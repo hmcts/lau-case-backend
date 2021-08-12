@@ -24,3 +24,18 @@ services:
       - LOGBACK_REQUIRE_ERROR_CODE=false
     ports:
       - $SERVER_PORT:$SERVER_PORT
+
+  lau-case-database:
+    container_name: lau-case-database
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: ${LAU_DB_USERNAME}
+      POSTGRES_PASSWORD: ${LAU_DB_PASSWORD}
+      POSTGRES_DB: ${LAU_DB_NAME}
+    ports:
+      - 5054:5432
+    volumes:
+      - lau-database-data:/var/lib/postgresql/data
+
+volumes:
+  lau-database-data:
