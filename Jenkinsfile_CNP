@@ -6,4 +6,82 @@ def type = "java"
 def product = "lau"
 def component = "case-backend"
 
-withPipeline(type, product, component) {}
+def secrets = [
+  'lau-${env}': [
+    secret('case-backend-POSTGRES-PASS', 'LAU_DB_PASSWORD'),
+    secret('case-backend-POSTGRES-ADMIN-PASS', 'LAU_DB_ADMIN_PASSWORD')
+  ]
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [ $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    version: '',
+    envVariable: envVar
+  ]
+}
+
+GradleBuilder builder = new GradleBuilder(this, product)
+
+withPipeline(type, product, component) {
+
+  after('test') {
+    builder.gradle('integration')
+  }
+  enableDbMigration('lau')
+  enableSlackNotifications('#lau-builds')
+  enableAksStagingDeployment()
+  loadVaultSecrets(secrets)
+  disableLegacyDeployment()
+
+  env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
+
+  after('test') {
+
+    junit 'build/test-results/test/**/*.xml'
+    archiveArtifacts 'build/reports/tests/test/index.html'
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/test",
+      reportFiles          : "index.html",
+      reportName           : "lau-case-backend Test Report"
+    ]
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/jacoco",
+      reportFiles          : "index.html",
+      reportName           : "lau-case-backend Code Coverage Report"
+    ]
+
+  }
+
+  after('functionalTest:aat') {
+    publishHTML target: [
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "AAT Functional Tests",
+      alwaysLinkToLastBuild: true
+    ]
+
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+  }
+
+  after('functionalTest:preview') {
+    publishHTML target: [
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "Preview Functional Tests",
+      alwaysLinkToLastBuild: true
+    ]
+
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+  }
+
+}

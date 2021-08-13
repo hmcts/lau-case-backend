@@ -78,6 +78,9 @@ psql -v ON_ERROR_STOP=1 --username $LAU_DB_USERNAME $LAU_DB_NAME <<-EOSQL
   comment on column case_search_audit_cases.search_id is 'Unique lau case search id';
   comment on column case_search_audit_cases.case_ref is 'Case reference number';
 
+  CREATE USER lauuser WITH ENCRYPTED PASSWORD 'laupass';
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE case_view_audit, case_search_audit, case_search_audit_cases TO lauuser;
+
 EOSQL
   echo "Database $service: Created"
 

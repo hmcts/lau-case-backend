@@ -19,7 +19,7 @@ plugins {
   id 'org.sonarqube' version '3.3'
   id "info.solidsoft.pitest" version '1.6.0'
   id 'com.gorylenko.gradle-git-properties' version '2.3.1'
-  id 'org.flywaydb.flyway' version '7.5.0'
+  id 'org.flywaydb.flyway' version '7.13.0'
 }
 
 apply plugin: "com.gorylenko.gradle-git-properties"
@@ -239,6 +239,11 @@ ext.libraries = [
 ]
 
 dependencies {
+  // exclude spring-cloud-context as it is already included in spring-cloud-starter-netflix-hystrix
+  def withoutSpringCloudContext = {
+    exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
+  }
+
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -252,10 +257,12 @@ dependencies {
   implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.7.RELEASE'
 
+  compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0', withoutSpringCloudContext
+
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
-  compile group: 'org.flywaydb', name: 'flyway-core', version: '7.6.0'
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '7.13.0'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
 
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
