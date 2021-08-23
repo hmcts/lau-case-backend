@@ -20,7 +20,7 @@ api-error-messages:
 api-required-header-keys:
   co-relationid: X-Correlation-Id
 api-schema-file:
-  submitanswer-schema: JsonSchema/submitAnswersSchema.json
+    submitanswer-schema: JsonSchema/submitAnswersSchema.json
 api-version-number: 1
 
 #Application specific unit test properties
@@ -42,4 +42,3 @@ spring:
 flyway:
   noop:
     strategy: "false"
-
