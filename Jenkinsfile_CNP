@@ -2,6 +2,8 @@
 
 @Library("Infrastructure")
 
+import uk.gov.hmcts.contino.GradleBuilder
+
 def type = "java"
 def product = "lau"
 def component = "case-backend"
@@ -26,9 +28,6 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
 
-  after('test') {
-    builder.gradle('integration')
-  }
   enableDbMigration('lau')
   enableSlackNotifications('#lau-builds')
   enableAksStagingDeployment()
@@ -38,6 +37,9 @@ withPipeline(type, product, component) {
   env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
 
   after('test') {
+
+    // Run integration tests
+    builder.gradle('integration')
 
     junit 'build/test-results/test/**/*.xml'
     archiveArtifacts 'build/reports/tests/test/index.html'
