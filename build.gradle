@@ -158,8 +158,8 @@ project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 sonarqube {
   properties {
-    property "sonar.projectName", "Reform :: pcq-backend"
-    property "sonar.projectKey", "uk.gov.hmcts.reform:pcq-backend"
+    property "sonar.projectName", "Reform :: lau-case-backend"
+    property "sonar.projectKey", "uk.gov.hmcts.reform:lau-case-backend"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.pitest.mode", "reuseReport"
