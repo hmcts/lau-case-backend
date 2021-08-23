@@ -6,4 +6,64 @@ def type = "java"
 def product = "lau"
 def component = "case-backend"
 
-withPipeline(type, product, component) {}
+GradleBuilder builder = new GradleBuilder(this, product)
+
+withPipeline(type, product, component) {
+
+  after('test') {
+    builder.gradle('integration')
+  }
+  enableSlackNotifications('#lau-builds')
+  enableAksStagingDeployment()
+  disableLegacyDeployment()
+
+  env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
+
+  after('test') {
+
+    junit 'build/test-results/test/**/*.xml'
+    archiveArtifacts 'build/reports/tests/test/index.html'
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/tests/test",
+      reportFiles          : "index.html",
+      reportName           : "lau-case-backend Test Report"
+    ]
+
+    publishHTML target: [
+      allowMissing         : true,
+      alwaysLinkToLastBuild: true,
+      keepAll              : true,
+      reportDir            : "build/reports/jacoco",
+      reportFiles          : "index.html",
+      reportName           : "lau-case-backend Code Coverage Report"
+    ]
+
+  }
+
+  after('functionalTest:aat') {
+    publishHTML target: [
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "AAT Functional Tests",
+      alwaysLinkToLastBuild: true
+    ]
+
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+  }
+
+  after('functionalTest:preview') {
+    publishHTML target: [
+      reportDir            : "target/site/serenity/",
+      reportFiles          : "index.html",
+      reportName           : "Preview Functional Tests",
+      alwaysLinkToLastBuild: true
+    ]
+
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+  }
+
+}
