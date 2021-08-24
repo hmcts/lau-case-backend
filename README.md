@@ -43,6 +43,11 @@ To run the PostgreSQL 11 LAU database, execute docker-compose to build the datab
   docker-compose -f docker-compose.yml up lau-case-database
 ```
 
+To apply flyway database scripts for PostgreSQL 11 LAU database, execute gradle migratePostgresDatabase task command - this will create all necessary users and tables.
+```
+  ./gradlew migratePostgresDatabase
+```
+
 To run the LAU Backend application, execute the gradle run command - this also adds the LAU schema to the database.
 ```
   ./gradlew run
