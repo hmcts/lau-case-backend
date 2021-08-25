@@ -32,6 +32,9 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
 
+  // Vars for DB upgrade
+  env.FLYWAY_USER = 'lauadmin'
+
   enableDbMigration('lau')
   enableSlackNotifications('#lau-builds')
   enableAksStagingDeployment()
