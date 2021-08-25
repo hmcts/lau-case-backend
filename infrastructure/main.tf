@@ -17,7 +17,7 @@ module "lau-case-db" {
   postgresql_user        = "lauadmin"
   postgresql_version     = "11"
   postgresql_listen_port = "5432"
-  sku_name               = "GP_Gen5_4"
+  sku_name               = "GP_Gen5_2"
   sku_tier               = "GeneralPurpose"
   common_tags            = var.common_tags
   subscription           = var.subscription
