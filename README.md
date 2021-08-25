@@ -82,7 +82,7 @@ If another service is using the lau-case-backend application, the emnvironment v
 The lau-case-backend application will automatically create the LAU database definitions from the flyway scripts included in the build.
 However if you would like to add the table definitions manually you'll need to execute the gradle migrate script:
 ```
-  ./gradlew -Pflyway.user=lauuser -Pflyway.password=laupass -Pflyway.url=jdbc:postgresql://0.0.0.0:5054/lau_case flywayMigrate
+  ./gradlew -Pflyway.user=lauadmin -Pflyway.password=laupass -Pflyway.url=jdbc:postgresql://0.0.0.0:5054/lau_case flywayMigrate
 ```
 
 ## Running the application in Docker

@@ -52,5 +52,5 @@
   comment on column case_search_audit_cases.case_ref is 'Case reference number';
 
   -- create user for application access
-  CREATE USER lauuser WITH ENCRYPTED PASSWORD 'laupass';
+  CREATE USER lauuser WITH PASSWORD '${LAU_DB_PASSWORD}';
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE case_view_audit, case_search_audit, case_search_audit_cases, flyway_schema_history TO lauuser;

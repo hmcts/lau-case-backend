@@ -15,6 +15,6 @@ export FLYWAY_PLACEHOLDERS_LAU_DB_USERNAME=lauuser
 export FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD=laupass
 export FLYWAY_URL=jdbc:postgresql://0.0.0.0:5054/lau_case
 export FLYWAY_USER=lauadmin
-export FLYWAY_PASSWORD=lauadminpass
+export FLYWAY_PASSWORD=laupass
 export FLYWAY_NOOP_STRATEGY=false
 
