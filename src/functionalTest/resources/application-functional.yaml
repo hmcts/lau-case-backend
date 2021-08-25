@@ -1,7 +1,7 @@
-targetInstance: ${TEST_URL:http://localhost:4450}
+targetInstance: ${TEST_URL:http://localhost:4550}
 
 server:
-  port: 4450
+  port: 4550
 
 management:
   endpoint:

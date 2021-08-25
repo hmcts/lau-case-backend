@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    propertiesvolume:
+      enabled: true
+      prefixed: false
+      paths: /mnt/secrets/lau
+      aliases:
+        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
+        case-backend-POSTGRES-PASS: ${LAU_DB_PASSWORD:LAU_DB_PASSWORD}, FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
+        case-backend-POSTGRES-USER: ${LAU_DB_USERNAME:LAU_DB_USERNAME}, FLYWAY_PLACEHOLDERS_LAU_DB_USERNAME
+        case-backend-POSTGRES-ADMIN-PASS: ${LAU_DB_ADMIN_PASSWORD:LAU_DB_ADMIN_PASSWORD}
+        case-backend-POSTGRES-ADMIN-USER: ${LAU_DB_ADMIN_USERNAME:LAU_DB_ADMIN_USERNAME}
+        case-backend-flyway-password: flyway.password
