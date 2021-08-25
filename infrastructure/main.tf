@@ -41,7 +41,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
 resource "azurerm_key_vault_secret" "SOMETHING" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-USER"
-  value        = "auuser@lau-case-backend-aat"
+  value        = "lauuser@lau-case-backend-aat"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
