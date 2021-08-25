@@ -7,6 +7,7 @@ import uk.gov.hmcts.contino.GradleBuilder
 def type = "java"
 def product = "lau"
 def component = "case-backend"
+def branchesToSync = ['demo']
 
 def secrets = [
   'lau-${env}': [
@@ -33,6 +34,7 @@ withPipeline(type, product, component) {
   enableAksStagingDeployment()
   loadVaultSecrets(secrets)
   disableLegacyDeployment()
+  syncBranchesWithMaster(branchesToSync)
 
   env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
 

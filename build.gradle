@@ -159,8 +159,8 @@ project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 sonarqube {
   properties {
-    property "sonar.projectName", "Reform :: pcq-backend"
-    property "sonar.projectKey", "uk.gov.hmcts.reform:pcq-backend"
+    property "sonar.projectName", "Reform :: lau-case-backend"
+    property "sonar.projectKey", "uk.gov.hmcts.reform:lau-case-backend"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
     property "sonar.pitest.mode", "reuseReport"
@@ -221,12 +221,13 @@ def versions = [
   reformLogging   : '5.1.7',
   springBoot      : springBoot.class.package.implementationVersion,
   springfoxSwagger: '3.0.0',
-  serenity        : '2.4.24',
+  serenity        : '2.5.10',
   gradlePitest    : '1.6.0',
   pitest          : '1.6.3',
   sonarPitest     : '0.5',
   lombok          : '1.18.12',
-  testcontainers  : '1.15.1'
+  testcontainers  : '1.15.1',
+  restAssured     : '4.4.0'
 ]
 
 ext.libraries = [
@@ -299,10 +300,19 @@ dependencies {
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
-  functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestCompile sourceSets.main.runtimeClasspath
+  functionalTestCompile sourceSets.test.runtimeClasspath
+  functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-  smokeTestImplementation sourceSets.main.runtimeClasspath
-  smokeTestImplementation sourceSets.test.runtimeClasspath
+  smokeTestImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
+  smokeTestImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.restAssured
+  smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
+  smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
+
+  smokeTestCompile sourceSets.main.runtimeClasspath
+  smokeTestCompile sourceSets.test.runtimeClasspath
+  implementation 'junit:junit:4.13.2'
 }
 
 flyway {
