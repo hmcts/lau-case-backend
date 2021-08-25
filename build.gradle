@@ -35,7 +35,7 @@ allprojects {
 }
 
 gitProperties {
-  gitPropertiesDir = new File("${project.rootDir}/src/main/resources/uk/gov/hmcts/reform/laubackend/gitcommit")
+  gitPropertiesDir = new File("${project.rootDir}/src/main/resources/uk/gov/hmcts/reform/laubackend/cases/gitcommit")
   keys = ['git.commit.id','git.commit.time']
   dateFormat = "yyyy-MM-dd'T'HH:mmZ"
   dateFormatTimeZone = "GMT"
