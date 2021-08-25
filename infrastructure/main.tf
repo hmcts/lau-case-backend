@@ -38,12 +38,6 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   value        = module.lau-case-db.user_name
 }
 
-resource "azurerm_key_vault_secret" "SOMETHING" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-USER"
-  value        = "lauuser@lau-case-backend-aat"
-}
-
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-ADMIN-PASS"
