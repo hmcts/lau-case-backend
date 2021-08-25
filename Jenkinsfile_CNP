@@ -9,6 +9,13 @@ def product = "lau"
 def component = "case-backend"
 def branchesToSync = ['demo']
 
+def secrets = [
+  'lau-${env}': [
+    secret('case-backend-POSTGRES-PASS', 'LAU_DB_PASSWORD'),
+    secret('case-backend-POSTGRES-ADMIN-PASS', 'LAU_DB_ADMIN_PASSWORD')
+  ]
+]
+
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   [ $class: 'AzureKeyVaultSecret',
     secretType: 'Secret',
@@ -22,8 +29,10 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
 
+  enableDbMigration('lau')
   enableSlackNotifications('#lau-builds')
   enableAksStagingDeployment()
+  loadVaultSecrets(secrets)
   disableLegacyDeployment()
   syncBranchesWithMaster(branchesToSync)
 

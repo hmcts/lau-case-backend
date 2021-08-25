@@ -1,12 +1,28 @@
-# lau-case-backend
+# LAU Case Backend Application
 
 [![Build Status](https://travis-ci.org/hmcts/lau-case-backend.svg?branch=master)](https://travis-ci.org/hmcts/lau-case-backend)
 
-## Notes
+## Purpose
 
-Since Spring Boot 2.1 bean overriding is disabled. If you want to enable it you will need to set `spring.main.allow-bean-definition-overriding` to `true`.
+This is the Log and Audit Case Back-End application that will provide an endpoint to capture and retrieve case log actions for a users views and searches to the database.
 
-JUnit 5 is now enabled by default in the project. Please refrain from using JUnit4 and use the next generation
+The API will be invoked by two components - LAU Case front-end which allows CFT Auditors to view log entries for case views and searches and for the source system to store log data into the Log and Audit system.
+
+## What's inside
+
+The application exposes health endpoint (http://localhost:4550/health).
+
+## Plugins
+
+The application uses the following plugins:
+
+  * checkstyle https://docs.gradle.org/current/userguide/checkstyle_plugin.html
+  * pmd https://docs.gradle.org/current/userguide/pmd_plugin.html
+  * jacoco https://docs.gradle.org/current/userguide/jacoco_plugin.html
+  * io.spring.dependency-management https://github.com/spring-gradle-plugins/dependency-management-plugin
+  * org.springframework.boot http://projects.spring.io/spring-boot/
+  * org.owasp.dependencycheck https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/index.html
+  * com.github.ben-manes.versions https://github.com/ben-manes/gradle-versions-plugin
 
 ## Building and deploying the application
 
@@ -16,76 +32,146 @@ The project uses [Gradle](https://gradle.org) as a build tool. It already contai
 `./gradlew` wrapper script, so there's no need to install gradle.
 
 To build the project execute the following command:
-
 ```bash
   ./gradlew build
 ```
 
 ### Running the application
 
-Create the image of the application by executing the following command:
-
-```bash
-  ./gradlew assemble
+To run the PostgreSQL 11 LAU database, execute docker-compose to build the database from the postgreSQL docker image:
+```
+  docker-compose -f docker-compose.yml up lau-case-database
 ```
 
-Create docker image:
+To apply flyway database scripts for PostgreSQL 11 LAU database, execute gradle migratePostgresDatabase task command - this will create all necessary users and tables.
+```
+  ./gradlew migratePostgresDatabase
+```
 
+To run the LAU Backend application, execute the gradle run command - this also adds the LAU schema to the database.
+```
+  ./gradlew run
+```
+
+To test database access using psql or your favourite SQL client use the equivalent parameters below. See .env file for dev database password.
+ ```
+  psql -h 0.0.0.0 -p 5054 -d lau_case -u lauuser
+ ```
+
+#### Environment variables
+
+The `.env` file has a list of the environment variables in use by the lau-case-backend and lau-database components. These are as follows:
+* LAU_DB_NAME
+* LAU_DB_HOST
+* LAU_DB_PORT
+* LAU_DB_USERNAME
+* LAU_DB_PASSWORD
+* FLYWAY_URL
+* FLYWAY_USER
+* FLYWAY_PASSWORD
+* FLYWAY_NOOP_STRATEGY
+
+There is no need to export these values if lau-case-backend repo is checked out.
+If another service is using the lau-case-backend application, the emnvironment values are available through a batch script:
+```bash
+  source ./bin/set-lau-docker-env.sh
+```
+
+#### Manually building the LAU Database using Flyway
+
+The lau-case-backend application will automatically create the LAU database definitions from the flyway scripts included in the build.
+However if you would like to add the table definitions manually you'll need to execute the gradle migrate script:
+```
+  ./gradlew -Pflyway.user=lauadmin -Pflyway.password=laupass -Pflyway.url=jdbc:postgresql://0.0.0.0:5054/lau_case flywayMigrate
+```
+
+## Running the application in Docker
+
+### Build docker image
+
+Create docker image:
 ```bash
   docker-compose build
 ```
 
-Run the distribution (created in `build/install/lau-case-backend` directory)
+Bring the lau-case-database and lau-case-backend application up in Docker.
 by executing the following command:
-
 ```bash
   docker-compose up
 ```
 
+az login
+az acr login --name hmctspublic --subscription DCD-CNP-Prod
+
 This will start the API container exposing the application's port
-(set to `4450` in this template app).
+(set to `4550` in this template app).
 
 In order to test if the application is up, you can call its health endpoint:
-
 ```bash
-  curl http://localhost:4450/health
+  curl http://localhost:4550/health/readiness
 ```
 
 You should get a response similar to this:
-
 ```
   {"status":"UP","diskSpace":{"status":"UP","total":249644974080,"free":137188298752,"threshold":10485760}}
 ```
 
-### Alternative script to run application
+### Notes:
 
-To skip all the setting up and building, just execute the following command:
+### Accessing Azure Container Repository
 
+Run the following to install the azure and kubernetes command-line tools
 ```bash
-./bin/run-in-docker.sh
+  brew install azure-cli
+  az acs kubernetes install-cli
+```
+login to azure - you'll not need hmctsprivate access for LAU.
+```bash
+  az login (will open a browser to login)
+  az acr login --name hmctspublic --subscription DCD-CNP-Prod
+  az acr login --name hmctsprivate --subscription DCD-CNP-Prod
 ```
 
-For more information:
+#### Removing old docker images
 
+Old containers can be removed by executing the following command:
 ```bash
-./bin/run-in-docker.sh -h
+  docker rm $(docker ps -a -q)
 ```
-
-Script includes bare minimum environment variables necessary to start api instance. Whenever any variable is changed or any other script regarding docker image/container build, the suggested way to ensure all is cleaned up properly is by this command:
-
+You may need to forcibly remove any relevant images by executing the following command:
 ```bash
-docker-compose rm
+  docker rmi $(docker images -q)
 ```
-
-It clears stopped containers correctly. Might consider removing clutter of images too, especially the ones fiddled with:
-
+Finally you can remove all volumes - not this rmoves all existing database values:
 ```bash
-docker images
-
-docker image rm <image-id>
+  docker volume rm $(docker volume ls -q)
 ```
 
 There is no need to remove postgres and java or similar core images.
+
+
+## Hystrix
+
+[Hystrix](https://github.com/Netflix/Hystrix/wiki) is a library that helps you control the interactions
+between your application and other services by adding latency tolerance and fault tolerance logic. It does this
+by isolating points of access between the services, stopping cascading failures across them,
+and providing fallback options. We recommend you to use Hystrix in your application if it calls any services.
+
+### Hystrix circuit breaker
+
+This API has [Hystrix Circuit Breaker](https://github.com/Netflix/Hystrix/wiki/How-it-Works#circuit-breaker)
+already enabled. It monitors and manages all the`@HystrixCommand` or `HystrixObservableCommand` annotated methods
+inside `@Component` or `@Service` annotated classes.
+
+### Other
+
+Hystrix offers much more than Circuit Breaker pattern implementation or command monitoring.
+Here are some other functionalities it provides:
+ * [Separate, per-dependency thread pools](https://github.com/Netflix/Hystrix/wiki/How-it-Works#isolation)
+ * [Semaphores](https://github.com/Netflix/Hystrix/wiki/How-it-Works#semaphores), which you can use to limit
+ the number of concurrent calls to any given dependency
+ * [Request caching](https://github.com/Netflix/Hystrix/wiki/How-it-Works#request-caching), allowing
+ different code paths to execute Hystrix Commands without worrying about duplicating work
 
 ## License
 

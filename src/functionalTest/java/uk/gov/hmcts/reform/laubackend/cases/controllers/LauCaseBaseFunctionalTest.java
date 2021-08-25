@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pcqbackend.controllers;
+package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
