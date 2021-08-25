@@ -7,5 +7,5 @@ FROM hmctspublic.azurecr.io/base/java:openjdk-11-distroless-1.2
 COPY lib/AI-Agent.xml /opt/app/
 COPY build/libs/lau-case-backend.jar /opt/app/
 
-EXPOSE 4450
+EXPOSE 4550
 CMD [ "lau-case-backend.jar" ]

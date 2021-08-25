@@ -6,7 +6,6 @@ import net.thucydides.core.annotations.WithTags;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
-import uk.gov.hmcts.reform.pcqbackend.controllers.LauCaseBaseFunctionalTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
