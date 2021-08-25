@@ -8,15 +8,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MigrationScriptExceptionTest {
 
-    final String script = "My test Message";
+    private static final String SCRIPT_MESSAGE = "My test Message";
 
     @Test
     void shouldGetMessage() {
-        assertThat(new MigrationScriptException(script)).hasMessage("Found migration not yet applied My test Message");
+        assertThat(new MigrationScriptException(SCRIPT_MESSAGE)).hasMessage(
+            "Found migration not yet applied My test Message");
     }
 
     @Test
     void shouldCreateInstanceOfRuntimeException() {
-        assertThat(new MigrationScriptException(script)).isInstanceOf(RuntimeException.class);
+        assertThat(new MigrationScriptException(SCRIPT_MESSAGE)).isInstanceOf(RuntimeException.class);
     }
 }
