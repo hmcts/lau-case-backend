@@ -11,7 +11,7 @@ def branchesToSync = ['demo']
 
 def secrets = [
   'lau-${env}': [
-    secret('case-backend-POSTGRES-ADMIN-USER', 'FLYWAY_USER')
+    secret('case-backend-POSTGRES-ADMIN-USER', 'FLYWAY_USER'),
     secret('case-backend-POSTGRES-PASS', 'LAU_DB_PASSWORD'),
     secret('case-backend-POSTGRES-ADMIN-PASS', 'LAU_DB_ADMIN_PASSWORD'),
     secret('case-backend-POSTGRES-ADMIN-PASS', 'FLYWAY_PASSWORD'),
