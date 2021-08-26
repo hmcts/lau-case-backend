@@ -46,10 +46,20 @@ withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
 
   enableSlackNotifications('#lau-builds')
+  enableMutationTest()
   enableFullFunctionalTest()
+  enableSecurityScan()
 
   after('fullFunctionalTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'target/**/*'
+  }
+
+  after('mutationTest') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+  }
+
+  after('securityScan') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
   }
 }
 
