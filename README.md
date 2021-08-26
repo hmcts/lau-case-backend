@@ -1,4 +1,4 @@
-# LAU Case Backend Application
+# LAU Case Backend Application test
 
 [![Build Status](https://travis-ci.org/hmcts/lau-case-backend.svg?branch=master)](https://travis-ci.org/hmcts/lau-case-backend)
 
