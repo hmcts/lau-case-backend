@@ -32,9 +32,6 @@ GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
   loadVaultSecrets(secrets)
-}
-
-withPipeline(type, product, component) {
   enableDbMigration('lau')
   enableSlackNotifications('#lau-builds')
   enableAksStagingDeployment()
