@@ -14,7 +14,7 @@ def secrets = [
     secret('case-backend-POSTGRES-USER', 'FLYWAY_USER'),
     secret('case-backend-POSTGRES-PASS', 'LAU_DB_ADMIN_PASSWORD'),
     secret('case-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
-    secret('case-backend-app-db-user ', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD'),
+    secret('case-backend-app-db-password ', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD'),
     secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
   ]
 ]
@@ -31,11 +31,13 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
+  loadVaultSecrets(secrets)
+}
 
+withPipeline(type, product, component) {
   enableDbMigration('lau')
   enableSlackNotifications('#lau-builds')
   enableAksStagingDeployment()
-  loadVaultSecrets(secrets)
   disableLegacyDeployment()
   syncBranchesWithMaster(branchesToSync)
 
