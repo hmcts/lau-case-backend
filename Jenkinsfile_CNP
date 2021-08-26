@@ -15,7 +15,7 @@ def secrets = [
     secret('case-backend-POSTGRES-PASS', 'LAU_DB_ADMIN_PASSWORD'),
     secret('case-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
     secret('case-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD'),
-    secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
+    secret('case-backend-app-db-password', 'LAU_DB_PASSWORD')
   ]
 ]
 
