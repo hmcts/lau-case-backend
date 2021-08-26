@@ -40,6 +40,12 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "case-backend-app-db-password"
+  value        = 'laupass'
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER-PASS" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-PASS"
   value        = module.lau-case-db.postgresql_password
 }
