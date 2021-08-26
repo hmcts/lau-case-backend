@@ -20,7 +20,7 @@ java:
       secrets:
         - case-backend-POSTGRES-USER
         - case-backend-POSTGRES-PASS
-        - case-backend-POSTGRES-ADMIN-USER
-        - case-backend-POSTGRES-ADMIN-PASS
+        - case-backend-app-db-user
+        - case-backend-app-db-password
         - case-backend-flyway-password
         - AppInsightsInstrumentationKey

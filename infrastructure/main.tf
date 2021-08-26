@@ -34,13 +34,13 @@ data "azurerm_key_vault" "key_vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-ADMIN-USER"
+  name         = "${var.component}-POSTGRES-USER"
   value        = module.lau-case-db.user_name
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-ADMIN-PASS"
+  name         = "${var.component}-POSTGRES-PASS"
   value        = module.lau-case-db.postgresql_password
 }
 
@@ -61,8 +61,6 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name         = "${var.component}-POSTGRES-DATABASE"
   value        = module.lau-case-db.postgresql_database
 }
-
-
 
 # Copy postgres password for flyway migration
 resource "azurerm_key_vault_secret" "flyway_password" {
