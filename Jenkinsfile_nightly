@@ -45,7 +45,7 @@ withNightlyPipeline(type, product, component) {
 
   loadVaultSecrets(secrets)
 
-  enableSlackNotifications('#lau-builds')
+//  enableSlackNotifications('#lau-builds')
   enableMutationTest()
   enableFullFunctionalTest()
   enableSecurityScan()
