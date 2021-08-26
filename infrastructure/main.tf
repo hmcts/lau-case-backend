@@ -38,17 +38,21 @@ resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   value        = module.lau-case-db.user_name
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "case-backend-app-db-password"
-  value        = 'laupass'
-}
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER-PASS" {
+resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-PASS"
   value        = module.lau-case-db.postgresql_password
 }
+
+
+
+resource "azurerm_key_vault_secret" "POSTGRES-USER-PASS" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "case-backend-app-db-password"
+  value        = "laupass"
+}
+
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   key_vault_id = data.azurerm_key_vault.key_vault.id

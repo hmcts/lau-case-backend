@@ -22,5 +22,6 @@ java:
         - case-backend-POSTGRES-PASS
         - case-backend-app-db-user
         - case-backend-app-db-password
+          alias: LAU_DB_PASSWORD
         - case-backend-flyway-password
         - AppInsightsInstrumentationKey
