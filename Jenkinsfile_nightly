@@ -1,5 +1,3 @@
-#!groovy
-
 properties([
   // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
   pipelineTriggers([cron('H 05 * * *')]),
@@ -46,10 +44,24 @@ withNightlyPipeline(type, product, component) {
   loadVaultSecrets(secrets)
 
   enableSlackNotifications('#lau-builds')
-  enableFullFunctionalTest()
+  enableMutationTest()
+//  enableFullFunctionalTest()
+  enableSecurityScan()
+//  enableFortifyScan()
 
   after('fullFunctionalTest') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'target/**/*'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
   }
-}
 
+  after('mutationTest') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+  }
+
+  after('securityScan') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+  }
+
+//  after('fortify-scan') {
+//    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+//  }
+}
