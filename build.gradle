@@ -322,13 +322,20 @@ dependencies {
   implementation 'junit:junit:4.13.2'
 }
 
+project.ext {
+  flyway.password = 'lau'
+}
+
 flyway {
   url = System.getenv('FLYWAY_URL')
   user = System.getenv('FLYWAY_USER')
   password = System.getenv('FLYWAY_PASSWORD')
-  placeholders = [
-    'LAU_DB_PASSWORD': project.ext['flyway.password']
-  ]
+
+  if (project.hasProperty("flyway.password")) {
+    placeholders = [
+      'LAU_DB_PASSWORD': project.getProperty("flyway.password")
+    ]
+  }
 
   baselineOnMigrate = true
   baselineVersion = '000'
