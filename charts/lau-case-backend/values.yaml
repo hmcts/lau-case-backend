@@ -14,6 +14,7 @@ java:
     FLYWAY_URL: jdbc:postgresql://lau-case-backend-{{ .Values.global.environment }}.postgres.database.azure.com:5432/lau_case?sslmode=require
     FLYWAY_USER: lauadmin@lau-case-backend-{{ .Values.global.environment }}
     FLYWAY_NOOP_STRATEGY: "false"
+    LAU_DB_CONN_OPTIONS: "?sslmode=require"
   keyVaults:
     lau:
       resourceGroup: lau
