@@ -136,7 +136,7 @@ pitest {
   junit5PluginVersion.set('0.12')
   targetClasses = ['uk.gov.hmcts.reform.laubackend.*']
   excludedClasses = [
-    'uk.gov.hmcts.reform.pcqbackend.madeup.*'
+    'uk.gov.hmcts.reform.laubackend.cases.madeup.*'
   ]
   threads = 10
   enableDefaultIncrementalAnalysis = true
