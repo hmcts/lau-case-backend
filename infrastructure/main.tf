@@ -79,9 +79,3 @@ resource "azurerm_key_vault_secret" "flyway_password" {
   value        = module.lau-case-db.postgresql_password
 }
 
-# Copy postgres password for initial lauuser user setup
-resource "azurerm_key_vault_secret" "app_db_password" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "case-backend-app-db-password"
-  value        = module.lau-case-db.postgresql_password
-}

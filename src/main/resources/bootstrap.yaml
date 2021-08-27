@@ -8,6 +8,6 @@ spring:
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         case-backend-POSTGRES-PASS: ${LAU_DB_ADMIN_PASSWORD:LAU_DB_ADMIN_PASSWORD}
         case-backend-POSTGRES-USER: ${LAU_DB_ADMIN_USERNAME:LAU_DB_ADMIN_USERNAME}
-        case-backend-app-db-password: ${LAU_DB_PASSWORD:LAU_DB_PASSWORD}, FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
-        case-backend-app-db-user: ${LAU_DB_USERNAME:LAU_DB_USERNAME}, FLYWAY_PLACEHOLDERS_LAU_DB_USERNAME
+        case-backend-app-db-password: ${LAU_DB_PASSWORD:LAU_DB_PASSWORD}
+        case-backend-app-db-user: ${LAU_DB_USERNAME:LAU_DB_USERNAME}
         case-backend-flyway-password: flyway.password
