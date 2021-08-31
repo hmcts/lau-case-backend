@@ -1,3 +1,6 @@
+#!groovy
+
+
 properties([
   // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
   pipelineTriggers([cron('H 05 * * *')]),
@@ -50,7 +53,7 @@ withNightlyPipeline(type, product, component) {
 //  enableFortifyScan()
 
   after('fullFunctionalTest') {
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'target/**/*'
   }
 
   after('mutationTest') {
