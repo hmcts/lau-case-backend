@@ -27,6 +27,8 @@ variable "jenkins_AAD_objectId" {
 
 variable "subscription" {}
 
+variable "aks_subscription_id" {}
+
 variable "common_tags" {
   type = map(string)
 }
