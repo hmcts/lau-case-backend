@@ -117,7 +117,7 @@ task integration(type: Test) {
   group = "Verification"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
-  failFast = true
+  useJUnitPlatform()
 }
 
 task smoke(type: Test) {
@@ -140,6 +140,8 @@ pmd {
   ruleSets = []
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
+
+project.tasks['jacocoTestReport'].dependsOn test, integration
 
 jacocoTestReport {
   executionData(test, integration)
@@ -341,8 +343,9 @@ dependencies {
   implementation 'junit:junit:4.13.2'
 }
 
-project.ext {
-  flyway.password = 'lau'
+test {
+  useJUnitPlatform()
+  failFast = true
 }
 
 flyway {
@@ -388,5 +391,5 @@ bootJar {
 }
 
 wrapper {
-    distributionType = Wrapper.DistributionType.ALL
+  distributionType = Wrapper.DistributionType.ALL
 }
