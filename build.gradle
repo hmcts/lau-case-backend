@@ -42,6 +42,15 @@ gitProperties {
 }
 
 sourceSets {
+  test {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/test/java')
+    }
+    resources.srcDir file('src/test/resources')
+  }
+
   functionalTest {
     java {
       compileClasspath += main.output
@@ -74,23 +83,33 @@ tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Werror"
 }
 
-tasks.withType(Test) {
-  useJUnitPlatform()
-
-  testLogging {
-    exceptionFormat = 'full'
-  }
-}
-
 test {
+  useJUnitPlatform()
   failFast = true
 }
 
+configurations {
+  integrationTestCompile.extendsFrom testCompile
+  integrationTestRuntime.extendsFrom testRuntime
+  functionalTestCompile.extendsFrom testCompile
+  functionalTestRuntime.extendsFrom testRuntime
+}
+
+task unit(type: Test, description: 'Runs the unit tests.', group: 'Verification') {
+  testClassesDirs = sourceSets.test.output.classesDirs
+  classpath = sourceSets.test.runtimeClasspath
+  useJUnitPlatform()
+}
+
 task functional(type: Test) {
+
+  systemProperty "scenario", System.getProperty('scenario')
+
   description = "Runs functional tests"
   group = "Verification"
   testClassesDirs = sourceSets.functionalTest.output.classesDirs
   classpath = sourceSets.functionalTest.runtimeClasspath
+  finalizedBy aggregate
 }
 
 task integration(type: Test) {
