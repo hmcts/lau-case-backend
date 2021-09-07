@@ -21,7 +21,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${LAU_DB_HOST:localhost}:${LAU_DB_PORT:5432}/${LAU_DB_NAME:lau_case}${LAU_DB_CONN_OPTIONS:}
     username: ${LAU_DB_USERNAME:lauuser}
-    password: ${LAU_DB_PASSWORD:laupass}
+    password: ${LAU_DB_PASSWORD:}
     properties:
       charSet: UTF-8
     hikari:

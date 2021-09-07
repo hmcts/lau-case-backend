@@ -55,7 +55,11 @@ To run the LAU Backend application, execute the gradle run command - this also a
 
 To test database access using psql or your favourite SQL client use the equivalent parameters below. See .env file for dev database password.
  ```
-  psql -h 0.0.0.0 -p 5054 -d lau_case -u lauuser
+  psql -h 0.0.0.0 -p 5054 -d lau_case -U lauuser
+ ```
+On a MAC you may have to put the full path in for psql - something like:
+ ```
+  /Library/PostgreSQL/11/bin/psql -h 0.0.0.0 -p 5054 -d lau_case -U lauuser
  ```
 
 #### Environment variables

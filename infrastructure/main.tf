@@ -68,3 +68,4 @@ resource "azurerm_key_vault_secret" "flyway_password" {
   name         = "flyway-password"
   value        = module.lau-case-db.postgresql_password
 }
+

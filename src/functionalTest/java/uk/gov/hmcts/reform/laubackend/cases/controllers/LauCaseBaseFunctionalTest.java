@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.laubackend.cases.client.LauCaseBackEndServiceClient;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags({@WithTag("testType:Functional")})
-@ComponentScan("uk.gov.hmcts.reform.pcqbackend")
+@ComponentScan("uk.gov.hmcts.reform.laubackend.cases")
 @TestPropertySource("classpath:application-functional.yaml")
 @Slf4j
 @SuppressWarnings({"PMD.AbstractClassWithoutAnyMethod", "PMD.AbstractClassWithoutAbstractMethod"})

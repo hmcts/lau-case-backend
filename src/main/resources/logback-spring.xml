@@ -44,8 +44,8 @@
     <appender-ref ref="Console" />
   </logger>
 
-  <!-- LOG "uk.gov.hmcts.reform.pcqbackend*" at DBUG level -->
-  <logger name="uk.gov.hmcts.reform.pcqbackend" level="debug" additivity="false">
+  <!-- LOG "uk.gov.hmcts.reform.laubackend*" at DBUG level -->
+  <logger name="uk.gov.hmcts.reform.laubackend" level="debug" additivity="false">
     <appender-ref ref="RollingFile" />
     <appender-ref ref="Console" />
   </logger>
