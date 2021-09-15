@@ -20,7 +20,7 @@ api-error-messages:
 api-required-header-keys:
   co-relationid: X-Correlation-Id
 api-schema-file:
-    submitanswer-schema: JsonSchema/submitAnswersSchema.json
+  submitanswer-schema: JsonSchema/submitAnswersSchema.json
 api-version-number: 1
 
 #Application specific unit test properties
@@ -30,14 +30,17 @@ spring:
   application:
     name: LAU Case Backend
   datasource:
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql://localhost/lau-case
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: sa
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: none
   flyway:
-    locations: classpath:db/migration
+    locations: classpath:h2
+
 
 flyway:
   noop:

@@ -36,7 +36,7 @@ allprojects {
 
 gitProperties {
   gitPropertiesDir = new File("${project.rootDir}/src/main/resources/uk/gov/hmcts/reform/laubackend/cases/gitcommit")
-  keys = ['git.commit.id','git.commit.time']
+  keys = ['git.commit.id', 'git.commit.time']
   dateFormat = "yyyy-MM-dd'T'HH:mmZ"
   dateFormatTimeZone = "GMT"
 }
@@ -288,7 +288,7 @@ dependencies {
   compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.7.RELEASE'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0', withoutSpringCloudContext
+  compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0', withoutSpringCloudContext
 
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
@@ -301,6 +301,10 @@ dependencies {
 
   compile group: "com.networknt", name: "json-schema-validator", version: "1.0.49"
   compile group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  compile("org.springframework.boot:spring-boot-devtools")
+
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+
 
   testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
   testCompile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
@@ -318,6 +322,8 @@ dependencies {
 
   integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+
+  compile('com.h2database:h2')
 
   testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
