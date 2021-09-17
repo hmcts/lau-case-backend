@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.laubackend.cases.response.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsHolder;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class CaseViewService {
 
     private Timestamp getTimestampValue(final String timestamp) {
         if (!isEmpty(timestamp)) {
-            return valueOf(timestamp);
+            return valueOf(LocalDateTime.parse(timestamp));
         }
         return null;
     }
