@@ -8,7 +8,6 @@ import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_GET_EXCEPTION_MESSAGE;
@@ -18,19 +17,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class InputParamsVerifierTest {
-
-    @Test
-    public void shouldVerifyUserId() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new InputParamsHolder("3748238",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null)));
-    }
+public class InputParamsVerifierGetExceptionTest {
 
     @Test
     public void shouldNotVerifyUserId() {
@@ -49,18 +36,6 @@ public class InputParamsVerifierTest {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo(USERID_GET_EXCEPTION_MESSAGE);
         }
-    }
-
-    @Test
-    public void shouldVerifyCaseRef() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new InputParamsHolder(null,
-                randomNumeric(16),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null)));
     }
 
     @Test
@@ -83,18 +58,6 @@ public class InputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyTimestamp() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new InputParamsHolder(null,
-                null,
-                null,
-                null,
-                "2021-06-23T22:20:05",
-                null,
-                null,
-                null)));
-    }
-
-    @Test
     public void shouldNotVerifyTimestamp() {
         try {
             final InputParamsHolder inputParamsHolder = new InputParamsHolder(null,
@@ -113,17 +76,6 @@ public class InputParamsVerifierTest {
         }
     }
 
-    @Test
-    public void shouldVerifyCaseTypeId() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new InputParamsHolder(null,
-                null,
-                randomNumeric(69),
-                null,
-                null,
-                null,
-                null,
-                null)));
-    }
 
     @Test
     public void shouldNotVerifyCaseTypeId() {
@@ -142,18 +94,6 @@ public class InputParamsVerifierTest {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo(CASETYPEID_GET_EXCEPTION_MESSAGE);
         }
-    }
-
-    @Test
-    public void shouldVerifyCaseJurisdictionId() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new InputParamsHolder(null,
-                null,
-                null,
-                randomNumeric(69),
-                null,
-                null,
-                null,
-                null)));
     }
 
     @Test

@@ -1,17 +1,28 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
 import static java.util.regex.Pattern.compile;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_POST_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_POST_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASE_JURISDICTION_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASE_JURISDICTION_POST_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.TIMESTAMP_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.TIMESTAMP_POST_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.USERID_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.USERID_POST_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE_REF_REGEX;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.TIMESTAMP_GET_REGEX;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.TIMESTAMP_POST_REGEX;
 
 
 public final class InputParamsVerifier {
-
-    private static final String TIMESTAMP_REGEX =
-            "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])T(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])$";
-    private static final String CASE_REF_REGEX = "^\\d{16}$";
 
     private InputParamsVerifier() {
     }
@@ -30,42 +41,58 @@ public final class InputParamsVerifier {
 
     public static void verifyRequestParamsConditions(final InputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
-        verifyUserId(inputParamsHolder.getUserId());
-        verifyCaseRef(inputParamsHolder.getCaseRef());
-        verifyCaseTypeId(inputParamsHolder.getCaseTypeId());
-        verifyCaseJurisdictionId(inputParamsHolder.getCaseJurisdictionId());
-        verifyTimestamp(inputParamsHolder.getStartTime());
-        verifyTimestamp(inputParamsHolder.getEndTime());
+        verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
+        verifyCaseRef(inputParamsHolder.getCaseRef(), CASEREF_GET_EXCEPTION_MESSAGE);
+        verifyCaseTypeId(inputParamsHolder.getCaseTypeId(), CASETYPEID_GET_EXCEPTION_MESSAGE);
+        verifyCaseJurisdictionId(inputParamsHolder.getCaseJurisdictionId(), CASE_JURISDICTION_GET_EXCEPTION_MESSAGE);
+        verifyTimestamp(inputParamsHolder.getStartTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
+        verifyTimestamp(inputParamsHolder.getEndTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
     }
 
-    private static void verifyTimestamp(final String timestamp) throws InvalidRequestException {
-        if (!isEmpty(timestamp) && !compile(TIMESTAMP_REGEX).matcher(timestamp).matches()) {
-            throw new InvalidRequestException("Unable to verify timestamp path parameter pattern", BAD_REQUEST);
+    public static void verifyRequestParamsConditions(final ViewLog viewLog)
+            throws InvalidRequestException {
+        verifyUserId(viewLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
+        verifyCaseRef(viewLog.getCaseRef(), CASEREF_POST_EXCEPTION_MESSAGE);
+        verifyCaseTypeId(viewLog.getCaseTypeId(), CASETYPEID_POST_EXCEPTION_MESSAGE);
+        verifyCaseJurisdictionId(viewLog.getCaseJurisdictionId(), CASE_JURISDICTION_POST_EXCEPTION_MESSAGE);
+        verifyTimestamp(viewLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
+    }
+
+    private static void verifyTimestamp(final String timestamp,
+                                        final String exceptionMessage,
+                                        final String regex) throws InvalidRequestException {
+        if (!isEmpty(timestamp) && !compile(regex).matcher(timestamp).matches()) {
+            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
         }
     }
 
-    private static void verifyCaseRef(final String caseRef) throws InvalidRequestException {
-        if (!isEmpty(caseRef) && !compile(CASE_REF_REGEX).matcher(caseRef).matches()) {
-            throw new InvalidRequestException("Unable to verify caseRef path parameter pattern", BAD_REQUEST);
+    private static void verifyCaseRef(final String caseRef,
+                                      final String exceptionMessage) throws InvalidRequestException {
+        if (!isEmpty(caseRef)
+                && !compile(CASE_REF_REGEX).matcher(caseRef).matches()) {
+            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
         }
     }
 
-    private static void verifyUserId(final String userId) throws InvalidRequestException {
+    private static void verifyUserId(final String userId,
+                                     final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(userId) && userId.length() > 64) {
-            throw new InvalidRequestException("Unable to verify userId path parameter pattern", BAD_REQUEST);
+            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
         }
     }
 
-    private static void verifyCaseTypeId(final String caseTypeId) throws InvalidRequestException {
+    private static void verifyCaseTypeId(final String caseTypeId,
+                                         final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseTypeId) && caseTypeId.length() > 70) {
-            throw new InvalidRequestException("Unable to verify caseTypeId path parameter pattern", BAD_REQUEST);
+            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
         }
     }
 
-    private static void verifyCaseJurisdictionId(final String caseJurisdictionId) throws InvalidRequestException {
+    private static void verifyCaseJurisdictionId(final String caseJurisdictionId,
+                                                 final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseJurisdictionId) && caseJurisdictionId.length() > 70) {
             throw new InvalidRequestException(
-                    "Unable to verify caseJurisdictionId path parameter pattern",
+                    exceptionMessage,
                     BAD_REQUEST
             );
         }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.response;
+package uk.gov.hmcts.reform.laubackend.cases.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +20,14 @@ public class ViewLog implements Serializable {
     private String caseTypeId;
     private String timestamp;
 
-    public ViewLog toDto(final CaseViewAudit caseViewAudit) {
+    public ViewLog toDto(final CaseViewAudit caseViewAudit, final String timestamp) {
         this.userId = caseViewAudit.getUserId();
         this.caseRef = caseViewAudit.getCaseRef();
         this.caseJurisdictionId = caseViewAudit.getCaseJurisdictionId();
         this.caseTypeId = caseViewAudit.getCaseTypeId();
-        this.timestamp = caseViewAudit.getTimestamp().toString();
+        this.timestamp = timestamp;
 
         return this;
     }
+
 }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.utils;
+package uk.gov.hmcts.reform.laubackend.cases.constants;
 
 public final class CaseViewConstants {
 
