@@ -248,18 +248,20 @@ repositories {
 }
 
 def versions = [
-        junit           : '5.7.2',
-        junitPlatform   : '1.7.2',
-        reformLogging   : '5.1.7',
-        springBoot      : springBoot.class.package.implementationVersion,
-        springfoxSwagger: '3.0.0',
-        serenity        : '2.5.10',
-        gradlePitest    : '1.6.0',
-        pitest          : '1.6.3',
-        sonarPitest     : '0.5',
-        lombok          : '1.18.12',
-        testcontainers  : '1.15.1',
-        restAssured     : '4.4.0'
+        junit             : '5.7.2',
+        junitPlatform     : '1.7.2',
+        reformLogging     : '5.1.7',
+        springBoot        : springBoot.class.package.implementationVersion,
+        springfoxSwagger  : '3.0.0',
+        serenity          : '2.5.10',
+        gradlePitest      : '1.6.0',
+        pitest            : '1.6.3',
+        sonarPitest       : '0.5',
+        lombok            : '1.18.12',
+        testcontainers    : '1.15.1',
+        restAssured       : '4.4.0',
+        serviceAuthVersion: '4.0.0',
+        commonsIo         : '2.7'
 ]
 
 ext.libraries = [
@@ -278,6 +280,8 @@ dependencies {
     def withoutSpringCloudContext = {
         exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
     }
+
+    implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
@@ -351,6 +355,7 @@ dependencies {
     smokeTestCompile sourceSets.main.runtimeClasspath
     smokeTestCompile sourceSets.test.runtimeClasspath
     implementation 'junit:junit:4.13.2'
+    implementation(group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.serviceAuthVersion)
 }
 
 test {

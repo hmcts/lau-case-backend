@@ -56,6 +56,12 @@ spring:
             # silence the 'wall-of-text' - unnecessary exception throw about blob types
             non_contextual_creation: true
 
+idam:
+  s2s-auth:
+    url: ${S2S_URL:http://localhost:4502}
+
+authorised.services: lau_case_frontend
+
 azure:
   application-insights:
     instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
