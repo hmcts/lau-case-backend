@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.laubackend.cases.response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseViewAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 
 import java.sql.Timestamp;
 
@@ -22,11 +23,11 @@ class ViewLogTest {
         caseViewAudit.setCaseRef("4");
         caseViewAudit.setCaseJurisdictionId("5");
 
-        final ViewLog viewLogDto = new ViewLog().toDto(caseViewAudit);
+        final ViewLog viewLogDto = new ViewLog().toDto(caseViewAudit, "2021-09-07 14:00:46.852754");
 
         assertThat(caseViewAudit.getUserId()).isEqualTo(viewLogDto.getUserId());
         assertThat(caseViewAudit.getCaseTypeId()).isEqualTo(viewLogDto.getCaseTypeId());
-        assertThat(caseViewAudit.getTimestamp().toString()).isEqualTo(viewLogDto.getTimestamp());
+        assertThat(caseViewAudit.getTimestamp().toString()).isEqualTo("2021-09-07 14:00:46.852754");
         assertThat(caseViewAudit.getCaseRef()).isEqualTo(viewLogDto.getCaseRef());
         assertThat(caseViewAudit.getCaseJurisdictionId()).isEqualTo(viewLogDto.getCaseJurisdictionId());
         assertThat(caseViewAudit.getUserId()).isEqualTo(viewLogDto.getUserId());

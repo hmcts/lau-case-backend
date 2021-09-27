@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.utils;
+package uk.gov.hmcts.reform.laubackend.cases.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

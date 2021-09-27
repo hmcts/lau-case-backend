@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseViewAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseViewService;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,6 +27,9 @@ public class GetWelcomeTest {
 
     @MockBean
     private CaseViewAuditRepository caseViewAuditRepository;
+
+    @MockBean
+    private TimestampUtil timestampUtil;
 
     @DisplayName("Should welcome upon root request with 200 response code")
     @Test

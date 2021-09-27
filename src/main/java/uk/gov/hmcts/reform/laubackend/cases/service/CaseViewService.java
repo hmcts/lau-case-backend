@@ -4,44 +4,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseViewAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseViewAuditRepository;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.ViewLog;
-import uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.ViewLogPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
-import static java.sql.Timestamp.valueOf;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.data.domain.PageRequest.of;
-import static uk.gov.hmcts.reform.laubackend.cases.response.CaseViewResponse.caseViewResponse;
+import static uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse.caseViewResponse;
 
-@Component
+@Service
 public class CaseViewService {
 
     @Autowired
     private CaseViewAuditRepository caseViewAuditRepository;
 
-    public CaseViewResponse getCaseView(final InputParamsHolder inputParamsHolder) {
+    @Autowired
+    private TimestampUtil timestampUtil;
+
+    public CaseViewGetResponse getCaseView(final InputParamsHolder inputParamsHolder) {
 
         final Page<CaseViewAudit> caseView = caseViewAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
                 inputParamsHolder.getCaseTypeId(),
                 inputParamsHolder.getCaseJurisdictionId(),
-                getTimestampValue(inputParamsHolder.getStartTime()),
-                getTimestampValue(inputParamsHolder.getEndTime()),
+                timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
+                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
         );
 
         final List<ViewLog> viewLogList = new ArrayList<>();
-        caseView.getContent().forEach(caseViewAudit -> viewLogList.add(new ViewLog().toDto(caseViewAudit)));
+
+        caseView.getContent().forEach(caseViewAudit -> {
+            final String timestamp = timestampUtil.timestampConvertor(caseViewAudit.getTimestamp());
+            viewLogList.add(
+                    new ViewLog().toDto(caseViewAudit, timestamp)
+            );
+        });
 
         return caseViewResponse()
                 .withViewLog(viewLogList)
@@ -50,21 +59,30 @@ public class CaseViewService {
                 .build();
     }
 
+    public CaseViewPostResponse saveCaseView(final ViewLog viewLog) {
+
+        final CaseViewAudit caseViewAudit = new CaseViewAudit();
+        caseViewAudit.setUserId(viewLog.getUserId());
+        caseViewAudit.setCaseRef(viewLog.getCaseRef());
+        caseViewAudit.setCaseJurisdictionId(viewLog.getCaseJurisdictionId());
+        caseViewAudit.setCaseTypeId(viewLog.getCaseTypeId());
+        caseViewAudit.setTimestamp(timestampUtil.getUtcTimestampValue(viewLog.getTimestamp()));
+
+        final CaseViewAudit caseViewAuditResponse = caseViewAuditRepository.save(caseViewAudit);
+        final String timestamp = timestampUtil.timestampConvertor(caseViewAudit.getTimestamp());
+
+        return new CaseViewPostResponse(new ViewLogPostResponse().toDto(caseViewAuditResponse, timestamp));
+    }
+
+
     private int calculateStartRecordNumber(final Page<CaseViewAudit> caseView) {
         return caseView.getSize() * caseView.getNumber() + 1;
     }
 
     private Pageable getPage(final String size, final String page) {
-        if (isEmpty(size) && isEmpty(page)) {
-            return null;
-        }
-        return of(parseInt(page) - 1, parseInt(size), Sort.by("timestamp"));
-    }
+        final String pageSize = Optional.ofNullable(size).orElse("10000");
+        final String pageNumber = Optional.ofNullable(page).orElse("1");
 
-    private Timestamp getTimestampValue(final String timestamp) {
-        if (!isEmpty(timestamp)) {
-            return valueOf(LocalDateTime.parse(timestamp));
-        }
-        return null;
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
     }
 }

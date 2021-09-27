@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;

@@ -6,9 +6,12 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 
 @Entity(name = "case_view_audit")
@@ -22,6 +25,7 @@ public class CaseViewAudit implements Serializable {
 
     @Id
     @Column(name = "case_view_id")
+    @GeneratedValue(strategy = IDENTITY)
     private Integer caseViewId;
 
     @Column(name = "user_id", nullable = false)
