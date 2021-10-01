@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,8 +35,7 @@ public class CaseSearchAuditCases implements Serializable {
     @Column(name = "case_ref", nullable = false)
     private String caseRef;
 
-    public CaseSearchAuditCases(Integer searchId, String caseRef) {
-        this.searchId = searchId;
+    public CaseSearchAuditCases(String caseRef) {
         this.caseRef = caseRef;
     }
 }

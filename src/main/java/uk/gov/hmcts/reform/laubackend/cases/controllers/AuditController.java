@@ -173,10 +173,10 @@ public final class AuditController {
     @ResponseBody
     public ResponseEntity<CaseSearchPostResponse> saveCaseSearch(@RequestBody final SearchLogPostRequest searchLogPostRequest) {
         try {
-            final CaseSearchPostResponse caseViewPostResponse = caseSearchService
+            final CaseSearchPostResponse caseSearchPostResponse = caseSearchService
                 .saveCaseSearch(searchLogPostRequest.getSearchLog());
 
-            return new ResponseEntity<>(caseViewPostResponse, CREATED);
+            return new ResponseEntity<>(caseSearchPostResponse, CREATED);
         //} catch (final InvalidRequestException invalidRequestException) {
         //    log.error("saveCaseView API call failed due to error - {}",
         //              invalidRequestException.getMessage(),

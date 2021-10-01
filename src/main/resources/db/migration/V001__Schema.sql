@@ -44,7 +44,10 @@
   CREATE TABLE case_search_audit_cases (
    search_id BIGINT,
    case_ref VARCHAR(16),
-   PRIMARY KEY(search_id, case_ref)
+   PRIMARY KEY(search_id, case_ref),
+   CONSTRAINT fk_case_search_audit
+      FOREIGN KEY(search_id)
+   	  REFERENCES case_search_audit(search_id)
   );
 
   -- case_search_audit_cases comments

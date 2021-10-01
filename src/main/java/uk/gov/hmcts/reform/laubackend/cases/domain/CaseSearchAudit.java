@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -36,20 +38,21 @@ public class CaseSearchAudit implements Serializable {
     private String userId;
 
     @Column(name = "case_ref", nullable = false)
-    @OneToMany
-    @JoinColumn(name="search_id")
-    private List<CaseSearchAuditCases> caseRefs;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "case_search_audit_cases", joinColumns = {
+        @JoinColumn(name = "search_id")})
+    private List<CaseSearchAuditCases> caseRefs = new ArrayList<CaseSearchAuditCases>();
 
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
 
     public void addCaseRef(String caseRef) {
-        this.caseRefs.add(new CaseSearchAuditCases(this.searchId, caseRef));
+        this.caseRefs.add(new CaseSearchAuditCases(caseRef));
     }
 
-    public void setCaseRefs(List<String> caseRefs) {
-        for(String caseRef : caseRefs) {
-            addCaseRef(caseRef);
+    public void setCaseRefs(List<String> caseRefsList) {
+        for(String caseRefStr : caseRefsList) {
+            addCaseRef(caseRefStr);
         }
     }
 
