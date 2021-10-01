@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.request.SearchLogPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.request.ViewLogPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseViewService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -47,6 +50,9 @@ public final class AuditController {
 
     @Autowired
     private CaseViewService caseViewService;
+
+    @Autowired
+    private CaseSearchService caseSearchService;
 
     @ApiOperation(
             tags = "Get case audits", value = "Get list of case view audits.")
@@ -140,6 +146,47 @@ public final class AuditController {
             log.error("saveCaseView API call failed due to error - {}",
                     exception.getMessage(),
                     exception
+            );
+            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ApiOperation(
+        tags = "Save case search audits", value = "Save case search audits")
+    @ApiResponses({
+        @ApiResponse(code = 201,
+            message = "Created searchLog case response.",
+            response = CaseViewPostResponse.class),
+        @ApiResponse(code = 400,
+            message = "Invalid case view",
+            response = CaseViewPostResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden",
+            response = CaseViewPostResponse.class),
+        @ApiResponse(code = 500, message = "Internal Server Error",
+            response = CaseViewPostResponse.class)
+    })
+    @PostMapping(
+        path = "/audit/caseSearch",
+        produces = APPLICATION_JSON_VALUE,
+        consumes = APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<CaseSearchPostResponse> saveCaseSearch(@RequestBody final SearchLogPostRequest searchLogPostRequest) {
+        try {
+            final CaseSearchPostResponse caseViewPostResponse = caseSearchService
+                .saveCaseSearch(searchLogPostRequest.getSearchLog());
+
+            return new ResponseEntity<>(caseViewPostResponse, CREATED);
+        //} catch (final InvalidRequestException invalidRequestException) {
+        //    log.error("saveCaseView API call failed due to error - {}",
+        //              invalidRequestException.getMessage(),
+        //              invalidRequestException
+        //    );
+        //    return new ResponseEntity<>(null, BAD_REQUEST);
+        } catch (final Exception exception) {
+            log.error("saveCaseView API call failed due to error - {}",
+                      exception.getMessage(),
+                      exception
             );
             return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
         }
