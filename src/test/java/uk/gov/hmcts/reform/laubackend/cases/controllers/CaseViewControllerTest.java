@@ -29,13 +29,13 @@ import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AuditControllerTest {
+class CaseViewControllerTest {
 
     @Mock
     private CaseViewService caseViewService;
 
     @InjectMocks
-    private AuditController auditController;
+    private CaseViewController caseViewController;
 
     @Test
     void shouldReturnResponseEntityForGetRequest() {
@@ -47,7 +47,7 @@ class AuditControllerTest {
         when(caseViewService.getCaseView(any())).thenReturn(
                 caseViewGetResponse);
 
-        final ResponseEntity<CaseViewGetResponse> responseEntity = auditController.getCaseView(
+        final ResponseEntity<CaseViewGetResponse> responseEntity = caseViewController.getCaseView(
                 userId,
                 caseRef,
                 caseTypeId,
@@ -64,7 +64,7 @@ class AuditControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
-        final ResponseEntity<CaseViewGetResponse> responseEntity = auditController.getCaseView(
+        final ResponseEntity<CaseViewGetResponse> responseEntity = caseViewController.getCaseView(
                 "1",
                 "2",
                 "3",
@@ -93,7 +93,7 @@ class AuditControllerTest {
         final ViewLogPostRequest viewLogPostRequest = new ViewLogPostRequest();
         viewLogPostRequest.setViewLog(viewLog);
 
-        final ResponseEntity<CaseViewPostResponse> responseEntity = auditController.saveCaseView(
+        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
                 viewLogPostRequest
         );
 
@@ -108,7 +108,7 @@ class AuditControllerTest {
 
         final ViewLogPostRequest viewLogPostRequest = new ViewLogPostRequest();
         viewLogPostRequest.setViewLog(viewLog);
-        final ResponseEntity<CaseViewPostResponse> responseEntity = auditController.saveCaseView(
+        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
                 viewLogPostRequest
         );
 
@@ -126,7 +126,7 @@ class AuditControllerTest {
         given(caseViewService.saveCaseView(any()))
                 .willAnswer(invocation -> new Exception("Some terrible exception happened"));
 
-        final ResponseEntity<CaseViewPostResponse> responseEntity = auditController.saveCaseView(
+        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
                 viewLogPostRequest
         );
 
