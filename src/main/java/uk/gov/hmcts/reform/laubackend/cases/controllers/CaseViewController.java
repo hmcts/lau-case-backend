@@ -43,7 +43,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.ver
         + "Back-End API that will audit case view and searches. "
         + "The API will be invoked by the LAU front-end service.")
 
-public final class AuditController {
+public final class CaseViewController {
 
     @Autowired
     private CaseViewService caseViewService;

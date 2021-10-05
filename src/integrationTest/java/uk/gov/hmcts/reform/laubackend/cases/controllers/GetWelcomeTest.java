@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthService;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorisedServices;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseViewAuditRepository;
+import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseViewService;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
@@ -38,6 +39,9 @@ public class GetWelcomeTest {
 
     @MockBean
     private AuthorisedServices authorisedServices;
+
+    @MockBean
+    private CaseSearchService caseSearchService;
 
 
     @DisplayName("Should welcome upon root request with 200 response code")

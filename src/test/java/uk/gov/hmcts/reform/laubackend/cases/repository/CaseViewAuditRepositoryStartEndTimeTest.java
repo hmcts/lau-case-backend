@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=validate",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })

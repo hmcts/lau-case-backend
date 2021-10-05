@@ -1,8 +1,10 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.util.regex.Pattern.compile;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -39,6 +41,16 @@ public final class InputParamsVerifier {
         }
     }
 
+    public static void verifyRequestParamsAreNotEmpty(final CaseSearchPostRequest caseSearchPostRequest)
+            throws InvalidRequestException {
+        if (isEmpty(caseSearchPostRequest.getSearchLog().getUserId())
+                || caseSearchPostRequest.getSearchLog().getCaseRefs().isEmpty()
+                || isEmpty(caseSearchPostRequest.getSearchLog().getTimestamp())) {
+            throw new InvalidRequestException("You need to populate all parameters - "
+                    + "userId, caseRefs and timestamp", BAD_REQUEST);
+        }
+    }
+
     public static void verifyRequestParamsConditions(final InputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
         verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
@@ -56,6 +68,17 @@ public final class InputParamsVerifier {
         verifyCaseTypeId(viewLog.getCaseTypeId(), CASETYPEID_POST_EXCEPTION_MESSAGE);
         verifyCaseJurisdictionId(viewLog.getCaseJurisdictionId(), CASE_JURISDICTION_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(viewLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
+    }
+
+    public static void verifyRequestParamsConditions(final SearchLog searchLog)
+            throws InvalidRequestException {
+
+        verifyUserId(searchLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
+        verifyTimestamp(searchLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
+
+        for (String caseRef : searchLog.getCaseRefs()) {
+            verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
+        }
     }
 
     private static void verifyTimestamp(final String timestamp,
