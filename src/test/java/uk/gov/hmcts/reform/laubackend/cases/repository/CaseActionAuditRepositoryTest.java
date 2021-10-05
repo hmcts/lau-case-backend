@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseViewAudit;
+import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -23,16 +23,16 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-class CaseViewAuditRepositoryTest {
+class CaseActionAuditRepositoryTest {
 
     @Autowired
-    private CaseViewAuditRepository caseViewAuditRepository;
+    private CaseActionAuditRepository caseActionAuditRepository;
 
     @BeforeEach
     public void setUp() {
         //Insert 20 records
         for (int i = 1; i < 21; i++) {
-            caseViewAuditRepository
+            caseActionAuditRepository
                     .save(getCaseViewAuditEntity(
                             String.valueOf(i),
                             String.valueOf(i),
@@ -45,7 +45,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseRef() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 "2",
                 null,
@@ -60,7 +60,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByUserId() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "10",
                 null,
                 null,
@@ -76,7 +76,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseTypeId() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
                 "4",
@@ -91,7 +91,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseJurisdictionId() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
                 null,
@@ -106,7 +106,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldFindPageableResults() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
                 null,
@@ -121,7 +121,7 @@ class CaseViewAuditRepositoryTest {
 
     @Test
     void shouldGetAllRecords() {
-        final Page<CaseViewAudit> caseViewAuditList = caseViewAuditRepository.findCaseView(
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
                 null,
@@ -133,25 +133,27 @@ class CaseViewAuditRepositoryTest {
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
     }
 
-    private void assertResults(final List<CaseViewAudit> caseViewAuditList, final int value) {
+    private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
         final String stringValue = String.valueOf(value);
-        assertThat(caseViewAuditList.get(0).getCaseRef()).isEqualTo(stringValue);
-        assertThat(caseViewAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
-        assertThat(caseViewAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
-        assertThat(caseViewAuditList.get(0).getUserId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseRef()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getAction()).isEqualTo("C");
     }
 
-    private CaseViewAudit getCaseViewAuditEntity(final String caseRef,
-                                                 final String caseJurisdictionId,
-                                                 final String caseTypeId,
-                                                 final String userId,
-                                                 final Timestamp timestamp) {
-        final CaseViewAudit caseViewAudit = new CaseViewAudit();
-        caseViewAudit.setCaseRef(caseRef);
-        caseViewAudit.setCaseTypeId(caseTypeId);
-        caseViewAudit.setCaseJurisdictionId(caseJurisdictionId);
-        caseViewAudit.setUserId(userId);
-        caseViewAudit.setTimestamp(timestamp);
-        return caseViewAudit;
+    private CaseActionAudit getCaseViewAuditEntity(final String caseRef,
+                                                   final String caseJurisdictionId,
+                                                   final String caseTypeId,
+                                                   final String userId,
+                                                   final Timestamp timestamp) {
+        final CaseActionAudit caseActionAudit = new CaseActionAudit();
+        caseActionAudit.setCaseRef(caseRef);
+        caseActionAudit.setCaseTypeId(caseTypeId);
+        caseActionAudit.setAction("C");
+        caseActionAudit.setCaseJurisdictionId(caseJurisdictionId);
+        caseActionAudit.setUserId(userId);
+        caseActionAudit.setTimestamp(timestamp);
+        return caseActionAudit;
     }
 }

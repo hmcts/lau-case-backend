@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +13,7 @@ public class CaseViewGetResponse implements Serializable {
 
     public static final long serialVersionUID = 432973322;
 
-    private List<ViewLog> viewLog;
+    private List<ActionLog> actionLog;
     private int startRecordNumber;
     private boolean moreRecords;
 
@@ -21,8 +21,8 @@ public class CaseViewGetResponse implements Serializable {
         return new CaseViewGetResponse();
     }
 
-    public CaseViewGetResponse withViewLog(final List<ViewLog> viewLog) {
-        this.viewLog = viewLog;
+    public CaseViewGetResponse withActionLog(final List<ActionLog> actionLog) {
+        this.actionLog = actionLog;
         return this;
     }
 
@@ -38,7 +38,7 @@ public class CaseViewGetResponse implements Serializable {
 
     public CaseViewGetResponse build() {
         final CaseViewGetResponse caseViewGetResponse = new CaseViewGetResponse();
-        caseViewGetResponse.setViewLog(viewLog);
+        caseViewGetResponse.setActionLog(actionLog);
         caseViewGetResponse.setStartRecordNumber(startRecordNumber);
         caseViewGetResponse.setMoreRecords(moreRecords);
         return caseViewGetResponse;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -38,14 +38,14 @@ public class CaseSearchController {
     @ApiResponses({
             @ApiResponse(code = 201,
                     message = "Created SearchLog case response - includes caseSearchId from DB.",
-                    response = CaseViewPostResponse.class),
+                    response = CaseActionPostResponse.class),
             @ApiResponse(code = 400,
                     message = "Invalid case search",
-                    response = CaseViewPostResponse.class),
+                    response = CaseActionPostResponse.class),
             @ApiResponse(code = 403, message = "Forbidden",
-                    response = CaseViewPostResponse.class),
+                    response = CaseActionPostResponse.class),
             @ApiResponse(code = 500, message = "Internal Server Error",
-                    response = CaseViewPostResponse.class)
+                    response = CaseActionPostResponse.class)
     })
     @PostMapping(
             path = "/audit/caseSearch",

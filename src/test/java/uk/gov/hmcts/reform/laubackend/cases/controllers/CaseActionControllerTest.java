@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
-import uk.gov.hmcts.reform.laubackend.cases.request.ViewLogPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
+import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
-import uk.gov.hmcts.reform.laubackend.cases.service.CaseViewService;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -29,13 +29,13 @@ import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CaseViewControllerTest {
+class CaseActionControllerTest {
 
     @Mock
-    private CaseViewService caseViewService;
+    private CaseActionService caseActionService;
 
     @InjectMocks
-    private CaseViewController caseViewController;
+    private CaseActionController caseActionController;
 
     @Test
     void shouldReturnResponseEntityForGetRequest() {
@@ -44,10 +44,10 @@ class CaseViewControllerTest {
         final String caseTypeId = "3";
         final CaseViewGetResponse caseViewGetResponse = mock(CaseViewGetResponse.class);
 
-        when(caseViewService.getCaseView(any())).thenReturn(
+        when(caseActionService.getCaseView(any())).thenReturn(
                 caseViewGetResponse);
 
-        final ResponseEntity<CaseViewGetResponse> responseEntity = caseViewController.getCaseView(
+        final ResponseEntity<CaseViewGetResponse> responseEntity = caseActionController.getCaseView(
                 userId,
                 caseRef,
                 caseTypeId,
@@ -58,13 +58,13 @@ class CaseViewControllerTest {
                 null
         );
 
-        verify(caseViewService, times(1)).getCaseView(any());
+        verify(caseActionService, times(1)).getCaseView(any());
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
-        final ResponseEntity<CaseViewGetResponse> responseEntity = caseViewController.getCaseView(
+        final ResponseEntity<CaseViewGetResponse> responseEntity = caseActionController.getCaseView(
                 "1",
                 "2",
                 "3",
@@ -81,35 +81,38 @@ class CaseViewControllerTest {
 
     @Test
     void shouldReturnResponseEntityForPostRequest() {
-        final CaseViewPostResponse caseViewPostResponse = mock(CaseViewPostResponse.class);
+        final CaseActionPostResponse caseActionPostResponse = mock(CaseActionPostResponse.class);
 
-        when(caseViewService.saveCaseView(any())).thenReturn(
-                caseViewPostResponse);
+        when(caseActionService.saveCaseAction(any())).thenReturn(
+                caseActionPostResponse);
 
-        final ViewLog viewLog = new ViewLog();
-        viewLog.setUserId("1");
-        viewLog.setCaseRef(randomNumeric(16));
+        final ActionLog actionLog = new ActionLog("1",
+                "R",
+                "1615817621013640",
+                "3",
+                "4",
+                "2021-08-23T22:20:05.023Z");
 
-        final ViewLogPostRequest viewLogPostRequest = new ViewLogPostRequest();
-        viewLogPostRequest.setViewLog(viewLog);
+        final CaseActionPostRequest caseActionPostRequest = new CaseActionPostRequest();
+        caseActionPostRequest.setActionLog(actionLog);
 
-        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
-                viewLogPostRequest
+        final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                caseActionPostRequest
         );
 
-        verify(caseViewService, times(1)).saveCaseView(viewLog);
+        verify(caseActionService, times(1)).saveCaseAction(actionLog);
         assertThat(responseEntity.getStatusCode()).isEqualTo(CREATED);
     }
 
     @Test
     void shouldReturnBadRequestResponseEntityForPostRequest() {
-        final ViewLog viewLog = new ViewLog();
-        viewLog.setCaseRef("2");
+        final ActionLog actionLog = new ActionLog();
+        actionLog.setCaseRef("2");
 
-        final ViewLogPostRequest viewLogPostRequest = new ViewLogPostRequest();
-        viewLogPostRequest.setViewLog(viewLog);
-        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
-                viewLogPostRequest
+        final CaseActionPostRequest caseActionPostRequest = new CaseActionPostRequest();
+        caseActionPostRequest.setActionLog(actionLog);
+        final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                caseActionPostRequest
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
@@ -117,17 +120,21 @@ class CaseViewControllerTest {
 
     @Test
     void shouldReturnInternalServerErrorForPostRequest() {
-        final ViewLog viewLog = new ViewLog();
-        viewLog.setUserId("1");
+        final ActionLog actionLog = new ActionLog("1",
+                "R",
+                "1615817621013640",
+                "3",
+                "4",
+                "2021-08-23T22:20:05.023Z");
 
-        final ViewLogPostRequest viewLogPostRequest = new ViewLogPostRequest();
-        viewLogPostRequest.setViewLog(viewLog);
+        final CaseActionPostRequest caseActionPostRequest = new CaseActionPostRequest();
+        caseActionPostRequest.setActionLog(actionLog);
 
-        given(caseViewService.saveCaseView(any()))
+        given(caseActionService.saveCaseAction(any()))
                 .willAnswer(invocation -> new Exception("Some terrible exception happened"));
 
-        final ResponseEntity<CaseViewPostResponse> responseEntity = caseViewController.saveCaseView(
-                viewLogPostRequest
+        final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                caseActionPostRequest
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);

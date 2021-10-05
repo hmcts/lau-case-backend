@@ -14,25 +14,28 @@ import java.sql.Timestamp;
 import static javax.persistence.GenerationType.IDENTITY;
 
 
-@Entity(name = "case_view_audit")
+@Entity(name = "case_action_audit")
 @NoArgsConstructor
 @Getter
 @Setter
 @SuppressWarnings({"PMD.TooManyFields"})
-public class CaseViewAudit implements Serializable {
+public class CaseActionAudit implements Serializable {
 
     public static final long serialVersionUID = 5428747L;
 
     @Id
-    @Column(name = "case_view_id")
+    @Column(name = "case_action_id")
     @GeneratedValue(strategy = IDENTITY)
-    private Integer caseViewId;
+    private Long caseActionId;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "case_ref", nullable = false)
     private String caseRef;
+
+    @Column(name = "action", nullable = false)
+    private String action;
 
     @Column(name = "case_jurisdiction_id", nullable = false)
     private String caseJurisdictionId;
