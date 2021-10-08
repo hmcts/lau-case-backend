@@ -34,6 +34,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
+    env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
+    env.TEST_S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
     after('test') {
         // Run integration tests
@@ -46,9 +48,6 @@ withPipeline(type, product, component) {
     enableAksStagingDeployment()
     disableLegacyDeployment()
     syncBranchesWithMaster(branchesToSync)
-
-    env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
-    env.TEST_S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
     after('test') {
 

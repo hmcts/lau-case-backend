@@ -3,18 +3,19 @@ package uk.gov.hmcts.reform.laubackend.cases.smoke;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {SmokeTestConfiguration.class})
 public class SmokeTests {
 
@@ -25,7 +26,7 @@ public class SmokeTests {
 
     RequestSpecification requestSpec;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         RequestSpecBuilder builder = new RequestSpecBuilder();
         builder.addParam("http.connection.timeout", "60000");
@@ -43,7 +44,7 @@ public class SmokeTests {
             .get(url + "/health")
             .then()
             .statusCode(HTTP_OK);
-        assertTrue(okResponse(response),"Health endpoint should be HTTP 200 (ok)");
+        assertTrue("Health endpoint should be HTTP 200 (ok)", okResponse(response));
     }
 
     @Test
@@ -55,7 +56,7 @@ public class SmokeTests {
             .statusCode(HTTP_OK)
             .body("git.commit.id", notNullValue())
             .body("git.commit.time", notNullValue());
-        assertTrue(okResponse(response), "Info endpoint should be HTTP 200 (ok)");
+        assertTrue("Info endpoint should be HTTP 200 (ok)", okResponse(response));
     }
 
     private boolean okResponse(ValidatableResponse response) {
