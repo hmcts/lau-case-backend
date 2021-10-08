@@ -42,7 +42,7 @@
 
   -- case_search_audit_cases table
   CREATE TABLE case_search_audit_cases(
-      id        SERIAL PRIMARY KEY,
+      id SERIAL PRIMARY KEY,
       search_id BIGINT,
       case_ref  VARCHAR(16),
       CONSTRAINT case_search_constraint UNIQUE (search_id, case_ref),
@@ -54,9 +54,12 @@
   -- case_search_audit_cases comments
   comment on column case_search_audit_cases.search_id is 'Unique lau case search id';
   comment on column case_search_audit_cases.case_ref is 'Case reference number';
+  
+  -- case_search_audit_cases indexes
+  CREATE INDEX case_search_audit_cases_search_id_idx ON case_search_audit_cases (search_id);
 
   -- create user for application access
   CREATE USER lauuser WITH PASSWORD '${LAU_DB_PASSWORD}';
   GRANT USAGE, SELECT ON SEQUENCE case_view_audit_case_view_id_seq TO lauuser;
-  GRANT USAGE, SELECT ON SEQUENCE case_search_audit_search_id_seq TO lauuser;
+  GRANT USAGE, SELECT ON SEQUENCE case_search_audit_cases_search_id_seq TO lauuser;
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE case_view_audit, case_search_audit, case_search_audit_cases, flyway_schema_history TO lauuser;
