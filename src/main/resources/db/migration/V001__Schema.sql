@@ -61,5 +61,6 @@
   -- create user for application access
   CREATE USER lauuser WITH PASSWORD '${LAU_DB_PASSWORD}';
   GRANT USAGE, SELECT ON SEQUENCE case_view_audit_case_view_id_seq TO lauuser;
-  GRANT USAGE, SELECT ON SEQUENCE case_search_audit_cases_search_id_seq TO lauuser;
+  GRANT USAGE, SELECT ON SEQUENCE case_search_audit_id_seq TO lauuser;
+  GRANT USAGE, SELECT ON SEQUENCE case_search_audit_cases_id_seq TO lauuser;
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE case_view_audit, case_search_audit, case_search_audit_cases, flyway_schema_history TO lauuser;
