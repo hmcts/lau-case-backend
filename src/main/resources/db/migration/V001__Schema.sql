@@ -54,7 +54,7 @@
   -- case_search_audit_cases comments
   comment on column case_search_audit_cases.search_id is 'Unique lau case search id';
   comment on column case_search_audit_cases.case_ref is 'Case reference number';
-  
+
   -- case_search_audit_cases indexes
   CREATE INDEX case_search_audit_cases_search_id_idx ON case_search_audit_cases (search_id);
 

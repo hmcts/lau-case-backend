@@ -121,7 +121,7 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-    useJUnitPlatform()
+//    useJUnitPlatform()
 }
 
 task smoke(type: Test) {
@@ -261,7 +261,9 @@ def versions = [
         testcontainers    : '1.15.1',
         restAssured       : '4.4.0',
         serviceAuthVersion: '4.0.0',
-        commonsIo         : '2.7'
+        commonsIo         : '2.7',
+        cucumber          : '6.8.0'
+
 ]
 
 ext.libraries = [
@@ -320,6 +322,7 @@ dependencies {
 
     testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
     testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+    testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
 
     testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
 
@@ -328,8 +331,16 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
+    testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+
     integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
     integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+    integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+    integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
     compile('com.h2database:h2')
 
