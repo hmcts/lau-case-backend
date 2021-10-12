@@ -7,19 +7,31 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_JURISDICTION_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_REF;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.END_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.PAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.SIZE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.START_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
 
@@ -72,6 +84,53 @@ public class CaseSearchController {
             log.error("saveCaseSearch API call failed due to error - {}",
                     exception.getMessage(),
                     exception
+            );
+            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @ApiOperation(
+        tags = "Get case search audits", value = "Get case search audits")
+    @ApiResponses({
+        @ApiResponse(code = 200,
+            message = "Request executed successfully. Response contains of case search logs",
+            response = CaseSearchGetResponse.class),
+        @ApiResponse(code = 400,
+            message =
+                "Missing userId, caseRef, startTimestamp or endTimestamp parameters.",
+            response = CaseSearchGetResponse.class),
+        @ApiResponse(code = 403, message = "Forbidden", response = CaseViewGetResponse.class)
+    })
+    @GetMapping(
+        path = "/audit/caseSearch",
+        produces = APPLICATION_JSON_VALUE,
+        consumes = APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<CaseSearchGetRequest> getCaseSearch(
+        @RequestParam(value = USER_ID, required = false) final String userId,
+        @RequestParam(value = CASE_REF, required = false) final String caseRef,
+        @RequestParam(value = START_TIME, required = false) final String startTime,
+        @RequestParam(value = END_TIME, required = false) final String endTime,
+        @RequestParam(value = SIZE, required = false) final String size,
+        @RequestParam(value = PAGE, required = false) final String page) {
+        try {
+            verifyRequestParamsAreNotEmpty(caseSearchGetRequest);
+            verifyRequestParamsConditions(caseSearchGetRequest.getSearchLog());
+
+            final CaseSearchPostRequest caseSearchAudit = caseSearchService.saveCaseSearch(caseSearchGetRequest);
+
+            return new ResponseEntity<>(caseSearchAudit, OK);
+        } catch (final InvalidRequestException invalidRequestException) {
+            log.error("getCaseSearch API call failed due to error - {}",
+                      invalidRequestException.getMessage(),
+                      invalidRequestException
+            );
+            return new ResponseEntity<>(null, BAD_REQUEST);
+        } catch (final Exception exception) {
+            log.error("getCaseSearch API call failed due to error - {}",
+                      exception.getMessage(),
+                      exception
             );
             return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
         }
