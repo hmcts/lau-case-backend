@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
@@ -17,9 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CaseViewSteps extends BaseSteps {
+public class CaseViewGetApiSteps extends BaseSteps {
 
-    private static final Logger logger = LoggerFactory.getLogger(CaseViewSteps.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseViewGetApiSteps.class);
 
 
     @Step("Given a valid service token is generated")
@@ -57,40 +55,41 @@ public class CaseViewSteps extends BaseSteps {
         int startRecordNumber = caseViewResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
         List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
-        ViewLog viewLogObj = viewLogList.get(0);
+        ViewLog viewLogObj = viewLogList == null || viewLogList.get(0) == null ? new ViewLog() : viewLogList.get(0);
         for (String queryParam : inputQueryParamMap.keySet()) {
 
             if ("userId".equals(queryParam)) {
+                String userId = viewLogObj.getUserId();
                 Assert.assertEquals(
                     "User Id is missing in the response",
-                    inputQueryParamMap.get(queryParam),
-                    viewLogObj.getUserId()
+                    inputQueryParamMap.get(queryParam),userId
                 );
             } else if ("caseRef".equals(queryParam)) {
+                String caseRef = viewLogObj.getCaseRef();
                 Assert.assertEquals(
                     "caseRef is missing in the response",
-                    inputQueryParamMap.get(queryParam),
-                    viewLogObj.getCaseRef()
+                    inputQueryParamMap.get(queryParam),caseRef
                 );
 
             } else if ("caseJurisdictionId".equals(queryParam)) {
+                String caseJurisdictionId = viewLogObj.getCaseJurisdictionId();
                 Assert.assertEquals(
                     "caseJurisdictionId is missing in the response",
-                    inputQueryParamMap.get(queryParam),
-                    viewLogObj.getCaseJurisdictionId()
+                    inputQueryParamMap.get(queryParam),caseJurisdictionId
                 );
 
             } else if ("caseTypeId".equals(queryParam)) {
+                String caseTypeId = viewLogObj.getCaseTypeId();
                 Assert.assertEquals(
                     "caseTypeId is missing in the response",
-                    inputQueryParamMap.get(queryParam),
-                    viewLogObj.getCaseTypeId()
+                    inputQueryParamMap.get(queryParam),caseTypeId
                 );
 
             }
         }
         return TestConstants.SUCCESS;
     }
+
 
     @Step("Then the GET CaseView response date range matches the input")
     public String thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap,
@@ -108,15 +107,14 @@ public class CaseViewSteps extends BaseSteps {
             Date inputEndTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampEndInputParam);
             Date responseTimestamp = new SimpleDateFormat(responseDateFormat, Locale.UK).parse(timeStampResponse);
 
-            logger.info("Input start date : " + inputStartTimestamp.getTime());
-            logger.info("Input end date : " + inputEndTimestamp.getTime());
-            logger.info("Output date : " + responseTimestamp.getTime());
+            LOGGER.info("Input start date : " + inputStartTimestamp.getTime());
+            LOGGER.info("Input end date : " + inputEndTimestamp.getTime());
+            LOGGER.info("Output date : " + responseTimestamp.getTime());
 
-            Assert.assertTrue(responseTimestamp.getTime() == inputStartTimestamp.getTime()
-                                  || responseTimestamp.getTime() == inputEndTimestamp.getTime()
-                                  || (responseTimestamp.after(inputStartTimestamp) && responseTimestamp.before(
-                inputEndTimestamp))
-            );
+        Assert.assertTrue(responseTimestamp.after(inputStartTimestamp) && responseTimestamp.before(
+            inputEndTimestamp) || responseTimestamp.getTime() == inputStartTimestamp.getTime()
+                              || responseTimestamp.getTime() == inputEndTimestamp.getTime()
+        );
         return TestConstants.SUCCESS;
     }
 
@@ -147,24 +145,6 @@ public class CaseViewSteps extends BaseSteps {
         return TestConstants.SUCCESS;
     }
 
-    @Step("Given the POST service body is generated")
-    public CaseViewRequestVO generateCaseViewPostRequestBody() {
-        ViewLog viewLog = new ViewLog();
-        viewLog.setUserId("3748240");
-        viewLog.setCaseRef("1615817621013549");
-        viewLog.setCaseJurisdictionId("CMC");
-        viewLog.setCaseTypeId("Caveats");
-        viewLog.setTimestamp("2021-08-23T22:20:05.023Z");
-        CaseViewRequestVO caseViewRequestVO = new CaseViewRequestVO();
-        caseViewRequestVO.setViewLog(viewLog);
-        return caseViewRequestVO;
-    }
-
-    @Step("When the POST service is invoked")
-    public Response whenThePostServiceIsInvoked(String serviceToken, Object viewLog) throws JsonProcessingException {
-        return performPostOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT, null, null, viewLog, serviceToken);
-    }
-
     @Step("Then a success response is returned")
     public String thenASuccessResposeIsReturned(Response response) {
         Assert.assertTrue(
@@ -173,4 +153,5 @@ public class CaseViewSteps extends BaseSteps {
         );
         return TestConstants.SUCCESS;
     }
+
 }

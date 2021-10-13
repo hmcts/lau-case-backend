@@ -95,7 +95,7 @@ public class BaseSteps {
 
         if (null != headers && !headers.isEmpty()) {
             for (String headerKey : headers.keySet()) {
-                requestSpecification.header(new Header(headerKey, headers.get(headerKey)));
+                requestSpecification.header(createHeader(headerKey, headers.get(headerKey)));
             }
         }
 
@@ -110,6 +110,10 @@ public class BaseSteps {
             .extract().response();
     }
 
+    public Header createHeader(String headerKey, String headerValue) {
+        return new Header(headerKey, headerValue);
+    }
+
 
     public Response performPostOperation(String endpoint,
                                          Map<String, String> headers,
@@ -118,17 +122,12 @@ public class BaseSteps {
                                          String authServiceToken
     ) throws JsonProcessingException {
 
-        String bodyJsonStr = null;
-        if (null != body) {
-            bodyJsonStr = new ObjectMapper().writeValueAsString(body);
-        }
         RequestSpecification requestSpecification = rest()
             .given().header("ServiceAuthorization", authServiceToken)
             .header("Content-Type", "application/json");
         if (null != headers && !headers.isEmpty()) {
             for (String headerKey : headers.keySet()) {
-                requestSpecification.header(new Header(headerKey, headers.get(headerKey)));
-
+                requestSpecification.header(createHeader(headerKey, headers.get(headerKey)));
             }
         }
         if (null != queryParams && !queryParams.isEmpty()) {
@@ -136,6 +135,7 @@ public class BaseSteps {
                 requestSpecification.param(queryParamKey, queryParams.get(queryParamKey));
             }
         }
+        String bodyJsonStr = null == body ? "" : new ObjectMapper().writeValueAsString(body);
         return requestSpecification.urlEncodingEnabled(true).body(bodyJsonStr).post(endpoint)
             .then()
             .extract().response();
