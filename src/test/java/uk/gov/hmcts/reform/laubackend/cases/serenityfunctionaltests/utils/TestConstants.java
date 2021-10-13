@@ -9,6 +9,8 @@ public final class TestConstants {
 
     /*CaseViw endPoint*/
     public static final String AUDIT_CASE_VIEW_ENDPOINT = "/audit/caseView";
+    public static final String SUCCESS = "Success";
+    public static final String FAILURE = "Failure";
 
     private TestConstants() {
 

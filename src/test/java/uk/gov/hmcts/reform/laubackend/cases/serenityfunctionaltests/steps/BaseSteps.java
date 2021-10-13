@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -25,8 +26,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class BaseSteps {
 
-    private static final RequestSpecification Spec;
-    private static final Logger Log =
+    private static final RequestSpecification REQSPEC;
+    private static final Logger LOGGER =
         LoggerFactory.getLogger(BaseSteps.class);
     private final String s2sUrl = TestConstants.S2S_URL;
 
@@ -43,26 +44,26 @@ public class BaseSteps {
             .setBaseUri(TestConstants.BASE_URL)
             .setRelaxedHTTPSValidation();
 
-        Log.info("Using base API URL: " + EnvConfig.API_URL);
+        LOGGER.info("Using base API URL: " + EnvConfig.API_URL);
         if (proxyHost != null) {
             specBuilder.setProxy(proxyHost, proxyPort);
         }
 
-        Spec = specBuilder.build();
+        REQSPEC = specBuilder.build();
     }
 
     public RequestSpecification rest() {
-        return SerenityRest.given(Spec);
+        return SerenityRest.given(REQSPEC);
     }
 
     public RequestSpecification given() {
-        return SerenityRest.given(Spec);
+        return SerenityRest.given(REQSPEC);
     }
 
 
     public String getServiceToken(String s2sMicroServiceName) {
 
-        Log.info("s2sUrl lease url: {}", s2sUrl + "/lease");
+        LOGGER.info("s2sUrl lease url: {}", s2sUrl + "/lease");
         final Map<String, Object> params = of(
             "microservice", s2sMicroServiceName
         );
@@ -115,23 +116,19 @@ public class BaseSteps {
                                          Map<String, String> queryParams,
                                          Object body,
                                          String authServiceToken
-    ) {
+    ) throws JsonProcessingException {
 
         String bodyJsonStr = null;
         if (null != body) {
-            try {
-                bodyJsonStr = new ObjectMapper().writeValueAsString(body);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            bodyJsonStr = new ObjectMapper().writeValueAsString(body);
         }
         RequestSpecification requestSpecification = rest()
             .given().header("ServiceAuthorization", authServiceToken)
             .header("Content-Type", "application/json");
-
         if (null != headers && !headers.isEmpty()) {
             for (String headerKey : headers.keySet()) {
                 requestSpecification.header(new Header(headerKey, headers.get(headerKey)));
+
             }
         }
         if (null != queryParams && !queryParams.isEmpty()) {

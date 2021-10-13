@@ -7,12 +7,16 @@ import net.thucydides.core.annotations.Title;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testng.Assert;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewSteps;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
-import java.util.HashMap;
+import java.text.ParseException;
+import java.util.Map;
 
 @RunWith(SerenityRunner.class)
 public class CaseViewApiTest {
@@ -21,66 +25,68 @@ public class CaseViewApiTest {
     CaseViewSteps caseViewSteps;
 
     @Test
-    @Title("Assert response code of 200 for CaseViewApi")
-    public void assertHttpSuccessResponseCodeForCaseViewApi() {
+    @Title("Assert response code of 200 for GET CaseViewApi with valid headers and valid request params")
+    public void assertHttpSuccessResponseCodeForCaseViewApi() throws JsonProcessingException, ParseException {
 
         String authServiceToken = caseViewSteps.givenAValidServiceTokenIsGenerated();
-        HashMap<String, String> queryParamMap = caseViewSteps.givenValidParamsAreSuppliedForGetCaseView();
+        Map<String, String> queryParamMap = caseViewSteps.givenValidParamsAreSuppliedForGetCaseView();
         Response response = caseViewSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
-        CaseViewResponseVO caseViewResponseVO = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            caseViewResponseVO = objectMapper.readValue(
-                response.getBody().asString(),
-                CaseViewResponseVO.class
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        CaseViewResponseVO caseViewResponseVO = objectMapper.readValue(
+            response.getBody().asString(),
+            CaseViewResponseVO.class
+        );
+
         caseViewSteps.thenASuccessResposeIsReturned(response);
         caseViewSteps.thenAtLeastOneRecordNumberShouldExist(response);
         caseViewSteps.thenTheGetCaseViewResponseParamsMatchesTheInput(queryParamMap, caseViewResponseVO);
-        caseViewSteps.thenTheGetCaseViewResponseDateRangeMatchesTheInput(queryParamMap, caseViewResponseVO);
+        String successOrFailure = caseViewSteps.thenTheGetCaseViewResponseDateRangeMatchesTheInput(
+            queryParamMap,
+            caseViewResponseVO
+        );
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion for GET CaseView API response code 200 is not successful");
     }
 
     @Test
-    @Title("Assert response code of 401 with Invalid Service Authentication Token for Get CaseViewApi service")
+    @Title("Assert response code of 401 for Get CaseViewApi service with Invalid Service Authentication Token")
     public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
         String invalidServiceToken = caseViewSteps.givenTheInvalidServiceTokenIsGenerated();
-        HashMap<String, String> queryParamMap = caseViewSteps.givenValidParamsAreSuppliedForGetCaseView();
+        Map<String, String> queryParamMap = caseViewSteps.givenValidParamsAreSuppliedForGetCaseView();
         Response response = caseViewSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             invalidServiceToken,
             queryParamMap
         );
-        caseViewSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
+        String successOrFailure = caseViewSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
+        Assert.assertEquals( successOrFailure, TestConstants.SUCCESS, "CaseView API response code 401 assertion is not successful");
     }
 
     @Test
-    @Title("Assert response code of 400 with Empty Params for CaseViewApi")
+    @Title("Assert response code of 400 for CaseViewApi with Empty Params")
     public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
         String authServiceToken = caseViewSteps.givenAValidServiceTokenIsGenerated();
-        HashMap<String, String> queryParamMap = caseViewSteps.givenEmptyParamsAreSuppliedForGetCaseView();
+        Map<String, String> queryParamMap = caseViewSteps.givenEmptyParamsAreSuppliedForGetCaseView();
         Response response = caseViewSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
-        caseViewSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 400);
+        String successOrFailure = caseViewSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 400);
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");
     }
 
 
     @Test
     @Title("Assert response code of 200 for POST Request CaseViewApi")
-    public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi() {
+    public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi() throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseViewSteps.givenAValidServiceTokenIsGenerated();
         CaseViewRequestVO caseViewRequestVO = caseViewSteps.generateCaseViewPostRequestBody();
         Response response = caseViewSteps.whenThePostServiceIsInvoked(authServiceToken, caseViewRequestVO);
-        caseViewSteps.thenASuccessResposeIsReturned(response);
-
+        String successOrFailure = caseViewSteps.thenASuccessResposeIsReturned(response);
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "CaseView POST API response code 200 assertion is not successful");
     }
 
     @AfterClass
