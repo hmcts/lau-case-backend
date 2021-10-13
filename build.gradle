@@ -457,14 +457,6 @@ wrapper {
 /*Added For FunctionalTests*/
 apply plugin: 'net.serenity-bdd.aggregator'
 
-task serenityBDDSmokeTests(type: Test) {
-  include '**/*SmokeTests.*'
-  testLogging.showStandardStreams = true
-
-  systemProperties = System.properties
-  systemProperties['user.dir'] = workingDir
-}
-
 task serenityBDDFunctionalTests(type: Test) {
   include '**/*ApiTest.*'
   testLogging.showStandardStreams = true
@@ -479,17 +471,6 @@ bootRun {
 
 gradle.startParameter.continueOnFailure = true
 
-serenityBDDSmokeTests.finalizedBy(aggregate)
 serenityBDDFunctionalTests.finalizedBy(aggregate)
 
-
-jacocoTestReport {
-  reports {
-    xml.enabled true
-    html.enabled true
-    html.destination file("${buildDir}/reports/jacoco")
-  }
-}
-
-test.finalizedBy jacocoTestReport
 
