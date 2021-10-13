@@ -25,9 +25,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class BaseSteps {
 
-    private static final RequestSpecification spec;
-    private static final Logger log =
-        LoggerFactory.getLogger((uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.BaseSteps.class));
+    private static final RequestSpecification Spec;
+    private static final Logger Log =
+        LoggerFactory.getLogger(BaseSteps.class);
     private final String s2sUrl = TestConstants.S2S_URL;
 
 
@@ -43,26 +43,26 @@ public class BaseSteps {
             .setBaseUri(TestConstants.BASE_URL)
             .setRelaxedHTTPSValidation();
 
-        log.info("Using base API URL: " + EnvConfig.API_URL);
+        Log.info("Using base API URL: " + EnvConfig.API_URL);
         if (proxyHost != null) {
             specBuilder.setProxy(proxyHost, proxyPort);
         }
 
-        spec = specBuilder.build();
+        Spec = specBuilder.build();
     }
 
     public RequestSpecification rest() {
-        return SerenityRest.given(spec);
+        return SerenityRest.given(Spec);
     }
 
     public RequestSpecification given() {
-        return SerenityRest.given(spec);
+        return SerenityRest.given(Spec);
     }
 
 
     public String getServiceToken(String s2sMicroServiceName) {
 
-        log.info("s2sUrl lease url: {}", s2sUrl + "/lease");
+        Log.info("s2sUrl lease url: {}", s2sUrl + "/lease");
         final Map<String, Object> params = of(
             "microservice", s2sMicroServiceName
         );
@@ -76,7 +76,6 @@ public class BaseSteps {
             .when()
             .post("/lease")
             .andReturn();
-        System.out.println("Token Resp : " + response.body().asString());
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return "Bearer " + response

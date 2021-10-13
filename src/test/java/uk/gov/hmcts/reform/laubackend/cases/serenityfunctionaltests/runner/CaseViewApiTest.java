@@ -32,7 +32,6 @@ public class CaseViewApiTest {
         );
         CaseViewResponseVO caseViewResponseVO = null;
         try {
-            System.out.println("case view response : " + response.getBody().asString());
             ObjectMapper objectMapper = new ObjectMapper();
             caseViewResponseVO = objectMapper.readValue(
                 response.getBody().asString(),
