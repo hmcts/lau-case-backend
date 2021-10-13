@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.runner;
+package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.runner;
 
 import io.restassured.response.Response;
 import net.serenitybdd.junit.runners.SerenityRunner;
@@ -8,9 +8,9 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.model.CaseViewRequestVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.model.CaseViewResponseVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.steps.CaseViewSteps;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewSteps;
 
 import java.util.HashMap;
 
@@ -49,7 +49,7 @@ public class CaseViewApiTest {
 
     @Test
     @Title("Assert response code of 401 with Invalid Service Authentication Token for Get CaseViewApi service")
-    public void AssertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
+    public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
         String invalidServiceToken = caseViewSteps.givenTheInvalidServiceTokenIsGenerated();
         HashMap<String, String> queryParamMap = caseViewSteps.givenValidParamsAreSuppliedForGetCaseView();
@@ -62,7 +62,7 @@ public class CaseViewApiTest {
 
     @Test
     @Title("Assert response code of 400 with Empty Params for CaseViewApi")
-    public void AssertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
+    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
         String authServiceToken = caseViewSteps.givenAValidServiceTokenIsGenerated();
         HashMap<String, String> queryParamMap = caseViewSteps.givenEmptyParamsAreSuppliedForGetCaseView();
         Response response = caseViewSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
@@ -86,7 +86,6 @@ public class CaseViewApiTest {
 
     @AfterClass
     public static void deleteAll() {
-//        new BaseSteps().deleteAllSync();
     }
 
 }

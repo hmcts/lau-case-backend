@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.steps;
+package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
@@ -6,11 +6,10 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.model.CaseViewRequestVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.model.CaseViewResponseVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.model.ViewLog;
-import uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.utils.TestConstants;
-
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ViewLog;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,8 +40,10 @@ public class CaseViewSteps extends BaseSteps {
     }
 
     @Step("When the CaseView GET service is invoked with the valid params")
-    public Response whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(String serviceToken, HashMap<String, String> queryParamMap) {
-        return performGetOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT, null, queryParamMap, serviceToken);
+    public Response whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(String serviceToken,
+                                                                         HashMap<String, String> queryParamMap) {
+        return performGetOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT,
+                                   null, queryParamMap, serviceToken);
     }
 
     @Step("Then at least one record number should exist")
@@ -51,7 +52,8 @@ public class CaseViewSteps extends BaseSteps {
     }
 
     @Step("Then the GET CaseView response params match the input")
-    public void thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap, CaseViewResponseVO caseViewResponseVO) {
+    public void thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
+                                                                CaseViewResponseVO caseViewResponseVO) {
         int startRecordNumber = caseViewResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
         List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
@@ -90,7 +92,8 @@ public class CaseViewSteps extends BaseSteps {
     }
 
     @Step("Then the GET CaseView response date range matches the input")
-    public void thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap, CaseViewResponseVO caseViewResponseVO) {
+    public void thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap,
+                                                                   CaseViewResponseVO caseViewResponseVO) {
         try {
             List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
             ViewLog viewLog = viewLogList.get(0);
@@ -148,13 +151,13 @@ public class CaseViewSteps extends BaseSteps {
 
     @Step("Given the POST service body is generated")
     public CaseViewRequestVO generateCaseViewPostRequestBody() {
-        CaseViewRequestVO caseViewRequestVO = new CaseViewRequestVO();
         ViewLog viewLog = new ViewLog();
         viewLog.setUserId("3748240");
         viewLog.setCaseRef("1615817621013549");
         viewLog.setCaseJurisdictionId("CMC");
         viewLog.setCaseTypeId("Caveats");
         viewLog.setTimestamp("2021-08-23T22:20:05.023Z");
+        CaseViewRequestVO caseViewRequestVO = new CaseViewRequestVO();
         caseViewRequestVO.setViewLog(viewLog);
         return caseViewRequestVO;
     }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.cases.serenityFunctionalTests.utils;
+package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils;
 
 public final class TestConstants {
 
@@ -9,4 +9,8 @@ public final class TestConstants {
 
     /*CaseViw endPoint*/
     public static final String AUDIT_CASE_VIEW_ENDPOINT = "/audit/caseView";
+
+    private TestConstants() {
+
+    }
 }
