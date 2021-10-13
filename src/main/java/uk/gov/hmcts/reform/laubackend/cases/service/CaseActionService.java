@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.ViewActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static org.springframework.data.domain.PageRequest.of;
-import static uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse.caseViewResponse;
+import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
 
 @Service
 public class CaseActionService {
@@ -31,7 +31,7 @@ public class CaseActionService {
     @Autowired
     private TimestampUtil timestampUtil;
 
-    public CaseViewGetResponse getCaseView(final InputParamsHolder inputParamsHolder) {
+    public CaseActionGetResponse getCaseView(final InputParamsHolder inputParamsHolder) {
 
         final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),
@@ -63,7 +63,7 @@ public class CaseActionService {
 
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
         caseActionAudit.setUserId(actionLog.getUserId());
-        caseActionAudit.setAction(actionLog.getAction());
+        caseActionAudit.setCaseAction(actionLog.getCaseAction());
         caseActionAudit.setCaseRef(actionLog.getCaseRef());
         caseActionAudit.setCaseJurisdictionId(actionLog.getCaseJurisdictionId());
         caseActionAudit.setCaseTypeId(actionLog.getCaseTypeId());

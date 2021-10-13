@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -58,7 +58,7 @@ class CaseActionServiceTest {
                         PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
                 .thenReturn(pageResults);
 
-        final CaseViewGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
+        final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
         verify(caseActionAuditRepository, times(1))
                 .findCaseView("1", "2", "3", "4", null, null,
@@ -80,7 +80,7 @@ class CaseActionServiceTest {
         caseActionAudit.setCaseRef("2");
         caseActionAudit.setCaseJurisdictionId("3");
         caseActionAudit.setCaseTypeId("4");
-        caseActionAudit.setAction("R");
+        caseActionAudit.setCaseAction("CREATE");
         caseActionAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
 
 
@@ -89,7 +89,7 @@ class CaseActionServiceTest {
         actionLog.setCaseRef("2");
         actionLog.setCaseJurisdictionId("3");
         actionLog.setCaseTypeId("4");
-        actionLog.setAction("R");
+        actionLog.setCaseAction("CREATE");
         actionLog.setTimestamp("2021-08-23T22:20:05.023Z");
 
         when(caseActionAuditRepository.save(any())).thenReturn(caseActionAudit);
@@ -101,7 +101,7 @@ class CaseActionServiceTest {
         assertThat(caseView.getActionLog().getCaseRef()).isEqualTo("2");
         assertThat(caseView.getActionLog().getCaseJurisdictionId()).isEqualTo("3");
         assertThat(caseView.getActionLog().getCaseTypeId()).isEqualTo("4");
-        assertThat(caseView.getActionLog().getAction()).isEqualTo("R");
+        assertThat(caseView.getActionLog().getCaseAction()).isEqualTo("CREATE");
     }
 
 

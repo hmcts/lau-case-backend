@@ -17,7 +17,7 @@ public class ViewActionPostResponse {
     private String caseRef;
     private String caseJurisdictionId;
     private String caseTypeId;
-    private String action;
+    private String caseAction;
     private String timestamp;
 
     public ViewActionPostResponse toDto(final CaseActionAudit caseActionAudit, final String timestamp) {
@@ -25,7 +25,7 @@ public class ViewActionPostResponse {
         this.userId = caseActionAudit.getUserId();
         this.caseRef = caseActionAudit.getCaseRef();
         this.caseJurisdictionId = caseActionAudit.getCaseJurisdictionId();
-        this.action = caseActionAudit.getAction();
+        this.caseAction = caseActionAudit.getCaseAction();
         this.caseTypeId = caseActionAudit.getCaseTypeId();
         this.timestamp = timestamp;
 

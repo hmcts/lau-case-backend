@@ -139,7 +139,7 @@ class CaseActionAuditRepositoryTest {
         assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getAction()).isEqualTo("C");
+        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo("CREATE");
     }
 
     private CaseActionAudit getCaseViewAuditEntity(final String caseRef,
@@ -150,7 +150,7 @@ class CaseActionAuditRepositoryTest {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
         caseActionAudit.setCaseRef(caseRef);
         caseActionAudit.setCaseTypeId(caseTypeId);
-        caseActionAudit.setAction("C");
+        caseActionAudit.setCaseAction("CREATE");
         caseActionAudit.setCaseJurisdictionId(caseJurisdictionId);
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);

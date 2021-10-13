@@ -66,7 +66,7 @@ public class CaseActionTest {
             assertNotNull("S2S String should contain a value", s2sToken);
             final String caseView = fetchCaseActionResponse();
 
-            assertThat(caseView).contains("viewLog");
+            assertThat(caseView).contains("actionLog");
 
         } catch (final Exception e) {
             fail("Unable to successfully retrieve SAS token: " + e.getMessage());
@@ -81,7 +81,7 @@ public class CaseActionTest {
             assertNotNull("S2S String should contain a value", s2sToken);
             final String caseAction = postCaseAction();
 
-            assertThat(caseAction).contains("caseAction");
+            assertThat(caseAction).contains("actionLog");
 
         } catch (final Exception e) {
             fail("Unable to successfully retrieve SAS token: " + e.getMessage());
@@ -109,7 +109,7 @@ public class CaseActionTest {
 
     private CaseActionPostRequest getCaseActionPostRequest() {
         final ActionLog actionLog = new ActionLog("1",
-                "R",
+                "VIEW",
                 "1615817621013640",
                 "3",
                 "4",

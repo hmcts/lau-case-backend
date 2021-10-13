@@ -60,7 +60,7 @@ public final class InputParamsVerifier {
     public static void verifyRequestParamsAreNotEmpty(final ActionLog actionLog)
             throws InvalidRequestException {
         if (isEmpty(actionLog.getUserId())
-                || isEmpty(actionLog.getAction())
+                || isEmpty(actionLog.getCaseAction())
                 || isEmpty(actionLog.getCaseRef())
                 || isEmpty(actionLog.getCaseJurisdictionId())
                 || isEmpty(actionLog.getCaseTypeId())
@@ -85,7 +85,7 @@ public final class InputParamsVerifier {
             throws InvalidRequestException {
         verifyUserId(actionLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyCaseRef(actionLog.getCaseRef(), CASEREF_POST_EXCEPTION_MESSAGE);
-        verifyAction(actionLog.getAction(), CASE_ACTION_POST_EXCEPTION_MESSAGE);
+        verifyAction(actionLog.getCaseAction(), CASE_ACTION_POST_EXCEPTION_MESSAGE);
         verifyCaseTypeId(actionLog.getCaseTypeId(), CASETYPEID_POST_EXCEPTION_MESSAGE);
         verifyCaseJurisdictionId(actionLog.getCaseJurisdictionId(), CASE_JURISDICTION_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(actionLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);

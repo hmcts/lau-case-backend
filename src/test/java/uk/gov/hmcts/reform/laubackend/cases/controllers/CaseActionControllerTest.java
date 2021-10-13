@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
@@ -42,12 +42,12 @@ class CaseActionControllerTest {
         final String userId = "1";
         final String caseRef = randomNumeric(16);
         final String caseTypeId = "3";
-        final CaseViewGetResponse caseViewGetResponse = mock(CaseViewGetResponse.class);
+        final CaseActionGetResponse caseActionGetResponse = mock(CaseActionGetResponse.class);
 
         when(caseActionService.getCaseView(any())).thenReturn(
-                caseViewGetResponse);
+                caseActionGetResponse);
 
-        final ResponseEntity<CaseViewGetResponse> responseEntity = caseActionController.getCaseView(
+        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseView(
                 userId,
                 caseRef,
                 caseTypeId,
@@ -64,7 +64,7 @@ class CaseActionControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
-        final ResponseEntity<CaseViewGetResponse> responseEntity = caseActionController.getCaseView(
+        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseView(
                 "1",
                 "2",
                 "3",
@@ -87,7 +87,7 @@ class CaseActionControllerTest {
                 caseActionPostResponse);
 
         final ActionLog actionLog = new ActionLog("1",
-                "R",
+                "CREATE",
                 "1615817621013640",
                 "3",
                 "4",
@@ -121,7 +121,7 @@ class CaseActionControllerTest {
     @Test
     void shouldReturnInternalServerErrorForPostRequest() {
         final ActionLog actionLog = new ActionLog("1",
-                "R",
+                "CREATE",
                 "1615817621013640",
                 "3",
                 "4",

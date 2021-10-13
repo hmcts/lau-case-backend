@@ -34,8 +34,8 @@ public class CaseActionAudit implements Serializable {
     @Column(name = "case_ref", nullable = false)
     private String caseRef;
 
-    @Column(name = "action", nullable = false)
-    private String action;
+    @Column(name = "case_action", nullable = false)
+    private String caseAction;
 
     @Column(name = "case_jurisdiction_id", nullable = false)
     private String caseJurisdictionId;

@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -53,13 +53,13 @@ public final class CaseActionController {
     @ApiResponses({
             @ApiResponse(code = 200,
                     message = "Request executed successfully. Response contains of case view logs",
-                    response = CaseViewGetResponse.class),
+                    response = CaseActionGetResponse.class),
             @ApiResponse(code = 400,
                     message =
                             "Missing userId, caseTypeId, caseJurisdictionId, "
                                     + "caseRef, startTimestamp or endTimestamp parameters.",
-                    response = CaseViewGetResponse.class),
-            @ApiResponse(code = 403, message = "Forbidden", response = CaseViewGetResponse.class)
+                    response = CaseActionGetResponse.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = CaseActionGetResponse.class)
     })
     @GetMapping(
             path = "/audit/caseAction",
@@ -67,12 +67,12 @@ public final class CaseActionController {
     )
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
-    public ResponseEntity<CaseViewGetResponse> getCaseView(
+    public ResponseEntity<CaseActionGetResponse> getCaseView(
             @RequestParam(value = USER_ID, required = false) final String userId,
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
-            @RequestParam(value = START_TIME, required = false) final String startTime,
+            @RequestParam(value = START_TIME,  required = false) final String startTime,
             @RequestParam(value = END_TIME, required = false) final String endTime,
             @RequestParam(value = SIZE, required = false) final String size,
             @RequestParam(value = PAGE, required = false) final String page) {
@@ -89,7 +89,7 @@ public final class CaseActionController {
             verifyRequestParamsAreNotEmpty(inputParamsHolder);
             verifyRequestParamsConditions(inputParamsHolder);
 
-            final CaseViewGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
+            final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
             return new ResponseEntity<>(caseView, OK);
         } catch (final InvalidRequestException invalidRequestException) {

@@ -131,7 +131,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyActionForCaseAction() {
         try {
             final ActionLog actionLog = new ActionLog();
-            actionLog.setAction("B");
+            actionLog.setCaseAction("B");
 
             verifyRequestParamsConditions(actionLog);
 

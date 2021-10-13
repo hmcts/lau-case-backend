@@ -14,7 +14,7 @@ import java.util.List;
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.U;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
 @TestPropertySource(properties = {
@@ -121,7 +121,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getAction()).isEqualTo(U.name());
+        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo(CREATE.name());
     }
 
     private CaseActionAudit getCaseViewAuditEntity(final String caseRef,
@@ -133,7 +133,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         caseActionAudit.setCaseRef(caseRef);
         caseActionAudit.setCaseTypeId(caseTypeId);
         caseActionAudit.setCaseJurisdictionId(caseJurisdictionId);
-        caseActionAudit.setAction(U.name());
+        caseActionAudit.setCaseAction(CREATE.name());
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);
         return caseActionAudit;
