@@ -13,7 +13,7 @@ import org.testng.Assert;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewGetApiSteps;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewPostAPISteps;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewPostApiSteps;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
 import java.text.ParseException;
@@ -25,7 +25,7 @@ public class CaseViewApiTest {
     @Steps
     CaseViewGetApiSteps caseViewGetApiSteps;
     @Steps
-    CaseViewPostAPISteps caseViewPostAPISteps;
+    CaseViewPostApiSteps caseViewPostApiSteps;
 
     @Test
     @Title("Assert response code of 200 for GET CaseViewApi with valid headers and valid request params")
@@ -50,7 +50,9 @@ public class CaseViewApiTest {
             queryParamMap,
             caseViewResponseVO
         );
-        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion for GET CaseView API response code 200 is not successful");
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                            "The assertion for GET CaseView API response code 200 is not successful"
+        );
     }
 
     @Test
@@ -64,7 +66,9 @@ public class CaseViewApiTest {
             queryParamMap
         );
         String successOrFailure = caseViewGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
-        Assert.assertEquals( successOrFailure, TestConstants.SUCCESS, "CaseView API response code 401 assertion is not successful");
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                            "CaseView API response code 401 assertion is not successful"
+        );
     }
 
     @Test
@@ -83,13 +87,18 @@ public class CaseViewApiTest {
 
     @Test
     @Title("Assert response code of 200 for POST Request CaseViewApi")
-    public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi() throws com.fasterxml.jackson.core.JsonProcessingException {
+    public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
+        throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseViewGetApiSteps.givenAValidServiceTokenIsGenerated();
-        CaseViewRequestVO caseViewRequestVO = caseViewPostAPISteps.generateCaseViewPostRequestBody();
-        Response response = caseViewPostAPISteps.whenThePostServiceIsInvoked(authServiceToken, caseViewRequestVO);
+        CaseViewRequestVO caseViewRequestVO = caseViewPostApiSteps.generateCaseViewPostRequestBody();
+        Response response = caseViewPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseViewRequestVO);
         String successOrFailure = caseViewGetApiSteps.thenASuccessResposeIsReturned(response);
-        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "CaseView POST API response code 200 assertion is not successful");
+        Assert.assertEquals(
+            successOrFailure,
+            TestConstants.SUCCESS,
+            "CaseView POST API response code 200 assertion is not successful"
+        );
     }
 
     @AfterClass

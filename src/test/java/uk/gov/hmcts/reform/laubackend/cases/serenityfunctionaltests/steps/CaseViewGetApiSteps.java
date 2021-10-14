@@ -12,7 +12,11 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CaseViewGetApiSteps extends BaseSteps {
@@ -41,7 +45,8 @@ public class CaseViewGetApiSteps extends BaseSteps {
     public Response whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(String serviceToken,
                                                                          Map<String, String> queryParamMap) {
         return performGetOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT,
-                                   null, queryParamMap, serviceToken);
+                                   null, queryParamMap, serviceToken
+        );
     }
 
     @Step("Then at least one record number should exist")
@@ -49,9 +54,10 @@ public class CaseViewGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis") @Step("Then the GET CaseView response params match the input")
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    @Step("Then the GET CaseView response params match the input")
     public String thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
-                                                                CaseViewResponseVO caseViewResponseVO) {
+                                                                  CaseViewResponseVO caseViewResponseVO) {
         int startRecordNumber = caseViewResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
         List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
@@ -62,27 +68,27 @@ public class CaseViewGetApiSteps extends BaseSteps {
                 String userId = viewLogObj.getUserId();
                 Assert.assertEquals(
                     "User Id is missing in the response",
-                    inputQueryParamMap.get(queryParam),userId
+                    inputQueryParamMap.get(queryParam), userId
                 );
             } else if ("caseRef".equals(queryParam)) {
                 String caseRef = viewLogObj.getCaseRef();
                 Assert.assertEquals(
                     "caseRef is missing in the response",
-                    inputQueryParamMap.get(queryParam),caseRef
+                    inputQueryParamMap.get(queryParam), caseRef
                 );
 
             } else if ("caseJurisdictionId".equals(queryParam)) {
                 String caseJurisdictionId = viewLogObj.getCaseJurisdictionId();
                 Assert.assertEquals(
                     "caseJurisdictionId is missing in the response",
-                    inputQueryParamMap.get(queryParam),caseJurisdictionId
+                    inputQueryParamMap.get(queryParam), caseJurisdictionId
                 );
 
             } else if ("caseTypeId".equals(queryParam)) {
                 String caseTypeId = viewLogObj.getCaseTypeId();
                 Assert.assertEquals(
                     "caseTypeId is missing in the response",
-                    inputQueryParamMap.get(queryParam),caseTypeId
+                    inputQueryParamMap.get(queryParam), caseTypeId
                 );
 
             }
@@ -93,23 +99,23 @@ public class CaseViewGetApiSteps extends BaseSteps {
 
     @Step("Then the GET CaseView response date range matches the input")
     public String thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap,
-                                                                   CaseViewResponseVO caseViewResponseVO) throws ParseException {
+                                                                     CaseViewResponseVO caseViewResponseVO)
+        throws ParseException {
+        List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
+        ViewLog viewLogObject = viewLogList.get(0);
+        String timeStampResponse = viewLogObject.getTimestamp();
+        String timeStampStartInputParam = inputQueryParamMap.get("starttimestamp");
+        String timeStampEndInputParam = inputQueryParamMap.get("endtimestamp");
 
-            List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
-            ViewLog viewLogObject = viewLogList.get(0);
-            String timeStampResponse = viewLogObject.getTimestamp();
-            String timeStampStartInputParam = inputQueryParamMap.get("starttimestamp");
-            String timeStampEndInputParam = inputQueryParamMap.get("endtimestamp");
+        String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+        String responseDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        Date inputStartTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampStartInputParam);
+        Date inputEndTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampEndInputParam);
+        Date responseTimestamp = new SimpleDateFormat(responseDateFormat, Locale.UK).parse(timeStampResponse);
 
-            String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
-            String responseDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-            Date inputStartTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampStartInputParam);
-            Date inputEndTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampEndInputParam);
-            Date responseTimestamp = new SimpleDateFormat(responseDateFormat, Locale.UK).parse(timeStampResponse);
-
-            LOGGER.info("Input start date : " + inputStartTimestamp.getTime());
-            LOGGER.info("Input end date : " + inputEndTimestamp.getTime());
-            LOGGER.info("Output date : " + responseTimestamp.getTime());
+        LOGGER.info("Input start date : " + inputStartTimestamp.getTime());
+        LOGGER.info("Input end date : " + inputEndTimestamp.getTime());
+        LOGGER.info("Output date : " + responseTimestamp.getTime());
 
         Assert.assertTrue(responseTimestamp.after(inputStartTimestamp) && responseTimestamp.before(
             inputEndTimestamp) || responseTimestamp.getTime() == inputStartTimestamp.getTime()

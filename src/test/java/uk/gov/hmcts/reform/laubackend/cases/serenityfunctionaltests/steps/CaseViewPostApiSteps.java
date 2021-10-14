@@ -7,7 +7,7 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseVi
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
-public class CaseViewPostAPISteps extends BaseSteps{
+public class CaseViewPostApiSteps extends BaseSteps {
     @Step("Given the POST service body is generated")
     public CaseViewRequestVO generateCaseViewPostRequestBody() {
         ViewLog viewLog = new ViewLog();
