@@ -49,7 +49,7 @@ public class CaseViewGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
-    @Step("Then the GET CaseView response params match the input")
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis") @Step("Then the GET CaseView response params match the input")
     public String thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                 CaseViewResponseVO caseViewResponseVO) {
         int startRecordNumber = caseViewResponseVO.getStartRecordNumber();
