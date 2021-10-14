@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static java.util.Arrays.asList;
@@ -16,12 +17,14 @@ import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +36,43 @@ class CaseSearchControllerTest {
 
     @InjectMocks
     private CaseSearchController caseSearchController;
+
+    @Test
+    void shouldReturnResponseEntityForGetRequest() {
+        final String userId = "1";
+        final String caseRef = randomNumeric(16);
+        final CaseSearchGetResponse caseSearchGetResponse = mock(CaseSearchGetResponse.class);
+
+        when(caseSearchService.getCaseSearch(any())).thenReturn(
+            caseSearchGetResponse);
+
+        final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
+            userId,
+            caseRef,
+            null,
+            null,
+            null,
+            null
+        );
+
+        verify(caseSearchService, times(1)).getCaseSearch(any());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    }
+
+    @Test
+    void shouldReturnBadRequestResponseEntityForGetRequest() {
+        final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
+            "1",
+            "2",
+            null,
+            null,
+            null,
+            null
+        );
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
+    }
+
 
 
     @Test
