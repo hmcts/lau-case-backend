@@ -60,6 +60,7 @@ sourceSets {
             compileClasspath += main.output
             runtimeClasspath += main.output
             srcDir file('src/functionalTest/java')
+            srcDir file ('src/test/java/uk/gov/hmcts/reform/laubackend/cases/serenityfunctionaltests')
         }
         resources.srcDir file('src/functionalTest/resources')
     }
@@ -115,7 +116,9 @@ task functional(type: Test) {
     description = "Runs functional tests"
     group = "Verification"
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
+    classpath = sourceSets.test.runtimeClasspath
     finalizedBy aggregate
 }
 
