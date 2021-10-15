@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseViewAudit;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseViewAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
@@ -31,7 +31,7 @@ public class CaseViewService {
     @Autowired
     private TimestampUtil timestampUtil;
 
-    public CaseViewGetResponse getCaseView(final InputParamsHolder inputParamsHolder) {
+    public CaseViewGetResponse getCaseView(final ViewInputParamsHolder inputParamsHolder) {
 
         final Page<CaseViewAudit> caseView = caseViewAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),

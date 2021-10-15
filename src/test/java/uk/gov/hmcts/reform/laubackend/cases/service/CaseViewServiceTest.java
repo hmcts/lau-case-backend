@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseViewAudit;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseViewAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
@@ -29,7 +29,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,7 +50,15 @@ class CaseViewServiceTest {
         final List<CaseViewAudit> caseViewAuditList = Arrays.asList(getCaseViewAuditEntity(timestamp));
         final Page<CaseViewAudit> pageResults = new PageImpl<>(caseViewAuditList);
 
-        final InputParamsHolder inputParamsHolder = new InputParamsHolder("1", "2", "3", "4", null, null, null, null);
+        final ViewInputParamsHolder inputParamsHolder = new ViewInputParamsHolder(
+            "1",
+            "2",
+            "3",
+            "4",
+            null,
+            null,
+            null,
+            null);
 
         when(caseViewAuditRepository
                 .findCaseView("1", "2", "3", "4", null, null,

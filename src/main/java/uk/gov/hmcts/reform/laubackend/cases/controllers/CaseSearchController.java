@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
@@ -34,12 +34,15 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.S
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
 @RestController
 @Slf4j
 @Api(tags = "LAU BackEnd - API for LAU database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case searches. "
         + "The API will be invoked by the LAU front-end service.")
+@SuppressWarnings("PMD.ExcessiveImports")
 public class CaseSearchController {
 
     @Autowired
@@ -116,16 +119,14 @@ public class CaseSearchController {
         @RequestParam(value = SIZE, required = false) final String size,
         @RequestParam(value = PAGE, required = false) final String page) {
         try {
-            final InputParamsHolder inputParamsHolder = new InputParamsHolder(userId,
-                                                                              caseRef,
-                                                                              null,
-                                                                              null,
-                                                                              startTime,
-                                                                              endTime,
-                                                                              size,
-                                                                              page);
-            verifyRequestParamsAreNotEmpty(inputParamsHolder);
-            verifyRequestParamsConditions(inputParamsHolder);
+            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
+                                                                                    caseRef,
+                                                                                    startTime,
+                                                                                    endTime,
+                                                                                    size,
+                                                                                    page);
+            verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
+            verifyRequestSearchParamsConditions(inputParamsHolder);
 
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 

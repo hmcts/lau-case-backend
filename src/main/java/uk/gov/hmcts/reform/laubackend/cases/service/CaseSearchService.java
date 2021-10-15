@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
@@ -31,7 +31,7 @@ public class CaseSearchService {
     @Autowired
     private TimestampUtil timestampUtil;
 
-    public CaseSearchGetResponse getCaseSearch(final InputParamsHolder inputParamsHolder) {
+    public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
 
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository.findCaseSearch(
             inputParamsHolder.getUserId(),

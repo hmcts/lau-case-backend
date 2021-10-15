@@ -1,7 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ViewLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
@@ -23,13 +24,13 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.TIMESTAMP_GET_REGEX;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.TIMESTAMP_POST_REGEX;
 
-
+@SuppressWarnings("PMD.TooManyMethods")
 public final class InputParamsVerifier {
 
     private InputParamsVerifier() {
     }
 
-    public static void verifyRequestParamsAreNotEmpty(final InputParamsHolder inputParamsHolder)
+    public static void verifyRequestViewParamsAreNotEmpty(final ViewInputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
         if (isEmpty(inputParamsHolder.getUserId())
                 && isEmpty(inputParamsHolder.getCaseRef())
@@ -37,6 +38,16 @@ public final class InputParamsVerifier {
                 && isEmpty(inputParamsHolder.getCaseJurisdictionId())
                 && isEmpty(inputParamsHolder.getStartTime())
                 && isEmpty(inputParamsHolder.getEndTime())) {
+            throw new InvalidRequestException("At least one path parameter must be present", BAD_REQUEST);
+        }
+    }
+
+    public static void verifyRequestSearchParamsAreNotEmpty(final SearchInputParamsHolder inputParamsHolder)
+        throws InvalidRequestException {
+        if (isEmpty(inputParamsHolder.getUserId())
+            && isEmpty(inputParamsHolder.getCaseRef())
+            && isEmpty(inputParamsHolder.getStartTime())
+            && isEmpty(inputParamsHolder.getEndTime())) {
             throw new InvalidRequestException("At least one path parameter must be present", BAD_REQUEST);
         }
     }
@@ -51,12 +62,20 @@ public final class InputParamsVerifier {
         }
     }
 
-    public static void verifyRequestParamsConditions(final InputParamsHolder inputParamsHolder)
+    public static void verifyRequestViewParamsConditions(final ViewInputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
         verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
         verifyCaseRef(inputParamsHolder.getCaseRef(), CASEREF_GET_EXCEPTION_MESSAGE);
         verifyCaseTypeId(inputParamsHolder.getCaseTypeId(), CASETYPEID_GET_EXCEPTION_MESSAGE);
         verifyCaseJurisdictionId(inputParamsHolder.getCaseJurisdictionId(), CASE_JURISDICTION_GET_EXCEPTION_MESSAGE);
+        verifyTimestamp(inputParamsHolder.getStartTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
+        verifyTimestamp(inputParamsHolder.getEndTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
+    }
+
+    public static void verifyRequestSearchParamsConditions(final SearchInputParamsHolder inputParamsHolder)
+        throws InvalidRequestException {
+        verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
+        verifyCaseRef(inputParamsHolder.getCaseRef(), CASEREF_GET_EXCEPTION_MESSAGE);
         verifyTimestamp(inputParamsHolder.getStartTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
         verifyTimestamp(inputParamsHolder.getEndTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
     }

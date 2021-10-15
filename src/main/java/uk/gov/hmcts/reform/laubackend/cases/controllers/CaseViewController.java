@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ViewInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.ViewLogPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
@@ -34,15 +34,16 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.P
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.SIZE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.USER_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestViewParamsAreNotEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestViewParamsConditions;
 
 @RestController
 @Slf4j
 @Api(tags = "LAU BackEnd - API for LAU database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case view and searches. "
         + "The API will be invoked by the LAU front-end service.")
-
+@SuppressWarnings("PMD.ExcessiveImports")
 public final class CaseViewController {
 
     @Autowired
@@ -78,16 +79,16 @@ public final class CaseViewController {
             @RequestParam(value = PAGE, required = false) final String page) {
 
         try {
-            final InputParamsHolder inputParamsHolder = new InputParamsHolder(userId,
-                    caseRef,
-                    caseTypeId,
-                    caseJurisdictionId,
-                    startTime,
-                    endTime,
-                    size,
-                    page);
-            verifyRequestParamsAreNotEmpty(inputParamsHolder);
-            verifyRequestParamsConditions(inputParamsHolder);
+            final ViewInputParamsHolder inputParamsHolder = new ViewInputParamsHolder(userId,
+                                                                                  caseRef,
+                                                                                  caseTypeId,
+                                                                                  caseJurisdictionId,
+                                                                                  startTime,
+                                                                                  endTime,
+                                                                                  size,
+                                                                                  page);
+            verifyRequestViewParamsAreNotEmpty(inputParamsHolder);
+            verifyRequestViewParamsConditions(inputParamsHolder);
 
             final CaseViewGetResponse caseView = caseViewService.getCaseView(inputParamsHolder);
 
