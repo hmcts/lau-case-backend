@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
@@ -18,7 +19,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.ver
 public class InputParamsNotEmptyVerifierTest {
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseView() {
+    public void shouldVerifyRequestParamsAreNotEmptyForCaseAction() {
         assertDoesNotThrow(() -> verifyRequestParamsAreNotEmpty(new InputParamsHolder(null,
                 null,
                 null,
@@ -30,7 +31,7 @@ public class InputParamsNotEmptyVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseView() {
+    public void shouldThrowExceptionWhenGetRequestParamsAreEmptyForCaseAction() {
         try {
             final InputParamsHolder inputParamsHolder = new InputParamsHolder(null,
                     null,
@@ -44,6 +45,18 @@ public class InputParamsNotEmptyVerifierTest {
             fail("The method should have thrown InvalidRequestException when input params are empty");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage()).isEqualTo("At least one path parameter must be present");
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPostRequestParamsAreEmptyForCaseAction() {
+        try {
+            verifyRequestParamsAreNotEmpty(new ActionLog("1", "2", null, "4", "5", "6"));
+            fail("The method should have thrown InvalidRequestException when input params are empty");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("You need to populate all required parameters -"
+                    + " userId, action, caseRef, caseJurisdictionId, caseTypeId and timestamp");
         }
     }
 

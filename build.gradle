@@ -120,11 +120,11 @@ task functional(type: Test) {
 }
 
 task integration(type: Test) {
-  description = "Runs integration tests"
-  group = "Verification"
-  testClassesDirs = sourceSets.integrationTest.output.classesDirs
-  classpath = sourceSets.integrationTest.runtimeClasspath
-  useJUnitPlatform()
+    description = "Runs integration tests"
+    group = "Verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+//    useJUnitPlatform()
 }
 
 task smoke(type: Test) {
@@ -251,20 +251,22 @@ repositories {
 }
 
 def versions = [
-  junit             : '5.7.2',
-  junitPlatform     : '1.7.2',
-  reformLogging     : '5.1.7',
-  springBoot        : springBoot.class.package.implementationVersion,
-  springfoxSwagger  : '3.0.0',
-  serenity          : '2.5.10',
-  gradlePitest      : '1.6.0',
-  pitest            : '1.6.3',
-  sonarPitest       : '0.5',
-  lombok            : '1.18.12',
-  testcontainers    : '1.15.1',
-  restAssured       : '4.4.0',
-  serviceAuthVersion: '4.0.0',
-  commonsIo         : '2.7'
+        junit             : '5.7.2',
+        junitPlatform     : '1.7.2',
+        reformLogging     : '5.1.7',
+        springBoot        : springBoot.class.package.implementationVersion,
+        springfoxSwagger  : '3.0.0',
+        serenity          : '2.5.10',
+        gradlePitest      : '1.6.0',
+        pitest            : '1.6.3',
+        sonarPitest       : '0.5',
+        lombok            : '1.18.12',
+        testcontainers    : '1.15.1',
+        restAssured       : '4.4.0',
+        serviceAuthVersion: '4.0.0',
+        commonsIo         : '2.7',
+        cucumber          : '6.8.0'
+
 ]
 
 ext.libraries = [
@@ -324,7 +326,12 @@ dependencies {
   testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
-  testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+
+    testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+    testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+    testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+    testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
+
 
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
@@ -334,7 +341,20 @@ dependencies {
   integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
+
   compile('com.h2database:h2')
+
+    testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+
+    integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+    integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+    integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+    integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+
 
   testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
