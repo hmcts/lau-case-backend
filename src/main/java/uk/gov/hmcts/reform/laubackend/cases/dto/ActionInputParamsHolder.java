@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ViewInputParamsHolder {
+public class ActionInputParamsHolder {
     private String userId;
     private String caseRef;
     private String caseTypeId;

@@ -15,6 +15,7 @@ public final class ExceptionMessageConstants {
     public static final String CASEREF_POST_EXCEPTION_MESSAGE = "Unable to verify caseRef pattern";
     public static final String USERID_POST_EXCEPTION_MESSAGE = "Unable to verify userId pattern";
     public static final String CASETYPEID_POST_EXCEPTION_MESSAGE = "Unable to verify caseTypeId pattern";
+    public static final String CASE_ACTION_POST_EXCEPTION_MESSAGE = "Unable to verify action pattern";
     public static final String CASE_JURISDICTION_POST_EXCEPTION_MESSAGE = "Unable to verify "
             + "caseJurisdictionId pattern";
 

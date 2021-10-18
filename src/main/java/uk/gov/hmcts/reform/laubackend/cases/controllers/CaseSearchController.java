@@ -17,8 +17,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewGetResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseViewPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -26,14 +25,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_REF;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.END_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.PAGE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.SIZE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.START_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.USER_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_REF;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.END_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.PAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
@@ -53,14 +50,14 @@ public class CaseSearchController {
     @ApiResponses({
             @ApiResponse(code = 201,
                     message = "Created SearchLog case response - includes caseSearchId from DB.",
-                    response = CaseViewPostResponse.class),
+                    response = CaseSearchPostResponse.class),
             @ApiResponse(code = 400,
                     message = "Invalid case search",
-                    response = CaseViewPostResponse.class),
+                    response = CaseSearchPostResponse.class),
             @ApiResponse(code = 403, message = "Forbidden",
-                    response = CaseViewPostResponse.class),
+                    response = CaseSearchPostResponse.class),
             @ApiResponse(code = 500, message = "Internal Server Error",
-                    response = CaseViewPostResponse.class)
+                    response = CaseSearchPostResponse.class)
     })
     @PostMapping(
             path = "/audit/caseSearch",
@@ -71,8 +68,8 @@ public class CaseSearchController {
     public ResponseEntity<CaseSearchPostRequest> saveCaseSearch(@RequestBody final CaseSearchPostRequest
                                                                         caseSearchPostRequest) {
         try {
-            verifyRequestParamsAreNotEmpty(caseSearchPostRequest);
-            verifyRequestParamsConditions(caseSearchPostRequest.getSearchLog());
+            verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
+            verifyRequestSearchParamsConditions(caseSearchPostRequest.getSearchLog());
 
             final CaseSearchPostRequest caseSearchAudit = caseSearchService.saveCaseSearch(caseSearchPostRequest);
 
@@ -102,7 +99,7 @@ public class CaseSearchController {
             message =
                 "Missing userId, caseRef, startTimestamp or endTimestamp parameters.",
             response = CaseSearchGetResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = CaseViewGetResponse.class)
+        @ApiResponse(code = 403, message = "Forbidden", response = CaseSearchGetResponse.class)
     })
     @GetMapping(
         path = "/audit/caseSearch",
