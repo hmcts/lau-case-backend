@@ -31,8 +31,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
 @RestController
 @Slf4j
@@ -90,38 +90,38 @@ public class CaseSearchController {
     }
 
     @ApiOperation(
-        tags = "Get case search audits", value = "Get case search audits")
+            tags = "Get case search audits", value = "Get case search audits")
     @ApiResponses({
-        @ApiResponse(code = 200,
-            message = "Request executed successfully. Response contains of case search logs",
-            response = CaseSearchGetResponse.class),
-        @ApiResponse(code = 400,
-            message =
-                "Missing userId, caseRef, startTimestamp or endTimestamp parameters.",
-            response = CaseSearchGetResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = CaseSearchGetResponse.class)
+            @ApiResponse(code = 200,
+                    message = "Request executed successfully. Response contains of case search logs",
+                    response = CaseSearchGetResponse.class),
+            @ApiResponse(code = 400,
+                    message =
+                            "Missing userId, caseRef, startTimestamp or endTimestamp parameters.",
+                    response = CaseSearchGetResponse.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = CaseSearchGetResponse.class)
     })
     @GetMapping(
-        path = "/audit/caseSearch",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
+            path = "/audit/caseSearch",
+            produces = APPLICATION_JSON_VALUE,
+            consumes = APPLICATION_JSON_VALUE
     )
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
-        @RequestParam(value = USER_ID, required = false) final String userId,
-        @RequestParam(value = CASE_REF, required = false) final String caseRef,
-        @RequestParam(value = START_TIME, required = false) final String startTime,
-        @RequestParam(value = END_TIME, required = false) final String endTime,
-        @RequestParam(value = SIZE, required = false) final String size,
-        @RequestParam(value = PAGE, required = false) final String page) {
+            @RequestParam(value = USER_ID, required = false) final String userId,
+            @RequestParam(value = CASE_REF, required = false) final String caseRef,
+            @RequestParam(value = START_TIME, required = false) final String startTime,
+            @RequestParam(value = END_TIME, required = false) final String endTime,
+            @RequestParam(value = SIZE, required = false) final String size,
+            @RequestParam(value = PAGE, required = false) final String page) {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
-                                                                                    caseRef,
-                                                                                    startTime,
-                                                                                    endTime,
-                                                                                    size,
-                                                                                    page);
+                    caseRef,
+                    startTime,
+                    endTime,
+                    size,
+                    page);
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
@@ -130,9 +130,9 @@ public class CaseSearchController {
             return new ResponseEntity<>(caseSearch, OK);
         } catch (final InvalidRequestException invalidRequestException) {
             log.error(
-                "getCaseView API call failed due to error - {}",
-                invalidRequestException.getMessage(),
-                invalidRequestException
+                    "getCaseView API call failed due to error - {}",
+                    invalidRequestException.getMessage(),
+                    invalidRequestException
             );
             return new ResponseEntity<>(null, BAD_REQUEST);
         }

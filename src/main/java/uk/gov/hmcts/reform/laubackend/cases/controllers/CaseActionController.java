@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -35,7 +35,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 
 @RestController
 @Slf4j
@@ -72,20 +72,20 @@ public final class CaseActionController {
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
-            @RequestParam(value = START_TIME,  required = false) final String startTime,
+            @RequestParam(value = START_TIME, required = false) final String startTime,
             @RequestParam(value = END_TIME, required = false) final String endTime,
             @RequestParam(value = SIZE, required = false) final String size,
             @RequestParam(value = PAGE, required = false) final String page) {
 
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
-                                                                                  caseRef,
-                                                                                  caseTypeId,
-                                                                                  caseJurisdictionId,
-                                                                                  startTime,
-                                                                                  endTime,
-                                                                                  size,
-                                                                                  page);
+                    caseRef,
+                    caseTypeId,
+                    caseJurisdictionId,
+                    startTime,
+                    endTime,
+                    size,
+                    page);
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
 
