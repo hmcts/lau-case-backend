@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 
 public class CaseActionPostApiSteps extends BaseSteps {
     @Step("Given the POST service body is generated")
-    public CaseActionRequestVO generateCaseViewPostRequestBody() {
+    public CaseActionRequestVO generateCaseActionPostRequestBody() {
         ActionLog actionLog = new ActionLog();
         actionLog.setUserId("3748240");
         actionLog.setCaseAction("VIEW");
@@ -24,7 +24,7 @@ public class CaseActionPostApiSteps extends BaseSteps {
 
     @Step("When the POST service is invoked")
     public Response whenThePostServiceIsInvoked(String serviceToken, Object actionLog) throws JsonProcessingException {
-        return performPostOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT, null, null, actionLog, serviceToken);
+        return performPostOperation(TestConstants.AUDIT_CASE_ACTION_ENDPOINT, null, null, actionLog, serviceToken);
     }
 
 }

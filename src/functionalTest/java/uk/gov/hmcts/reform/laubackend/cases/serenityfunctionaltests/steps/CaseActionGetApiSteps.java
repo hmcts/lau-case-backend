@@ -29,8 +29,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return getServiceToken(TestConstants.S2S_NAME);
     }
 
-    @Step("When valid params are supplied for Get CaseView API")
-    public Map<String, String> givenValidParamsAreSuppliedForGetCaseView() {
+    @Step("When valid params are supplied for Get CaseAction API")
+    public Map<String, String> givenValidParamsAreSuppliedForGetCaseAction() {
         HashMap<String, String> queryParamMap = new HashMap<>();
         queryParamMap.put("userId", "3748240");
         queryParamMap.put("caseAction","VIEW");
@@ -42,10 +42,10 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return queryParamMap;
     }
 
-    @Step("When the CaseView GET service is invoked with the valid params")
-    public Response whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(String serviceToken,
+    @Step("When the CaseAction GET service is invoked with the valid params")
+    public Response whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(String serviceToken,
                                                                          Map<String, String> queryParamMap) {
-        return performGetOperation(TestConstants.AUDIT_CASE_VIEW_ENDPOINT,
+        return performGetOperation(TestConstants.AUDIT_CASE_ACTION_ENDPOINT,
                                    null, queryParamMap, serviceToken
         );
     }
@@ -56,8 +56,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
     }
 
     @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
-    @Step("Then the GET CaseView response params match the input")
-    public String thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
+    @Step("Then the GET CaseAction response params match the input")
+    public String thenTheGetCaseActionResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                   CaseActionResponseVO caseActionResponseVO) {
         int startRecordNumber = caseActionResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
@@ -106,7 +106,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
     }
 
 
-    @Step("Then the GET CaseView response date range matches the input")
+    @Step("Then the GET CaseAction response date range matches the input")
     public String thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                      CaseActionResponseVO caseActionResponseVO)
         throws ParseException {
@@ -133,8 +133,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return TestConstants.SUCCESS;
     }
 
-    @Step("Given empty params values are supplied for the GET CaseView API")
-    public Map<String, String> givenEmptyParamsAreSuppliedForGetCaseView() {
+    @Step("Given empty params values are supplied for the GET CaseAction API")
+    public Map<String, String> givenEmptyParamsAreSuppliedForGetCaseAction() {
         Map<String, String> queryParamMap = new ConcurrentHashMap<>();
         queryParamMap.put("userId", "");
         queryParamMap.put("caseRef", "");
