@@ -6,7 +6,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
@@ -63,7 +62,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         int startRecordNumber = caseActionResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
         List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
-        ActionLog actionLogObj = actionLogList == null || actionLogList.get(0) == null ? new ActionLog() : actionLogList.get(0);
+        ActionLog actionLogObj = actionLogList == null || actionLogList.get(0) == null
+            ? new ActionLog() : actionLogList.get(0);
         for (String queryParam : inputQueryParamMap.keySet()) {
 
             if ("userId".equals(queryParam)) {
