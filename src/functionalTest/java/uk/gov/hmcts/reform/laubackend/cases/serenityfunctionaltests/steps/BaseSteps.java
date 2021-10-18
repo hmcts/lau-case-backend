@@ -41,7 +41,7 @@ public class BaseSteps {
 
         final RequestSpecBuilder specBuilder = new RequestSpecBuilder()
             .setConfig(config)
-            .setBaseUri(TestConstants.BASE_URL)
+            .setBaseUri(EnvConfig.API_URL)
             .setRelaxedHTTPSValidation();
 
         LOGGER.info("Using base API URL: " + EnvConfig.API_URL);

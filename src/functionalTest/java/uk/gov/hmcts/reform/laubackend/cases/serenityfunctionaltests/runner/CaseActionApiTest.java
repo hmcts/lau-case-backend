@@ -10,45 +10,45 @@ import org.junit.runner.RunWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewRequestVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewGetApiSteps;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseViewPostApiSteps;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionResponseVO;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseActionGetApiSteps;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseActionPostApiSteps;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
 import java.text.ParseException;
 import java.util.Map;
 
 @RunWith(SerenityRunner.class)
-public class CaseViewApiTest {
+public class CaseActionApiTest {
 
     @Steps
-    CaseViewGetApiSteps caseViewGetApiSteps;
+    CaseActionGetApiSteps caseActionGetApiSteps;
     @Steps
-    CaseViewPostApiSteps caseViewPostApiSteps;
+    CaseActionPostApiSteps caseActionPostApiSteps;
 
     @Test
     @Title("Assert response code of 200 for GET CaseViewApi with valid headers and valid request params")
     public void assertHttpSuccessResponseCodeForCaseViewApi() throws JsonProcessingException, ParseException {
 
-        String authServiceToken = caseViewGetApiSteps.givenAValidServiceTokenIsGenerated();
-        Map<String, String> queryParamMap = caseViewGetApiSteps.givenValidParamsAreSuppliedForGetCaseView();
-        Response response = caseViewGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
+        String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseView();
+        Response response = caseActionGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
         ObjectMapper objectMapper = new ObjectMapper();
-        CaseViewResponseVO caseViewResponseVO = objectMapper.readValue(
+        CaseActionResponseVO caseActionResponseVO = objectMapper.readValue(
             response.getBody().asString(),
-            CaseViewResponseVO.class
+            CaseActionResponseVO.class
         );
 
-        caseViewGetApiSteps.thenASuccessResposeIsReturned(response);
-        caseViewGetApiSteps.thenAtLeastOneRecordNumberShouldExist(response);
-        caseViewGetApiSteps.thenTheGetCaseViewResponseParamsMatchesTheInput(queryParamMap, caseViewResponseVO);
-        String successOrFailure = caseViewGetApiSteps.thenTheGetCaseViewResponseDateRangeMatchesTheInput(
+        caseActionGetApiSteps.thenASuccessResposeIsReturned(response);
+        caseActionGetApiSteps.thenAtLeastOneRecordNumberShouldExist(response);
+        caseActionGetApiSteps.thenTheGetCaseViewResponseParamsMatchesTheInput(queryParamMap, caseActionResponseVO);
+        String successOrFailure = caseActionGetApiSteps.thenTheGetCaseViewResponseDateRangeMatchesTheInput(
             queryParamMap,
-            caseViewResponseVO
+            caseActionResponseVO
         );
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                             "The assertion for GET CaseView API response code 200 is not successful"
@@ -59,13 +59,13 @@ public class CaseViewApiTest {
     @Title("Assert response code of 401 for GET CaseViewApi service with Invalid Service Authentication Token")
     public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
-        String invalidServiceToken = caseViewGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
-        Map<String, String> queryParamMap = caseViewGetApiSteps.givenValidParamsAreSuppliedForGetCaseView();
-        Response response = caseViewGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
+        String invalidServiceToken = caseActionGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseView();
+        Response response = caseActionGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             invalidServiceToken,
             queryParamMap
         );
-        String successOrFailure = caseViewGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                             "CaseView API response code 401 assertion is not successful"
         );
@@ -74,13 +74,13 @@ public class CaseViewApiTest {
     @Test
     @Title("Assert response code of 400 for GET CaseViewApi with Empty Params")
     public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
-        String authServiceToken = caseViewGetApiSteps.givenAValidServiceTokenIsGenerated();
-        Map<String, String> queryParamMap = caseViewGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseView();
-        Response response = caseViewGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
+        String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = caseActionGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseView();
+        Response response = caseActionGetApiSteps.whenTheGetCaseViewServiceIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
-        String successOrFailure = caseViewGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 400);
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 400);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");
     }
 
@@ -90,10 +90,10 @@ public class CaseViewApiTest {
     public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
         throws com.fasterxml.jackson.core.JsonProcessingException {
 
-        String authServiceToken = caseViewGetApiSteps.givenAValidServiceTokenIsGenerated();
-        CaseViewRequestVO caseViewRequestVO = caseViewPostApiSteps.generateCaseViewPostRequestBody();
-        Response response = caseViewPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseViewRequestVO);
-        String successOrFailure = caseViewGetApiSteps.thenASuccessResposeIsReturned(response);
+        String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        CaseActionRequestVO caseActionRequestVO = caseActionPostApiSteps.generateCaseViewPostRequestBody();
+        Response response = caseActionPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseActionRequestVO);
+        String successOrFailure = caseActionGetApiSteps.thenASuccessResposeIsReturned(response);
         Assert.assertEquals(
             successOrFailure,
             TestConstants.SUCCESS,

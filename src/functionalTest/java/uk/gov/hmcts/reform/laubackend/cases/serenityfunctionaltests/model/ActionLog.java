@@ -7,16 +7,20 @@ import javax.annotation.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("jsonschema2pojo")
-public class ViewLog {
+public class ActionLog {
 
     @JsonProperty("userId")
     private String userId;
+    @JsonProperty("caseActionId")
+    private String caseActionId;
     @JsonProperty("caseRef")
     private String caseRef;
     @JsonProperty("caseJurisdictionId")
     private String caseJurisdictionId;
     @JsonProperty("caseTypeId")
     private String caseTypeId;
+    @JsonProperty("caseAction")
+    private String caseAction;
     @JsonProperty("timestamp")
     private String timestamp;
 
@@ -26,6 +30,14 @@ public class ViewLog {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getcaseActionId() {
+        return caseActionId;
+    }
+
+    public void setcaseActionId(String caseActionId) {
+        this.caseActionId = caseActionId;
     }
 
     public String getCaseRef() {
@@ -50,6 +62,14 @@ public class ViewLog {
 
     public void setCaseTypeId(String caseTypeId) {
         this.caseTypeId = caseTypeId;
+    }
+
+    public String getCaseAction() {
+        return caseAction;
+    }
+
+    public void setCaseAction(String caseAction) {
+        this.caseAction = caseAction;
     }
 
     public String getTimestamp() {

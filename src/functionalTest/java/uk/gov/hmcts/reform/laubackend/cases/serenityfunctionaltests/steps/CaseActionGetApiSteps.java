@@ -6,8 +6,9 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseViewResponseVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ViewLog;
+
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ActionLog;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
 import java.text.ParseException;
@@ -19,9 +20,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CaseViewGetApiSteps extends BaseSteps {
+public class CaseActionGetApiSteps extends BaseSteps {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CaseViewGetApiSteps.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseActionGetApiSteps.class);
 
 
     @Step("Given a valid service token is generated")
@@ -33,6 +34,7 @@ public class CaseViewGetApiSteps extends BaseSteps {
     public Map<String, String> givenValidParamsAreSuppliedForGetCaseView() {
         HashMap<String, String> queryParamMap = new HashMap<>();
         queryParamMap.put("userId", "3748240");
+        queryParamMap.put("caseAction","VIEW");
         queryParamMap.put("caseRef", "1615817621013549");
         queryParamMap.put("caseJurisdictionId", "CMC");
         queryParamMap.put("caseTypeId", "Caveats");
@@ -57,35 +59,35 @@ public class CaseViewGetApiSteps extends BaseSteps {
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     @Step("Then the GET CaseView response params match the input")
     public String thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
-                                                                  CaseViewResponseVO caseViewResponseVO) {
-        int startRecordNumber = caseViewResponseVO.getStartRecordNumber();
+                                                                  CaseActionResponseVO caseActionResponseVO) {
+        int startRecordNumber = caseActionResponseVO.getStartRecordNumber();
         Assert.assertTrue(startRecordNumber > 0);
-        List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
-        ViewLog viewLogObj = viewLogList == null || viewLogList.get(0) == null ? new ViewLog() : viewLogList.get(0);
+        List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
+        ActionLog actionLogObj = actionLogList == null || actionLogList.get(0) == null ? new ActionLog() : actionLogList.get(0);
         for (String queryParam : inputQueryParamMap.keySet()) {
 
             if ("userId".equals(queryParam)) {
-                String userId = viewLogObj.getUserId();
+                String userId = actionLogObj.getUserId();
                 Assert.assertEquals(
                     "User Id is missing in the response",
                     inputQueryParamMap.get(queryParam), userId
                 );
             } else if ("caseRef".equals(queryParam)) {
-                String caseRef = viewLogObj.getCaseRef();
+                String caseRef = actionLogObj.getCaseRef();
                 Assert.assertEquals(
                     "caseRef is missing in the response",
                     inputQueryParamMap.get(queryParam), caseRef
                 );
 
             } else if ("caseJurisdictionId".equals(queryParam)) {
-                String caseJurisdictionId = viewLogObj.getCaseJurisdictionId();
+                String caseJurisdictionId = actionLogObj.getCaseJurisdictionId();
                 Assert.assertEquals(
                     "caseJurisdictionId is missing in the response",
                     inputQueryParamMap.get(queryParam), caseJurisdictionId
                 );
 
             } else if ("caseTypeId".equals(queryParam)) {
-                String caseTypeId = viewLogObj.getCaseTypeId();
+                String caseTypeId = actionLogObj.getCaseTypeId();
                 Assert.assertEquals(
                     "caseTypeId is missing in the response",
                     inputQueryParamMap.get(queryParam), caseTypeId
@@ -99,11 +101,11 @@ public class CaseViewGetApiSteps extends BaseSteps {
 
     @Step("Then the GET CaseView response date range matches the input")
     public String thenTheGetCaseViewResponseDateRangeMatchesTheInput(Map<String, String> inputQueryParamMap,
-                                                                     CaseViewResponseVO caseViewResponseVO)
+                                                                     CaseActionResponseVO caseActionResponseVO)
         throws ParseException {
-        List<ViewLog> viewLogList = caseViewResponseVO.getViewLog();
-        ViewLog viewLogObject = viewLogList.get(0);
-        String timeStampResponse = viewLogObject.getTimestamp();
+        List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
+        ActionLog actionLogObject = actionLogList.get(0);
+        String timeStampResponse = actionLogObject.getTimestamp();
         String timeStampStartInputParam = inputQueryParamMap.get("starttimestamp");
         String timeStampEndInputParam = inputQueryParamMap.get("endtimestamp");
 

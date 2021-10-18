@@ -10,21 +10,21 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @Generated("jsonschema2pojo")
-public class CaseViewResponseVO {
+public class CaseActionResponseVO {
 
-    @JsonProperty("viewLog")
-    private List<ViewLog> viewLog;
+    @JsonProperty("actionLog")
+    private List<ActionLog> actionLog;
     @JsonProperty("startRecordNumber")
     private Integer startRecordNumber;
     @JsonProperty("moreRecords")
     private Boolean moreRecords;
 
-    public List<ViewLog> getViewLog() {
-        return viewLog;
+    public List<ActionLog> getActionLog() {
+        return actionLog;
     }
 
-    public void setViewLog(List<ViewLog> viewLog) {
-        this.viewLog = viewLog;
+    public void setActionLog(List<ActionLog> viewLog) {
+        this.actionLog = actionLog;
     }
 
     public Integer getStartRecordNumber() {

@@ -8,17 +8,17 @@ import javax.annotation.Generated;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @Generated("jsonschema2pojo")
-public class CaseViewRequestVO {
+public class CaseActionRequestVO {
 
-    @JsonProperty("viewLog")
-    private ViewLog viewLog;
+    @JsonProperty("actionLog")
+    private ActionLog actionLog;
 
-    public ViewLog getViewLog() {
-        return viewLog;
+    public ActionLog getActionLog() {
+        return actionLog;
     }
 
-    public void setViewLog(ViewLog viewLog) {
-        this.viewLog = viewLog;
+    public void setActionLog(ActionLog actionLog) {
+        this.actionLog = actionLog;
     }
 
 }
