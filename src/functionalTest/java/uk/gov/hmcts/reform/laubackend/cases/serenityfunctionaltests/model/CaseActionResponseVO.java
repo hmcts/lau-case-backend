@@ -23,7 +23,7 @@ public class CaseActionResponseVO {
         return actionLog;
     }
 
-    public void setActionLog(List<ActionLog> viewLog) {
+    public void setActionLog(List<ActionLog> actionLog) {
         this.actionLog = actionLog;
     }
 

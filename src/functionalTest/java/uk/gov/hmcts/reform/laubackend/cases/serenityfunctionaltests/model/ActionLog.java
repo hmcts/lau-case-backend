@@ -11,8 +11,6 @@ public class ActionLog {
 
     @JsonProperty("userId")
     private String userId;
-    @JsonProperty("caseActionId")
-    private String caseActionId;
     @JsonProperty("caseRef")
     private String caseRef;
     @JsonProperty("caseJurisdictionId")
@@ -30,14 +28,6 @@ public class ActionLog {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getcaseActionId() {
-        return caseActionId;
-    }
-
-    public void setcaseActionId(String caseActionId) {
-        this.caseActionId = caseActionId;
     }
 
     public String getCaseRef() {

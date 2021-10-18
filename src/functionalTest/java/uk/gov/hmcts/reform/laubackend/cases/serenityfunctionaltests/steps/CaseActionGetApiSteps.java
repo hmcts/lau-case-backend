@@ -55,7 +55,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
     @Step("Then the GET CaseView response params match the input")
     public String thenTheGetCaseViewResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                   CaseActionResponseVO caseActionResponseVO) {
@@ -91,6 +91,13 @@ public class CaseActionGetApiSteps extends BaseSteps {
                 Assert.assertEquals(
                     "caseTypeId is missing in the response",
                     inputQueryParamMap.get(queryParam), caseTypeId
+                );
+
+            } else if ("caseAction".equals(queryParam)) {
+                String caseAction = actionLogObj.getCaseAction();
+                Assert.assertEquals(
+                    "caseAction is missing in the response",
+                    inputQueryParamMap.get(queryParam), caseAction
                 );
 
             }
