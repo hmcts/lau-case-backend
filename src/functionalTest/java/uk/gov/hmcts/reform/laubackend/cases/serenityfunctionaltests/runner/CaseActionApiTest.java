@@ -65,7 +65,7 @@ public class CaseActionApiTest {
             invalidServiceToken,
             queryParamMap
         );
-        String successOrFailure = caseActionGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 401);
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, 401);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                             "CaseAction API response code 401 assertion is not successful"
         );
@@ -80,7 +80,7 @@ public class CaseActionApiTest {
             authServiceToken,
             queryParamMap
         );
-        String successOrFailure = caseActionGetApiSteps.thenBadResponseForServiceAuthorizationIsReturned(response, 400);
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");
     }
 
