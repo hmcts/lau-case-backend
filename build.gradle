@@ -121,8 +121,9 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-//    useJUnitPlatform()
+    mustRunAfter test
 }
+check.dependsOn integration
 
 task smoke(type: Test) {
     description = "Runs Smoke Tests"

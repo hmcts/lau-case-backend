@@ -47,7 +47,7 @@ class CaseActionControllerTest {
         when(caseActionService.getCaseView(any())).thenReturn(
                 caseActionGetResponse);
 
-        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseView(
+        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
                 userId,
                 caseRef,
                 caseTypeId,
@@ -64,7 +64,7 @@ class CaseActionControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
-        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseView(
+        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
                 "1",
                 "2",
                 "3",

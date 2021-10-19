@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
@@ -49,7 +50,7 @@ public final class InputParamsVerifier {
     public static void verifyRequestParamsAreNotEmpty(final CaseSearchPostRequest caseSearchPostRequest)
             throws InvalidRequestException {
         if (isEmpty(caseSearchPostRequest.getSearchLog().getUserId())
-                || caseSearchPostRequest.getSearchLog().getCaseRefs().isEmpty()
+                || CollectionUtils.isEmpty(caseSearchPostRequest.getSearchLog().getCaseRefs())
                 || isEmpty(caseSearchPostRequest.getSearchLog().getTimestamp())) {
             throw new InvalidRequestException("You need to populate all parameters - "
                     + "userId, caseRefs and timestamp", BAD_REQUEST);
