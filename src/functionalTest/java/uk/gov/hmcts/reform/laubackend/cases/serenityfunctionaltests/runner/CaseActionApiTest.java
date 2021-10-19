@@ -56,7 +56,7 @@ public class CaseActionApiTest {
     }
 
     @Test
-    @Title("Assert response code of 401 for GET CaseActionApi service with Invalid Service Authentication Token")
+    @Title("Assert response code of 401 for GET CaseActionApi service with Invalid Authentication Token")
     public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
         String invalidServiceToken = caseActionGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
@@ -86,7 +86,7 @@ public class CaseActionApiTest {
 
 
     @Test
-    @Title("Assert response code of 200 for POST Request CaseActionApi")
+    @Title("Assert response code of 201 for POST Request CaseActionApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
         throws com.fasterxml.jackson.core.JsonProcessingException {
 
