@@ -151,7 +151,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return authServiceToken + "abc";
     }
 
-    @Step("Then 401 response is returned")
+    @Step("Then 403 response is returned")
     public String thenBadResponseForServiceAuthorizationIsReturned(Response response, int expectedStatusCode) {
         Assert.assertTrue(
             "Response status code is not " + expectedStatusCode + ", but it is " + response.getStatusCode(),

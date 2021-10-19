@@ -56,7 +56,7 @@ public class CaseActionApiTest {
     }
 
     @Test
-    @Title("Assert response code of 401 for GET CaseActionApi service with Invalid Authentication Token")
+    @Title("Assert response code of 403 for GET CaseActionApi service with Invalid ServiceAuthorization Token")
     public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
         String invalidServiceToken = caseActionGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
