@@ -67,7 +67,7 @@ public final class CaseActionController {
     )
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
-    public ResponseEntity<CaseActionGetResponse> getCaseView(
+    public ResponseEntity<CaseActionGetResponse> getCaseAction(
             @RequestParam(value = USER_ID, required = false) final String userId,
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
