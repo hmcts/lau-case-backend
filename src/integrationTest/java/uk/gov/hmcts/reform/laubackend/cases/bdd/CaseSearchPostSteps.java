@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
 import com.google.gson.Gson;
-import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,7 +8,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -28,16 +26,8 @@ public class CaseSearchPostSteps extends AbstractSteps {
     private final Gson jsonReader = new Gson();
 
     @Before
-    public void setUp() throws InterruptedException {
-        wiremokInstantiator.startWiremock();
+    public void setUp() {
         setupServiceAuthorisationStub();
-        SECONDS.sleep(1);
-    }
-
-    @After
-    public void shutDown() throws InterruptedException {
-        wiremokInstantiator.stopWiremock();
-        SECONDS.sleep(1);
     }
 
     @When("I request POST {string} endpoint using s2s")

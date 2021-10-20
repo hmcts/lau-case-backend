@@ -9,11 +9,7 @@ public enum WiremokInstantiator {
 
     private final WireMockServer wireMockServer = new WireMockServer(4554);
 
-    public void startWiremock() {
+    WiremokInstantiator() {
         wireMockServer.start();
-    }
-
-    public void stopWiremock() {
-        wireMockServer.shutdown();
     }
 }
