@@ -7,7 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CaseActionPostResponse {
+public class CaseSearchPostResponse {
 
-    private ActionLogPostResponse actionLog;
+    private CaseSearchPostResponse searchLog;
 }

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -26,23 +26,23 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_JURISDICTION_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_REF;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.CASE_TYPE_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.END_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.PAGE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.SIZE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.START_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseViewConstants.USER_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
-import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_JURISDICTION_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_REF;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_TYPE_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.END_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.PAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 
 @RestController
 @Slf4j
 @Api(tags = "LAU BackEnd - API for LAU database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case actions and searches. "
         + "The API will be invoked by the LAU front-end service.")
-
+@SuppressWarnings("PMD.ExcessiveImports")
 public final class CaseActionController {
 
     @Autowired
@@ -72,13 +72,13 @@ public final class CaseActionController {
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
-            @RequestParam(value = START_TIME,  required = false) final String startTime,
+            @RequestParam(value = START_TIME, required = false) final String startTime,
             @RequestParam(value = END_TIME, required = false) final String endTime,
             @RequestParam(value = SIZE, required = false) final String size,
             @RequestParam(value = PAGE, required = false) final String page) {
 
         try {
-            final InputParamsHolder inputParamsHolder = new InputParamsHolder(userId,
+            final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     caseRef,
                     caseTypeId,
                     caseJurisdictionId,
@@ -86,8 +86,8 @@ public final class CaseActionController {
                     endTime,
                     size,
                     page);
-            verifyRequestParamsAreNotEmpty(inputParamsHolder);
-            verifyRequestParamsConditions(inputParamsHolder);
+            verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
+            verifyRequestActionParamsConditions(inputParamsHolder);
 
             final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
@@ -126,8 +126,8 @@ public final class CaseActionController {
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
 
-            verifyRequestParamsAreNotEmpty(caseActionPostRequest.getActionLog());
-            verifyRequestParamsConditions(caseActionPostRequest.getActionLog());
+            verifyRequestActionParamsAreNotEmpty(caseActionPostRequest.getActionLog());
+            verifyRequestActionParamsConditions(caseActionPostRequest.getActionLog());
 
             final CaseActionPostResponse caseActionPostResponse = caseActionService
                     .saveCaseAction(caseActionPostRequest.getActionLog());

@@ -6,12 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.ViewActionPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class CaseActionService {
     @Autowired
     private TimestampUtil timestampUtil;
 
-    public CaseActionGetResponse getCaseView(final InputParamsHolder inputParamsHolder) {
+    public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
 
         final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),
@@ -72,9 +72,8 @@ public class CaseActionService {
         final CaseActionAudit caseActionAuditResponse = caseActionAuditRepository.save(caseActionAudit);
         final String timestamp = timestampUtil.timestampConvertor(caseActionAudit.getTimestamp());
 
-        return new CaseActionPostResponse(new ViewActionPostResponse().toDto(caseActionAuditResponse, timestamp));
+        return new CaseActionPostResponse(new ActionLogPostResponse().toDto(caseActionAuditResponse, timestamp));
     }
-
 
     private int calculateStartRecordNumber(final Page<CaseActionAudit> caseView) {
         return caseView.getSize() * caseView.getNumber() + 1;

@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ViewActionPostResponse {
+public class ActionLogPostResponse {
 
     public static final long serialVersionUID = 432973322;
 
@@ -20,7 +20,7 @@ public class ViewActionPostResponse {
     private String caseAction;
     private String timestamp;
 
-    public ViewActionPostResponse toDto(final CaseActionAudit caseActionAudit, final String timestamp) {
+    public ActionLogPostResponse toDto(final CaseActionAudit caseActionAudit, final String timestamp) {
         this.caseActionId = caseActionAudit.getCaseActionId().toString();
         this.userId = caseActionAudit.getUserId();
         this.caseRef = caseActionAudit.getCaseRef();

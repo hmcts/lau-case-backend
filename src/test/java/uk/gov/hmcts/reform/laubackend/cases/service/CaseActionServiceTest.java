@@ -11,11 +11,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
-import uk.gov.hmcts.reform.laubackend.cases.dto.InputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
-import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -51,7 +51,15 @@ class CaseActionServiceTest {
         final List<CaseActionAudit> caseActionAuditList = Arrays.asList(getCaseViewAuditEntity(timestamp));
         final Page<CaseActionAudit> pageResults = new PageImpl<>(caseActionAuditList);
 
-        final InputParamsHolder inputParamsHolder = new InputParamsHolder("1", "2", "3", "4", null, null, null, null);
+        final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(
+            "1",
+            "2",
+            "3",
+            "4",
+            null,
+            null,
+            null,
+            null);
 
         when(caseActionAuditRepository
                 .findCaseView("1", "2", "3", "4", null, null,

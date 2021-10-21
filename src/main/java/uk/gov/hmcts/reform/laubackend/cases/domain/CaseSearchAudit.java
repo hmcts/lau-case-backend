@@ -49,6 +49,14 @@ public class CaseSearchAudit implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public List<String> getCaserefs() {
+        List<String> caseRefs = new ArrayList<>();
+        for (CaseSearchAuditCases caseSearchAuditCase : caseSearchAuditCases) {
+            caseRefs.add(caseSearchAuditCase.getCaseRef());
+        }
+        return caseRefs;
+    }
+
     public void addCaseSearchAuditCases(final CaseSearchAuditCases caseSearchAuditCase) {
         caseSearchAuditCase.setCaseSearchAudit(this);
         this.caseSearchAuditCases.add(caseSearchAuditCase);

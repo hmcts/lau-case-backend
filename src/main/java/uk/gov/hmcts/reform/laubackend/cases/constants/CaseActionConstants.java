@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.constants;
 
-public final class CaseViewConstants {
+public final class CaseActionConstants {
 
     public static final String USER_ID = "userId";
     public static final String CASE_REF = "caseRef";
@@ -11,6 +11,6 @@ public final class CaseViewConstants {
     public static final String SIZE = "size";
     public static final String PAGE = "page";
 
-    private CaseViewConstants() {
+    private CaseActionConstants() {
     }
 }

@@ -32,7 +32,6 @@ public class CaseSearchAuditCases implements Serializable {
     @Column(name = "case_ref", nullable = false)
     private String caseRef;
 
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "search_id", referencedColumnName = "id", nullable = false)
     private CaseSearchAudit caseSearchAudit;

@@ -6,20 +6,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +45,30 @@ class CaseSearchServiceTest {
 
     @InjectMocks
     private CaseSearchService caseSearchService;
+
+    @Test
+    void shouldGetRepositoryResponse() {
+        final Timestamp timestamp = mock(Timestamp.class);
+        final List<CaseSearchAudit> caseSearchAuditList = asList(getCaseSearchAuditEntity(timestamp));
+        final Page<CaseSearchAudit> pageResults = new PageImpl<>(caseSearchAuditList);
+
+        final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder("1", "2", "3", "4", null, null);
+
+        when(caseSearchAuditRepository
+                 .findCaseSearch("1", "2", null, null,
+                               PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
+            .thenReturn(pageResults);
+
+        final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
+
+        verify(caseSearchAuditRepository, times(1))
+            .findCaseSearch("1", "2",null, null,
+                          PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
+
+        assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
+        assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");
+        assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo("2");
+    }
 
     @Test
     void shouldPostCaseView() {
@@ -67,6 +99,15 @@ class CaseSearchServiceTest {
         verify(caseSearchAuditRepository, times(1)).save(any());
         assertThat(searchPostRequest.getSearchLog().getUserId()).isEqualTo("1");
         assertThat(searchPostRequest.getSearchLog().getCaseRefs().get(0)).isEqualTo(caseRef);
+    }
 
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+    private CaseSearchAudit getCaseSearchAuditEntity(final Timestamp timestamp) {
+        final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
+        caseSearchAudit.setUserId("1");
+        final CaseSearchAuditCases caseSearchAuditCases = new CaseSearchAuditCases("2", caseSearchAudit);
+        caseSearchAudit.addCaseSearchAuditCases(caseSearchAuditCases);
+        caseSearchAudit.setTimestamp(timestamp);
+        return caseSearchAudit;
     }
 }

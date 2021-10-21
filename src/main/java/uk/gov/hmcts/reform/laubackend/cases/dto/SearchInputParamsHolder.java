@@ -7,11 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class InputParamsHolder {
+public class SearchInputParamsHolder {
     private String userId;
     private String caseRef;
-    private String caseTypeId;
-    private String caseJurisdictionId;
     private String startTime;
     private String endTime;
     private String size;
