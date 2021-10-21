@@ -37,8 +37,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         queryParamMap.put("caseRef", "1615817621013549");
         queryParamMap.put("caseJurisdictionId", "CMC");
         queryParamMap.put("caseTypeId", "Caveats");
-        queryParamMap.put("starttimestamp", "2021-08-22T22:19:05");
-        queryParamMap.put("endtimestamp", "2021-08-23T22:20:06");
+        queryParamMap.put("startTimestamp", "2021-08-22T22:19:05");
+        queryParamMap.put("endTimestamp", "2021-08-23T22:20:06");
         return queryParamMap;
     }
 
@@ -113,8 +113,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
         ActionLog actionLogObject = actionLogList.get(0);
         String timeStampResponse = actionLogObject.getTimestamp();
-        String timeStampStartInputParam = inputQueryParamMap.get("starttimestamp");
-        String timeStampEndInputParam = inputQueryParamMap.get("endtimestamp");
+        String timeStampStartInputParam = inputQueryParamMap.get("startTimestamp");
+        String timeStampEndInputParam = inputQueryParamMap.get("endTimestamp");
 
         String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
         String responseDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -140,8 +140,8 @@ public class CaseActionGetApiSteps extends BaseSteps {
         queryParamMap.put("caseRef", "");
         queryParamMap.put("caseJurisdictionId", "");
         queryParamMap.put("caseTypeId", "");
-        queryParamMap.put("starttimestamp", "");
-        queryParamMap.put("endtimestamp", "");
+        queryParamMap.put("startTimestamp", "");
+        queryParamMap.put("endTimestamp", "");
         return queryParamMap;
     }
 
