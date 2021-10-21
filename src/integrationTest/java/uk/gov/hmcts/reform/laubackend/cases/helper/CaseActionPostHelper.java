@@ -3,9 +3,9 @@ package uk.gov.hmcts.reform.laubackend.cases.helper;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 
-public final class CaseActionHelper {
+public final class CaseActionPostHelper {
 
-    private CaseActionHelper() {
+    private CaseActionPostHelper() {
     }
 
     public static CaseActionPostRequest getCaseActionPostRequest() {
