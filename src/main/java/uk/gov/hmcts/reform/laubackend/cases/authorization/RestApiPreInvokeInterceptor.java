@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 
 @Slf4j
 public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
@@ -38,7 +38,7 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                     exception.getMessage(),
                     exception);
             response.getWriter().write(exception.getMessage());
-            response.setStatus(SC_UNAUTHORIZED);
+            response.setStatus(SC_FORBIDDEN);
 
             return false;
         }
