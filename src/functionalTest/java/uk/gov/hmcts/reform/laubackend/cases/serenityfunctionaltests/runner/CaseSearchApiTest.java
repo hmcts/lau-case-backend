@@ -32,7 +32,7 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseSearchApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-             throws com.fasterxml.jackson.core.JsonProcessingException {
+              throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateCaseSearchPostRequestBody();
