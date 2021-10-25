@@ -38,8 +38,19 @@ spring:
       ddl-auto: none
   flyway:
     locations: classpath:db/migration
+    placeholders:
+      LAU_DB_PASSWORD: laupass
 
 flyway:
   noop:
     strategy: "false"
+
+idam:
+  s2s-auth:
+    url: http://localhost:4554
+    secret-cs: AAAAAAAAAAAAAAAA
+    name-cs: lau_case_frontend
+
+authorised.services: lau_case_frontend
+targetInstance: ${TEST_URL:http://localhost:4550}
 

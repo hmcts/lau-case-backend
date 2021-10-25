@@ -15,18 +15,6 @@ public class LauCaseBackEndServiceClient {
     }
 
     @SuppressWarnings("PMD.LawOfDemeter")
-    public String getWelcomePage() {
-        return SerenityRest
-            .get(lauCaseBackEndApiUrl)
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .and()
-            .extract()
-            .body()
-            .asString();
-    }
-
-    @SuppressWarnings("PMD.LawOfDemeter")
     public String getHealthPage() {
         return SerenityRest
             .get(lauCaseBackEndApiUrl + "/health")
