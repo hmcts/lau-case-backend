@@ -55,6 +55,18 @@ spring:
           lob:
             # silence the 'wall-of-text' - unnecessary exception throw about blob types
             non_contextual_creation: true
+  flyway:
+    enabled: ${LAU_FLYWAY_MIGRATE_DB:false}
+    user: ${LAU_DB_ADMIN_USERNAME:lauadmin}
+    password: ${LAU_DB_ADMIN_PASSWORD:}
+    placeholders:
+      LAU_DB_PASSWORD: ${LAU_DB_PASSWORD:}
+
+idam:
+  s2s-auth:
+    url: ${S2S_URL:http://localhost:4502}
+
+authorised.services: lau_case_frontend
 
 azure:
   application-insights:
@@ -63,3 +75,4 @@ azure:
 flyway:
   noop:
     strategy: "false"
+
