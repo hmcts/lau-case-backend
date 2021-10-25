@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
@@ -118,9 +118,9 @@ public class CaseActionPostSteps extends AbstractSteps {
                 .isEqualTo(caseActionPostResponse.getActionLog().getCaseJurisdictionId());
     }
 
-    @Then("http unauthorised response is returned for POST caseAction")
+    @Then("http forbidden response is returned for POST caseAction")
     public void unauthorisedResponseReturned() {
-        assertThat(httpStatusResponseCode).isEqualTo(UNAUTHORIZED.value());
+        assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
     }
 
     @Then("http bad request response is returned for POST caseAction")

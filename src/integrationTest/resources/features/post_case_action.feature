@@ -18,5 +18,5 @@ Feature: The application's POST caseAction endpoint
   Scenario: The backend is unable to process caseAction POST requests due to missing s2s authorisation header
     Given LAU backend application is healthy
     When I POST "/audit/caseAction" endpoint with missing s2s header
-    Then http unauthorised response is returned for POST caseAction
+    Then http forbidden response is returned for POST caseAction
 
