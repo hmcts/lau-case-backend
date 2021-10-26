@@ -5,7 +5,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
@@ -14,9 +13,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchGetHelper.getCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchGetHelper.getCaseSearchPostRequest;
 
@@ -35,8 +32,8 @@ public class CaseSearchGetSteps extends AbstractSteps {
     public void postCaseActionWithUserIds(final String path, final String userIds) {
         final List<String> userIdList = asList(userIds.split(","));
         userIdList.forEach(userId -> {
-            final Response response = postCaseSearch(getCaseSearchPostRequest(userId, null, null),
-                    path);
+            final Response response = restHelper.postObject(getCaseSearchPostRequest(userId, null, null),
+                    baseUrl() + path);
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
     }
@@ -45,10 +42,10 @@ public class CaseSearchGetSteps extends AbstractSteps {
     public void postCaseActionWithTimestamps(final String path, final String timestamp) {
         final List<String> timestampList = asList(timestamp.split(","));
         timestampList.forEach(timestampParam -> {
-            final Response response = postCaseSearch(getCaseSearchPostRequest(null,
+            final Response response = restHelper.postObject(getCaseSearchPostRequest(null,
                             null,
                             timestampParam),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -57,32 +54,32 @@ public class CaseSearchGetSteps extends AbstractSteps {
     @When("I POST multiple caseSearch records to {string} endpoint using caseRefs {string}")
     public void postCaseActionWithCaseRefs(final String path, final String caseRefs) {
         final List<String> caseRefsList = asList(caseRefs.split(","));
-        final Response response = postCaseSearch(getCaseSearchPostRequest(null, caseRefsList, null),
-                path);
+        final Response response = restHelper.postObject(getCaseSearchPostRequest(null, caseRefsList, null),
+                baseUrl() + path);
         assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
     }
 
     @And("I GET {string} using userId {string} query parameter")
     public void caseSearchUsingUserId(final String path, final String userId) {
-        final Response response = getResponse(path, "userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using startTimestamp {string} query parameter")
     public void caseSearchUsingStartTimestamp(final String path, final String startTimestamp) {
-        final Response response = getResponse(path, "startTimestamp", startTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, "startTimestamp", startTimestamp);
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
     @And("I GET {string} using caseRef {string} query parameter")
     public void caseSearchUsingCaseRef(final String path, final String caseRef) {
-        final Response response = getResponse(path, "caseRef", caseRef);
+        final Response response = restHelper.getResponse(baseUrl() + path, "caseRef", caseRef);
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using endTimestamp {string} query parameter")
     public void caseSearchUsingEndTimestamp(final String path, String endTimestamp) {
-        final Response response = getResponse(path, "endTimestamp", endTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, "endTimestamp", endTimestamp);
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
@@ -136,34 +133,5 @@ public class CaseSearchGetSteps extends AbstractSteps {
                 .isEqualTo(caseSearchPostRequest.getSearchLog().getCaseRefs().get(1));
         assertThat(caseSearchGetResponse.getSearchLog().get(0).getCaseRefs().get(2))
                 .isEqualTo(caseSearchPostRequest.getSearchLog().getCaseRefs().get(2));
-    }
-
-    private Response getResponse(final String path,
-                                 final String parameterName,
-                                 final String parameterValue) {
-        return RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .queryParam(parameterName, parameterValue)
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .get()
-                .andReturn();
-    }
-
-    private Response postCaseSearch(final CaseSearchPostRequest caseSearchPostRequest,
-                                    final String path) {
-        return RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(caseSearchPostRequest)
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .post()
-                .andReturn();
     }
 }

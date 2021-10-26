@@ -24,6 +24,16 @@ Feature: The application's GET caseSearch endpoint
     And And I GET "/audit/caseSearch" using endTimestamp "2019-08-23T21:20:05" query parameter
     Then a single caseSearch response body is returned for endTimestamp "2018-08-23T22:20:05.023Z"
 
+  Scenario: The backend is unable to process caseSearch GET requests due to missing s2s
+    Given LAU backend application is healthy
+    When And I GET "/audit/caseSearch" without service authorization header
+    Then HTTP "403" Forbidden response is returned
+
+  Scenario: The backend is unable to process caseSearch GET requests due to missing search params
+    Given LAU backend application is healthy
+    When I request GET "/audit/caseSearch" endpoint without mandatory params
+    Then HTTP "400" Bad Request response is returned
+
 
 
 
