@@ -43,16 +43,18 @@ withNightlyPipeline(type, product, component) {
 
     env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
     env.TEST_S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-
     env.Rules = params.SecurityRules
 
     loadVaultSecrets(secrets)
-
     enableSlackNotifications('#lau-builds')
     enableMutationTest()
     enableFullFunctionalTest()
     enableSecurityScan()
-    // enableFortifyScan()
+    enableFortifyScan()
+
+    after('fortify-scan') {
+      steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
 
     after('fullFunctionalTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'target/**/*'
@@ -66,7 +68,4 @@ withNightlyPipeline(type, product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
     }
 
-//  after('fortify-scan') {
-//    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-//  }
 }
