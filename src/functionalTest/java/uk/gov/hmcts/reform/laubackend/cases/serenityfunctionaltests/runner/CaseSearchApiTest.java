@@ -19,6 +19,8 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 import java.text.ParseException;
 import java.util.Map;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 @RunWith(SerenityRunner.class)
 public class CaseSearchApiTest {
     @Steps
@@ -30,32 +32,32 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseSearchApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-        throws com.fasterxml.jackson.core.JsonProcessingException {
+              throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateCaseSearchPostRequestBody();
         Response response = caseSearchPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseSearchRequestVO);
         String successOrFailure = caseSearchGetApiSteps.thenASuccessResposeIsReturned(response);
         Assert.assertEquals(
-            successOrFailure,
-            TestConstants.SUCCESS,
-            "CaseAction POST API response code 200 assertion is not successful"
+                successOrFailure,
+                TestConstants.SUCCESS,
+                "CaseAction POST API response code 200 assertion is not successful"
         );
     }
 
     @Test
     @Title("Assert response code of 400 for Invalid POST request body for CaseSearchApi")
     public void assertHttpBadResponseCodeForInvalidPostRequestBodyCaseSearchApi()
-        throws com.fasterxml.jackson.core.JsonProcessingException {
+            throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateInvalidCaseSearchPostRequestBody();
         Response response = caseSearchPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseSearchRequestVO);
-        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response,400);
+        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals(
-            successOrFailure,
-            TestConstants.SUCCESS,
-            "CaseAction POST API response code 400 assertion is not successful"
+                successOrFailure,
+                TestConstants.SUCCESS,
+                "CaseAction POST API response code 400 assertion is not successful"
         );
     }
 
@@ -66,24 +68,24 @@ public class CaseSearchApiTest {
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
-            authServiceToken,
-            queryParamMap
+                authServiceToken,
+                queryParamMap
         );
         ObjectMapper objectMapper = new ObjectMapper();
         CaseSearchGetResponseVO caseSearchGetResponseVO = objectMapper.readValue(
-            response.getBody().asString(),
-            CaseSearchGetResponseVO.class
+                response.getBody().asString(),
+                CaseSearchGetResponseVO.class
         );
 
         caseSearchGetApiSteps.thenASuccessResposeIsReturned(response);
         caseSearchGetApiSteps.thenAtLeastOneRecordNumberShouldExist(response);
         caseSearchGetApiSteps.thenTheGetCaseSearchResponseParamsMatchesTheInput(queryParamMap, caseSearchGetResponseVO);
         String successOrFailure = caseSearchGetApiSteps.thenTheGetCaseSearchResponseDateRangeMatchesTheInput(
-            queryParamMap,
-            caseSearchGetResponseVO
+                queryParamMap,
+                caseSearchGetResponseVO
         );
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
-                            "The assertion for GET CaseAction API response code 200 is not successful"
+                "The assertion for GET CaseAction API response code 200 is not successful"
         );
     }
 
@@ -94,12 +96,12 @@ public class CaseSearchApiTest {
         String invalidServiceToken = caseSearchGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
-            invalidServiceToken,
-            queryParamMap
+                invalidServiceToken,
+                queryParamMap
         );
-        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, 401);
+        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
-                                       "CaseAction API response code 401 assertion is not successful"
+                "CaseAction API response code 403 assertion is not successful"
         );
     }
 
@@ -109,8 +111,8 @@ public class CaseSearchApiTest {
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
-            authServiceToken,
-            queryParamMap
+                authServiceToken,
+                queryParamMap
         );
         String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");

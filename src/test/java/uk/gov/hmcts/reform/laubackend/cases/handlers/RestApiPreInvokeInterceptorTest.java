@@ -67,7 +67,7 @@ class RestApiPreInvokeInterceptorTest {
         final boolean isValidRequest = restApiPreInvokeInterceptor
                 .preHandle(httpServletRequest, httpServletResponse, object);
 
-        assertThat(((MockHttpServletResponse) httpServletResponse).getContentAsString())
+        assertThat(((MockHttpServletResponse) httpServletResponse).getErrorMessage())
                 .isEqualTo("Unable to authenticate service request.");
         assertThat(((MockHttpServletResponse) httpServletResponse).getStatus())
                 .isEqualTo(SC_UNAUTHORIZED);

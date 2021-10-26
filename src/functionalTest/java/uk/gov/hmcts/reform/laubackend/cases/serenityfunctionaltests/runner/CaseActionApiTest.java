@@ -19,6 +19,8 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 import java.text.ParseException;
 import java.util.Map;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
 @RunWith(SerenityRunner.class)
 public class CaseActionApiTest {
 
@@ -34,40 +36,40 @@ public class CaseActionApiTest {
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
-            authServiceToken,
-            queryParamMap
+                authServiceToken,
+                queryParamMap
         );
         ObjectMapper objectMapper = new ObjectMapper();
         CaseActionResponseVO caseActionResponseVO = objectMapper.readValue(
-            response.getBody().asString(),
-            CaseActionResponseVO.class
+                response.getBody().asString(),
+                CaseActionResponseVO.class
         );
 
         caseActionGetApiSteps.thenASuccessResposeIsReturned(response);
         caseActionGetApiSteps.thenAtLeastOneRecordNumberShouldExist(response);
         caseActionGetApiSteps.thenTheGetCaseActionResponseParamsMatchesTheInput(queryParamMap, caseActionResponseVO);
         String successOrFailure = caseActionGetApiSteps.thenTheGetCaseViewResponseDateRangeMatchesTheInput(
-            queryParamMap,
-            caseActionResponseVO
+                queryParamMap,
+                caseActionResponseVO
         );
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
-                            "The assertion for GET CaseAction API response code 200 is not successful"
+                "The assertion for GET CaseAction API response code 200 is not successful"
         );
     }
 
     @Test
     @Title("Assert response code of 403 for GET CaseActionApi service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf401WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
+    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
 
         String invalidServiceToken = caseActionGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
-            invalidServiceToken,
-            queryParamMap
+                invalidServiceToken,
+                queryParamMap
         );
-        String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, 401);
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
-                            "CaseAction API response code 401 assertion is not successful"
+                "CaseAction API response code 403 assertion is not successful"
         );
     }
 
@@ -77,8 +79,8 @@ public class CaseActionApiTest {
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
-            authServiceToken,
-            queryParamMap
+                authServiceToken,
+                queryParamMap
         );
         String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");
@@ -88,16 +90,16 @@ public class CaseActionApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseActionApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
-        throws com.fasterxml.jackson.core.JsonProcessingException {
+            throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseActionRequestVO caseActionRequestVO = caseActionPostApiSteps.generateCaseActionPostRequestBody();
         Response response = caseActionPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseActionRequestVO);
         String successOrFailure = caseActionGetApiSteps.thenASuccessResposeIsReturned(response);
         Assert.assertEquals(
-            successOrFailure,
-            TestConstants.SUCCESS,
-            "CaseAction POST API response code 200 assertion is not successful"
+                successOrFailure,
+                TestConstants.SUCCESS,
+                "CaseAction POST API response code 200 assertion is not successful"
         );
     }
 
