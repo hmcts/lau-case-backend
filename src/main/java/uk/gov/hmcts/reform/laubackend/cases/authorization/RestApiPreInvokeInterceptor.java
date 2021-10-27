@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 
 @Slf4j
 public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
@@ -37,7 +37,7 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
             log.error("Token authorisation failed due to error - {}",
                     exception.getMessage(),
                     exception);
-            response.sendError(SC_UNAUTHORIZED, exception.getMessage());
+            response.sendError(SC_FORBIDDEN, exception.getMessage());
 
             return false;
         }
