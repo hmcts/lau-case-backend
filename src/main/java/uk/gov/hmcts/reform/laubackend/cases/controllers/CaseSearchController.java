@@ -113,7 +113,7 @@ public class CaseSearchController {
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
             @ApiParam (value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
-            @ApiParam (value = "Case Reference IDs", example = "1615817621013640,1615817621013642")
+            @ApiParam (value = "Case Reference ID", example = "1615817621013640")
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @ApiParam (value = "Start Timestamp", example = "2021-06-23T22:20:05")
             @RequestParam(value = START_TIME, required = false) final String startTime,
