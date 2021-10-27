@@ -37,8 +37,7 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
             log.error("Token authorisation failed due to error - {}",
                     exception.getMessage(),
                     exception);
-            response.getWriter().write(exception.getMessage());
-            response.setStatus(SC_FORBIDDEN);
+            response.sendError(SC_FORBIDDEN, exception.getMessage());
 
             return false;
         }
