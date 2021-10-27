@@ -5,7 +5,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
@@ -14,9 +13,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionGetHelper.getCaseActionPostRequest;
 
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
@@ -34,12 +31,12 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void postCaseActionForUserIds(final String path, final String pathParam) {
         final List<String> pathParams = asList(pathParam.split(","));
         pathParams.forEach(userId -> {
-            final Response response = postCaseAction(getCaseActionPostRequest(userId,
+            final Response response = restHelper.postObject(getCaseActionPostRequest(userId,
                             null,
                             null,
                             null,
                             null),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -49,12 +46,12 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void postCaseActionForCaseRefs(final String path, final String caseRefs) {
         final List<String> caseRefsList = asList(caseRefs.split(","));
         caseRefsList.forEach(caseRef -> {
-            final Response response = postCaseAction(getCaseActionPostRequest(null,
+            final Response response = restHelper.postObject(getCaseActionPostRequest(null,
                             caseRef,
                             null,
                             null,
                             null),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -64,12 +61,12 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void postCaseJurisdiction(final String path, final String caseJurisdiction) {
         final List<String> caseJurisdictionList = asList(caseJurisdiction.split(","));
         caseJurisdictionList.forEach(caseJurisdictionParam -> {
-            final Response response = postCaseAction(getCaseActionPostRequest(null,
+            final Response response = restHelper.postObject(getCaseActionPostRequest(null,
                             null,
                             caseJurisdictionParam,
                             null,
                             null),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -79,12 +76,12 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void postWithCaseAction(final String path, final String caseTypeId) {
         final List<String> caseTypeIdList = asList(caseTypeId.split(","));
         caseTypeIdList.forEach(caseTypeIdParam -> {
-            final Response response = postCaseAction(getCaseActionPostRequest(null,
+            final Response response = restHelper.postObject(getCaseActionPostRequest(null,
                             null,
                             null,
                             caseTypeIdParam,
                             null),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -94,12 +91,12 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void postWithTimestamp(final String path, final String timestamp) {
         final List<String> pathParams = asList(timestamp.split(","));
         pathParams.forEach(timestampParam -> {
-            final Response response = postCaseAction(getCaseActionPostRequest(null,
+            final Response response = restHelper.postObject(getCaseActionPostRequest(null,
                             null,
                             null,
                             null,
                             timestampParam),
-                    path);
+                    baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
@@ -107,43 +104,43 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     @And("I GET {string} using userId {string} query param")
     public void searchUsingUserId(final String path, String userId) {
-        Response response = getResponse(path, "userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("I GET {string} using caseRef query param")
     public void searchUsingCaseRef(final String path) {
-        Response response = getResponse(path, "caseRef", "1");
+        Response response = restHelper.getResponse(baseUrl() + path, "caseRef", "1");
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseRef {string} query param")
     public void retrieveCaseActionCaseRefResponse(final String path, final String caseRef) {
-        Response response = getResponse(path, "caseRef", caseRef);
+        Response response = restHelper.getResponse(baseUrl() + path, "caseRef", caseRef);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseTypeId {string} query param")
     public void retrieveCaseActionForCaseType(final String path, final String caseTypeId) {
-        Response response = getResponse(path, "caseTypeId", caseTypeId);
+        Response response = restHelper.getResponse(baseUrl() + path, "caseTypeId", caseTypeId);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseJurisdictionId {string} query param")
     public void retrieveCaseJurisdiction(final String path, final String caseJurisdictionId) {
-        Response response = getResponse(path, "caseJurisdictionId", caseJurisdictionId);
+        Response response = restHelper.getResponse(baseUrl() + path, "caseJurisdictionId", caseJurisdictionId);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using endTimestamp {string} query param")
     public void retrieveWithEndTimestamp(final String path, final String endTimestamp) {
-        final Response response = getResponse(path, "endTimestamp", endTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, "endTimestamp", endTimestamp);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using startTimestamp {string} query param")
     public void retrieveWithStartTime(final String path, final String startTimestamp) {
-        final Response response = getResponse(path, "startTimestamp", startTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, "startTimestamp", startTimestamp);
         caseActionPostResponseBody = response.getBody().asString();
     }
 
@@ -164,7 +161,6 @@ public class CaseActionGetSteps extends AbstractSteps {
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
-
 
     @Then("a single caseAction response body is returned for caseTypeId {string}")
     public void retrieveCaseActionResponse(final String caseTypeId) {
@@ -228,34 +224,5 @@ public class CaseActionGetSteps extends AbstractSteps {
                 .isEqualTo(caseSearchPostRequest.getActionLog().getCaseRef());
         assertThat(caseActionGetResponse.getActionLog().get(0).getCaseTypeId())
                 .isEqualTo(caseSearchPostRequest.getActionLog().getCaseTypeId());
-    }
-
-    private Response getResponse(final String path,
-                                 final String parameterName,
-                                 final String parameterValue) {
-        return RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .queryParam(parameterName, parameterValue)
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .get()
-                .andReturn();
-    }
-
-    private Response postCaseAction(final CaseActionPostRequest caseActionPostRequest,
-                                    final String path) {
-        return RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(caseActionPostRequest)
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .post()
-                .andReturn();
     }
 }
