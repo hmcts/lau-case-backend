@@ -12,11 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingCaseRefs;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTH_TOKEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 
 @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
 public class CaseSearchPostSteps extends AbstractSteps {
@@ -93,9 +95,9 @@ public class CaseSearchPostSteps extends AbstractSteps {
         httpStatusResponseCode = response.getStatusCode();
     }
 
-    @Then("unauthorised response is returned")
+    @Then("http forbidden response is returned for POST caseSearch")
     public void unauthorisedResponseReturned() {
-        assertThat(httpStatusResponseCode).isEqualTo(UNAUTHORIZED.value());
+        assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
     }
 
     @Then("http bad request response is returned")
@@ -122,5 +124,4 @@ public class CaseSearchPostSteps extends AbstractSteps {
         assertThat(caseSearchPostRequest.getSearchLog().getCaseRefs().get(3))
                 .isEqualTo(caseSearchPostResponse.getSearchLog().getCaseRefs().get(3));
     }
-
 }
