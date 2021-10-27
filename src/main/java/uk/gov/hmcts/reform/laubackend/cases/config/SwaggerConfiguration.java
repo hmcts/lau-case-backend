@@ -4,9 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
@@ -20,7 +24,21 @@ public class SwaggerConfiguration {
             .apis(RequestHandlerSelectors.basePackage(
                 uk.gov.hmcts.reform.laubackend.cases.Application.class.getPackage().getName() + ".controllers"))
             .paths(PathSelectors.any())
-            .build();
+            .build()
+            .apiInfo(apiDetails());
     }
 
+    private ApiInfo apiDetails() {
+        return new ApiInfo(
+            "LAU Back-End API",
+            "This is the Log and Audit Back-End API that will audit case actions. "
+                + "\nThe API will be invoked by both the CCD (POST) and the LAU front-end service (GET).",
+            "",
+            "",
+            new Contact("", "", ""),
+            "",
+            "",
+            Collections.emptyList()
+        );
+    }
 }
