@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
 import lombok.Getter;
 import org.springframework.boot.web.server.LocalServerPort;
+import uk.gov.hmcts.reform.laubackend.cases.helper.RestHelper;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -12,10 +13,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTA
 @Getter
 public class AbstractSteps {
 
-    public static final String SERVICE_AUTHORISATION_HEADER = "ServiceAuthorization";
     private static final String JSON_RESPONSE = "application/json;charset=UTF-8";
-    public static final String AUTH_TOKEN = "some_exciting_super_cool_chars";
     public final WiremokInstantiator wiremokInstantiator = INSTANCE;
+    protected final RestHelper restHelper = new RestHelper();
+
 
     @LocalServerPort
     private int port;

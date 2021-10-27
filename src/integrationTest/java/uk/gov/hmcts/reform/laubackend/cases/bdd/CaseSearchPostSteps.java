@@ -17,6 +17,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingCaseRefs;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTH_TOKEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 
 @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
 public class CaseSearchPostSteps extends AbstractSteps {
@@ -122,5 +124,4 @@ public class CaseSearchPostSteps extends AbstractSteps {
         assertThat(caseSearchPostRequest.getSearchLog().getCaseRefs().get(3))
                 .isEqualTo(caseSearchPostResponse.getSearchLog().getCaseRefs().get(3));
     }
-
 }
