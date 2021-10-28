@@ -14,20 +14,29 @@ public final class CaseSearchPostHelper {
         final SearchLog searchLog = new SearchLog("3748230", asList("1615817621013640",
                 "1615817621013642",
                 "1615817621013600",
-                "1615817621013601"), "2021-08-23T22:20:05.023Z");
+                "1615817621013601"), "2021-08-24T22:20:05.023Z");
 
         return new CaseSearchPostRequest(searchLog);
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequestWithMissingCaseRefs() {
-        return new CaseSearchPostRequest(new SearchLog("3748230",
-                null,
+        final SearchLog searchLog = new SearchLog("3748230", null, "2021-08-25T22:20:05.023Z");
+
+        return new CaseSearchPostRequest(searchLog);
+    }
+
+    public static CaseSearchPostRequest getCaseSearchPostRequestWithMissingUserId() {
+        return new CaseSearchPostRequest(new SearchLog(null,
+                asList("1615817621013640",
+                        "1615817621013642",
+                        "1615817621013600",
+                        "1615817621013601"),
                 "2021-08-23T22:20:05.023Z"));
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequestWithInvalidCaseRefs() {
         return new CaseSearchPostRequest(new SearchLog("3748230",
                 asList("12"),
-                "2021-08-23T22:20:05.023Z"));
+                "2021-08-26T22:20:05.023Z"));
     }
 }

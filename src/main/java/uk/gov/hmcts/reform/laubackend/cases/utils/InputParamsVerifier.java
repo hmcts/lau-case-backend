@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
@@ -64,8 +65,10 @@ public final class InputParamsVerifier {
 
         verifyUserId(searchLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(searchLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
-        for (String caseRef : searchLog.getCaseRefs()) {
-            verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
+        if (!CollectionUtils.isEmpty(searchLog.getCaseRefs())) {
+            for (String caseRef : searchLog.getCaseRefs()) {
+                verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
+            }
         }
     }
 }
