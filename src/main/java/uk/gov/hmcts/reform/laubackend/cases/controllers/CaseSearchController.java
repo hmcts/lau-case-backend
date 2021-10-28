@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -36,17 +37,18 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 
 @RestController
 @Slf4j
-@Api(tags = "LAU BackEnd - API for LAU database operations.", value = "This is the Log and Audit "
+@Api(tags = "Case search database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case searches. "
-        + "The API will be invoked by the LAU front-end service.")
+        + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
 @SuppressWarnings("PMD.ExcessiveImports")
 public class CaseSearchController {
 
     @Autowired
     private CaseSearchService caseSearchService;
 
-    @ApiOperation(
-            tags = "Save case search audits", value = "Save case search audits")
+    @ApiOperation(tags = "POST end-points", value = "Save case search audits", notes = "This operation will "
+        + "persist CCD case search entries which are posted in the request. Single CaseSearch per request will "
+        + "be stored in the database.")
     @ApiResponses({
             @ApiResponse(code = 201,
                     message = "Created SearchLog case response - includes caseSearchId from DB.",
@@ -89,8 +91,8 @@ public class CaseSearchController {
         }
     }
 
-    @ApiOperation(
-            tags = "Get case search audits", value = "Get case search audits")
+    @ApiOperation(tags = "GET end-points", value = "Retrieve case search audits", notes = "This operation will "
+        + "query and return a list of case searches based on the search conditions provided in the URL path.")
     @ApiResponses({
             @ApiResponse(code = 200,
                     message = "Request executed successfully. Response contains of case search logs",
@@ -109,11 +111,17 @@ public class CaseSearchController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
+            @ApiParam (value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
+            @ApiParam (value = "Case Reference ID", example = "1615817621013640")
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
+            @ApiParam (value = "Start Timestamp", example = "2021-06-23T22:20:05")
             @RequestParam(value = START_TIME, required = false) final String startTime,
+            @ApiParam (value = "End Timestamp", example = "2021-08-23T22:20:05")
             @RequestParam(value = END_TIME, required = false) final String endTime,
+            @ApiParam (value = "Size", example = "500")
             @RequestParam(value = SIZE, required = false) final String size,
+            @ApiParam (value = "Page", example = "1")
             @RequestParam(value = PAGE, required = false) final String page) {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,

@@ -263,6 +263,7 @@ def versions = [
         reformLogging     : '5.1.7',
         springBoot        : springBoot.class.package.implementationVersion,
         springfoxSwagger  : '3.0.0',
+        springfoxSwaggerui: '2.9.2',
         serenity          : '2.5.10',
         gradlePitest      : '1.6.0',
         pitest            : '1.6.3',
@@ -303,6 +304,7 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwaggerui
 
   compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
