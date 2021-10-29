@@ -4,6 +4,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 public final class CaseSearchPostHelper {
 
@@ -20,7 +21,7 @@ public final class CaseSearchPostHelper {
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequestWithMissingCaseRefs() {
-        final SearchLog searchLog = new SearchLog("3748230", null, "2021-08-25T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("3748230", emptyList(), "2021-08-25T22:20:05.023Z");
 
         return new CaseSearchPostRequest(searchLog);
     }
