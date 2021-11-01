@@ -31,12 +31,11 @@ public class SwaggerConfiguration {
     private ApiInfo apiDetails() {
         return new ApiInfo(
             "LAU Back-End API",
-            "This is the Log and Audit Back-End API that will audit case actions. "
-                + "\nThe API will be invoked by both the CCD (POST) and the LAU front-end service (GET).",
-            "",
+            "Log and Audit Back-End API, used for auditing case searches and actions.",
+            "0.1",
             "",
             new Contact("", "", ""),
-            "",
+            "REFORM Common Components",
             "",
             Collections.emptyList()
         );
