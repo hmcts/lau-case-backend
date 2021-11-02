@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse.caseSearchResponse;
 
 @Service
@@ -34,11 +35,11 @@ public class CaseSearchService {
     public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
 
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository.findCaseSearch(
-            inputParamsHolder.getUserId(),
-            inputParamsHolder.getCaseRef(),
-            timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
-            timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
-            getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
+                inputParamsHolder.getUserId(),
+                inputParamsHolder.getCaseRef(),
+                timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
+                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
+                getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
         );
 
         final List<SearchLog> searchLogList = new ArrayList<>();
@@ -46,15 +47,15 @@ public class CaseSearchService {
         caseSearch.getContent().forEach(caseSearchAudit -> {
             final String timestamp = timestampUtil.timestampConvertor(caseSearchAudit.getTimestamp());
             searchLogList.add(
-                new SearchLog().toDto(caseSearchAudit, timestamp)
+                    new SearchLog().toDto(caseSearchAudit, timestamp)
             );
         });
 
         return caseSearchResponse()
-            .withSearchLog(searchLogList)
-            .withMoreRecords(caseSearch.hasNext())
-            .withStartRecordNumber(calculateStartRecordNumber(caseSearch))
-            .build();
+                .withSearchLog(searchLogList)
+                .withMoreRecords(caseSearch.hasNext())
+                .withStartRecordNumber(calculateStartRecordNumber(caseSearch))
+                .build();
     }
 
     public CaseSearchPostRequest saveCaseSearch(final CaseSearchPostRequest
@@ -65,11 +66,11 @@ public class CaseSearchService {
                 .getUserId(),
                 timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()));
 
-        final List<String> caseRefs = caseSearchPostRequest.getSearchLog().getCaseRefs();
-
-        caseRefs.forEach(caseRef -> caseSearchAuditRequest
-                .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
-
+        if (!isEmpty(caseSearchPostRequest.getSearchLog().getCaseRefs())) {
+            caseSearchPostRequest.getSearchLog().getCaseRefs()
+                    .forEach(caseRef -> caseSearchAuditRequest
+                    .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
+        }
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
         final String timestamp = timestampUtil.timestampConvertor(caseSearchAuditResponse.getTimestamp());

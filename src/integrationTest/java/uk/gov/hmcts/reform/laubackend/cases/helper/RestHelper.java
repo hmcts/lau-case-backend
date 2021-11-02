@@ -50,4 +50,17 @@ public class RestHelper {
                 .post()
                 .andReturn();
     }
+
+    public Response postObjectWithoutHeader(final Object object,
+                                            final String path) {
+        return RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(path)
+                .body(object)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .when()
+                .post()
+                .andReturn();
+    }
 }

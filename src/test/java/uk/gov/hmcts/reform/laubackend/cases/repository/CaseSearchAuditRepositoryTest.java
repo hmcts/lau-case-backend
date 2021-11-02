@@ -25,6 +25,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
+@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 class CaseSearchAuditRepositoryTest {
 
     @Autowired
@@ -35,22 +36,22 @@ class CaseSearchAuditRepositoryTest {
         //Insert 20 records
         for (int i = 1; i < 21; i++) {
             caseSearchAuditRepository
-                .save(getCaseSearchAuditEntity(
-                    Arrays.asList(String.valueOf(i)),
-                    String.valueOf(i),
-                    valueOf(now().plusDays(i))
-                ));
+                    .save(getCaseSearchAuditEntity(
+                            Arrays.asList(String.valueOf(i)),
+                            String.valueOf(i),
+                            valueOf(now().plusDays(i))
+                    ));
         }
     }
 
     @Test
     void shouldFindCaseByCaseRef() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
-            null,
-            "2",
-            null,
-            null,
-            null
+                null,
+                "2",
+                null,
+                null,
+                null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseSearchAuditList.getContent(), 2);
@@ -59,11 +60,11 @@ class CaseSearchAuditRepositoryTest {
     @Test
     void shouldFindCaseByUserId() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
-            "10",
-            null,
-            null,
-            null,
-            null
+                "10",
+                null,
+                null,
+                null,
+                null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseSearchAuditList.getContent(), 10);
@@ -72,11 +73,11 @@ class CaseSearchAuditRepositoryTest {
     @Test
     void shouldFindPageableResults() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
-            null,
-            null,
-            null,
-            null,
-            PageRequest.of(1, 10, Sort.by("timestamp"))
+                null,
+                null,
+                null,
+                null,
+                PageRequest.of(1, 10, Sort.by("timestamp"))
         );
 
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(10);
@@ -85,11 +86,11 @@ class CaseSearchAuditRepositoryTest {
     @Test
     void shouldGetAllRecords() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
-            null,
-            null,
-            null,
-            null,
-            null
+                null,
+                null,
+                null,
+                null,
+                null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(20);
     }
@@ -121,22 +122,20 @@ class CaseSearchAuditRepositoryTest {
     private void assertResults(final List<CaseSearchAudit> caseSearchAuditList, final int value) {
         final String stringValue = String.valueOf(value);
         assertThat(caseSearchAuditList.get(0)
-                                  .getCaseSearchAuditCases().get(0).getCaseRef()).isEqualTo(stringValue);
+                .getCaseSearchAuditCases().get(0).getCaseRef()).isEqualTo(stringValue);
         assertThat(caseSearchAuditList.get(0).getUserId()).isEqualTo(stringValue);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private CaseSearchAudit getCaseSearchAuditEntity(final List<String> caseRefs,
-                                                 final String userId,
-                                                 final Timestamp timestamp) {
+                                                     final String userId,
+                                                     final Timestamp timestamp) {
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
-        CaseSearchAuditCases caseSearchAuditCases = new CaseSearchAuditCases(null, caseSearchAudit);
-        for (String caseRefStr : caseRefs) {
-            caseSearchAuditCases.setCaseRef(caseRefStr);
-            caseSearchAudit.addCaseSearchAuditCases(caseSearchAuditCases);
-        }
         caseSearchAudit.setUserId(userId);
         caseSearchAudit.setTimestamp(timestamp);
+        for (final String caseRefStr : caseRefs) {
+            caseSearchAudit.addCaseSearchAuditCases(new CaseSearchAuditCases(caseRefStr, caseSearchAudit));
+        }
         return caseSearchAudit;
     }
 }
