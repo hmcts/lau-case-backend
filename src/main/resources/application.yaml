@@ -66,7 +66,7 @@ idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4502}
 
-authorised.services: lau_case_frontend
+authorised.services: lau_case_frontend,ccd_data
 
 azure:
   application-insights:
