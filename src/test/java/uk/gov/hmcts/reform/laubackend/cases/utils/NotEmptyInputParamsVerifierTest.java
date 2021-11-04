@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
+@SuppressWarnings("PMD.TooManyMethods")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NotEmptyInputParamsVerifierTest {
 
@@ -156,8 +157,20 @@ public class NotEmptyInputParamsVerifierTest {
             verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
             fail("The method should have thrown InvalidRequestException when input params are empty");
         } catch (final InvalidRequestException invalidRequestException) {
-            assertThat(invalidRequestException.getMessage()).isEqualTo("You need to populate all parameters - "
-                    + "userId, caseRefs and timestamp");
+            assertThat(invalidRequestException.getMessage()).isEqualTo("You need to populate all "
+                    + "mandatory parameters - userId and timestamp");
         }
+    }
+
+    @Test
+    public void shouldVerifyRequestParamsAreNotEmptyForCaseSearchWithMissingCaseRefs() {
+        final SearchLog searchLog = new SearchLog();
+        searchLog.setUserId("1");
+        searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
+
+        final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
+        caseSearchPostRequest.setSearchLog(searchLog);
+
+        assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest));
     }
 }

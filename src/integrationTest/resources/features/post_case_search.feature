@@ -5,6 +5,11 @@ Feature: The application's POST caseSearch endpoint
     When I request POST "/audit/caseSearch" endpoint using s2s
     Then  caseSearch response body is returned
 
+  Scenario: The backend is able to process caseSearch POST requests without caseRefs
+    Given LAU backend application is healthy
+    When I request POST "/audit/caseSearch" endpoint using s2s and missing caseRefs
+    Then  caseSearch response body with missing caseRefs is returned
+
   Scenario: The backend is unable to process caseSearch POST requests due to missing mandatory parameter
     Given LAU backend application is healthy
     When I request POST "/audit/caseSearch" endpoint with missing request body parameter using s2s
