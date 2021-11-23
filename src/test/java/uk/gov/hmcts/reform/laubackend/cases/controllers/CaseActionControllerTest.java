@@ -48,6 +48,7 @@ class CaseActionControllerTest {
                 caseActionGetResponse);
 
         final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
+                null,
                 userId,
                 caseRef,
                 caseTypeId,
@@ -65,6 +66,7 @@ class CaseActionControllerTest {
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
         final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
+                null,
                 "1",
                 "2",
                 "3",
@@ -97,6 +99,7 @@ class CaseActionControllerTest {
         caseActionPostRequest.setActionLog(actionLog);
 
         final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                null,
                 caseActionPostRequest
         );
 
@@ -112,7 +115,9 @@ class CaseActionControllerTest {
         final CaseActionPostRequest caseActionPostRequest = new CaseActionPostRequest();
         caseActionPostRequest.setActionLog(actionLog);
         final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                null,
                 caseActionPostRequest
+
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
@@ -134,6 +139,7 @@ class CaseActionControllerTest {
                 .willAnswer(invocation -> new Exception("Some terrible exception happened"));
 
         final ResponseEntity<CaseActionPostResponse> responseEntity = caseActionController.saveCaseAction(
+                null,
                 caseActionPostRequest
         );
 
