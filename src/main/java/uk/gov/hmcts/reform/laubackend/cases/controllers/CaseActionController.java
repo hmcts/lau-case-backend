@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,23 +36,24 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 
 @RestController
 @Slf4j
 @Api(tags = "Case action database operations.", value = "This is the Log and Audit "
-    + "Back-End API that will audit case actions. "
-    + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
-@SuppressWarnings("PMD.ExcessiveImports")
+        + "Back-End API that will audit case actions. "
+        + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
+@SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement"})
 public final class CaseActionController {
 
     @Autowired
     private CaseActionService caseActionService;
 
     @ApiOperation(tags = "POST end-points", value = "Save case action audits", notes = "This operation will "
-        + "persist CCD case action entries which are posted in the request. Single CaseAction per request will "
-        + "be stored in the database.")
+            + "persist CCD case action entries which are posted in the request. Single CaseAction per request will "
+            + "be stored in the database.")
     @ApiResponses({
             @ApiResponse(code = 201,
                     message = "Created actionLog case response - includes caseActionId from DB.",
@@ -71,6 +73,7 @@ public final class CaseActionController {
     )
     @ResponseBody
     public ResponseEntity<CaseActionPostResponse> saveCaseAction(
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
 
@@ -97,51 +100,52 @@ public final class CaseActionController {
     }
 
     @ApiOperation(tags = "GET end-points", value = "Retrieve case action audits", notes = "This operation will "
-        + "query and return a list of case actions based on the search conditions provided in the URL path.")
+            + "query and return a list of case actions based on the search conditions provided in the URL path.")
     @ApiResponses({
-        @ApiResponse(code = 200,
-            message = "Request executed successfully. Response contains of case view logs",
-            response = CaseActionGetResponse.class),
-        @ApiResponse(code = 400,
-            message =
-                "Missing userId, caseTypeId, caseJurisdictionId, "
-                    + "caseRef, startTimestamp or endTimestamp parameters.",
-            response = CaseActionGetResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = CaseActionGetResponse.class)
+            @ApiResponse(code = 200,
+                    message = "Request executed successfully. Response contains of case view logs",
+                    response = CaseActionGetResponse.class),
+            @ApiResponse(code = 400,
+                    message =
+                            "Missing userId, caseTypeId, caseJurisdictionId, "
+                                    + "caseRef, startTimestamp or endTimestamp parameters.",
+                    response = CaseActionGetResponse.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = CaseActionGetResponse.class)
     })
     @GetMapping(
-        path = "/audit/caseAction",
-        produces = APPLICATION_JSON_VALUE
+            path = "/audit/caseAction",
+            produces = APPLICATION_JSON_VALUE
     )
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
-        @ApiParam(value = "User ID", example = "3748238")
-        @RequestParam(value = USER_ID, required = false) final String userId,
-        @ApiParam(value = "Case Reference ID", example = "1615817621013640")
-        @RequestParam(value = CASE_REF, required = false) final String caseRef,
-        @ApiParam(value = "Case Type ID", example = "GrantOfRepresentation")
-        @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
-        @ApiParam(value = "Case Jurisdiction ID", example = "PROBATE")
-        @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
-        @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
-        @RequestParam(value = START_TIME, required = false) final String startTime,
-        @ApiParam(value = "End Timestamp", example = "2021-08-23T22:20:05")
-        @RequestParam(value = END_TIME, required = false) final String endTime,
-        @ApiParam(value = "Size", example = "500")
-        @RequestParam(value = SIZE, required = false) final String size,
-        @ApiParam(value = "Page", example = "1")
-        @RequestParam(value = PAGE, required = false) final String page) {
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
+            @ApiParam(value = "User ID", example = "3748238")
+            @RequestParam(value = USER_ID, required = false) final String userId,
+            @ApiParam(value = "Case Reference ID", example = "1615817621013640")
+            @RequestParam(value = CASE_REF, required = false) final String caseRef,
+            @ApiParam(value = "Case Type ID", example = "GrantOfRepresentation")
+            @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
+            @ApiParam(value = "Case Jurisdiction ID", example = "PROBATE")
+            @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
+            @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
+            @RequestParam(value = START_TIME, required = false) final String startTime,
+            @ApiParam(value = "End Timestamp", example = "2021-08-23T22:20:05")
+            @RequestParam(value = END_TIME, required = false) final String endTime,
+            @ApiParam(value = "Size", example = "500")
+            @RequestParam(value = SIZE, required = false) final String size,
+            @ApiParam(value = "Page", example = "1")
+            @RequestParam(value = PAGE, required = false) final String page) {
 
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
-                                                                                          caseRef,
-                                                                                          caseTypeId,
-                                                                                          caseJurisdictionId,
-                                                                                          startTime,
-                                                                                          endTime,
-                                                                                          size,
-                                                                                          page);
+                    caseRef,
+                    caseTypeId,
+                    caseJurisdictionId,
+                    startTime,
+                    endTime,
+                    size,
+                    page);
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
 
@@ -150,9 +154,9 @@ public final class CaseActionController {
             return new ResponseEntity<>(caseView, OK);
         } catch (final InvalidRequestException invalidRequestException) {
             log.error(
-                "getCaseView API call failed due to error - {}",
-                invalidRequestException.getMessage(),
-                invalidRequestException
+                    "getCaseView API call failed due to error - {}",
+                    invalidRequestException.getMessage(),
+                    invalidRequestException
             );
             return new ResponseEntity<>(null, BAD_REQUEST);
         }

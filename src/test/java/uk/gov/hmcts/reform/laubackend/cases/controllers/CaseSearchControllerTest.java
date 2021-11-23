@@ -44,15 +44,16 @@ class CaseSearchControllerTest {
         final CaseSearchGetResponse caseSearchGetResponse = mock(CaseSearchGetResponse.class);
 
         when(caseSearchService.getCaseSearch(any())).thenReturn(
-            caseSearchGetResponse);
+                caseSearchGetResponse);
 
         final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
-            userId,
-            caseRef,
-            null,
-            null,
-            null,
-            null
+                null,
+                userId,
+                caseRef,
+                null,
+                null,
+                null,
+                null
         );
 
         verify(caseSearchService, times(1)).getCaseSearch(any());
@@ -62,17 +63,17 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
         final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
-            "1",
-            "2",
-            null,
-            null,
-            null,
-            null
+                null,
+                "1",
+                "2",
+                null,
+                null,
+                null,
+                null
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
-
 
 
     @Test
@@ -90,7 +91,8 @@ class CaseSearchControllerTest {
                 caseSearchPostRequest);
 
         final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
-                caseSearchPostRequest
+                caseSearchPostRequest,
+                null
         );
 
         verify(caseSearchService, times(1)).saveCaseSearch(caseSearchPostRequest);
@@ -108,7 +110,8 @@ class CaseSearchControllerTest {
         caseSearchPostRequest.setSearchLog(searchLog);
 
         final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
-                caseSearchPostRequest
+                caseSearchPostRequest,
+                null
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
@@ -128,7 +131,8 @@ class CaseSearchControllerTest {
                 .willAnswer(invocation -> new Exception("Mama mia what a terrible exception"));
 
         final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
-                caseSearchPostRequest
+                caseSearchPostRequest,
+                null
         );
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
