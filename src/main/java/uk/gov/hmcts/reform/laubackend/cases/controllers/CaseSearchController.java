@@ -71,6 +71,7 @@ public class CaseSearchController {
     @ResponseBody
     public ResponseEntity<CaseSearchPostRequest> saveCaseSearch(
             @RequestBody final CaseSearchPostRequest caseSearchPostRequest,
+            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) final String authToken) {
         try {
             verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
@@ -114,6 +115,7 @@ public class CaseSearchController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
+            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,

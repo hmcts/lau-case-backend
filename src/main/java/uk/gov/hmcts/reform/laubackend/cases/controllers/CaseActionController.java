@@ -73,6 +73,7 @@ public final class CaseActionController {
     )
     @ResponseBody
     public ResponseEntity<CaseActionPostResponse> saveCaseAction(
+            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
@@ -119,6 +120,7 @@ public final class CaseActionController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
+            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
