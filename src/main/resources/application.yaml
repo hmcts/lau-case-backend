@@ -65,8 +65,15 @@ spring:
 idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4502}
+  api:
+    url: ${IDAM_API_URL:http://localhost:5000}
+  client:
+    id: ${IDAM_CLIENT_NAME:lau}
+    secret: ${IDAM_CLIENT_SECRET:12345678}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:3451/oauth2redirect}
 
 authorised.services: lau_case_frontend,ccd_data
+authorised.roles: cft-audit-investigator
 
 azure:
   application-insights:

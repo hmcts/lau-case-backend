@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTH_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 
@@ -32,6 +33,7 @@ public class RestHelper {
                 .queryParam(parameterName, parameterValue)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .header(AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
                 .when()
                 .get()
                 .andReturn();
