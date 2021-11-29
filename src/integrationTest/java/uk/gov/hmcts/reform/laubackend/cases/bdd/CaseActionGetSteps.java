@@ -25,7 +25,6 @@ public class CaseActionGetSteps extends AbstractSteps {
     @Before
     public void setUp() {
         setupServiceAuthorisationStub();
-        setupAuthorisationStub();
     }
 
     @When("I POST multiple records to {string} endpoint using {string} userIds")

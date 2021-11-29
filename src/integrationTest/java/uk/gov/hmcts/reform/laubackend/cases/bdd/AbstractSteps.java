@@ -35,9 +35,6 @@ public class AbstractSteps {
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody("lau_case_frontend")));
-    }
-
-    public void setupAuthorisationStub() {
         wiremokInstantiator.getWireMockServer().stubFor(get(urlPathMatching("/o/userinfo"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)

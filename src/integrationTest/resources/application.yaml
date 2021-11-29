@@ -55,7 +55,7 @@ idam:
   client:
     id: lau
     secret: 12345678
-    redirect_uri: http://localhost:3451/oauth2redirect}
+    redirect_uri: http://localhost:3451/oauth2redirect
 
 
 authorised.services: lau_case_frontend
