@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
+import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.authorisation.exceptions.ServiceException;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
@@ -35,7 +37,8 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                 authorizationAuthenticator.authorizeAuthorizationToken(request);
             }
 
-        } catch (final InvalidServiceAuthorizationException exception) {
+        } catch (final InvalidServiceAuthorizationException
+                | InvalidTokenException | ServiceException exception) {
             log.error("Service authorization token failed due to error - {}",
                     exception.getMessage(),
                     exception);

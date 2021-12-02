@@ -9,10 +9,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTHORIS
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTH_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 
+@SuppressWarnings({"unchecked", "PMD.AvoidDuplicateLiterals"})
 public class RestHelper {
 
     public static Response getResponseWithoutHeader(final String path) {
-
         return RestAssured
                 .given()
                 .relaxedHTTPSValidation()
@@ -22,6 +22,19 @@ public class RestHelper {
                 .get()
                 .andReturn();
     }
+
+    public static Response getResponseWithoutAuthorizationHeader(final String path) {
+        return RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(path)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .when()
+                .get()
+                .andReturn();
+    }
+
 
     public Response getResponse(final String path,
                                 final String parameterName,
