@@ -143,6 +143,12 @@ public class CaseSearchGetApiSteps extends BaseSteps {
         queryParamMap.put("endTimestamp", "");
         return queryParamMap;
     }
+
+    @Step("Given the invalid authorization token is generated")
+    public String givenTheInvalidAuthorizationTokenIsGenerated() throws JSONException {
+        String authToken = validAuthorizationTokenIsGenerated();
+        return authToken + "abc";
+    }
 }
 
 

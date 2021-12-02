@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RunWith(SerenityRunner.class)
 @SuppressWarnings("PMD.TooManyMethods")
@@ -108,6 +109,24 @@ public class CaseSearchApiTest {
                 queryParamMap
         );
         String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                "CaseAction API response code 403 assertion is not successful"
+        );
+    }
+
+    @Test
+    @Title("Assert response code of 401 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
+    public void assertResponseCodeOf401WithInvalidServiceAuthorizationTokenForGetCaseSearchApi() throws JSONException {
+
+        String validServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
+        String ivalidAuthorizationToken = caseSearchGetApiSteps.givenTheInvalidAuthorizationTokenIsGenerated();
+        Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
+        Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
+                validServiceToken,
+                ivalidAuthorizationToken,
+                queryParamMap
+        );
+        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, UNAUTHORIZED.value());
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                 "CaseAction API response code 403 assertion is not successful"
         );

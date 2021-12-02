@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 
 @Slf4j
 @Service
+@SuppressWarnings({"PMD.PreserveStackTrace"})
 public class AuthorizationAuthenticator {
 
     @Autowired
@@ -21,13 +22,17 @@ public class AuthorizationAuthenticator {
     private AuthorisedServices authorisedServices;
 
     public void authorizeAuthorizationToken(final HttpServletRequest request) {
-        final String authHeader = request.getHeader(AUTHORISATION_HEADER);
-        final UserInfo userInfo = authService.authorize(authHeader);
+        try {
+            final String authHeader = request.getHeader(AUTHORISATION_HEADER);
+            final UserInfo userInfo = authService.authorize(authHeader);
 
-        if (!authorisedServices.hasRole(userInfo.getRoles())) {
-            log.info("User {} has NOT been authorised!", userInfo.getName().concat(" ")
-                    .concat(userInfo.getFamilyName()));
-            throw new InvalidAuthorizationException("Unable to authorize user.");
+            if (!authorisedServices.hasRole(userInfo.getRoles())) {
+                log.info("User {} has NOT been authorised!", userInfo.getName().concat(" ")
+                        .concat(userInfo.getFamilyName()));
+                throw new InvalidAuthorizationException("Unable to authorize user.");
+            }
+        } catch (final Exception exception) {
+            throw new InvalidAuthorizationException(exception.getMessage());
         }
     }
 }

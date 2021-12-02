@@ -161,6 +161,12 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return authServiceToken + "abc";
     }
 
+    @Step("Given the invalid authorization token is generated")
+    public String givenTheInvalidAuthorizationTokenIsGenerated() throws JSONException {
+        String authServiceToken = validAuthorizationTokenIsGenerated();
+        return authServiceToken + "abc";
+    }
+
     @Step("Then bad response is returned")
     public String thenBadResponseIsReturned(Response response, int expectedStatusCode) {
         Assert.assertTrue(

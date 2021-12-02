@@ -19,6 +19,7 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RunWith(SerenityRunner.class)
 public class CaseActionApiTest {
@@ -74,6 +75,24 @@ public class CaseActionApiTest {
         String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                 "CaseAction API response code 403 assertion is not successful"
+        );
+    }
+
+    @Test
+    @Title("Assert response code of 401 for GET CaseActionApi service with Invalid Authorization Token")
+    public void assertResponseCodeOf401WithInvalidAuthenticationTokenForGetCaseViewApi() throws JSONException {
+
+        final String validServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        final String invalidAuthorizationToken = caseActionGetApiSteps.givenTheInvalidAuthorizationTokenIsGenerated();
+        final Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
+        final Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
+                validServiceToken,
+                invalidAuthorizationToken,
+                queryParamMap
+        );
+        String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, UNAUTHORIZED.value());
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                "CaseAction API response code 401 assertion is not successful"
         );
     }
 

@@ -11,6 +11,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SER
 
 @Slf4j
 @Service
+@SuppressWarnings({"PMD.PreserveStackTrace"})
 public class ServiceAuthorizationAuthenticator {
 
     @Autowired
@@ -20,12 +21,16 @@ public class ServiceAuthorizationAuthenticator {
     private AuthorisedServices authorisedServices;
 
     public void authorizeServiceToken(final HttpServletRequest request) {
-        final String serviceAuthHeader = request.getHeader(SERVICE_AUTHORISATION_HEADER);
-        final String serviceName = authService.authenticateService(serviceAuthHeader);
+        try {
+            final String serviceAuthHeader = request.getHeader(SERVICE_AUTHORISATION_HEADER);
+            final String serviceName = authService.authenticateService(serviceAuthHeader);
 
-        if (!authorisedServices.hasService(serviceName)) {
-            log.info("Service {} has NOT been authorised!", serviceName);
-            throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
+            if (!authorisedServices.hasService(serviceName)) {
+                log.info("Service {} has NOT been authorised!", serviceName);
+                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
+            }
+        } catch (final Exception exception) {
+            throw new InvalidServiceAuthorizationException(exception.getMessage());
         }
     }
 }
