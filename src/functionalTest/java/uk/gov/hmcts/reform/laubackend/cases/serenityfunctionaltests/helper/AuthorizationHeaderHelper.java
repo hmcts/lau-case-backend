@@ -13,8 +13,8 @@ import static com.google.common.collect.ImmutableMap.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig.IDAM_CLIENT_SECRET;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.CLIENT_ID;
-import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.CLIENT_SECRET;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.GRANT_TYPE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.PASSWORD;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.REDIRECT_URI;
@@ -38,7 +38,7 @@ public class AuthorizationHeaderHelper {
                 .formParam("redirect_uri", REDIRECT_URI)
                 .formParam("scope", SCOPE)
                 .formParam("client_id", CLIENT_ID)
-                .formParam("client_secret", CLIENT_SECRET)
+                .formParam("client_secret", IDAM_CLIENT_SECRET)
                 .when()
                 .post(TOKEN_URL);
 

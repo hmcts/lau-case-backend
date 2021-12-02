@@ -12,7 +12,6 @@ public final class TestConstants {
     public static final String REDIRECT_URI = "https://lau-case.aat.platform.hmcts.net/oauth2/callback";
     public static final String SCOPE = "openid profile roles";
     public static final String CLIENT_ID = "lau";
-    public static final String CLIENT_SECRET = "laulaulau";
     public static final String TOKEN_URL = "https://idam-api.aat.platform.hmcts.net/o/token";
 
 
