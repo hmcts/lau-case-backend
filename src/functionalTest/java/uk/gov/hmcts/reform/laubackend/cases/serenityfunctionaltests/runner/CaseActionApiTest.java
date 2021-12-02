@@ -4,10 +4,10 @@ import io.restassured.response.Response;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
+import org.json.JSONException;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseAc
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseActionPostApiSteps;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
-import java.text.ParseException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -29,14 +28,17 @@ public class CaseActionApiTest {
     @Steps
     CaseActionPostApiSteps caseActionPostApiSteps;
 
+
     @Test
     @Title("Assert response code of 200 for GET CaseActionApi with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForCaseViewApi() throws JsonProcessingException, ParseException {
+    public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
 
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        final String authorizationToken = caseActionGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         ObjectMapper objectMapper = new ObjectMapper();
@@ -59,12 +61,14 @@ public class CaseActionApiTest {
 
     @Test
     @Title("Assert response code of 403 for GET CaseActionApi service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
+    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() throws JSONException {
 
         String invalidServiceToken = caseActionGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
+        final String authorizationToken = caseActionGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
                 invalidServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
@@ -75,11 +79,13 @@ public class CaseActionApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET CaseActionApi with Empty Params")
-    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
+    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        final String authorizationToken = caseActionGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseAction();
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         String successOrFailure = caseActionGetApiSteps.thenBadResponseIsReturned(response, 400);
