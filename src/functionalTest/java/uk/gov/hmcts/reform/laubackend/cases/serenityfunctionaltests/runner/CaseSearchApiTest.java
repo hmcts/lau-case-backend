@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,8 +21,10 @@ import java.text.ParseException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RunWith(SerenityRunner.class)
+@SuppressWarnings("PMD.TooManyMethods")
 public class CaseSearchApiTest {
     @Steps
     CaseSearchPostApiSteps caseSearchPostApiSteps;
@@ -32,9 +35,10 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseSearchApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-              throws com.fasterxml.jackson.core.JsonProcessingException {
+            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
+
         CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateCaseSearchPostRequestBody();
         Response response = caseSearchPostApiSteps.whenThePostServiceIsInvoked(authServiceToken, caseSearchRequestVO);
         String successOrFailure = caseSearchGetApiSteps.thenASuccessResposeIsReturned(response);
@@ -63,12 +67,15 @@ public class CaseSearchApiTest {
 
     @Test
     @Title("Assert response code of 200 for GET CaseSearchApi with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForCaseViewApi() throws JsonProcessingException, ParseException {
+    public void assertHttpSuccessResponseCodeForCaseViewApi()
+            throws JsonProcessingException, ParseException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
+        String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         ObjectMapper objectMapper = new ObjectMapper();
@@ -91,12 +98,14 @@ public class CaseSearchApiTest {
 
     @Test
     @Title("Assert response code of 403 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() {
+    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() throws JSONException {
 
         String invalidServiceToken = caseSearchGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
+        String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
                 invalidServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
@@ -106,16 +115,35 @@ public class CaseSearchApiTest {
     }
 
     @Test
+    @Title("Assert response code of 401 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
+    public void assertResponseCodeOf401WithInvalidServiceAuthorizationTokenForGetCaseSearchApi() throws JSONException {
+
+        String validServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
+        String ivalidAuthorizationToken = caseSearchGetApiSteps.givenTheInvalidAuthorizationTokenIsGenerated();
+        Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
+        Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
+                validServiceToken,
+                ivalidAuthorizationToken,
+                queryParamMap
+        );
+        String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, UNAUTHORIZED.value());
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                "CaseAction API response code 403 assertion is not successful"
+        );
+    }
+
+    @Test
     @Title("Assert response code of 400 for GET CaseSearchApi with Empty Params")
-    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
+    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
+        String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
+                authorizationToken,
                 queryParamMap
         );
         String successOrFailure = caseSearchGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS, "The assertion is not successful");
     }
-
 }

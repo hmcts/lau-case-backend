@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -13,36 +12,30 @@ import net.serenitybdd.rest.SerenityRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
+import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.AuthorizationHeaderHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
-import static com.google.common.collect.ImmutableMap.of;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 public class BaseSteps {
 
     private static final RequestSpecification REQSPEC;
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(BaseSteps.class);
-    private final String s2sUrl = TestConstants.S2S_URL;
-
+            LoggerFactory.getLogger(BaseSteps.class);
+    protected final AuthorizationHeaderHelper authorizationHeaderHelper = new AuthorizationHeaderHelper();
 
     static {
         final String proxyHost = System.getProperty("http.proxyHost");
         final Integer proxyPort = proxyHost == null ? null : Integer.parseInt(System.getProperty("http.proxyPort"));
 
         final RestAssuredConfig config = RestAssuredConfig.newConfig()
-            .encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset(StandardCharsets.UTF_8));
+                .encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset(StandardCharsets.UTF_8));
 
         final RequestSpecBuilder specBuilder = new RequestSpecBuilder()
-            .setConfig(config)
-            .setBaseUri(EnvConfig.API_URL)
-            .setRelaxedHTTPSValidation();
+                .setConfig(config)
+                .setBaseUri(EnvConfig.API_URL)
+                .setRelaxedHTTPSValidation();
 
         LOGGER.info("Using base API URL: " + EnvConfig.API_URL);
         if (proxyHost != null) {
@@ -56,41 +49,17 @@ public class BaseSteps {
         return SerenityRest.given(REQSPEC);
     }
 
-    public RequestSpecification given() {
-        return SerenityRest.given(REQSPEC);
-    }
-
-
-    public String getServiceToken(String s2sMicroServiceName) {
-
-        LOGGER.info("s2sUrl lease url: {}", s2sUrl + "/lease");
-        final Map<String, Object> params = of(
-            "microservice", s2sMicroServiceName
-        );
-
-        final Response response = RestAssured
-            .given()
-            .relaxedHTTPSValidation()
-            .baseUri(s2sUrl)
-            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-            .body(params)
-            .when()
-            .post("/lease")
-            .andReturn();
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return "Bearer " + response
-            .getBody()
-            .asString();
-    }
-
     public Response performGetOperation(String endpoint,
                                         Map<String, String> headers,
-                                        Map<String, String> queryParams, String authServiceToken) {
+                                        Map<String, String> queryParams,
+                                        String authServiceToken,
+                                        String authorizationToken) {
 
         RequestSpecification requestSpecification = rest().urlEncodingEnabled(false)
-            .given().header("ServiceAuthorization", authServiceToken)
-            .header("Content-Type", "application/json");
+                .given()
+                .header("ServiceAuthorization", authServiceToken)
+                .header("Authorization", authorizationToken)
+                .header("Content-Type", "application/json");
 
 
         if (null != headers && !headers.isEmpty()) {
@@ -106,8 +75,8 @@ public class BaseSteps {
         }
 
         return requestSpecification.get(endpoint)
-            .then()
-            .extract().response();
+                .then()
+                .extract().response();
     }
 
     public Header createHeader(String headerKey, String headerValue) {
@@ -123,8 +92,8 @@ public class BaseSteps {
     ) throws JsonProcessingException {
 
         RequestSpecification requestSpecification = rest()
-            .given().header("ServiceAuthorization", authServiceToken)
-            .header("Content-Type", "application/json");
+                .given().header("ServiceAuthorization", authServiceToken)
+                .header("Content-Type", "application/json");
         if (null != headers && !headers.isEmpty()) {
             for (String headerKey : headers.keySet()) {
                 requestSpecification.header(createHeader(headerKey, headers.get(headerKey)));
@@ -137,8 +106,8 @@ public class BaseSteps {
         }
         String bodyJsonStr = null == body ? "" : new ObjectMapper().writeValueAsString(body);
         return requestSpecification.urlEncodingEnabled(true).body(bodyJsonStr).post(endpoint)
-            .then()
-            .extract().response();
+                .then()
+                .extract().response();
     }
 
 }

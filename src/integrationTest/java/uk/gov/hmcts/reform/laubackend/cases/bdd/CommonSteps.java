@@ -46,6 +46,12 @@ public class CommonSteps {
         httpStatusResponseCode = response.getStatusCode();
     }
 
+    @When("And I GET {string} without authorization header")
+    public void searchWithoutAuthorizationHeader(final String path) {
+        final Response response = RestHelper.getResponseWithoutAuthorizationHeader(getUrl(path));
+        httpStatusResponseCode = response.getStatusCode();
+    }
+
     @When("I request GET {string} endpoint without mandatory params")
     public void requestWithoutMandatoryParams(final String path) {
         final Response response = restHelper.getResponse(getUrl(path), "nonExistingParam", "nonExistingValue");
@@ -60,5 +66,10 @@ public class CommonSteps {
     @Then("HTTP {string} Bad Request response is returned")
     public void assertErrorResponse(final String errorCode) {
         assertThat(httpStatusResponseCode).isEqualTo(parseInt(errorCode));
+    }
+
+    @Then("HTTP {string} Unauthorized response is returned")
+    public void assertUnauthorizedRseponse(final String responseCode) {
+        assertThat(httpStatusResponseCode).isEqualTo(parseInt(responseCode));
     }
 }

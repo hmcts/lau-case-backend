@@ -225,4 +225,6 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertThat(caseActionGetResponse.getActionLog().get(0).getCaseTypeId())
                 .isEqualTo(caseSearchPostRequest.getActionLog().getCaseTypeId());
     }
+
+
 }

@@ -9,11 +9,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
-import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthenticationException;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
+import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
+import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,8 +28,6 @@ class AuthServiceTest {
 
     private static final String REFORM_SCAN_BLOB_ROUTER_SERVICE_AUTH = "DFJSDFSDFSDFSDFSDSFS";
     private static final String REFORM_SCAN_BLOB_ROUTER_SERVICE_NAME = "lau_case_backend";
-    private static final String IAE_EXCEPTION_MESSAGE = "Missing ServiceAuthorization header";
-    private static final String ERROR_MSG_PREFIX = "Test failed because of exception during execution. Message is ";
 
     @InjectMocks
     private AuthService authService;
@@ -31,9 +35,12 @@ class AuthServiceTest {
     @Mock
     private AuthTokenValidator authTokenValidator;
 
+    @Mock
+    private IdamClient idamClient;
+
     @BeforeEach
     void setUp() {
-        this.authService = new AuthService(authTokenValidator);
+        this.authService = new AuthService(authTokenValidator, idamClient);
     }
 
     @Test
@@ -41,30 +48,38 @@ class AuthServiceTest {
         when(authTokenValidator.getServiceName(REFORM_SCAN_BLOB_ROUTER_SERVICE_AUTH))
                 .thenReturn(REFORM_SCAN_BLOB_ROUTER_SERVICE_NAME);
 
-        try {
-            String actualServiceName = authService.authenticate(REFORM_SCAN_BLOB_ROUTER_SERVICE_AUTH);
+        final String actualServiceName = authService.authenticateService(REFORM_SCAN_BLOB_ROUTER_SERVICE_AUTH);
 
-            assertNotNull(actualServiceName, "Should be not null");
-            assertEquals(REFORM_SCAN_BLOB_ROUTER_SERVICE_NAME,
-                    actualServiceName, "Should return authenticated service name");
-
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage(), e);
-        }
+        assertNotNull(actualServiceName, "Should be not null");
+        assertEquals(REFORM_SCAN_BLOB_ROUTER_SERVICE_NAME,
+                actualServiceName, "Should return authenticated service name");
     }
 
     @Test
     void testShouldErrorIfServiceNotAuthenticated() {
         try {
-            authService.authenticate(null);
+            authService.authenticateService(null);
             fail("The method should have thrown InvalidAuthenticationException");
-
-        } catch (InvalidAuthenticationException iae) {
-            assertEquals(IAE_EXCEPTION_MESSAGE,
-                    iae.getMessage(), "Exception message not matching");
-
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage(), e);
+        } catch (InvalidServiceAuthorizationException iae) {
+            assertThat(iae.getMessage()).isEqualTo("Missing ServiceAuthorization header");
         }
+    }
+
+    @Test
+    void testShouldErrorIfAuthorizationHeaderNull() {
+        try {
+            authService.authorize(null);
+            fail("The method should have thrown InvalidAuthorizationException");
+        } catch (InvalidAuthorizationException iae) {
+            assertThat(iae.getMessage()).isEqualTo("Missing Authorization header");
+        }
+    }
+
+    @Test
+    void testShouldNotThrowExceptionForValidAuth() {
+        final UserInfo userInfo = mock(UserInfo.class);
+        when(authService.authorize("hum_ho")).thenReturn(userInfo);
+
+        assertDoesNotThrow(() -> authService.authorize("hum_ho"));
     }
 }
