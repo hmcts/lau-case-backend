@@ -24,7 +24,7 @@ def secrets = [
                 secret('case-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
                 secret('case-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD'),
                 secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
-                secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET')
+                secret('idam-client-secret', 'IDAM_CLIENT_SECRET')
         ],
         's2s-${env}': [
                 secret('microservicekey-lau-case-frontend', 'S2S_LAU_FT_SECRET')
@@ -54,7 +54,7 @@ withNightlyPipeline(type, product, component) {
     enableMutationTest()
     enableFullFunctionalTest()
     enableSecurityScan()
-    enableFortifyScan()
+    // enableFortifyScan()
 
     after('fortify-scan') {
       steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
