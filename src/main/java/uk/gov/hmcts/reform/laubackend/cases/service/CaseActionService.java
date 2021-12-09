@@ -6,12 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
-import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
+import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
-import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ public class CaseActionService {
                 .withActionLog(actionLogList)
                 .withMoreRecords(caseView.hasNext())
                 .withStartRecordNumber(calculateStartRecordNumber(caseView))
+                .withTotalNumberOfRecords(caseView.getTotalElements())
                 .build();
     }
 

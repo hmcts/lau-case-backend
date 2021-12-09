@@ -55,6 +55,7 @@ public class CaseSearchService {
                 .withSearchLog(searchLogList)
                 .withMoreRecords(caseSearch.hasNext())
                 .withStartRecordNumber(calculateStartRecordNumber(caseSearch))
+                .withTotalNumberOfRecords(caseSearch.getTotalElements())
                 .build();
     }
 
