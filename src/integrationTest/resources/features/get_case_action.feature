@@ -36,6 +36,18 @@ Feature: The application's GET caseAction endpoint
     And And I GET "/audit/caseAction" using endTimestamp "2019-08-23T21:20:05" query param
     Then a single caseAction response body is returned for endTimestamp "2018-08-23T22:20:05.023Z"
 
+  Scenario: The backend is able to process case insensitive caseTypeId caseAction GET requests
+    Given LAU backend application is healthy
+    When I POST multiple records to "/audit/caseAction" endpoint using "TEST1,TEST2,TEST3" caseTypeId
+    And And I GET "/audit/caseAction" using caseTypeId "test1" query param
+    Then a single caseAction response body is returned for caseTypeId "TEST1"
+
+  Scenario: The backend is able to process case insensitive caseJurisdictionId caseAction GET requests
+    Given LAU backend application is healthy
+    When I POST multiple records to "/audit/caseAction" endpoint using "TEST1,TEST2,TEST3" caseJurisdictionId
+    And And I GET "/audit/caseAction" using caseJurisdictionId "test1" query param
+    Then a single caseAction response body is returned for caseJurisdictionId "TEST1"
+
   Scenario: The backend is unable to process caseAction GET requests due to missing s2s
     Given LAU backend application is healthy
     When And I GET "/audit/caseAction" without service authorization header
