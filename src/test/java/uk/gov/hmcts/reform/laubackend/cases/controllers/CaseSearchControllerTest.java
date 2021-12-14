@@ -48,6 +48,7 @@ class CaseSearchControllerTest {
 
         final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
                 null,
+                null,
                 userId,
                 caseRef,
                 null,
@@ -63,6 +64,7 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
         final ResponseEntity<CaseSearchGetResponse> responseEntity = caseSearchController.getCaseSearch(
+                null,
                 null,
                 "1",
                 "2",

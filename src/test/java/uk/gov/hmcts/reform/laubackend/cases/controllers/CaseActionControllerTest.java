@@ -49,6 +49,7 @@ class CaseActionControllerTest {
 
         final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
                 null,
+                null,
                 userId,
                 caseRef,
                 caseTypeId,
@@ -66,6 +67,7 @@ class CaseActionControllerTest {
     @Test
     void shouldReturnBadRequestResponseEntityForGetRequest() {
         final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
+                null,
                 null,
                 "1",
                 "2",

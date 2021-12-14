@@ -33,6 +33,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
@@ -72,7 +73,7 @@ public class CaseSearchController {
     public ResponseEntity<CaseSearchPostRequest> saveCaseSearch(
             @RequestBody final CaseSearchPostRequest caseSearchPostRequest,
             @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
-            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) final String authToken) {
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) final String serviceAuthToken) {
         try {
             verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
             verifyRequestSearchParamsConditions(caseSearchPostRequest.getSearchLog());
@@ -115,8 +116,10 @@ public class CaseSearchController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
+        @ApiParam(value = "Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+        @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
             @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
-            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
             @ApiParam(value = "Case Reference ID", example = "1615817621013640")
