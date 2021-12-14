@@ -41,6 +41,11 @@ Feature: The application's GET caseAction endpoint
     When And I GET "/audit/caseAction" without service authorization header
     Then HTTP "403" Forbidden response is returned
 
+  Scenario: The backend is unable to process caseAction GET requests due to missing authorization
+    Given LAU backend application is healthy
+    When And I GET "/audit/caseAction" without authorization header
+    Then HTTP "401" Unauthorized response is returned
+
   Scenario: The backend is unable to process caseAction GET requests due to missing search params
     Given LAU backend application is healthy
     When I request GET "/audit/caseAction" endpoint without mandatory params
