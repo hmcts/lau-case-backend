@@ -115,7 +115,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 PageRequest.of(1, 10, Sort.by("timestamp"))
         );
-
+        assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
 

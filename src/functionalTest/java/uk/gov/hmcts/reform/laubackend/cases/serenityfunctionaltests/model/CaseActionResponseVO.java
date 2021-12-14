@@ -18,6 +18,8 @@ public class CaseActionResponseVO {
     private Integer startRecordNumber;
     @JsonProperty("moreRecords")
     private Boolean moreRecords;
+    @JsonProperty("totalNumberOfRecords")
+    private Long totalNumberOfRecords;
 
     public List<ActionLog> getActionLog() {
         return actionLog;
@@ -43,6 +45,13 @@ public class CaseActionResponseVO {
         this.moreRecords = moreRecords;
     }
 
+    public Long getTotalNumberOfRecords() {
+        return totalNumberOfRecords;
+    }
+
+    public void setTotalNumberOfRecords(Long totalNumberOfRecords) {
+        this.totalNumberOfRecords = totalNumberOfRecords;
+    }
 }
 
 
