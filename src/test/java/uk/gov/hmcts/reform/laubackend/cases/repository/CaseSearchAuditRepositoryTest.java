@@ -79,7 +79,7 @@ class CaseSearchAuditRepositoryTest {
                 null,
                 PageRequest.of(1, 10, Sort.by("timestamp"))
         );
-
+        assertThat(caseSearchAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(10);
     }
 

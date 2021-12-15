@@ -8,14 +8,29 @@ public class CaseSearchGetResponseVO {
 
     @JsonProperty("searchLog")
     private List<SearchLog> searchLog;
+
     @JsonProperty("startRecordNumber")
     private Integer startRecordNumber;
+
     @JsonProperty("moreRecords")
     private Boolean moreRecords;
+
+    @JsonProperty("totalNumberOfRecords")
+    private Long totalNumberOfRecords;
 
     @JsonProperty("searchLog")
     public List<SearchLog> getSearchLog() {
         return searchLog;
+    }
+
+    @JsonProperty("totalNumberOfRecords")
+    public Long getTotalNumberOfRecords() {
+        return totalNumberOfRecords;
+    }
+
+    @JsonProperty("totalNumberOfRecords")
+    public void setTotalNumberOfRecords(Long totalNumberOfRecords) {
+        this.totalNumberOfRecords = totalNumberOfRecords;
     }
 
     @JsonProperty("searchLog")
@@ -42,5 +57,7 @@ public class CaseSearchGetResponseVO {
     public void setMoreRecords(Boolean moreRecords) {
         this.moreRecords = moreRecords;
     }
+
+
 
 }

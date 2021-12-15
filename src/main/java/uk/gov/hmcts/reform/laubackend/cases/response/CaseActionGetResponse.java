@@ -24,6 +24,9 @@ public class CaseActionGetResponse implements Serializable {
     @ApiModelProperty(notes = "Indicates whether there are more records beyond the current page in the full result set")
     private boolean moreRecords;
 
+    @ApiModelProperty(notes = "The total number of records in the full result set")
+    private long totalNumberOfRecords;
+
     public static CaseActionGetResponse caseViewResponse() {
         return new CaseActionGetResponse();
     }
@@ -43,11 +46,17 @@ public class CaseActionGetResponse implements Serializable {
         return this;
     }
 
+    public CaseActionGetResponse withTotalNumberOfRecords(final long totalNumberOfRecords) {
+        this.totalNumberOfRecords = totalNumberOfRecords;
+        return this;
+    }
+
     public CaseActionGetResponse build() {
         final CaseActionGetResponse caseActionGetResponse = new CaseActionGetResponse();
         caseActionGetResponse.setActionLog(actionLog);
         caseActionGetResponse.setStartRecordNumber(startRecordNumber);
         caseActionGetResponse.setMoreRecords(moreRecords);
+        caseActionGetResponse.setTotalNumberOfRecords(totalNumberOfRecords);
         return caseActionGetResponse;
     }
 }
