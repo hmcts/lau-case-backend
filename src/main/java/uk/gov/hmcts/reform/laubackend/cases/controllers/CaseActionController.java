@@ -36,6 +36,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.SIZE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
@@ -45,7 +46,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 @Api(tags = "Case action database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case actions. "
         + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
-@SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement"})
+@SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement","PMD.ExcessiveParameterList"})
 public final class CaseActionController {
 
     @Autowired
@@ -74,7 +75,7 @@ public final class CaseActionController {
     @ResponseBody
     public ResponseEntity<CaseActionPostResponse> saveCaseAction(
             @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
-            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
 
@@ -120,8 +121,10 @@ public final class CaseActionController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
+            @ApiParam(value = "Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
             @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
-            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
+            @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
             @ApiParam(value = "Case Reference ID", example = "1615817621013640")
