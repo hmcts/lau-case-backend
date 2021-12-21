@@ -32,5 +32,5 @@ idam:
   s2s-auth:
     url: ${TEST_S2S_URL:http://localhost:4502}
     secret-cs: ${S2S_LAU_FT_SECRET:AAAAAAAAAAAAAAAA}
-    name-cs: ${S2S_LAU_FT_NAME:lau_case_frontend}
+    name-cs: ${S2S_LAU_FT_NAME:lau_frontend}
 
