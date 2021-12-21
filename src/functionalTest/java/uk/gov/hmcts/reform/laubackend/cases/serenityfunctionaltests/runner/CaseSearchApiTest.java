@@ -8,7 +8,6 @@ import net.thucydides.core.annotations.Title;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchGetResponseVO;
@@ -17,6 +16,7 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseSe
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseSearchPostApiSteps;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -68,10 +68,10 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 200 for GET CaseSearchApi with valid headers and valid request params")
     public void assertHttpSuccessResponseCodeForCaseViewApi()
-            throws JsonProcessingException, ParseException, JSONException {
+        throws IOException, ParseException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
-        String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
+        final String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
