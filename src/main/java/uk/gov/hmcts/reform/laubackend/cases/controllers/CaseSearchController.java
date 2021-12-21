@@ -72,7 +72,7 @@ public class CaseSearchController {
     @ResponseBody
     public ResponseEntity<CaseSearchPostRequest> saveCaseSearch(
             @RequestBody final CaseSearchPostRequest caseSearchPostRequest,
-            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) final String serviceAuthToken) {
         try {
             verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
@@ -106,7 +106,9 @@ public class CaseSearchController {
                     message =
                             "Missing userId, caseRef, startTimestamp or endTimestamp parameters.",
                     response = CaseSearchGetResponse.class),
-            @ApiResponse(code = 403, message = "Forbidden", response = CaseSearchGetResponse.class)
+            @ApiResponse(code = 401, message = "Unauthorized", response = CaseSearchGetResponse.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = CaseSearchGetResponse.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = CaseSearchGetResponse.class)
     })
     @GetMapping(
             path = "/audit/caseSearch",
@@ -116,9 +118,9 @@ public class CaseSearchController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
-        @ApiParam(value = "Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+        @ApiParam(value = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
         @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
-            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,

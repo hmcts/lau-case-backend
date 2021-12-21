@@ -74,7 +74,7 @@ public final class CaseActionController {
     )
     @ResponseBody
     public ResponseEntity<CaseActionPostResponse> saveCaseAction(
-            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
@@ -112,7 +112,9 @@ public final class CaseActionController {
                             "Missing userId, caseTypeId, caseJurisdictionId, "
                                     + "caseRef, startTimestamp or endTimestamp parameters.",
                     response = CaseActionGetResponse.class),
-            @ApiResponse(code = 403, message = "Forbidden", response = CaseActionGetResponse.class)
+            @ApiResponse(code = 401, message = "Unauthorized", response = CaseActionGetResponse.class),
+            @ApiResponse(code = 403, message = "Forbidden", response = CaseActionGetResponse.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = CaseActionGetResponse.class)
     })
     @GetMapping(
             path = "/audit/caseAction",
@@ -121,9 +123,9 @@ public final class CaseActionController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
-            @ApiParam(value = "Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @ApiParam(value = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
-            @ApiParam(value = "Service Authorisation", example = "Bearer eyJ0eXAiOiJK.........")
+            @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @ApiParam(value = "User ID", example = "3748238")
             @RequestParam(value = USER_ID, required = false) final String userId,
