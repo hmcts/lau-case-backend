@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -76,6 +77,7 @@ class CaseSearchServiceTest {
         final String caseRef = randomNumeric(16);
 
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
+        caseSearchAudit.setId(Long.valueOf(3));
         caseSearchAudit.setUserId("1");
         caseSearchAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
 
@@ -94,11 +96,12 @@ class CaseSearchServiceTest {
 
         when(caseSearchAuditRepository.save(any())).thenReturn(caseSearchAudit);
 
-        final CaseSearchPostRequest searchPostRequest = caseSearchService.saveCaseSearch(caseSearchPostRequest);
+        final CaseSearchPostResponse caseSearchPostResponse = caseSearchService.saveCaseSearch(caseSearchPostRequest);
 
         verify(caseSearchAuditRepository, times(1)).save(any());
-        assertThat(searchPostRequest.getSearchLog().getUserId()).isEqualTo("1");
-        assertThat(searchPostRequest.getSearchLog().getCaseRefs().get(0)).isEqualTo(caseRef);
+        assertThat(caseSearchPostResponse.getSearchLog().getId()).isEqualTo("3");
+        assertThat(caseSearchPostResponse.getSearchLog().getUserId()).isEqualTo("1");
+        assertThat(caseSearchPostResponse.getSearchLog().getCaseRefs().get(0)).isEqualTo(caseRef);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
