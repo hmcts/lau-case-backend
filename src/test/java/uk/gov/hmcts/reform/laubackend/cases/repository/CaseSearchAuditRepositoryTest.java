@@ -26,7 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+@SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops","PMD.AvoidDuplicateLiterals"})
 @Import({RemoveColumnTransformers.class})
 class CaseSearchAuditRepositoryTest {
 
@@ -120,6 +120,34 @@ class CaseSearchAuditRepositoryTest {
         assertThat(caseSearchAuditList.get(20).getCaseSearchAuditCases().get(0).getCaseRef()).isEqualTo("3");
         assertThat(caseSearchAuditList.get(20).getCaseSearchAuditCases().get(1).getCaseRef()).isEqualTo("4");
     }
+
+    @Test
+    void shouldDeleteCaseSearchAudit() {
+        final Timestamp timestamp = valueOf(now());
+        final CaseSearchAudit caseSearchAudit = new CaseSearchAudit("3333", timestamp);
+
+        final CaseSearchAuditCases caseSearchAuditCases1 = new CaseSearchAuditCases(
+                "3",
+                caseSearchAudit);
+
+        caseSearchAudit.addCaseSearchAuditCases(caseSearchAuditCases1);
+
+        caseSearchAuditRepository.save(caseSearchAudit);
+
+        final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository
+                .findCaseSearch("3333", null, null, null, null);
+
+        assertThat(caseSearch.getContent().size()).isEqualTo(1);
+        assertThat(caseSearch.getContent().get(0).getUserId()).isEqualTo("3333");
+
+        caseSearchAuditRepository.deleteById(caseSearch.getContent().get(0).getId());
+
+        final Page<CaseSearchAudit> caseSearch1 = caseSearchAuditRepository
+                .findCaseSearch("3333", null, null, null, null);
+
+        assertThat(caseSearch1.getContent().size()).isEqualTo(0);
+    }
+
 
     private void assertResults(final List<CaseSearchAudit> caseSearchAuditList, final int value) {
         final String stringValue = String.valueOf(value);

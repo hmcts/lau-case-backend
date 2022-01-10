@@ -60,6 +60,7 @@ idam:
 
 authorised.services: lau_case_frontend
 authorised.roles: cft-audit-investigator
+db.allow.delete.record: true
 
 targetInstance: ${TEST_URL:http://localhost:4550}
 

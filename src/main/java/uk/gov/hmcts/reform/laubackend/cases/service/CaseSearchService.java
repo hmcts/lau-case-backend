@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Long.valueOf;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse.caseSearchResponse;
@@ -62,7 +63,7 @@ public class CaseSearchService {
     }
 
     public CaseSearchPostResponse saveCaseSearch(final CaseSearchPostRequest
-                                                        caseSearchPostRequest) {
+                                                         caseSearchPostRequest) {
 
         final CaseSearchAudit caseSearchAuditRequest = new CaseSearchAudit(caseSearchPostRequest
                 .getSearchLog()
@@ -72,12 +73,16 @@ public class CaseSearchService {
         if (!isEmpty(caseSearchPostRequest.getSearchLog().getCaseRefs())) {
             caseSearchPostRequest.getSearchLog().getCaseRefs()
                     .forEach(caseRef -> caseSearchAuditRequest
-                    .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
+                            .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
         }
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
         final String timestamp = timestampUtil.timestampConvertor(caseSearchAuditResponse.getTimestamp());
         return new CaseSearchPostResponse(new SearchLogPostResponse().toDto(caseSearchAuditResponse, timestamp));
+    }
+
+    public void deleteCaseSearchBbyId(final String id) {
+        caseSearchAuditRepository.deleteById(valueOf(id));
     }
 
     private int calculateStartRecordNumber(final Page<CaseSearchAudit> caseView) {

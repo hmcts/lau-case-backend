@@ -14,6 +14,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyIdNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
@@ -172,5 +173,16 @@ public class NotEmptyInputParamsVerifierTest {
         caseSearchPostRequest.setSearchLog(searchLog);
 
         assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenIdIsNotPresent() {
+        try {
+            verifyIdNotEmpty(null);
+            fail("The method should have thrown InvalidRequestException when id is missing");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("Id must be present");
+        }
     }
 }

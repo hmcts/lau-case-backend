@@ -56,15 +56,15 @@ class CaseSearchServiceTest {
         final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder("1", "2", "3", "4", null, null);
 
         when(caseSearchAuditRepository
-                 .findCaseSearch("1", "2", null, null,
-                               PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
-            .thenReturn(pageResults);
+                .findCaseSearch("1", "2", null, null,
+                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
+                .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
         verify(caseSearchAuditRepository, times(1))
-            .findCaseSearch("1", "2",null, null,
-                          PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
+                .findCaseSearch("1", "2", null, null,
+                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
 
         assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
         assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");
@@ -112,5 +112,11 @@ class CaseSearchServiceTest {
         caseSearchAudit.addCaseSearchAuditCases(caseSearchAuditCases);
         caseSearchAudit.setTimestamp(timestamp);
         return caseSearchAudit;
+    }
+
+    @Test
+    void shouldDeleteCaseSearchId() {
+        caseSearchService.deleteCaseSearchBbyId("1");
+        verify(caseSearchAuditRepository, times(1)).deleteById(Long.valueOf("1"));
     }
 }

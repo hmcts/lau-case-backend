@@ -34,3 +34,4 @@ idam:
     secret-cs: ${S2S_LAU_FT_SECRET:AAAAAAAAAAAAAAAA}
     name-cs: ${S2S_LAU_FT_NAME:lau_case_frontend}
 
+db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}
