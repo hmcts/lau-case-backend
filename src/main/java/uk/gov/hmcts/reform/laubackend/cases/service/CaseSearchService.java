@@ -12,6 +12,8 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class CaseSearchService {
                 .build();
     }
 
-    public CaseSearchPostRequest saveCaseSearch(final CaseSearchPostRequest
+    public CaseSearchPostResponse saveCaseSearch(final CaseSearchPostRequest
                                                         caseSearchPostRequest) {
 
         final CaseSearchAudit caseSearchAuditRequest = new CaseSearchAudit(caseSearchPostRequest
@@ -75,7 +77,7 @@ public class CaseSearchService {
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
         final String timestamp = timestampUtil.timestampConvertor(caseSearchAuditResponse.getTimestamp());
-        return new CaseSearchPostRequest(new SearchLog().toDto(caseSearchAuditResponse, timestamp));
+        return new CaseSearchPostResponse(new SearchLogPostResponse().toDto(caseSearchAuditResponse, timestamp));
     }
 
     private int calculateStartRecordNumber(final Page<CaseSearchAudit> caseView) {
