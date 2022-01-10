@@ -35,7 +35,7 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseSearchApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
+            throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
 
@@ -45,7 +45,7 @@ public class CaseSearchApiTest {
         Assert.assertEquals(
                 successOrFailure,
                 TestConstants.SUCCESS,
-                "CaseAction POST API response code 200 assertion is not successful"
+                "CaseAction POST API response code 201 assertion is successful"
         );
     }
 

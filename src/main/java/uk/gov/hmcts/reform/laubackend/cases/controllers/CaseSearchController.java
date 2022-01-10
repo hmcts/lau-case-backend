@@ -70,7 +70,7 @@ public class CaseSearchController {
             consumes = APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public ResponseEntity<CaseSearchPostRequest> saveCaseSearch(
+    public ResponseEntity<CaseSearchPostResponse> saveCaseSearch(
             @RequestBody final CaseSearchPostRequest caseSearchPostRequest,
             @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) final String serviceAuthToken) {
@@ -78,7 +78,7 @@ public class CaseSearchController {
             verifyRequestSearchParamsAreNotEmpty(caseSearchPostRequest);
             verifyRequestSearchParamsConditions(caseSearchPostRequest.getSearchLog());
 
-            final CaseSearchPostRequest caseSearchAudit = caseSearchService.saveCaseSearch(caseSearchPostRequest);
+            final CaseSearchPostResponse caseSearchAudit = caseSearchService.saveCaseSearch(caseSearchPostRequest);
 
             return new ResponseEntity<>(caseSearchAudit, CREATED);
         } catch (final InvalidRequestException invalidRequestException) {

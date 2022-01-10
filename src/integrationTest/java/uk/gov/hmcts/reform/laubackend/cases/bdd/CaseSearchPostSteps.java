@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.helper.RestHelper;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -90,22 +91,23 @@ public class CaseSearchPostSteps extends AbstractSteps {
     @Then("caseSearch response body is returned")
     public void caseSearchResponseBodyIsReturned() {
         final CaseSearchPostRequest caseSearchPostRequest = getCaseSearchPostRequest();
-        final CaseSearchPostRequest caseSearchPostResponse = jsonReader
-                .fromJson(caseSearchPostResponseBody, CaseSearchPostRequest.class);
+        final CaseSearchPostResponse caseSearchPostResponse = jsonReader
+                .fromJson(caseSearchPostResponseBody, CaseSearchPostResponse.class);
         assertResponseBody(caseSearchPostRequest, caseSearchPostResponse);
     }
 
     @Then("caseSearch response body with missing caseRefs is returned")
     public void caseSearchResponseBodyWithMissingCaseRefsIsReturned() {
         final CaseSearchPostRequest caseSearchPostRequest = getCaseSearchPostRequestWithMissingCaseRefs();
-        final CaseSearchPostRequest caseSearchPostResponse = jsonReader
-                .fromJson(caseSearchPostResponseBody, CaseSearchPostRequest.class);
+        final CaseSearchPostResponse caseSearchPostResponse = jsonReader
+                .fromJson(caseSearchPostResponseBody, CaseSearchPostResponse.class);
         assertResponseBody(caseSearchPostRequest, caseSearchPostResponse);
     }
 
     private void assertResponseBody(final CaseSearchPostRequest caseSearchPostRequest,
-                                    final CaseSearchPostRequest caseSearchPostResponse) {
+                                    final CaseSearchPostResponse caseSearchPostResponse) {
 
+        assertThat(caseSearchPostResponse.getSearchLog().getId()).isNotEqualTo(null);
         assertThat(caseSearchPostRequest.getSearchLog().getUserId())
                 .isEqualTo(caseSearchPostResponse.getSearchLog().getUserId());
         assertThat(caseSearchPostRequest.getSearchLog().getTimestamp())

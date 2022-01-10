@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static java.util.Arrays.asList;
@@ -81,18 +83,20 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForPostRequest() {
 
-        final SearchLog searchLog = new SearchLog();
-        searchLog.setUserId("1");
-        searchLog.setCaseRefs(asList(randomNumeric(16)));
-        searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("1",asList(randomNumeric(16)),"2021-08-23T22:20:05.023Z");
+        final SearchLogPostResponse searchLogPostResponse = new SearchLogPostResponse("1",
+                "1",
+                asList(randomNumeric(16)),
+                "2021-08-23T22:20:05.023Z");
 
-        final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
-        caseSearchPostRequest.setSearchLog(searchLog);
+        final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest(searchLog);
+
+        final CaseSearchPostResponse caseSearchPostResponse = new CaseSearchPostResponse(searchLogPostResponse);
 
         when(caseSearchService.saveCaseSearch(any())).thenReturn(
-                caseSearchPostRequest);
+                caseSearchPostResponse);
 
-        final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
+        final ResponseEntity<CaseSearchPostResponse> responseEntity = caseSearchController.saveCaseSearch(
                 caseSearchPostRequest,
                 null
         );
@@ -111,7 +115,7 @@ class CaseSearchControllerTest {
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
 
-        final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
+        final ResponseEntity<CaseSearchPostResponse> responseEntity = caseSearchController.saveCaseSearch(
                 caseSearchPostRequest,
                 null
         );
@@ -132,7 +136,7 @@ class CaseSearchControllerTest {
         given(caseSearchService.saveCaseSearch(any()))
                 .willAnswer(invocation -> new Exception("Mama mia what a terrible exception"));
 
-        final ResponseEntity<CaseSearchPostRequest> responseEntity = caseSearchController.saveCaseSearch(
+        final ResponseEntity<CaseSearchPostResponse> responseEntity = caseSearchController.saveCaseSearch(
                 caseSearchPostRequest,
                 null
         );
