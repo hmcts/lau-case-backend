@@ -120,6 +120,8 @@ task functional(type: Test) {
 }
 
 task integration(type: Test) {
+    useJUnitPlatform()
+    failFast = true
     description = "Runs integration tests"
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
