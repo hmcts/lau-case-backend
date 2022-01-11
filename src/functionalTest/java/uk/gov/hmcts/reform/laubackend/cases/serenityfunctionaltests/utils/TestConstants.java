@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils;
 
 public final class TestConstants {
 
-    public static final String S2S_NAME = "lau_case_frontend";
+    public static final String S2S_NAME = "lau_frontend";
     public static final String S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal/testing-support";
 
     // Authorization constants
