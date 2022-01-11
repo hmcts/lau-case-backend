@@ -30,8 +30,8 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiDetails() {
         return new ApiInfo(
-            "LAU Back-End API",
-            "Log and Audit Back-End API, used for auditing case searches and actions.",
+            "LAU Case Back-End API",
+            "Log and Audit Case Back-End API, used for auditing case searches and actions.",
             "0.1",
             "",
             new Contact("", "", ""),
