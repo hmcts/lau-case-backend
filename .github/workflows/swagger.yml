@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: 11
       - name: Run Swagger Publisher
-        run: ./gradlew integration --tests uk.gov.hmcts.reform.laubackend.cases.config.SwaggerPublisherTest
+        run: ./gradlew test --tests uk.gov.hmcts.reform.laubackend.cases.config.SwaggerGeneratorTest
       - name: Commit to repository
         run: |
           mkdir swagger-staging
