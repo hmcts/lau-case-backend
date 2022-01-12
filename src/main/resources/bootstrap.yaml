@@ -12,4 +12,6 @@ spring:
         case-backend-app-db-user: ${LAU_DB_USERNAME:LAU_DB_USERNAME}
         case-backend-flyway-password: flyway.password
         idam-client-secret: ${IDAM_CLIENT_SECRET:IDAM_CLIENT_SECRET}
+        idam-username: ${IDAM_USERNAME:IDAM_USERNAME}
+        idam-password: ${IDAM_PASSWORD:IDAM_PASSWORD}
 
