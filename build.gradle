@@ -1,10 +1,6 @@
 buildscript {
   repositories {
-    mavenLocal()
-    jcenter()
-    maven {
-      url = 'https://repo.maven.apache.org/maven2'
-    }
+    mavenCentral()
   }
   dependencies {
     classpath("net.serenity-bdd:serenity-gradle-plugin:2.4.24")

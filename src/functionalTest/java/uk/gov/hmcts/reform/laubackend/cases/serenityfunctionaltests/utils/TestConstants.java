@@ -7,8 +7,6 @@ public final class TestConstants {
 
     // Authorization constants
     public static final String GRANT_TYPE = "password";
-    public static final String USERNAME = "lautest@test.com";
-    public static final String PASSWORD = "Password12";
     public static final String REDIRECT_URI = "https://lau-case.aat.platform.hmcts.net/oauth2/callback";
     public static final String SCOPE = "openid profile roles";
     public static final String CLIENT_ID = "lau";

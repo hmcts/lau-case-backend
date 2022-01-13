@@ -14,14 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig.IDAM_CLIENT_SECRET;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig.IDAM_PASSWORD;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig.IDAM_USERNAME;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.CLIENT_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.GRANT_TYPE;
-import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.PASSWORD;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.REDIRECT_URI;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.S2S_URL;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SCOPE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.TOKEN_URL;
-import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.USERNAME;
 
 public class AuthorizationHeaderHelper {
 
@@ -33,8 +33,8 @@ public class AuthorizationHeaderHelper {
                 .given()
                 .contentType("application/x-www-form-urlencoded; charset=utf-8")
                 .formParam("grant_type", GRANT_TYPE)
-                .formParam("username", USERNAME)
-                .formParam("password", PASSWORD)
+                .formParam("username", IDAM_USERNAME)
+                .formParam("password", IDAM_PASSWORD)
                 .formParam("redirect_uri", REDIRECT_URI)
                 .formParam("scope", SCOPE)
                 .formParam("client_id", CLIENT_ID)
