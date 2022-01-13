@@ -58,5 +58,12 @@ public final class NotEmptyInputParamsVerifier {
                     + "userId and timestamp", BAD_REQUEST);
         }
     }
+
+    public static void verifyIdNotEmpty(final String id)
+            throws InvalidRequestException {
+        if (isEmpty(id)) {
+            throw new InvalidRequestException("Id must be present", BAD_REQUEST);
+        }
+    }
 }
 

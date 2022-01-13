@@ -52,6 +52,46 @@ public class RestHelper {
                 .andReturn();
     }
 
+    public Response deleteResponse(final String path,
+                                   final String parameterName,
+                                   final String parameterValue) {
+        return RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(path)
+                .queryParam(parameterName, parameterValue)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .header(AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .when()
+                .delete()
+                .andReturn();
+    }
+
+    public Response deleteResponseWithoutServiceAuthHeader(final String path) {
+        return RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(path)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .when()
+                .delete()
+                .andReturn();
+    }
+
+    public Response deleteResponseWithoutAuthHeader(final String path) {
+        return RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(path)
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
+                .when()
+                .delete()
+                .andReturn();
+    }
+
     public Response postObject(final Object object,
                                final String path) {
         return RestAssured
