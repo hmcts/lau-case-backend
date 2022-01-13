@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Long.valueOf;
 import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
 
@@ -74,6 +75,10 @@ public class CaseActionService {
         final String timestamp = timestampUtil.timestampConvertor(caseActionAudit.getTimestamp());
 
         return new CaseActionPostResponse(new ActionLogPostResponse().toDto(caseActionAuditResponse, timestamp));
+    }
+
+    public void deleteCaseActionById(final String id) {
+        caseActionAuditRepository.deleteById(valueOf(id));
     }
 
     private int calculateStartRecordNumber(final Page<CaseActionAudit> caseView) {

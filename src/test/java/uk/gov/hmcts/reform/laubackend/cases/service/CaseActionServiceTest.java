@@ -52,14 +52,14 @@ class CaseActionServiceTest {
         final Page<CaseActionAudit> pageResults = new PageImpl<>(caseActionAuditList);
 
         final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(
-            "1",
-            "2",
-            "3",
-            "4",
-            null,
-            null,
-            null,
-            null);
+                "1",
+                "2",
+                "3",
+                "4",
+                null,
+                null,
+                null,
+                null);
 
         when(caseActionAuditRepository
                 .findCaseView("1", "2", "3", "4", null, null,
@@ -110,6 +110,12 @@ class CaseActionServiceTest {
         assertThat(caseView.getActionLog().getCaseJurisdictionId()).isEqualTo("3");
         assertThat(caseView.getActionLog().getCaseTypeId()).isEqualTo("4");
         assertThat(caseView.getActionLog().getCaseAction()).isEqualTo("CREATE");
+    }
+
+    @Test
+    void shouldDeleteCaseSearchId() {
+        caseActionService.deleteCaseActionById("1");
+        verify(caseActionAuditRepository, times(1)).deleteById(Long.valueOf("1"));
     }
 
 

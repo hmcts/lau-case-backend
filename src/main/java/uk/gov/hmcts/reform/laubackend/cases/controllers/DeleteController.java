@@ -7,12 +7,15 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -22,6 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyIdNotEmpty;
 
+@ApiIgnore
 @RestController
 @Slf4j
 @Api(tags = "Lau case database delete operations.", value = "This is the Log and Audit "
@@ -32,6 +36,9 @@ public class DeleteController {
 
     @Autowired
     private CaseSearchService caseSearchService;
+
+    @Autowired
+    private CaseActionService caseActionService;
 
     @ApiOperation(
             tags = "DELETE end-points", value = "Delete case search record from the database.",
@@ -62,26 +69,69 @@ public class DeleteController {
 
             return new ResponseEntity<>(null, OK);
         } catch (final InvalidRequestException invalidRequestException) {
-            log.error(
-                    "deleteCaseSearchRecordById API call failed due to error - {}",
-                    invalidRequestException.getMessage(),
-                    invalidRequestException
-            );
-            return new ResponseEntity<>(null, BAD_REQUEST);
+
+            return getExceptionResponseEntity(invalidRequestException, BAD_REQUEST);
+
         } catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
-            log.error(
-                    "deleteCaseSearchRecordById API call failed due to error - {}",
-                    emptyResultDataAccessException.getMessage(),
-                    emptyResultDataAccessException
-            );
-            return new ResponseEntity<>(null, NOT_FOUND);
+
+            return getExceptionResponseEntity(emptyResultDataAccessException, NOT_FOUND);
+
         } catch (final Exception exception) {
-            log.error(
-                    "deleteCaseSearchRecordById API call failed due to error - {}",
-                    exception.getMessage(),
-                    exception
-            );
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+
+            return getExceptionResponseEntity(exception, INTERNAL_SERVER_ERROR);
+
         }
+    }
+
+
+    @ApiOperation(
+            tags = "DELETE end-points", value = "Delete case action record from the database.",
+            notes = "This API will delete a record from the lau database for the given case action id. "
+                    + "It is intended to be called from the test api for testing purposes."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    code = 200,
+                    message = "Case action record has been deleted"
+            ),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Case action id not found in the database"),
+            @ApiResponse(code = 400, message = "Missing case search id from the API request"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @DeleteMapping(
+            path = "/audit/caseAction/deleteCaseActionRecord",
+            produces = APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<Object> deleteCaseActionRecordById(@RequestParam("caseActionId") final String caseActionId) {
+        try {
+            verifyIdNotEmpty(caseActionId);
+
+            caseActionService.deleteCaseActionById(caseActionId);
+
+            return new ResponseEntity<>(null, OK);
+        } catch (final InvalidRequestException invalidRequestException) {
+
+            return getExceptionResponseEntity(invalidRequestException, BAD_REQUEST);
+
+        } catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
+
+            return getExceptionResponseEntity(emptyResultDataAccessException, NOT_FOUND);
+
+        } catch (final Exception exception) {
+
+            return getExceptionResponseEntity(exception, INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ResponseEntity<Object> getExceptionResponseEntity(final Exception exception, final HttpStatus httpStatus) {
+        log.error(
+                "deleteRecordById API call failed due to error - {}",
+                exception.getMessage(),
+                exception
+        );
+        return new ResponseEntity<>(null, httpStatus);
     }
 }
