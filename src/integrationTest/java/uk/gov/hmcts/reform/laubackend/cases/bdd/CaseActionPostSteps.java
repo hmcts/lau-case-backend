@@ -4,22 +4,17 @@ import com.google.gson.Gson;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingMandatoryParameter;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTH_TOKEN;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 
 @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
 public class CaseActionPostSteps extends AbstractSteps {
@@ -36,16 +31,7 @@ public class CaseActionPostSteps extends AbstractSteps {
     @When("I POST case action using {string} endpoint using s2s")
     public void postCaseAction(final String path) {
 
-        final Response response = RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(getCaseActionPostRequest())
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .post()
-                .andReturn();
+        final Response response = restHelper.postObject(getCaseActionPostRequest(), baseUrl() + path);
 
         assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
 
@@ -54,48 +40,25 @@ public class CaseActionPostSteps extends AbstractSteps {
 
     @When("I POST {string} endpoint with missing request body parameter using s2s")
     public void postCaseActionWithMissingParameter(String path) {
+        final Response response = restHelper.postObject(getCaseActionPostRequestWithMissingMandatoryParameter(),
+                baseUrl() + path);
 
-        final Response response = RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(getCaseActionPostRequestWithMissingMandatoryParameter())
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .post()
-                .andReturn();
 
         httpStatusResponseCode = response.getStatusCode();
     }
 
     @When("I POST {string} endpoint with missing invalid body parameter using s2s")
     public void caseActionWithInvalidBodyParameter(String path) {
-        final Response response = RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(getCaseActionPostRequestWithInvalidParameter())
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
-                .when()
-                .post()
-                .andReturn();
+        final Response response = restHelper.postObject(getCaseActionPostRequestWithInvalidParameter(),
+                baseUrl() + path);
 
         httpStatusResponseCode = response.getStatusCode();
     }
 
     @When("I POST {string} endpoint with missing s2s header")
     public void postCaseActionWithMissingAuthHeader(String path) {
-        final Response response = RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(baseUrl() + path)
-                .body(getCaseActionPostRequestWithInvalidParameter())
-                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-                .when()
-                .post()
-                .andReturn();
+        final Response response = restHelper
+                .postObjectWithoutHeader(getCaseActionPostRequestWithInvalidParameter(), baseUrl() + path);
 
         httpStatusResponseCode = response.getStatusCode();
     }

@@ -12,7 +12,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_
 @SuppressWarnings({"unchecked", "PMD.AvoidDuplicateLiterals"})
 public class RestHelper {
 
-    public static Response getResponseWithoutHeader(final String path) {
+    public Response getResponseWithoutHeader(final String path) {
         return RestAssured
                 .given()
                 .relaxedHTTPSValidation()
@@ -23,7 +23,7 @@ public class RestHelper {
                 .andReturn();
     }
 
-    public static Response getResponseWithoutAuthorizationHeader(final String path) {
+    public Response getResponseWithoutAuthorizationHeader(final String path) {
         return RestAssured
                 .given()
                 .relaxedHTTPSValidation()

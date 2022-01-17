@@ -42,13 +42,13 @@ public class CommonSteps {
 
     @When("And I GET {string} without service authorization header")
     public void searchCaseActionWithoutAuthHeader(final String path) {
-        final Response response = RestHelper.getResponseWithoutHeader(getUrl(path));
+        final Response response = restHelper.getResponseWithoutHeader(getUrl(path));
         httpStatusResponseCode = response.getStatusCode();
     }
 
     @When("And I GET {string} without authorization header")
     public void searchWithoutAuthorizationHeader(final String path) {
-        final Response response = RestHelper.getResponseWithoutAuthorizationHeader(getUrl(path));
+        final Response response = restHelper.getResponseWithoutAuthorizationHeader(getUrl(path));
         httpStatusResponseCode = response.getStatusCode();
     }
 

@@ -12,7 +12,7 @@ Feature: The application's DELETE caseSearch endpoint
     And I request DELETE "/audit/caseSearch/deleteCaseSearchRecord/" endpoint with missing s2s header
     Then http "403" response is returned for DELETE caseSearch
 
-  Scenario: The backend is unabble to process caseSearch DELETE requests due to invalid authorization header
+  Scenario: The backend is unable to process caseSearch DELETE requests due to invalid authorization header
     Given LAU backend application is healthy
     And I request DELETE "/audit/caseSearch/deleteCaseSearchRecord/" endpoint with missing authorization header
     Then http "401" response is returned for DELETE caseSearch

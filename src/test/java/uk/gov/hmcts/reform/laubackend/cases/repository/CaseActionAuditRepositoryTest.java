@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.flyway.enabled=true"
 })
 @Import({RemoveColumnTransformers.class})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 class CaseActionAuditRepositoryTest {
 
     @Autowired
@@ -134,6 +135,44 @@ class CaseActionAuditRepositoryTest {
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
     }
+
+    @Test
+    void shouldDeleteCaseSearchAudit() {
+        caseActionAuditRepository.save(getCaseViewAuditEntity("1",
+                "1",
+                "1",
+                "3333",
+                valueOf(now())));
+
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                "3333",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+
+        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("3333");
+
+        caseActionAuditRepository.deleteById(caseViewAuditList.getContent().get(0).getCaseActionId());
+
+        final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository.findCaseView(
+                "3333",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        assertThat(caseViewAuditList1.getContent().size()).isEqualTo(0);
+    }
+
 
     private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
         final String stringValue = String.valueOf(value);
