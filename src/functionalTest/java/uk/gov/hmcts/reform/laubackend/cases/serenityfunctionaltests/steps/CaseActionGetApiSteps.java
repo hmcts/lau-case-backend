@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_ENDPOINT;
-import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.S2S_NAME;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 
 @SuppressWarnings("PMD.TooManyMethods")
@@ -30,7 +29,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
 
     @Step("Given a valid service token is generated")
     public String givenAValidServiceTokenIsGenerated() {
-        return authorizationHeaderHelper.getServiceToken(S2S_NAME);
+        return authorizationHeaderHelper.getServiceToken();
     }
 
     @Step("And valid Authorization token is generated")

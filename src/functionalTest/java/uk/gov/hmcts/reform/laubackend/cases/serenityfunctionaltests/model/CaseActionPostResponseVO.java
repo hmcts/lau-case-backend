@@ -2,14 +2,13 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CaseSearchPostResponseVO {
+public class CaseActionPostResponseVO {
 
-    private SearchLogPostResponseVO searchLog;
+    private ActionLogPostResponse actionLog;
 }
