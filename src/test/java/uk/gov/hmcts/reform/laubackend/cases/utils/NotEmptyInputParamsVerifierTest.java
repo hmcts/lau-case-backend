@@ -113,7 +113,7 @@ public class NotEmptyInputParamsVerifierTest {
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo("You need to populate all required parameters -"
-                            + " userId, action, caseRef, caseJurisdictionId, caseTypeId and timestamp");
+                            + " userId, action, caseRef, caseTypeId and timestamp");
         }
     }
 

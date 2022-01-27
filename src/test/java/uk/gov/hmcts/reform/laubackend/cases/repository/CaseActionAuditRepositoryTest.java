@@ -137,7 +137,7 @@ class CaseActionAuditRepositoryTest {
     }
 
     @Test
-    void shouldDeleteCaseSearchAudit() {
+    void shouldDeleteCaseActionAudit() {
         caseActionAuditRepository.save(getCaseViewAuditEntity("1",
                 "1",
                 "1",
@@ -171,6 +171,30 @@ class CaseActionAuditRepositoryTest {
         );
 
         assertThat(caseViewAuditList1.getContent().size()).isEqualTo(0);
+    }
+
+    @Test
+    void shouldSaveCaseAuctionWithoutCaseJurisdiction() {
+        caseActionAuditRepository.save(getCaseViewAuditEntity("1",
+                null,
+                "4444",
+                "6666",
+                valueOf(now())));
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                "6666",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("6666");
+        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo("4444");
+        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo(null);
     }
 
 
