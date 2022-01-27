@@ -31,6 +31,17 @@ public final class CaseActionPostHelper {
         return new CaseActionPostRequest(actionLog);
     }
 
+    public static CaseActionPostRequest getCaseActionPostRequestWithMissingJurisdiction() {
+        final ActionLog actionLog = new ActionLog("1",
+                "CREATE",
+                "1615817621010000",
+                null,
+                "7",
+                "2021-08-23T22:20:05.023Z");
+
+        return new CaseActionPostRequest(actionLog);
+    }
+
     public static CaseActionPostRequest getCaseActionPostRequestWithMissingMandatoryParameter() {
         final ActionLog actionLog = new ActionLog("1",
                 null,
@@ -52,5 +63,4 @@ public final class CaseActionPostHelper {
 
         return new CaseActionPostRequest(actionLog);
     }
-
 }

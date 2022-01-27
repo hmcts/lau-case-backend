@@ -31,11 +31,10 @@ public final class NotEmptyInputParamsVerifier {
         if (isEmpty(actionLog.getUserId())
                 || isEmpty(actionLog.getCaseAction())
                 || isEmpty(actionLog.getCaseRef())
-                || isEmpty(actionLog.getCaseJurisdictionId())
                 || isEmpty(actionLog.getCaseTypeId())
                 || isEmpty(actionLog.getTimestamp())) {
             throw new InvalidRequestException("You need to populate all required parameters - "
-                    + "userId, action, caseRef, caseJurisdictionId, caseTypeId "
+                    + "userId, action, caseRef, caseTypeId "
                     + "and timestamp", BAD_REQUEST);
         }
     }

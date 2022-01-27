@@ -14,6 +14,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingJurisdiction;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingMandatoryParameter;
 
 @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
@@ -38,11 +39,20 @@ public class CaseActionPostSteps extends AbstractSteps {
         caseActionPostResponseBody = response.getBody().asString();
     }
 
+    @When("I POST case action using {string} endpoint without case jurisdiction")
+    public void postWithoutCaseJurisdiction(String path) {
+        final Response response = restHelper
+                .postObject(getCaseActionPostRequestWithMissingJurisdiction(), baseUrl() + path);
+
+        assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
     @When("I POST {string} endpoint with missing request body parameter using s2s")
     public void postCaseActionWithMissingParameter(String path) {
         final Response response = restHelper.postObject(getCaseActionPostRequestWithMissingMandatoryParameter(),
                 baseUrl() + path);
-
 
         httpStatusResponseCode = response.getStatusCode();
     }
@@ -66,6 +76,28 @@ public class CaseActionPostSteps extends AbstractSteps {
     @Then("caseAction response body is returned")
     public void caseSearchResponseBodyIsReturned() {
         final CaseActionPostRequest caseActionPostRequest = getCaseActionPostRequest();
+
+        assertResponse(caseActionPostRequest);
+    }
+
+    @Then("caseAction response body is returned with missing jurisdiction")
+    public void caseSearchResponseBodyIsReturnedWithMissingJurisdiction() {
+        final CaseActionPostRequest caseActionPostRequest = getCaseActionPostRequestWithMissingJurisdiction();
+
+        assertResponse(caseActionPostRequest);
+    }
+
+    @Then("http forbidden response is returned for POST caseAction")
+    public void unauthorisedResponseReturned() {
+        assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
+    }
+
+    @Then("http bad request response is returned for POST caseAction")
+    public void badRequestResponseBodyIsReturned() {
+        assertThat(httpStatusResponseCode).isEqualTo(BAD_REQUEST.value());
+    }
+
+    private void assertResponse(final CaseActionPostRequest caseActionPostRequest) {
         final CaseActionPostResponse caseActionPostResponse = jsonReader
                 .fromJson(caseActionPostResponseBody, CaseActionPostResponse.class);
 
@@ -83,15 +115,5 @@ public class CaseActionPostSteps extends AbstractSteps {
                 .isEqualTo(caseActionPostResponse.getActionLog().getCaseTypeId());
         assertThat(caseActionPostRequest.getActionLog().getCaseJurisdictionId())
                 .isEqualTo(caseActionPostResponse.getActionLog().getCaseJurisdictionId());
-    }
-
-    @Then("http forbidden response is returned for POST caseAction")
-    public void unauthorisedResponseReturned() {
-        assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
-    }
-
-    @Then("http bad request response is returned for POST caseAction")
-    public void badRequestResponseBodyIsReturned() {
-        assertThat(httpStatusResponseCode).isEqualTo(BAD_REQUEST.value());
     }
 }
