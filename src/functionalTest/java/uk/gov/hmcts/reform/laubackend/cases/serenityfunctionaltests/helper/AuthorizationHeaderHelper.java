@@ -19,6 +19,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.confi
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.CLIENT_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.GRANT_TYPE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.REDIRECT_URI;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.S2S_NAME;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.S2S_URL;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SCOPE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.TOKEN_URL;
@@ -47,11 +48,11 @@ public class AuthorizationHeaderHelper {
     }
 
 
-    public String getServiceToken(String s2sMicroServiceName) {
+    public String getServiceToken() {
 
         LOGGER.info("s2sUrl lease url: {}", S2S_URL + "/lease");
         final Map<String, Object> params = of(
-                "microservice", s2sMicroServiceName
+                "microservice", S2S_NAME
         );
 
         final Response response = RestAssured

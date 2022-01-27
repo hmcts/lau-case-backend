@@ -5,7 +5,6 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.annotations.Title;
 import org.json.JSONException;
-import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +19,8 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.DatabaseCleaner.deleteRecord;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_DELETE_ENDPOINT;
 
 @RunWith(SerenityRunner.class)
 public class CaseActionApiTest {
@@ -37,6 +38,9 @@ public class CaseActionApiTest {
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         final String authorizationToken = caseActionGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseActionGetApiSteps.givenValidParamsAreSuppliedForGetCaseAction();
+        CaseActionRequestVO caseActionRequestVO = caseActionPostApiSteps.generateCaseActionPostRequestBody();
+        final Response postResponse = caseActionPostApiSteps
+                .whenThePostServiceIsInvoked(authServiceToken, caseActionRequestVO);
         Response response = caseActionGetApiSteps.whenTheGetCaseActionServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
                 authorizationToken,
@@ -58,6 +62,8 @@ public class CaseActionApiTest {
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                 "The assertion for GET CaseAction API response code 200 is not successful"
         );
+
+        deleteRecord(AUDIT_CASE_ACTION_DELETE_ENDPOINT, false, postResponse);
     }
 
     @Test
@@ -115,7 +121,7 @@ public class CaseActionApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseActionApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException {
+            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
 
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseActionRequestVO caseActionRequestVO = caseActionPostApiSteps.generateCaseActionPostRequestBody();
@@ -126,10 +132,8 @@ public class CaseActionApiTest {
                 TestConstants.SUCCESS,
                 "CaseAction POST API response code 200 assertion is not successful"
         );
-    }
 
-    @AfterClass
-    public static void deleteAll() {
+        deleteRecord(AUDIT_CASE_ACTION_DELETE_ENDPOINT, false, response);
     }
 
 }

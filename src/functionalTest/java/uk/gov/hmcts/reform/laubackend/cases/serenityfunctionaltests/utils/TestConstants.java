@@ -15,10 +15,14 @@ public final class TestConstants {
 
     /*CaseViw endPoint*/
     public static final String AUDIT_CASE_ACTION_ENDPOINT = "/audit/caseAction";
+    public static final String AUDIT_CASE_ACTION_DELETE_ENDPOINT = "/audit/caseAction/deleteCaseActionRecord";
+
     public static final String SUCCESS = "Success";
 
     /*CaseSearch endPoint*/
     public static final String AUDIT_CASE_SEARCH_ENDPOINT = "/audit/caseSearch";
+    public static final String AUDIT_CASE_SEARCH_DELETE_ENDPOINT = "/audit/caseSearch/deleteCaseSearchRecord";
+
 
     private TestConstants() {
 

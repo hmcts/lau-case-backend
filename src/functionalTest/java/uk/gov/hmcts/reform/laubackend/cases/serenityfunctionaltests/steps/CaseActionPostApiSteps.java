@@ -5,7 +5,8 @@ import io.restassured.response.Response;
 import net.thucydides.core.annotations.Step;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
-import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants;
+
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_ENDPOINT;
 
 public class CaseActionPostApiSteps extends BaseSteps {
     @Step("Given the POST service body is generated")
@@ -24,7 +25,7 @@ public class CaseActionPostApiSteps extends BaseSteps {
 
     @Step("When the POST service is invoked")
     public Response whenThePostServiceIsInvoked(String serviceToken, Object actionLog) throws JsonProcessingException {
-        return performPostOperation(TestConstants.AUDIT_CASE_ACTION_ENDPOINT, null, null, actionLog, serviceToken);
+        return performPostOperation(AUDIT_CASE_ACTION_ENDPOINT, null, null, actionLog, serviceToken);
     }
 
 }

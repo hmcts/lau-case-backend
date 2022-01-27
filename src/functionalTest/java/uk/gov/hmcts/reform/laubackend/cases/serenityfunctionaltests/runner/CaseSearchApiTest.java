@@ -22,6 +22,8 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.DatabaseCleaner.deleteRecord;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_DELETE_ENDPOINT;
 
 @RunWith(SerenityRunner.class)
 @SuppressWarnings("PMD.TooManyMethods")
@@ -35,7 +37,7 @@ public class CaseSearchApiTest {
     @Test
     @Title("Assert response code of 201 for POST Request CaseSearchApi")
     public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException {
+            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
 
@@ -47,6 +49,8 @@ public class CaseSearchApiTest {
                 TestConstants.SUCCESS,
                 "CaseAction POST API response code 201 assertion is successful"
         );
+
+        deleteRecord(AUDIT_CASE_SEARCH_DELETE_ENDPOINT,true, response);
     }
 
     @Test
@@ -73,6 +77,9 @@ public class CaseSearchApiTest {
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         final String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenValidParamsAreSuppliedForGetCaseSearchApi();
+        CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateCaseSearchPostRequestBody();
+        final Response postResponse = caseSearchPostApiSteps
+                .whenThePostServiceIsInvoked(authServiceToken, caseSearchRequestVO);
         Response response = caseSearchGetApiSteps.whenTheGetCaseSearchServiceIsInvokedWithTheGivenParams(
                 authServiceToken,
                 authorizationToken,
@@ -94,6 +101,8 @@ public class CaseSearchApiTest {
         Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
                 "The assertion for GET CaseAction API response code 200 is not successful"
         );
+
+        deleteRecord(AUDIT_CASE_SEARCH_DELETE_ENDPOINT,true, postResponse);
     }
 
     @Test
