@@ -22,6 +22,8 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -43,7 +45,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 @Api(tags = "Case search database operations.", value = "This is the Log and Audit "
         + "Back-End API that will audit case searches. "
         + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
-@SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.UnnecessaryAnnotationValueElement", "PMD.LawOfDemeter"})
 public class CaseSearchController {
 
     @Autowired
@@ -118,8 +120,8 @@ public class CaseSearchController {
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     @ResponseBody
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
-        @ApiParam(value = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
-        @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
+            @ApiParam(value = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
+            @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
             @ApiParam(value = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @ApiParam(value = "User ID", example = "3748238")
@@ -144,7 +146,17 @@ public class CaseSearchController {
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
+            long getCaseStartTime = System.currentTimeMillis();
+            log.info("Case search service invoked: " + getCaseStartTime);
+
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
+
+            long getCaseEndTime = System.currentTimeMillis();
+            long totalTime = getCaseEndTime - getCaseStartTime;
+            log.info("Case search service finished: " + getCaseEndTime);
+            log.info("Case search total invocation time: " + totalTime + " milliseconds");
+            log.info("Case search total invocation time: " + TimeUnit.MILLISECONDS.toSeconds(totalTime) + " seconds");
+            log.info("**************************************************************************");
 
             return new ResponseEntity<>(caseSearch, OK);
         } catch (final InvalidRequestException invalidRequestException) {
