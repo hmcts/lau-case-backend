@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.config;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthService;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorisedServices;
@@ -20,19 +22,20 @@ import java.nio.file.Paths;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Built-in feature which saves service's swagger specs in temporary directory.
  * Each travis run on master should automatically save and upload (if updated) documentation.
  */
-@SpringJUnitWebConfig
 @SpringBootTest
-@AutoConfigureMockMvc
 @SuppressWarnings({"PMD.UnusedPrivateField"})
 class SwaggerGeneratorTest {
 
-    @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private WebApplicationContext webAppContext;
 
     @MockBean
     private AuthService authService;
@@ -48,6 +51,11 @@ class SwaggerGeneratorTest {
 
     @MockBean
     private IdamApi idamApi;
+
+    @BeforeEach
+    public void setup() {
+        this.mvc = webAppContextSetup(webAppContext).build();
+    }
 
     @DisplayName("Generate swagger documentation")
     @Test

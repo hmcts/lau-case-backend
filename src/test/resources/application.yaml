@@ -41,6 +41,9 @@ spring:
   flyway:
     locations: classpath:h2
 
+azure:
+  application-insights:
+    instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
 
 flyway:
   noop:
