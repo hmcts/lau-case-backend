@@ -44,7 +44,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
         queryParamMap.put("caseAction", "VIEW");
         queryParamMap.put("caseRef", "1615817621013549");
         queryParamMap.put("caseJurisdictionId", "CMC");
-        queryParamMap.put("caseTypeId", "Caveats");
+        queryParamMap.put("caseTypeId", "CAVEATS");
         queryParamMap.put("startTimestamp", "2021-08-22T22:19:05");
         queryParamMap.put("endTimestamp", "2021-08-23T22:20:06");
         return queryParamMap;

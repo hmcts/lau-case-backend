@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse.caseSearchResponse;
@@ -39,10 +38,6 @@ public class CaseSearchService {
     private TimestampUtil timestampUtil;
 
     public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
-
-        final long getCaseRepositoryStartTime = System.currentTimeMillis();
-        log.info("Case search REPOSITORY invoked: " + getCaseRepositoryStartTime);
-
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository.findCaseSearch(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
@@ -50,16 +45,6 @@ public class CaseSearchService {
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
         );
-
-        final long getCaseRepositoryEndTime = System.currentTimeMillis();
-        final long totalTime = getCaseRepositoryEndTime - getCaseRepositoryStartTime;
-        log.info("Case search REPOSITORY finished: " + getCaseRepositoryEndTime);
-        log.info("Case search REPOSITORY total invocation time: " + totalTime + " milliseconds");
-        log.info("Case search REPOSITORY total invocation time: " + MILLISECONDS.toSeconds(totalTime) + " seconds");
-        log.info("**************************************************************************");
-
-        long getCaseObjectCreationStartTime = System.currentTimeMillis();
-        log.info("Case search OBJECT CREATION invoked: " + getCaseObjectCreationStartTime);
 
         final List<SearchLog> searchLogList = new ArrayList<>();
 
@@ -69,14 +54,6 @@ public class CaseSearchService {
                     new SearchLog().toDto(caseSearchAudit, timestamp)
             );
         });
-
-        final long getCaseObjectCreationEndTime = System.currentTimeMillis();
-        final long totalObjectCreationTime = getCaseObjectCreationEndTime - getCaseObjectCreationStartTime;
-        log.info("Case search OBJECT CREATION finished: " + getCaseObjectCreationEndTime);
-        log.info("Case search OBJECT CREATION total invocation time: " + totalObjectCreationTime + " milliseconds");
-        log.info("Case search OBJECT CREATION total invocation time: "
-                + MILLISECONDS.toSeconds(totalObjectCreationTime) + " seconds");
-        log.info("**************************************************************************");
 
         return caseSearchResponse()
                 .withSearchLog(searchLogList)
