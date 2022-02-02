@@ -336,7 +336,6 @@ dependencies {
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-
   testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
   testCompile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
   testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
@@ -344,12 +343,11 @@ dependencies {
   testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
+  testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
 
-    testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
-    testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-    testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
-    testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
-
+  testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
 
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
@@ -361,17 +359,16 @@ dependencies {
 
   implementation group: 'com.h2database', name: 'h2', version: '2.0.202'
 
-    testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
-    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
-    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
-    testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
-    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
 
-    integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-    integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
-    integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-    integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-
+  integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
   testImplementation libraries.junit5
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
@@ -465,12 +462,6 @@ task migratePostgresDatabase(type: FlywayMigrateTask) {
     url = "jdbc:postgresql://${dburl}"
   }
 }
-
-//task fortifyScan(type: JavaExec)  {
-//  main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
-//  classpath += sourceSets.test.runtimeClasspath
-//  jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
-//}
 
 mainClassName = 'uk.gov.hmcts.reform.laubackend.cases.Application'
 
