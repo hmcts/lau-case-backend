@@ -18,8 +18,8 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
     @Query("SELECT ca FROM case_action_audit ca "
             + "WHERE (:userId IS NULL OR ca.userId = :userId) "
             + "AND (:caseRef IS NULL OR ca.caseRef = :caseRef) "
-            + "AND (:caseTypeId IS NULL OR  ca.caseTypeId LIKE :caseTypeId) "
-            + "AND (:caseJurisdictionId IS NULL OR ca.caseJurisdictionId LIKE :caseJurisdictionId) "
+            + "AND (:caseTypeId IS NULL OR  ca.caseTypeId=:caseTypeId) "
+            + "AND (:caseJurisdictionId IS NULL OR ca.caseJurisdictionId=:caseJurisdictionId) "
             + "AND (cast(:startTime as timestamp) IS NULL OR ca.timestamp >= :startTime) "
             + "AND (cast(:endTime as timestamp) IS NULL OR ca.timestamp <= :endTime)")
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,

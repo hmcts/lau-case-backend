@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
+import static org.apache.commons.lang3.StringUtils.upperCase;
 import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
 
@@ -37,8 +38,8 @@ public class CaseActionService {
         final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
-                inputParamsHolder.getCaseTypeId(),
-                inputParamsHolder.getCaseJurisdictionId(),
+                upperCase(inputParamsHolder.getCaseTypeId()),
+                upperCase(inputParamsHolder.getCaseJurisdictionId()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
@@ -67,8 +68,8 @@ public class CaseActionService {
         caseActionAudit.setUserId(actionLog.getUserId());
         caseActionAudit.setCaseAction(actionLog.getCaseAction());
         caseActionAudit.setCaseRef(actionLog.getCaseRef());
-        caseActionAudit.setCaseJurisdictionId(actionLog.getCaseJurisdictionId());
-        caseActionAudit.setCaseTypeId(actionLog.getCaseTypeId());
+        caseActionAudit.setCaseJurisdictionId(upperCase(actionLog.getCaseJurisdictionId()));
+        caseActionAudit.setCaseTypeId(upperCase(actionLog.getCaseTypeId()));
         caseActionAudit.setTimestamp(timestampUtil.getUtcTimestampValue(actionLog.getTimestamp()));
 
         final CaseActionAudit caseActionAuditResponse = caseActionAuditRepository.save(caseActionAudit);
