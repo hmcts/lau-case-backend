@@ -22,8 +22,6 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
-import java.util.concurrent.TimeUnit;
-
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -146,17 +144,7 @@ public class CaseSearchController {
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
-            long getCaseStartTime = System.currentTimeMillis();
-            log.info("Case search service invoked: " + getCaseStartTime);
-
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
-
-            long getCaseEndTime = System.currentTimeMillis();
-            long totalTime = getCaseEndTime - getCaseStartTime;
-            log.info("Case search service finished: " + getCaseEndTime);
-            log.info("Case search total invocation time: " + totalTime + " milliseconds");
-            log.info("Case search total invocation time: " + TimeUnit.MILLISECONDS.toSeconds(totalTime) + " seconds");
-            log.info("**************************************************************************");
 
             return new ResponseEntity<>(caseSearch, OK);
         } catch (final InvalidRequestException invalidRequestException) {
