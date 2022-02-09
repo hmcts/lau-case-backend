@@ -69,13 +69,9 @@ public class CaseSearchService {
         final CaseSearchAudit caseSearchAuditRequest = new CaseSearchAudit(caseSearchPostRequest
                 .getSearchLog()
                 .getUserId(),
-                timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()));
-
-        if (!isEmpty(caseSearchPostRequest.getSearchLog().getCaseRefs())) {
-            caseSearchPostRequest.getSearchLog().getCaseRefs()
-                    .forEach(caseRef -> caseSearchAuditRequest
-                            .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
-        }
+                timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()),
+                caseSearchPostRequest.getSearchLog().getCaseRefs().toArray(new String[0])
+        );
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
         final String timestamp = timestampUtil.timestampConvertor(caseSearchAuditResponse.getTimestamp());

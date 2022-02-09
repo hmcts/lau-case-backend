@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -37,15 +38,8 @@ public class SearchLogPostResponse implements Serializable {
     public SearchLogPostResponse toDto(final CaseSearchAudit caseSearchAuditResponse, final String timestamp) {
         this.id = caseSearchAuditResponse.getId().toString();
         this.userId = caseSearchAuditResponse.getUserId();
-        this.caseRefs = getCaseRefs(caseSearchAuditResponse.getCaseSearchAuditCases());
+        this.caseRefs = Arrays.asList(caseSearchAuditResponse.getCaseRefs());
         this.timestamp = timestamp;
         return this;
-    }
-
-    private List<String> getCaseRefs(final List<CaseSearchAuditCases> caseSearchAuditCases) {
-        final List<String> caseRefs = new ArrayList<>();
-        caseSearchAuditCases.forEach(caseRef -> caseRefs.add(caseRef.getCaseRef()));
-
-        return caseRefs;
     }
 }
