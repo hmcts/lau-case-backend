@@ -20,6 +20,31 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
         + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
         + "AND (cast(:caseTypeId as text) IS NULL OR ca.case_type_id = cast(:caseTypeId as text)) "
         + "AND (cast(:caseJurisdictionId as text) IS NULL OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
+        + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL OR ca.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
+        + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL OR ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp))",
+        countQuery = "SELECT count(*) FROM ( "
+            + "SELECT 1 FROM case_action_audit ca "
+            + "WHERE (cast(:userId as text) IS NULL OR ca.user_id = cast(:userId as text)) "
+            + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
+            + "AND (cast(:caseTypeId as text) IS NULL OR  ca.case_type_id = cast(:caseTypeId as text)) "
+            + "AND (cast(:caseJurisdictionId as text) IS NULL OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
+            + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL OR ca.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
+            + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL OR ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp))"
+            + "limit 100000) ca",
+        nativeQuery = true)
+    Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
+                                       final @Param("caseRef") String caseRef,
+                                       final @Param("caseTypeId") String caseTypeId,
+                                       final @Param("caseJurisdictionId") String caseJurisdictionId,
+                                       final @Param("startTime") Timestamp startTime,
+                                       final @Param("endTime") Timestamp endTime,
+                                       final Pageable pageable);
+
+    @Query(value = "SELECT ca.* FROM case_action_audit ca "
+        + "WHERE (cast(:userId as text) IS NULL OR ca.user_id = cast(:userId as text)) "
+        + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
+        + "AND (cast(:caseTypeId as text) IS NULL OR ca.case_type_id = cast(:caseTypeId as text)) "
+        + "AND (cast(:caseJurisdictionId as text) IS NULL OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
         + "AND (cast(cast(:startTime as text) as timestamp) IS NULL OR ca.log_timestamp >= cast(cast(:startTime as text) as timestamp)) "
         + "AND (cast(cast(:endTime as text) as timestamp) IS NULL OR ca.log_timestamp <= cast(cast(:endTime as text) as timestamp))",
         countQuery = "SELECT count(*) FROM ( "
@@ -32,7 +57,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
             + "AND (cast(cast(:endTime as text) as timestamp) IS NULL OR ca.log_timestamp <= cast(cast(:endTime as text) as timestamp))"
             + "limit 100000) ca",
         nativeQuery = true)
-    Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
+    Page<CaseActionAudit> findCaseViewH2(final @Param("userId") String userId,
                                        final @Param("caseRef") String caseRef,
                                        final @Param("caseTypeId") String caseTypeId,
                                        final @Param("caseJurisdictionId") String caseJurisdictionId,

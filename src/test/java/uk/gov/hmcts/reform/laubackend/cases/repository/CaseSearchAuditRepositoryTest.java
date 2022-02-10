@@ -55,7 +55,7 @@ class CaseSearchAuditRepositoryTest {
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
-        assertResults(caseSearchAuditList.getContent(), 2);
+        assertThat(caseSearchAuditList.getContent().get(0).getCaseRefs().get(0)).isEqualTo(2L);
     }
 
     @Test
@@ -68,7 +68,7 @@ class CaseSearchAuditRepositoryTest {
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
-        assertResults(caseSearchAuditList.getContent(), 10);
+        assertThat(caseSearchAuditList.getContent().get(0).getUserId()).isEqualTo("10");
     }
 
     @Test
@@ -112,7 +112,7 @@ class CaseSearchAuditRepositoryTest {
 
         assertThat(caseSearchAuditList.get(20).getCaseRefs().size()).isEqualTo(2);
         assertThat(caseSearchAuditList.get(20).getCaseRefs().get(0)).isEqualTo(3L);
-        assertThat(caseSearchAuditList.get(20).getCaseRefs().get(0)).isEqualTo(4L);
+        assertThat(caseSearchAuditList.get(20).getCaseRefs().get(1)).isEqualTo(4L);
     }
 
     @Test
@@ -135,13 +135,6 @@ class CaseSearchAuditRepositoryTest {
                 .findCaseSearch("3333", null, null, null, null);
 
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
-    }
-
-
-    private void assertResults(final List<CaseSearchAudit> caseSearchAuditList, final int value) {
-        final String stringValue = String.valueOf(value);
-        assertThat(caseSearchAuditList.get(0).getCaseRefs().get(0)).isEqualTo(stringValue);
-        assertThat(caseSearchAuditList.get(0).getUserId()).isEqualTo(stringValue);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")

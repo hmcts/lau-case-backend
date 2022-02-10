@@ -16,15 +16,18 @@ public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit
 
     @Query(value = "SELECT cs.id, cs.user_id, cs.log_timestamp, cs.case_refs FROM case_search_audit cs "
         + "WHERE (cast(:userId as text) IS NULL OR cs.user_id=cast(:userId as text)) "
-        + "AND (cast(:caseRef as text) IS NULL OR \"case_refs\" @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
-        + "AND (cast(cast(:startTime as text) as timestamp) IS NULL OR cs.log_timestamp >= cast(cast(:startTime as text) as timestamp)) "
-        + "AND (cast(cast(:endTime as text) as timestamp) IS NULL OR cs.log_timestamp <= cast(cast(:endTime as text) as timestamp)) ",
+        //+ "AND (cast(:caseRef as text) IS NULL OR case_refs @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
+        + "AND (cast(:caseRef as text) IS NULL OR ARRAY_CONTAINS(cs.case_refs, coalesce(cast(cast(:caseRef as varchar) as bigint), 10000000000)) "
+        + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL OR cs.log_timestamp >= cast(cast(:startTime as varchar) as timestamp))) "
+        + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL OR cs.log_timestamp <= cast(cast(:endTime as varchar) as timestamp)) ",
         countQuery = "SELECT count(*) FROM ( "
             + "SELECT 1 FROM case_search_audit cs "
             + "WHERE (cast(:userId as text) IS NULL OR cs.user_id=cast(:userId as text)) "
-            + "AND (cast(:caseRef as text) IS NULL OR \"case_refs\" @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
-            + "AND (cast(cast(:startTime as text) as timestamp) IS NULL OR cs.log_timestamp >= cast(cast(:startTime as text) as timestamp)) "
-            + "AND (cast(cast(:endTime as text) as timestamp) IS NULL OR cs.log_timestamp <= cast(cast(:endTime as text) as timestamp)) "
+            //+ "AND (cast(:caseRef as text) IS NULL OR case_refs @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
+            + "AND (cast(:caseRef as text) IS NULL OR ARRAY_CONTAINS(cs.case_refs, coalesce(cast(cast(:caseRef as varchar) as bigint), 10000000000))) "
+            + "AND (cast(:caseRef as text) IS NULL ) "
+            + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL OR cs.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
+            + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL OR cs.log_timestamp <= cast(cast(:endTime as varchar) as timestamp)) "
             + "limit 100000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearch(final @Param("userId") String userId,

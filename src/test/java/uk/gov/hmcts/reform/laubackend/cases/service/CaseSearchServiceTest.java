@@ -56,18 +56,18 @@ class CaseSearchServiceTest {
 
         when(caseSearchAuditRepository
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
         verify(caseSearchAuditRepository, times(1))
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
 
         assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
         assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");
-        assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo("2");
+        assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo(2L);
     }
 
     @Test
@@ -79,7 +79,7 @@ class CaseSearchServiceTest {
         caseSearchAudit.setId(Long.valueOf(3));
         caseSearchAudit.setUserId("1");
         caseSearchAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
-        caseSearchAudit.setCaseRefs(List.of(Long.valueOf(1)));
+        caseSearchAudit.setCaseRefs(List.of(caseRef));
 
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
