@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
@@ -74,18 +73,13 @@ class CaseSearchServiceTest {
     @Test
     void shouldPostCaseView() {
 
-        final String caseRef = randomNumeric(16);
+        final Long caseRef = Long.valueOf(randomNumeric(16));
 
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setId(Long.valueOf(3));
         caseSearchAudit.setUserId("1");
         caseSearchAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
-
-        final CaseSearchAuditCases caseSearchAuditCases = new CaseSearchAuditCases();
-        caseSearchAuditCases.setId(Long.valueOf(1));
-
-        caseSearchAuditCases.setCaseRef(caseRef);
-        caseSearchAudit.setCaseSearchAuditCases(List.of(caseSearchAuditCases));
+        caseSearchAudit.setCaseRefs(List.of(Long.valueOf(1)));
 
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
@@ -108,8 +102,7 @@ class CaseSearchServiceTest {
     private CaseSearchAudit getCaseSearchAuditEntity(final Timestamp timestamp) {
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setUserId("1");
-        final CaseSearchAuditCases caseSearchAuditCases = new CaseSearchAuditCases("2", caseSearchAudit);
-        caseSearchAudit.addCaseSearchAuditCases(caseSearchAuditCases);
+        caseSearchAudit.addCaseRef(2L);
         caseSearchAudit.setTimestamp(timestamp);
         return caseSearchAudit;
     }

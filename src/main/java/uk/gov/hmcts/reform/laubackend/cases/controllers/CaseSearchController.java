@@ -144,7 +144,11 @@ public class CaseSearchController {
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
+            log.info("Case search REPOSITORY calling getCaseSearch...");
+
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
+
+            log.info("Case search REPOSITORY response received...");
 
             return new ResponseEntity<>(caseSearch, OK);
         } catch (final InvalidRequestException invalidRequestException) {

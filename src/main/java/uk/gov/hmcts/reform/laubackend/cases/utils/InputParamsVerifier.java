@@ -66,8 +66,8 @@ public final class InputParamsVerifier {
         verifyUserId(searchLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(searchLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
         if (!CollectionUtils.isEmpty(searchLog.getCaseRefs())) {
-            for (String caseRef : searchLog.getCaseRefs()) {
-                verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
+            for (Long caseRef : searchLog.getCaseRefs()) {
+                verifyCaseRef(caseRef.toString(), CASEREF_POST_EXCEPTION_MESSAGE);
             }
         }
     }

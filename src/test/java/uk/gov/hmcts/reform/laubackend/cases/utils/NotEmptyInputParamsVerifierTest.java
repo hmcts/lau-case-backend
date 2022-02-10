@@ -150,7 +150,7 @@ public class NotEmptyInputParamsVerifierTest {
         try {
             final SearchLog searchLog = new SearchLog();
             searchLog.setUserId("1");
-            searchLog.setCaseRefs(asList(randomNumeric(16)));
+            searchLog.setCaseRefs(asList(Long.valueOf(randomNumeric(16))));
 
             final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
             caseSearchPostRequest.setSearchLog(searchLog);

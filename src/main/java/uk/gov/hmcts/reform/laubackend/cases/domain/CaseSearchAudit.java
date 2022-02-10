@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.domain;
 
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,17 +13,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity(name = "case_search_audit_new")
+@Entity(name = "case_search_audit")
 @Getter
 @Setter
 @NoArgsConstructor
 @SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement"})
 @TypeDef(
-    name = "string-array",
-    typeClass = StringArrayType.class
+    name = "list-array",
+    typeClass = ListArrayType.class
 )
 public class CaseSearchAudit implements Serializable {
 
@@ -40,14 +42,18 @@ public class CaseSearchAudit implements Serializable {
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
 
-    @Type(type = "string-array")
-    @Column(name = "case_refs", columnDefinition = "varchar[]")
-    private String[] caseRefs;
+    @Type(type = "list-array")
+    @Column(name = "case_refs", columnDefinition = "bigint[]")
+    private List<Long> caseRefs = new ArrayList<>();
 
-    public CaseSearchAudit(final String userId, final Timestamp timestamp, final String[] caseRefs) {
+    public CaseSearchAudit(final String userId, final Timestamp timestamp, final List<Long> caseRefs) {
         this.userId = userId;
         this.timestamp = timestamp;
         this.caseRefs = caseRefs;
+    }
+
+    public void addCaseRef(final Long caseRef) {
+        caseRefs.add(caseRef);
     }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
@@ -24,7 +23,6 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
 import static org.springframework.data.domain.PageRequest.of;
-import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse.caseSearchResponse;
 
 @Service
@@ -38,6 +36,7 @@ public class CaseSearchService {
     private TimestampUtil timestampUtil;
 
     public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
+
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository.findCaseSearch(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
@@ -70,7 +69,7 @@ public class CaseSearchService {
                 .getSearchLog()
                 .getUserId(),
                 timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()),
-                caseSearchPostRequest.getSearchLog().getCaseRefs().toArray(new String[0])
+                caseSearchPostRequest.getSearchLog().getCaseRefs()
         );
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
@@ -90,6 +89,6 @@ public class CaseSearchService {
         final String pageSize = Optional.ofNullable(size).orElse("10000");
         final String pageNumber = Optional.ofNullable(page).orElse("1");
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
 }

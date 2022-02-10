@@ -10,26 +10,26 @@ import static java.util.Arrays.asList;
 
 public final class CaseSearchGetHelper {
 
-    private static List<String> caseRefs;
+    private static List<Long> caseRefs;
 
     private CaseSearchGetHelper() {
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequest(final String userId,
-                                                                 final List<String> caseRefsList,
+                                                                 final List<Long> caseRefsList,
                                                                  final String timestamp) {
 
         final SearchLog searchLog = new SearchLog(userId == null ? "1" : userId,
                 caseRefsList == null
-                        ? asList("0000000000000000", "0000000000000001", "0000000000000002") : caseRefsList,
+                        ? asList(1000000000000000L, 1000000000000001L, 1000000000000002L) : caseRefsList,
                 timestamp == null ? "2021-08-23T22:20:05.023Z" : timestamp);
 
         caseRefs = searchLog.getCaseRefs();
         return new CaseSearchPostRequest(searchLog);
     }
 
-    public static List<String> getCaseRefs(final String caseRef) {
-        if (caseRefs.contains(caseRef)) {
+    public static List<Long> getCaseRefs(final String caseRef) {
+        if (caseRefs.contains(Long.valueOf(caseRef))) {
             return caseRefs;
         }
         return new ArrayList<>();

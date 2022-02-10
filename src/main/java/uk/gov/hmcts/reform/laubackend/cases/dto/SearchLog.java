@@ -7,11 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -27,14 +24,14 @@ public class SearchLog implements Serializable {
     private String userId;
 
     @ApiModelProperty(notes = "The caseRefs effected by the search operation")
-    private List<String> caseRefs;
+    private List<Long> caseRefs;
 
     @ApiModelProperty(notes = "When the operation took place with microseconds in iso-8601-date-and-time-format")
     private String timestamp;
 
     public SearchLog toDto(final CaseSearchAudit caseSearchAuditResponse, final String timestamp) {
         this.userId = caseSearchAuditResponse.getUserId();
-        this.caseRefs = Arrays.asList(caseSearchAuditResponse.getCaseRefs());
+        this.caseRefs = caseSearchAuditResponse.getCaseRefs();
         this.timestamp = timestamp;
         return this;
     }

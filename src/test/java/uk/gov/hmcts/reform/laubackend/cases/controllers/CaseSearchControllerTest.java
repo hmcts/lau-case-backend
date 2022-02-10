@@ -83,10 +83,11 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForPostRequest() {
 
-        final SearchLog searchLog = new SearchLog("1",asList(randomNumeric(16)),"2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog =
+            new SearchLog("1",asList(Long.valueOf(randomNumeric(16))),"2021-08-23T22:20:05.023Z");
         final SearchLogPostResponse searchLogPostResponse = new SearchLogPostResponse("1",
                 "1",
-                asList(randomNumeric(16)),
+                asList(Long.valueOf(randomNumeric(16))),
                 "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest(searchLog);
@@ -110,7 +111,7 @@ class CaseSearchControllerTest {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
         // Validation will fail here
-        searchLog.setCaseRefs(asList(randomNumeric(18)));
+        searchLog.setCaseRefs(asList(Long.valueOf(randomNumeric(18))));
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
@@ -127,7 +128,7 @@ class CaseSearchControllerTest {
     void shouldReturnInternalServerErrorForPostRequest() {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
-        searchLog.setCaseRefs(asList(randomNumeric(16)));
+        searchLog.setCaseRefs(asList(Long.valueOf(randomNumeric(16))));
         searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();

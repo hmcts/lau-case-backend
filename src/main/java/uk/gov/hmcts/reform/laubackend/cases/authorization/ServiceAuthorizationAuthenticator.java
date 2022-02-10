@@ -22,13 +22,13 @@ public class ServiceAuthorizationAuthenticator {
 
     public void authorizeServiceToken(final HttpServletRequest request) {
         try {
-//            final String serviceAuthHeader = request.getHeader(SERVICE_AUTHORISATION_HEADER);
-//            final String serviceName = authService.authenticateService(serviceAuthHeader);
+            final String serviceAuthHeader = request.getHeader(SERVICE_AUTHORISATION_HEADER);
+            final String serviceName = authService.authenticateService(serviceAuthHeader);
 
-//            if (!authorisedServices.hasService(serviceName)) {
-//                log.info("Service {} has NOT been authorised!", serviceName);
-//                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
-//            }
+            if (!authorisedServices.hasService(serviceName)) {
+                log.info("Service {} has NOT been authorised!", serviceName);
+                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
+            }
         } catch (final Exception exception) {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
         }

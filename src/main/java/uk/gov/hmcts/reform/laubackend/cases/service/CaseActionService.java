@@ -90,6 +90,6 @@ public class CaseActionService {
         final String pageSize = Optional.ofNullable(size).orElse("10000");
         final String pageNumber = Optional.ofNullable(page).orElse("1");
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
 }

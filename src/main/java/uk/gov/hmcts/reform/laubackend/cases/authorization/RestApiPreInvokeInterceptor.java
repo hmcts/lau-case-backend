@@ -33,10 +33,10 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
         try {
             serviceAuthorizationAuthenticator.authorizeServiceToken(request);
 
-//            if (request.getMethod().equalsIgnoreCase(GET.name())
-//                    || request.getMethod().equalsIgnoreCase(DELETE.name())) {
-//                authorizationAuthenticator.authorizeAuthorizationToken(request);
-//            }
+            if (request.getMethod().equalsIgnoreCase(GET.name())
+                    || request.getMethod().equalsIgnoreCase(DELETE.name())) {
+                authorizationAuthenticator.authorizeAuthorizationToken(request);
+            }
 
         } catch (final InvalidServiceAuthorizationException exception) {
             log.error("Service authorization token failed due to error - {}",

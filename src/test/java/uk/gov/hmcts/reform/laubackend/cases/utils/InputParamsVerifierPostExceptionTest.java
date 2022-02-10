@@ -117,7 +117,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseRefForCaseSearch() {
         try {
             final SearchLog searchLog = new SearchLog();
-            searchLog.setCaseRefs(asList(randomNumeric(17), randomNumeric(8)));
+            searchLog.setCaseRefs(asList(Long.valueOf(randomNumeric(17)), Long.valueOf(randomNumeric(8))));
 
             verifyRequestSearchParamsConditions(searchLog);
 
