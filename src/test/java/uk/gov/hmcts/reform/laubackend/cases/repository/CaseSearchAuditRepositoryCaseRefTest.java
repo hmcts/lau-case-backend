@@ -39,7 +39,7 @@ public class CaseSearchAuditRepositoryCaseRefTest {
         caseSearchAuditRepository.save(getCaseSearchAuditEntity("1", emptyList(), timestamp));
         caseSearchAuditRepository.save(getCaseSearchAuditEntity("2", asList(1L, 2L, 3L), timestamp));
 
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 "1",
                 null,
                 null,

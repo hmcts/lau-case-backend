@@ -47,7 +47,7 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseRef() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 null,
                 "2",
                 null,
@@ -60,7 +60,7 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByUserId() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 "10",
                 null,
                 null,
@@ -73,7 +73,7 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindPageableResults() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 null,
                 null,
                 null,
@@ -86,7 +86,7 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldGetAllRecords() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 null,
                 null,
                 null,
@@ -124,7 +124,7 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.save(caseSearchAudit);
 
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository
-                .findCaseSearch("3333", null, null, null, null);
+                .findCaseSearchH2("3333", null, null, null, null);
 
         assertThat(caseSearch.getContent().size()).isEqualTo(1);
         assertThat(caseSearch.getContent().get(0).getUserId()).isEqualTo("3333");
@@ -132,7 +132,7 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.deleteById(caseSearch.getContent().get(0).getId());
 
         final Page<CaseSearchAudit> caseSearch1 = caseSearchAuditRepository
-                .findCaseSearch("3333", null, null, null, null);
+                .findCaseSearchH2("3333", null, null, null, null);
 
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
     }
