@@ -10,11 +10,10 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
 
-@SuppressWarnings({"PMD.UseObjectForClearerAPI","PMD.UnnecessaryAnnotationValueElement"})
+@SuppressWarnings({"PMD.UseObjectForClearerAPI"})
 @Repository
 public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit, Long> {
 
-    //@EntityGraph(value = "CaseSearch.List")
     @Query("SELECT distinct cs FROM case_search_audit cs "
         + "LEFT JOIN FETCH case_search_audit_cases csa on csa.caseSearchAudit = cs.id "
         + "WHERE (:userId IS NULL OR cs.userId = :userId) "

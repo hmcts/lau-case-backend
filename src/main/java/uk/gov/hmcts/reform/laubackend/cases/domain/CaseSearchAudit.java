@@ -9,8 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -24,11 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @NoArgsConstructor
-@NamedEntityGraph(
-        name = "CaseSearch.List",
-        attributeNodes = {@NamedAttributeNode(value = "caseSearchAuditCases")}
-)
-@SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.UnnecessaryAnnotationValueElement"})
 public class CaseSearchAudit implements Serializable {
 
     public static final long serialVersionUID = 5428747L;
