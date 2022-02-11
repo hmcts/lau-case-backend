@@ -45,3 +45,5 @@ spring:
 flyway:
   noop:
     strategy: "false"
+
+default.page.size: "100000"

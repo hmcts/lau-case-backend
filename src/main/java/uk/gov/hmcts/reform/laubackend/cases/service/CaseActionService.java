@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,9 @@ public class CaseActionService {
 
     @Autowired
     private TimestampUtil timestampUtil;
+
+    @Value("${default.page.size}")
+    private String defaultPageSize;
 
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
 
@@ -87,7 +91,7 @@ public class CaseActionService {
     }
 
     private Pageable getPage(final String size, final String page) {
-        final String pageSize = Optional.ofNullable(size).orElse("10000");
+        final String pageSize = Optional.ofNullable(size).orElse(defaultPageSize);
         final String pageNumber = Optional.ofNullable(page).orElse("1");
 
         return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));

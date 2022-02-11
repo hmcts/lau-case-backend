@@ -24,7 +24,7 @@ class SearchLogTest {
 
         assertThat(caseSearchAudit.getUserId()).isEqualTo(searchLogDto.getUserId());
         assertThat(caseSearchAudit.getTimestamp().toString()).isEqualTo("2021-09-07 14:00:46.852754");
-        assertThat(caseSearchAudit.getCaseRefs().get(0))
+        assertThat(caseSearchAudit.getCaseRefs().get(0).toString())
             .isEqualTo(searchLogDto.getCaseRefs().get(0));
         assertThat(caseSearchAudit.getUserId()).isEqualTo(searchLogDto.getUserId());
     }

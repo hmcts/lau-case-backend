@@ -31,6 +31,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -52,34 +53,42 @@ class CaseSearchServiceTest {
         final List<CaseSearchAudit> caseSearchAuditList = asList(getCaseSearchAuditEntity(timestamp));
         final Page<CaseSearchAudit> pageResults = new PageImpl<>(caseSearchAuditList);
 
-        final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder("1", "2", "3", "4", null, null);
+        setField(caseSearchService, "defaultPageSize", "100000");
+
+        final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(
+                "1",
+                "2",
+                "3",
+                "4",
+                null,
+                null);
 
         when(caseSearchAuditRepository
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
+                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
         verify(caseSearchAuditRepository, times(1))
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
+                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp")));
 
         assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
         assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");
-        assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo(2L);
+        assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo("2");
     }
 
     @Test
     void shouldPostCaseView() {
 
-        final Long caseRef = Long.valueOf(randomNumeric(16));
+        final String caseRef = randomNumeric(16);
 
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setId(Long.valueOf(3));
         caseSearchAudit.setUserId("1");
         caseSearchAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
-        caseSearchAudit.setCaseRefs(List.of(caseRef));
+        caseSearchAudit.setCaseRefs(List.of(Long.valueOf(caseRef)));
 
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");

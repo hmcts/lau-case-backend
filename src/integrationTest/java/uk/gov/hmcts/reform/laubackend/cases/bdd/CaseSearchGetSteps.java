@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,8 +53,7 @@ public class CaseSearchGetSteps extends AbstractSteps {
 
     @When("I POST multiple caseSearch records to {string} endpoint using caseRefs {string}")
     public void postCaseActionWithCaseRefs(final String path, final String caseRefs) {
-        final List<Long> caseRefsList =
-            asList(caseRefs.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
+        final List<String> caseRefsList = asList(caseRefs.split(","));
         final Response response = restHelper.postObject(getCaseSearchPostRequest(null, caseRefsList, null),
                 baseUrl() + path);
         assertThat(response.getStatusCode()).isEqualTo(CREATED.value());

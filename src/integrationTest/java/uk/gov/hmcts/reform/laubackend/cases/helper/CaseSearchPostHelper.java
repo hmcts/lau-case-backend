@@ -12,19 +12,19 @@ public final class CaseSearchPostHelper {
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequest() {
-        final SearchLog searchLog = new SearchLog("3748230", asList(1615817621013640L,
-                1615817621013642L,
-                1615817621013600L,
-                1615817621013601L), "2021-08-24T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("3748230", asList("1615817621013640",
+                "1615817621013642",
+                "1615817621013600",
+                "1615817621013601"), "2021-08-24T22:20:05.023Z");
 
         return new CaseSearchPostRequest(searchLog);
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequest(final String usingId) {
-        final SearchLog searchLog = new SearchLog(usingId, asList(1615817621013640L,
-                1615817621013642L,
-                1615817621013600L,
-                1615817621013601L), "2021-08-24T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog(usingId, asList("1615817621013640",
+                "1615817621013642",
+                "1615817621013600",
+                "1615817621013601"), "2021-08-24T22:20:05.023Z");
 
         return new CaseSearchPostRequest(searchLog);
     }
@@ -37,16 +37,16 @@ public final class CaseSearchPostHelper {
 
     public static CaseSearchPostRequest getCaseSearchPostRequestWithMissingUserId() {
         return new CaseSearchPostRequest(new SearchLog(null,
-                asList(1615817621013640L,
-                        1615817621013642L,
-                        1615817621013600L,
-                        1615817621013601L),
+                asList("1615817621013640",
+                        "1615817621013642",
+                        "1615817621013600",
+                        "1615817621013601"),
                 "2021-08-23T22:20:05.023Z"));
     }
 
     public static CaseSearchPostRequest getCaseSearchPostRequestWithInvalidCaseRefs() {
         return new CaseSearchPostRequest(new SearchLog("3748230",
-                asList(12L),
+                asList("12"),
                 "2021-08-26T22:20:05.023Z"));
     }
 }

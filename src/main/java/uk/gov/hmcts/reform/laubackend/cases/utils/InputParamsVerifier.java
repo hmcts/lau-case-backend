@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
-import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_POST_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_GET_EXCEPTION_MESSAGE;
@@ -65,9 +65,9 @@ public final class InputParamsVerifier {
 
         verifyUserId(searchLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(searchLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
-        if (!CollectionUtils.isEmpty(searchLog.getCaseRefs())) {
-            for (Long caseRef : searchLog.getCaseRefs()) {
-                verifyCaseRef(caseRef.toString(), CASEREF_POST_EXCEPTION_MESSAGE);
+        if (!isEmpty(searchLog.getCaseRefs())) {
+            for (String caseRef : searchLog.getCaseRefs()) {
+                verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
             }
         }
     }
