@@ -336,6 +336,7 @@ dependencies {
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
+  implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.14.0'
 
   testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
   testCompile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
@@ -359,7 +360,7 @@ dependencies {
   integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
-  implementation group: 'com.h2database', name: 'h2', version: '2.0.202'
+  implementation group: 'com.h2database', name: 'h2', version: '2.1.210'
 
     testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
     testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -36,11 +35,11 @@ public class CaseSearchAuditRepositoryCaseRefTest {
     void shouldRetrieveCasesWithNoCaseRefs() {
 
         final Timestamp timestamp = valueOf(now().plusDays(1));
-        caseSearchAuditRepository.save(getCaseSearchAuditEntity("1", asList("1", "2", "3"), timestamp));
+        caseSearchAuditRepository.save(getCaseSearchAuditEntity("1", asList(1L, 2L, 3L), timestamp));
         caseSearchAuditRepository.save(getCaseSearchAuditEntity("1", emptyList(), timestamp));
-        caseSearchAuditRepository.save(getCaseSearchAuditEntity("2", asList("1", "2", "3"), timestamp));
+        caseSearchAuditRepository.save(getCaseSearchAuditEntity("2", asList(1L, 2L, 3L), timestamp));
 
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
                 "1",
                 null,
                 null,
@@ -50,28 +49,25 @@ public class CaseSearchAuditRepositoryCaseRefTest {
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(2);
         assertThat(caseSearchAuditList.getContent().get(0).getUserId()).isEqualTo("1");
         assertThat(caseSearchAuditList.getContent().get(0).getTimestamp()).isEqualTo(timestamp);
-        assertThat(caseSearchAuditList.getContent().get(0).getCaseSearchAuditCases().size()).isEqualTo(3);
-        assertThat(caseSearchAuditList.getContent().get(0).getCaseSearchAuditCases()
-                .get(0).getCaseRef()).isEqualTo("1");
-        assertThat(caseSearchAuditList.getContent().get(0).getCaseSearchAuditCases()
-                .get(1).getCaseRef()).isEqualTo("2");
-        assertThat(caseSearchAuditList.getContent().get(0).getCaseSearchAuditCases()
-                .get(2).getCaseRef()).isEqualTo("3");
+        assertThat(caseSearchAuditList.getContent().get(0).getCaseRefs().size()).isEqualTo(3);
+        assertThat(caseSearchAuditList.getContent().get(0).getCaseRefs().get(0)).isEqualTo(1L);
+        assertThat(caseSearchAuditList.getContent().get(0).getCaseRefs().get(1)).isEqualTo(2L);
+        assertThat(caseSearchAuditList.getContent().get(0).getCaseRefs().get(2)).isEqualTo(3L);
 
         assertThat(caseSearchAuditList.getContent().get(1).getUserId()).isEqualTo("1");
-        assertThat(caseSearchAuditList.getContent().get(1).getCaseSearchAuditCases().size()).isEqualTo(0);
+        assertThat(caseSearchAuditList.getContent().get(1).getCaseRefs().size()).isEqualTo(0);
     }
 
     private CaseSearchAudit getCaseSearchAuditEntity(final String userId,
-                                                     final List<String> caseRefs,
+                                                     final List<Long> caseRefs,
                                                      final Timestamp timestamp) {
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setUserId(userId);
         caseSearchAudit.setTimestamp(timestamp);
 
         if (!isEmpty(caseRefs)) {
-            for (String caseRefStr : caseRefs) {
-                caseSearchAudit.addCaseSearchAuditCases(new CaseSearchAuditCases(caseRefStr, caseSearchAudit));
+            for (Long caseRef : caseRefs) {
+                caseSearchAudit.addCaseRef(caseRef);
             }
         }
 
