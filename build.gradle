@@ -238,6 +238,10 @@ dependencyManagement {
     dependencySet(group: 'com.google.guava', version: '30.1.1-jre') {
       entry 'guava'
     }
+    dependencySet(group: 'org.springframework.cloud', version: '3.0.5') {
+      entry 'spring-cloud-starter-openfeign'
+      entry 'spring-cloud-openfeign-core'
+    }
     dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.58') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
@@ -318,7 +322,7 @@ dependencies {
 
   compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
-  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.7.RELEASE'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
   compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0', withoutSpringCloudContext
 
@@ -327,6 +331,8 @@ dependencies {
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.2'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.5'
+
 
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
   compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.17.1'
