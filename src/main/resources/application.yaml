@@ -19,9 +19,9 @@ spring:
     name: Case Log and Audit
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://lau-case-backend-aat.postgres.database.azure.com:5432/${LAU_DB_NAME:lau_case}${LAU_DB_CONN_OPTIONS:}
-    username: lauadmin@lau-case-backend-aat
-    password: I&?>3r=2t9[IF)Hs
+    url: jdbc:postgresql://${LAU_DB_HOST:localhost}:${LAU_DB_PORT:5432}/${LAU_DB_NAME:lau_case}${LAU_DB_CONN_OPTIONS:}
+    username: ${LAU_DB_USERNAME:lauuser}
+    password: ${LAU_DB_PASSWORD:}
     properties:
       charSet: UTF-8
     hikari:
@@ -55,9 +55,8 @@ spring:
           lob:
             # silence the 'wall-of-text' - unnecessary exception throw about blob types
             non_contextual_creation: true
-    show-sql: true
   flyway:
-    enabled: false
+    enabled: ${LAU_FLYWAY_MIGRATE_DB:false}
     user: ${LAU_DB_ADMIN_USERNAME:lauadmin}
     password: ${LAU_DB_ADMIN_PASSWORD:}
     placeholders:
@@ -65,13 +64,13 @@ spring:
 
 idam:
   s2s-auth:
-    url: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    url: ${S2S_URL:http://localhost:4502}
   api:
-    url: https://idam-api.aat.platform.hmcts.net
+    url: ${IDAM_API_URL:http://localhost:5000}
   client:
     id: ${IDAM_CLIENT_NAME:lau}
-    secret: gQ4pHYQ8TTYdQp8d
-    redirect_uri: https://lau-case.aat.platform.hmcts.net/oauth2/callback
+    secret: ${IDAM_CLIENT_SECRET:12345678}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:3451/oauth2redirect}
 
 authorised.services: lau_frontend,ccd_data
 authorised.roles: cft-audit-investigator
