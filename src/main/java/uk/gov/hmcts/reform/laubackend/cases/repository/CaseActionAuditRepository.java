@@ -36,7 +36,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
             +   "OR ca.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
             + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL "
             +   "OR ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp))"
-            + "limit 100000) ca",
+            + "limit 10000) ca",
         nativeQuery = true)
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
                                        final @Param("caseRef") String caseRef,
