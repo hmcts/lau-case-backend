@@ -53,7 +53,7 @@ class CaseSearchServiceTest {
         final List<CaseSearchAudit> caseSearchAuditList = asList(getCaseSearchAuditEntity(timestamp));
         final Page<CaseSearchAudit> pageResults = new PageImpl<>(caseSearchAuditList);
 
-        setField(caseSearchService, "defaultPageSize", "100000");
+        setField(caseSearchService, "defaultPageSize", "10000");
 
         final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(
                 "1",
@@ -65,14 +65,14 @@ class CaseSearchServiceTest {
 
         when(caseSearchAuditRepository
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp"))))
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
         verify(caseSearchAuditRepository, times(1))
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp")));
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
 
         assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
         assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");

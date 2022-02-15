@@ -31,7 +31,7 @@ public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit
             +   "OR cs.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
             + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL "
             +   "OR cs.log_timestamp <= cast(cast(:endTime as varchar) as timestamp)) "
-            + "limit 100000) cs",
+            + "limit 10000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearch(final @Param("userId") String userId,
                                                    final @Param("caseRef") String caseRef,
@@ -56,7 +56,7 @@ public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit
             +   "OR cs.log_timestamp >= cast(cast(:startTime as varchar) as timestamp)) "
             + "AND (cast(cast(:endTime as varchar) as timestamp) IS NULL "
             +   "OR cs.log_timestamp <= cast(cast(:endTime as varchar) as timestamp)) "
-            + "limit 100000) cs",
+            + "limit 10000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearchH2(final @Param("userId") String userId,
                                          final @Param("caseRef") String caseRef,

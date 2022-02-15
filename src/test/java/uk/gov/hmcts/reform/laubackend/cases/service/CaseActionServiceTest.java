@@ -52,7 +52,7 @@ class CaseActionServiceTest {
         final List<CaseActionAudit> caseActionAuditList = Arrays.asList(getCaseViewAuditEntity(timestamp));
         final Page<CaseActionAudit> pageResults = new PageImpl<>(caseActionAuditList);
 
-        setField(caseActionService, "defaultPageSize", "100000");
+        setField(caseActionService, "defaultPageSize", "10000");
 
         final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(
                 "1",
@@ -66,14 +66,14 @@ class CaseActionServiceTest {
 
         when(caseActionAuditRepository
                 .findCaseView("1", "2", "3", "4", null, null,
-                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp"))))
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
         verify(caseActionAuditRepository, times(1))
                 .findCaseView("1", "2", "3", "4", null, null,
-                        PageRequest.of(0, parseInt("100000"), Sort.by("log_timestamp")));
+                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
 
         assertThat(caseView.getActionLog().size()).isEqualTo(1);
         assertThat(caseView.getActionLog().get(0).getUserId()).isEqualTo("5");
