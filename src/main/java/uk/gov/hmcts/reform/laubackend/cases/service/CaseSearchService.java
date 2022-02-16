@@ -2,12 +2,12 @@ package uk.gov.hmcts.reform.laubackend.cases.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
@@ -24,8 +24,8 @@ import java.util.Optional;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
 import static org.springframework.data.domain.PageRequest.of;
-import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse.caseSearchResponse;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseSearchHelper.convertCaseRefsToLong;
 
 @Service
 @Slf4j
@@ -37,7 +37,11 @@ public class CaseSearchService {
     @Autowired
     private TimestampUtil timestampUtil;
 
+    @Value("${default.page.size}")
+    private String defaultPageSize;
+
     public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
+
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository.findCaseSearch(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
@@ -69,13 +73,9 @@ public class CaseSearchService {
         final CaseSearchAudit caseSearchAuditRequest = new CaseSearchAudit(caseSearchPostRequest
                 .getSearchLog()
                 .getUserId(),
-                timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()));
-
-        if (!isEmpty(caseSearchPostRequest.getSearchLog().getCaseRefs())) {
-            caseSearchPostRequest.getSearchLog().getCaseRefs()
-                    .forEach(caseRef -> caseSearchAuditRequest
-                            .addCaseSearchAuditCases(new CaseSearchAuditCases(caseRef, caseSearchAuditRequest)));
-        }
+                timestampUtil.getUtcTimestampValue(caseSearchPostRequest.getSearchLog().getTimestamp()),
+                convertCaseRefsToLong(caseSearchPostRequest.getSearchLog().getCaseRefs())
+        );
 
         final CaseSearchAudit caseSearchAuditResponse = caseSearchAuditRepository.save(caseSearchAuditRequest);
         final String timestamp = timestampUtil.timestampConvertor(caseSearchAuditResponse.getTimestamp());
@@ -91,9 +91,9 @@ public class CaseSearchService {
     }
 
     private Pageable getPage(final String size, final String page) {
-        final String pageSize = Optional.ofNullable(size).orElse("10000");
+        final String pageSize = Optional.ofNullable(size).orElse(defaultPageSize);
         final String pageNumber = Optional.ofNullable(page).orElse("1");
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
 }
