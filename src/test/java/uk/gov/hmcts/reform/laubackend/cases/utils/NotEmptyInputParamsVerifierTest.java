@@ -112,8 +112,8 @@ public class NotEmptyInputParamsVerifierTest {
             fail("The method should have thrown InvalidRequestException when all required params are not populated");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
-                    .isEqualTo("You need to populate all required parameters -"
-                            + " userId, action, caseRef, caseTypeId and timestamp");
+                    .isEqualTo("You need to populate all required parameters - "
+                            + "userId: 1, action: 2, caseRef: null, caseTypeId: 5, timestamp: 6");
         }
     }
 
@@ -159,7 +159,7 @@ public class NotEmptyInputParamsVerifierTest {
             fail("The method should have thrown InvalidRequestException when input params are empty");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage()).isEqualTo("You need to populate all "
-                    + "mandatory parameters - userId and timestamp");
+                    + "mandatory parameters - userId: 1, timestamp: null");
         }
     }
 
