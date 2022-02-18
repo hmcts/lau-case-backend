@@ -1,5 +1,5 @@
 #!groovy
-
+import uk.gov.hmcts.contino.AppPipelineDsl
 @Library("Infrastructure")
 
 import uk.gov.hmcts.contino.GradleBuilder
@@ -8,6 +8,8 @@ def type = "java"
 def product = "lau"
 def component = "case-backend"
 def branchesToSync = ['demo','perftest','ithc']
+
+def definitionStoreDevelopPr = "pr-db-migrate"
 
 def secrets = [
         'lau-${env}': [
@@ -44,13 +46,21 @@ withPipeline(type, product, component) {
     env.TEST_IDAM_CLIENT_REDIRECT_URI = 'https://lau-case.aat.platform.hmcts.net/oauth2/callback'
     env.TEST_IDAM_CLIENT_NAME = 'lau'
 
+    if (env.BRANCH_NAME.equalsIgnoreCase(definitionStoreDevelopPr)) {
+        enableDbMigration('lau')
+    }
+
+    onPR {
+        enableDbMigration('lau')
+    }
+
     after('test') {
         // Run integration tests
         builder.gradle('integration')
     }
 
     loadVaultSecrets(secrets)
-    enableDbMigration('lau')
+//    enableDbMigration('lau')
     enableSlackNotifications('#lau-builds')
     enableAksStagingDeployment()
     disableLegacyDeployment()
