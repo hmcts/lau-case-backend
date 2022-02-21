@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomi
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
-import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAuditCases;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +24,6 @@ public class RemoveColumnTransformers implements HibernatePropertiesCustomizer {
     public void customize(Map<String, Object> hibernateProperties) {
         final Field idFieldForCaseActionAudit = CaseActionAudit.class.getDeclaredField("caseActionId");
         final Field idFieldForCaseSearchAudit = CaseSearchAudit.class.getDeclaredField("id");
-        final Field idFieldForCaseSearchAuditCases = CaseSearchAuditCases.class.getDeclaredField("id");
 
         final GeneratedValue idGeneratedValueForCaseActionAudit = idFieldForCaseActionAudit
             .getDeclaredAnnotation(GeneratedValue.class);
@@ -33,12 +31,8 @@ public class RemoveColumnTransformers implements HibernatePropertiesCustomizer {
         final GeneratedValue idGeneratedValueForCaseSearchAudit = idFieldForCaseSearchAudit
             .getDeclaredAnnotation(GeneratedValue.class);
 
-        final GeneratedValue idGeneratedValueForCaseSearchAuditCases = idFieldForCaseSearchAuditCases
-            .getDeclaredAnnotation(GeneratedValue.class);
-
         updateAnnotationValue(idGeneratedValueForCaseActionAudit, "strategy", GenerationType.AUTO);
         updateAnnotationValue(idGeneratedValueForCaseSearchAudit, "strategy", GenerationType.AUTO);
-        updateAnnotationValue(idGeneratedValueForCaseSearchAuditCases, "strategy", GenerationType.AUTO);
     }
 
     @SuppressWarnings({"unchecked"})

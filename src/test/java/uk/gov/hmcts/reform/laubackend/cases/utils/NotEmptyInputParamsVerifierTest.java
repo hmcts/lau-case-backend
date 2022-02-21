@@ -104,7 +104,7 @@ public class NotEmptyInputParamsVerifierTest {
     public void shouldThrowExceptionWhenPostRequestParamsAreEmptyForCaseAction() {
         try {
             verifyRequestActionParamsAreNotEmpty(new ActionLog("1",
-                    "2",
+                    null,
                     null,
                     "4",
                     "5",
@@ -113,10 +113,9 @@ public class NotEmptyInputParamsVerifierTest {
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo("You need to populate all required parameters - "
-                            + "userId: 1, action: 2, caseRef: null, caseTypeId: 5, timestamp: 6");
+                            + "userId: 1, action: null, timestamp: 6");
         }
     }
-
 
     @Test
     public void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
