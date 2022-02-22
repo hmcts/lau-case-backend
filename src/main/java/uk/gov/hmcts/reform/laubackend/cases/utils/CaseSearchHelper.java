@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -19,7 +20,9 @@ public final class CaseSearchHelper {
 
     public static List<String> convertCaseRefsToString(final List<Long> caseRefs) {
         if (!isEmpty(caseRefs)) {
-            return caseRefs.stream().map(String::valueOf).collect(toList());
+            final List<String> caseRefStringList = new ArrayList<>();
+            caseRefs.forEach(caseRef -> caseRefStringList.add(Long.toString(caseRef)));
+            return caseRefStringList;
         }
         return emptyList();
     }
