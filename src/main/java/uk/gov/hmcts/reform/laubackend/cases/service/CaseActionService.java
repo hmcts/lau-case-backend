@@ -17,10 +17,10 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
@@ -91,8 +91,8 @@ public class CaseActionService {
     }
 
     private Pageable getPage(final String size, final String page) {
-        final String pageSize = Optional.ofNullable(size).orElse(defaultPageSize);
-        final String pageNumber = Optional.ofNullable(page).orElse("1");
+        final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
+        final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
         return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
