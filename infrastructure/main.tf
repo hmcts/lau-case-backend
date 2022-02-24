@@ -65,7 +65,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
 # Copy postgres password for flyway migration
 resource "azurerm_key_vault_secret" "flyway_password" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-flyway-password"
+  name         = "flyway-password"
   value        = module.lau-case-db.postgresql_password
 }
 
