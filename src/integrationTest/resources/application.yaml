@@ -40,6 +40,7 @@ spring:
     locations: classpath:db/migration
     placeholders:
       LAU_DB_PASSWORD: laupass
+      LAU_DB_DUMMY: 'TEST1234'
 
 flyway:
   noop:
