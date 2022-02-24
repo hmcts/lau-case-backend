@@ -61,6 +61,7 @@ spring:
     password: ${LAU_DB_ADMIN_PASSWORD:}
     placeholders:
       LAU_DB_PASSWORD: ${LAU_DB_PASSWORD:}
+      LAU_DB_DUMMY: 'TEST1234'
 
 idam:
   s2s-auth:
