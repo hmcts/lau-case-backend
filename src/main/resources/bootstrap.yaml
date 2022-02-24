@@ -10,7 +10,7 @@ spring:
         case-backend-POSTGRES-USER: ${LAU_DB_ADMIN_USERNAME:LAU_DB_ADMIN_USERNAME}
         case-backend-app-db-password: ${LAU_DB_PASSWORD:LAU_DB_PASSWORD}
         case-backend-app-db-user: ${LAU_DB_USERNAME:LAU_DB_USERNAME}
-        flyway-password: flyway.password
+        case-backend-flyway-password: flyway.password
         idam-client-secret: ${IDAM_CLIENT_SECRET:IDAM_CLIENT_SECRET}
         idam-username: ${IDAM_USERNAME:IDAM_USERNAME}
         idam-password: ${IDAM_PASSWORD:IDAM_PASSWORD}
