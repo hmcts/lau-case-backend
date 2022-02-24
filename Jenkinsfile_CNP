@@ -50,8 +50,8 @@ withPipeline(type, product, component) {
 
     loadVaultSecrets(secrets)
 
-    after('checkout') {
-      withAzureKeyvault( azureKeyVaultSecrets: secrets) {
+    before('buildinfra:demo')
+      withAzureKeyvault( azureKeyVaultSecrets: secrets, keyVaultURLOverride: 'https://lau-demo.vault.azure.net')) {
           env.FLYWAY_PLACEHOLDERS_LAU_DB_DUMMY = env.IDAM_USERNAME
        }
     }
