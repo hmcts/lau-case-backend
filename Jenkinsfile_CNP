@@ -9,12 +9,16 @@ def product = "lau"
 def component = "case-backend"
 def branchesToSync = ['demo','perftest','ithc']
 
+
+def flywaySecrets = [
+    secret('case-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD')
+]
+
 def secrets = [
         'lau-${env}': [
                 secret('case-backend-POSTGRES-USER', 'FLYWAY_USER'),
                 secret('case-backend-POSTGRES-PASS', 'LAU_DB_ADMIN_PASSWORD'),
                 secret('case-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
-                secret('case-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD'),
                 secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
                 secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET'),
                 secret( 'idam-username', 'IDAM_USERNAME'),
@@ -50,9 +54,33 @@ withPipeline(type, product, component) {
 
     loadVaultSecrets(secrets)
 
+    before('buildinfra:aat') {
+      withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-aat.vault.azure.net') {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
+       }
+    }
+
     before('buildinfra:demo') {
-      withAzureKeyvault( azureKeyVaultSecrets: secrets, keyVaultURLOverride: 'https://lau-demo.vault.azure.net') {
-          env.FLYWAY_PLACEHOLDERS_LAU_DB_DUMMY = env.IDAM_USERNAME
+      withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-demo.vault.azure.net') {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
+       }
+    }
+
+    before('buildinfra:perftest') {
+      withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-perftest.vault.azure.net') {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
+       }
+    }
+
+    before('buildinfra:ithc') {
+      withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-ithc.vault.azure.net') {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
+       }
+    }
+
+    before('buildinfra:prod') {
+      withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-prod.vault.azure.net') {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD
        }
     }
 
