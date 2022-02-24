@@ -18,7 +18,7 @@ def secrets = [
                 secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
                 secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET'),
                 secret( 'idam-username', 'IDAM_USERNAME'),
-                secret( 'idam-password', 'IDAM_PASSWORD'),
+                secret( 'idam-password', 'IDAM_PASSWORD')
         ],
         's2s-${env}': [
                 secret('microservicekey-lau-case-frontend', 'S2S_LAU_FT_SECRET')
