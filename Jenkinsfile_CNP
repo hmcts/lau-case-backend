@@ -18,8 +18,7 @@ def secrets = [
                 secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
                 secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET'),
                 secret( 'idam-username', 'IDAM_USERNAME'),
-                secret( 'idam-password', 'IDAM_PASSWORD')
-
+                secret( 'idam-password', 'IDAM_PASSWORD'),
         ],
         's2s-${env}': [
                 secret('microservicekey-lau-case-frontend', 'S2S_LAU_FT_SECRET')
@@ -52,8 +51,9 @@ withPipeline(type, product, component) {
     loadVaultSecrets(secrets)
 
     after('checkout') {
-      env.LAU_DB_DUMMY='TEST1234'
-      env.FLYWAY_PLACEHOLDERS_LAU_DB_DUMMY='TEST1235'
+      withAzureKeyvault( azureKeyVaultSecrets: secrets) {
+          env.FLYWAY_PLACEHOLDERS_LAU_DB_DUMMY = env.IDAM_USERNAME
+       }
     }
 
     enableDbMigration('lau')
