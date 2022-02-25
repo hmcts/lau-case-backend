@@ -5,8 +5,8 @@ import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import static com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -48,7 +48,7 @@ public class SearchInputParamsVerifierTest {
     @Test
     public void shouldVerifyCaseRef() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder(null,
-                randomNumeric(16),
+                random(16, "123456"),
                 null,
                 null,
                 null,
@@ -59,7 +59,7 @@ public class SearchInputParamsVerifierTest {
     public void shouldNotVerifyCaseRef() {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
-                    randomNumeric(17),
+                    random(17, "123456"),
                     null,
                     null,
                     null,
@@ -86,11 +86,11 @@ public class SearchInputParamsVerifierTest {
     public void shouldNotVerifyTimestamp() {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
-                                                                                          null,
-                                                                                          "2021-106-23T22:20:05",
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    "2021-106-23T22:20:05",
+                    null,
+                    null,
+                    null);
             verifyRequestSearchParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid timestamp");
         } catch (final InvalidRequestException invalidRequestException) {

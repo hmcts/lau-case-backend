@@ -22,9 +22,9 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 import java.sql.Timestamp;
 import java.util.List;
 
+import static com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.RandomStringUtils.random;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -82,7 +82,7 @@ class CaseSearchServiceTest {
     @Test
     void shouldPostCaseView() {
 
-        final String caseRef = randomNumeric(16);
+        final String caseRef = random(16, "123456");
 
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setId(Long.valueOf(3));

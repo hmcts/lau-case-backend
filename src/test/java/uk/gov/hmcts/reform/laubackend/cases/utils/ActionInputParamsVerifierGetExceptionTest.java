@@ -5,8 +5,8 @@ import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import static com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -23,13 +23,13 @@ public class ActionInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyUserId() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(randomAlphanumeric(65),
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid userId");
         } catch (final InvalidRequestException invalidRequestException) {
@@ -42,13 +42,13 @@ public class ActionInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyCaseRef() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
-                                                                                          randomNumeric(17),
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    random(17, "123456"),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid caseRef");
         } catch (final InvalidRequestException invalidRequestException) {
@@ -61,13 +61,13 @@ public class ActionInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyTimestamp() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          "2021-106-23T22:20:05",
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    null,
+                    null,
+                    "2021-106-23T22:20:05",
+                    null,
+                    null,
+                    null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid timestamp");
         } catch (final InvalidRequestException invalidRequestException) {
@@ -81,13 +81,13 @@ public class ActionInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyCaseTypeId() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
-                                                                                          null,
-                                                                                          randomNumeric(71),
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    random(71, "123456"),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid case typeId");
         } catch (final InvalidRequestException invalidRequestException) {
@@ -100,13 +100,13 @@ public class ActionInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyCaseJurisdictionId() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          randomNumeric(71),
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    null,
+                    random(71, "123456"),
+                    null,
+                    null,
+                    null,
+                    null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid jurisdiction id");
         } catch (final InvalidRequestException invalidRequestException) {

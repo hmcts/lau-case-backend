@@ -14,8 +14,8 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
+import static com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
-
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CaseSearchControllerTest {
@@ -42,7 +42,7 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForGetRequest() {
         final String userId = "1";
-        final String caseRef = randomNumeric(16);
+        final String caseRef = random(16, "123456");
         final CaseSearchGetResponse caseSearchGetResponse = mock(CaseSearchGetResponse.class);
 
         when(caseSearchService.getCaseSearch(any())).thenReturn(
@@ -83,10 +83,10 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForPostRequest() {
 
-        final SearchLog searchLog = new SearchLog("1",asList(randomNumeric(16)),"2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), "2021-08-23T22:20:05.023Z");
         final SearchLogPostResponse searchLogPostResponse = new SearchLogPostResponse("1",
                 "1",
-                asList(randomNumeric(16)),
+                asList(random(16, "123456")),
                 "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest(searchLog);
@@ -110,7 +110,7 @@ class CaseSearchControllerTest {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
         // Validation will fail here
-        searchLog.setCaseRefs(asList(randomNumeric(18)));
+        searchLog.setCaseRefs(asList(random(18, "123456")));
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
@@ -127,7 +127,7 @@ class CaseSearchControllerTest {
     void shouldReturnInternalServerErrorForPostRequest() {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
-        searchLog.setCaseRefs(asList(randomNumeric(16)));
+        searchLog.setCaseRefs(asList(random(16, "123456")));
         searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
