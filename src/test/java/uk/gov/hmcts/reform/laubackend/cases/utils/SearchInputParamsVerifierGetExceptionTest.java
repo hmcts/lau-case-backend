@@ -5,8 +5,8 @@ import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -21,11 +21,11 @@ public class SearchInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyUserId() {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(randomAlphanumeric(65),
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null,
-                                                                                          null);
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
             verifyRequestSearchParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid userId");
         } catch (final InvalidRequestException invalidRequestException) {
@@ -38,7 +38,7 @@ public class SearchInputParamsVerifierGetExceptionTest {
     public void shouldNotVerifyCaseRef() {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
-                    randomNumeric(17),
+                    random(17, "123456"),
                     null,
                     null,
                     null,

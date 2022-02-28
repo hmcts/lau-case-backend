@@ -6,9 +6,9 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_POST_EXCEPTION_MESSAGE;
@@ -20,6 +20,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InputParamsVerifierPostExceptionTest {
 
@@ -42,7 +43,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseRefForCaseAction() {
         try {
             final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseRef(randomNumeric(17));
+            actionLog.setCaseRef(random(17, "123456"));
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -72,7 +73,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseTypeIdForCaseAction() {
         try {
             final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseTypeId(randomNumeric(71));
+            actionLog.setCaseTypeId(random(71, "123456"));
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -87,7 +88,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseJurisdictionIdForCaseAction() {
         try {
             final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseJurisdictionId(randomNumeric(71));
+            actionLog.setCaseJurisdictionId(random(71, "123456"));
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -117,7 +118,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseRefForCaseSearch() {
         try {
             final SearchLog searchLog = new SearchLog();
-            searchLog.setCaseRefs(asList(randomNumeric(17), randomNumeric(8)));
+            searchLog.setCaseRefs(asList(random(17, "123456"), random(8, "123456")));
 
             verifyRequestSearchParamsConditions(searchLog);
 
