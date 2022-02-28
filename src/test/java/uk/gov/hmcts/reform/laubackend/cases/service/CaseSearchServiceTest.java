@@ -22,7 +22,7 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static com.microsoft.applicationinsights.web.dependencies.apachecommons.lang3.RandomStringUtils.random;
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
