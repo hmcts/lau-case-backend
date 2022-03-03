@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.TIMESTAMP_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.USERID_GET_EXCEPTION_MESSAGE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.appendExceptionParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -19,8 +20,9 @@ public class SearchInputParamsVerifierGetExceptionTest {
 
     @Test
     public void shouldNotVerifyUserId() {
+        final String userId = randomAlphanumeric(65);
         try {
-            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(randomAlphanumeric(65),
+            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
                     null,
                     null,
                     null,
@@ -30,15 +32,16 @@ public class SearchInputParamsVerifierGetExceptionTest {
             fail("The method should have thrown InvalidRequestException due to invalid userId");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
-                    .isEqualTo(USERID_GET_EXCEPTION_MESSAGE);
+                    .isEqualTo(appendExceptionParameter(USERID_GET_EXCEPTION_MESSAGE, userId));
         }
     }
 
     @Test
     public void shouldNotVerifyCaseRef() {
+        final String caseRef = random(17, "123456");
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
-                    random(17, "123456"),
+                    caseRef,
                     null,
                     null,
                     null,
@@ -47,16 +50,17 @@ public class SearchInputParamsVerifierGetExceptionTest {
             fail("The method should have thrown InvalidRequestException due to invalid caseRef");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
-                    .isEqualTo(CASEREF_GET_EXCEPTION_MESSAGE);
+                    .isEqualTo(appendExceptionParameter(CASEREF_GET_EXCEPTION_MESSAGE, caseRef));
         }
     }
 
     @Test
     public void shouldNotVerifyTimestamp() {
+        final String timestamp = "2021-106-23T22:20:05";
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
                     null,
-                    "2021-106-23T22:20:05",
+                    timestamp,
                     null,
                     null,
                     null);
@@ -64,7 +68,7 @@ public class SearchInputParamsVerifierGetExceptionTest {
             fail("The method should have thrown InvalidRequestException due to invalid timestamp");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
-                    .isEqualTo(TIMESTAMP_GET_EXCEPTION_MESSAGE);
+                    .isEqualTo(appendExceptionParameter(TIMESTAMP_GET_EXCEPTION_MESSAGE, timestamp));
         }
     }
 }
