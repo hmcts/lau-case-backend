@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -40,7 +40,7 @@ class CaseActionControllerTest {
     @Test
     void shouldReturnResponseEntityForGetRequest() {
         final String userId = "1";
-        final String caseRef = randomNumeric(16);
+        final String caseRef = random(16, "123456");
         final String caseTypeId = "3";
         final CaseActionGetResponse caseActionGetResponse = mock(CaseActionGetResponse.class);
 

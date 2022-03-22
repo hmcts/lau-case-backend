@@ -7,6 +7,7 @@ import static java.util.regex.Pattern.compile;
 import static org.apache.commons.lang3.EnumUtils.isValidEnum;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.appendExceptionParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE_REF_REGEX;
 
 public final class InputParamsVerifierHelper {
@@ -17,7 +18,8 @@ public final class InputParamsVerifierHelper {
     public static void verifyAction(final String action,
                                     final String caseActionPostExceptionMessage) throws InvalidRequestException {
         if (!isEmpty(action) && !isValidEnum(CaseAction.class, action)) {
-            throw new InvalidRequestException(caseActionPostExceptionMessage, BAD_REQUEST);
+            throw new InvalidRequestException(appendExceptionParameter(caseActionPostExceptionMessage, action),
+                    BAD_REQUEST);
         }
     }
 
@@ -25,7 +27,7 @@ public final class InputParamsVerifierHelper {
                                        final String exceptionMessage,
                                        final String regex) throws InvalidRequestException {
         if (!isEmpty(timestamp) && !compile(regex).matcher(timestamp).matches()) {
-            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
+            throw new InvalidRequestException(appendExceptionParameter(exceptionMessage, timestamp), BAD_REQUEST);
         }
     }
 
@@ -33,21 +35,21 @@ public final class InputParamsVerifierHelper {
                                      final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseRef)
                 && !compile(CASE_REF_REGEX).matcher(caseRef).matches()) {
-            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
+            throw new InvalidRequestException(appendExceptionParameter(exceptionMessage, caseRef), BAD_REQUEST);
         }
     }
 
     public static void verifyUserId(final String userId,
                                     final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(userId) && userId.length() > 64) {
-            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
+            throw new InvalidRequestException(appendExceptionParameter(exceptionMessage, userId), BAD_REQUEST);
         }
     }
 
     public static void verifyCaseTypeId(final String caseTypeId,
                                         final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseTypeId) && caseTypeId.length() > 70) {
-            throw new InvalidRequestException(exceptionMessage, BAD_REQUEST);
+            throw new InvalidRequestException(appendExceptionParameter(exceptionMessage, caseTypeId), BAD_REQUEST);
         }
     }
 
@@ -55,7 +57,7 @@ public final class InputParamsVerifierHelper {
                                                 final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseJurisdictionId) && caseJurisdictionId.length() > 70) {
             throw new InvalidRequestException(
-                    exceptionMessage,
+                    appendExceptionParameter(exceptionMessage, caseJurisdictionId),
                     BAD_REQUEST
             );
         }

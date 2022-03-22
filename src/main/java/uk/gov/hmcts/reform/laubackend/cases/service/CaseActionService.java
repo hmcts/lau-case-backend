@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,10 +17,11 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.upperCase;
 import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
 
@@ -32,13 +34,16 @@ public class CaseActionService {
     @Autowired
     private TimestampUtil timestampUtil;
 
+    @Value("${default.page.size}")
+    private String defaultPageSize;
+
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
 
         final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
-                inputParamsHolder.getCaseTypeId(),
-                inputParamsHolder.getCaseJurisdictionId(),
+                upperCase(inputParamsHolder.getCaseTypeId()),
+                upperCase(inputParamsHolder.getCaseJurisdictionId()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
@@ -67,8 +72,8 @@ public class CaseActionService {
         caseActionAudit.setUserId(actionLog.getUserId());
         caseActionAudit.setCaseAction(actionLog.getCaseAction());
         caseActionAudit.setCaseRef(actionLog.getCaseRef());
-        caseActionAudit.setCaseJurisdictionId(actionLog.getCaseJurisdictionId());
-        caseActionAudit.setCaseTypeId(actionLog.getCaseTypeId());
+        caseActionAudit.setCaseJurisdictionId(upperCase(actionLog.getCaseJurisdictionId()));
+        caseActionAudit.setCaseTypeId(upperCase(actionLog.getCaseTypeId()));
         caseActionAudit.setTimestamp(timestampUtil.getUtcTimestampValue(actionLog.getTimestamp()));
 
         final CaseActionAudit caseActionAuditResponse = caseActionAuditRepository.save(caseActionAudit);
@@ -86,9 +91,9 @@ public class CaseActionService {
     }
 
     private Pageable getPage(final String size, final String page) {
-        final String pageSize = Optional.ofNullable(size).orElse("10000");
-        final String pageNumber = Optional.ofNullable(page).orElse("1");
+        final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
+        final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
 }

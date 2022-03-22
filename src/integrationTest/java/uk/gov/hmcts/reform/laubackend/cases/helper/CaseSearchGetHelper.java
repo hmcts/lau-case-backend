@@ -21,7 +21,7 @@ public final class CaseSearchGetHelper {
 
         final SearchLog searchLog = new SearchLog(userId == null ? "1" : userId,
                 caseRefsList == null
-                        ? asList("0000000000000000", "0000000000000001", "0000000000000002") : caseRefsList,
+                        ? asList("3769509556751473", "2155980079888170", "1203768774671784") : caseRefsList,
                 timestamp == null ? "2021-08-23T22:20:05.023Z" : timestamp);
 
         caseRefs = searchLog.getCaseRefs();

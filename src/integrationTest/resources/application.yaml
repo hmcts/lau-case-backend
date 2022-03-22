@@ -31,7 +31,7 @@ spring:
     name: LAU Case Backend
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql:10://localhost/lau-case
+    url: jdbc:tc:postgresql:11://localhost/lau-case
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -67,3 +67,4 @@ db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}
 
 targetInstance: ${TEST_URL:http://localhost:4550}
 
+default.page.size: ${LAU_PAGE_SIZE_DEFAULT:10000}

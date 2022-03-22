@@ -9,8 +9,8 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -27,7 +27,7 @@ public class NotEmptyInputParamsVerifierTest {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
-                randomNumeric(71),
+                random(71, "123456"),
                 null,
                 null,
                 null,
@@ -104,7 +104,7 @@ public class NotEmptyInputParamsVerifierTest {
     public void shouldThrowExceptionWhenPostRequestParamsAreEmptyForCaseAction() {
         try {
             verifyRequestActionParamsAreNotEmpty(new ActionLog("1",
-                    "2",
+                    null,
                     null,
                     "4",
                     "5",
@@ -112,16 +112,15 @@ public class NotEmptyInputParamsVerifierTest {
             fail("The method should have thrown InvalidRequestException when all required params are not populated");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
-                    .isEqualTo("You need to populate all required parameters -"
-                            + " userId, action, caseRef, caseTypeId and timestamp");
+                    .isEqualTo("You need to populate all required parameters - "
+                            + "userId: 1, action: null, timestamp: 6");
         }
     }
-
 
     @Test
     public void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder(null,
-                randomNumeric(71),
+                random(71, "123456"),
                 null,
                 null,
                 null,
@@ -150,7 +149,7 @@ public class NotEmptyInputParamsVerifierTest {
         try {
             final SearchLog searchLog = new SearchLog();
             searchLog.setUserId("1");
-            searchLog.setCaseRefs(asList(randomNumeric(16)));
+            searchLog.setCaseRefs(asList(random(16, "123456")));
 
             final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
             caseSearchPostRequest.setSearchLog(searchLog);
@@ -159,7 +158,7 @@ public class NotEmptyInputParamsVerifierTest {
             fail("The method should have thrown InvalidRequestException when input params are empty");
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage()).isEqualTo("You need to populate all "
-                    + "mandatory parameters - userId and timestamp");
+                    + "mandatory parameters - userId: 1, timestamp: null");
         }
     }
 

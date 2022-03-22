@@ -9,7 +9,6 @@ import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizati
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
@@ -32,22 +31,12 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                              final Object handler) throws IOException {
 
         try {
-            final long authorizationStartTime = System.currentTimeMillis();
-            log.info("Authorization invoked: " + authorizationStartTime);
-
             serviceAuthorizationAuthenticator.authorizeServiceToken(request);
 
             if (request.getMethod().equalsIgnoreCase(GET.name())
                     || request.getMethod().equalsIgnoreCase(DELETE.name())) {
                 authorizationAuthenticator.authorizeAuthorizationToken(request);
             }
-
-            final long authorizationEndTime = System.currentTimeMillis();
-            final long totalTime = authorizationEndTime - authorizationStartTime;
-            log.info("Authorization finished: " + authorizationEndTime);
-            log.info("Authorization invocation time: " + totalTime + " milliseconds");
-            log.info("Authorization total invocation time: " + TimeUnit.MILLISECONDS.toSeconds(totalTime) + " seconds");
-            log.info("**************************************************************************");
 
         } catch (final InvalidServiceAuthorizationException exception) {
             log.error("Service authorization token failed due to error - {}",

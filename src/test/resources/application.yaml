@@ -48,3 +48,5 @@ azure:
 flyway:
   noop:
     strategy: "false"
+
+default.page.size: ${LAU_PAGE_SIZE_DEFAULT:10000}
