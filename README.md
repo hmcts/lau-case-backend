@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/hmcts/lau-case-backend.svg?branch=master)](https://travis-ci.org/hmcts/lau-case-backend)
 
+[![codecov](https://codecov.io/gh/hmcts/lau-case-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/lau-case-backend)
+
 ## Purpose
 
 This is the Log and Audit Case Back-End application that will provide an endpoint to capture and retrieve case log actions for a users views and searches to the database.
