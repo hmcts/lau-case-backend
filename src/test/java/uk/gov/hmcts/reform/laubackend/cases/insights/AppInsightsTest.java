@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.REQUEST_SENT;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_EXCEPTION;
 
 class AppInsightsTest {
-    private uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights classUnderTest;
+    private AppInsights classUnderTest;
     private static final String APPINSIGHTS_INSTRUMENT_KEY = "key";
 
     @Mock
@@ -27,13 +27,14 @@ class AppInsightsTest {
         TelemetryContext telemetryContext = new TelemetryContext();
         telemetryContext.setInstrumentationKey("some-key");
         doReturn(telemetryContext).when(telemetryClient).getContext();
-        classUnderTest = new uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights(APPINSIGHTS_INSTRUMENT_KEY, telemetryClient);
+        classUnderTest = new AppInsights(APPINSIGHTS_INSTRUMENT_KEY, telemetryClient);
     }
 
     @Test
     void trackRequest() {
         try {
-            classUnderTest.trackEvent(REQUEST_SENT.toString(), classUnderTest.trackingMap("uri", "http://testurl.com"));
+            classUnderTest.trackEvent(GET_ACTIVITY_REQUEST_EXCEPTION.toString(),
+                                      classUnderTest.trackingMap("exception", "Error"));
         } catch (Exception exp) {
             fail("classUnderTest.trackEvent() failed.");
         }

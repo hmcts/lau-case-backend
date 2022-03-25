@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
+import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
@@ -18,10 +19,12 @@ import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -35,6 +38,9 @@ class CaseSearchControllerTest {
 
     @Mock
     private CaseSearchService caseSearchService;
+
+    @Mock
+    private AppInsights appInsights;
 
     @InjectMocks
     private CaseSearchController caseSearchController;
@@ -60,6 +66,7 @@ class CaseSearchControllerTest {
         );
 
         verify(caseSearchService, times(1)).getCaseSearch(any());
+        verify(appInsights, times(1)).trackEvent(any(),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
@@ -76,6 +83,7 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1)).trackEvent(any(),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
@@ -102,6 +110,7 @@ class CaseSearchControllerTest {
         );
 
         verify(caseSearchService, times(1)).saveCaseSearch(caseSearchPostRequest);
+        verifyNoInteractions(appInsights); // no telementry for successful posts.
         assertThat(responseEntity.getStatusCode()).isEqualTo(CREATED);
     }
 
@@ -120,6 +129,7 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1)).trackEvent(any(),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
@@ -141,6 +151,7 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1)).trackEvent(any(),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
     }
 
