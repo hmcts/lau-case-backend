@@ -306,6 +306,9 @@ configurations.all {
 }
 
 dependencies {
+  // Fix for missing jackson-databind BOM when using version 2.13.2.1
+  // TODO: Remove as soon as https://github.com/FasterXML/jackson-databind/issues/3428 has been addressed.
+  implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.2.20220324"))
 
   // exclude spring-cloud-context as it is already included in spring-cloud-starter-netflix-hystrix
   def withoutSpringCloudContext = {
