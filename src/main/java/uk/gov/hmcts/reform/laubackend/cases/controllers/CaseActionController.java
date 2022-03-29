@@ -167,10 +167,10 @@ public final class CaseActionController {
                     endTime,
                     size,
                     page);
+            final long timeStart = System.currentTimeMillis();
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
 
-            final long timeStart = System.currentTimeMillis();
             final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
             final long timeEnd = System.currentTimeMillis();
             final String report = (timeEnd - timeStart) > PERF_TOLERANCE_THRESHOLD_MS

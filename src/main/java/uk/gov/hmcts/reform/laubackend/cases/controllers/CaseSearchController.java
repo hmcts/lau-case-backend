@@ -156,10 +156,10 @@ public class CaseSearchController {
                     endTime,
                     size,
                     page);
+            final long timeStart = System.currentTimeMillis();
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
-            final long timeStart = System.currentTimeMillis();
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
             final long timeEnd = System.currentTimeMillis();
             final String report = (timeEnd - timeStart) > PERF_TOLERANCE_THRESHOLD_MS
