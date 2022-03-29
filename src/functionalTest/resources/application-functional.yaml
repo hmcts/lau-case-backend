@@ -34,4 +34,8 @@ idam:
     secret-cs: ${S2S_LAU_FT_SECRET:AAAAAAAAAAAAAAAA}
     name-cs: ${S2S_LAU_FT_NAME:lau_frontend}
 
+azure:
+  application-insights:
+    instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
+
 db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}

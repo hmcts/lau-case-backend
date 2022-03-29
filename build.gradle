@@ -281,8 +281,8 @@ def versions = [
         restAssured       : '4.4.0',
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
-        cucumber          : '6.8.0'
-
+        cucumber          : '6.8.0',
+        fasterXmlJackson  : '2.13.2'
 ]
 
 ext.libraries = [
@@ -306,7 +306,6 @@ configurations.all {
 }
 
 dependencies {
-
   // exclude spring-cloud-context as it is already included in spring-cloud-starter-netflix-hystrix
   def withoutSpringCloudContext = {
     exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
@@ -337,8 +336,9 @@ dependencies {
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.5'
 
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2'
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
+  implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
 
   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
   compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.17.1'
