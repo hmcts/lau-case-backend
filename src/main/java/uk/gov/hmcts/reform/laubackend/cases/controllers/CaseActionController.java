@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
@@ -37,7 +37,14 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_ABOVE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_BELOW;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_TOLERANCE_THRESHOLD_MS;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INFO;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_EXCEPTION;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 
@@ -51,6 +58,9 @@ public final class CaseActionController {
 
     @Autowired
     private CaseActionService caseActionService;
+
+    @Autowired
+    private AppInsights appInsights;
 
     @ApiOperation(tags = "POST end-points", value = "Save case action audits", notes = "This operation will "
             + "persist CCD case action entries which are posted in the request. Single CaseAction per request will "
@@ -91,12 +101,16 @@ public final class CaseActionController {
                     invalidRequestException.getMessage(),
                     invalidRequestException
             );
+            appInsights.trackEvent(POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
+                "exception", invalidRequestException.getMessage()));
             return new ResponseEntity<>(null, BAD_REQUEST);
         } catch (final Exception exception) {
             log.error("saveCaseAction API call failed due to error - {}",
                     exception.getMessage(),
                     exception
             );
+            appInsights.trackEvent(POST_ACTIVITY_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
+                "exception", exception.getMessage()));
             return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
         }
     }
@@ -153,11 +167,16 @@ public final class CaseActionController {
                     endTime,
                     size,
                     page);
+            final long timeStart = System.currentTimeMillis();
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
 
             final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
-
+            final long timeEnd = System.currentTimeMillis();
+            final String report = (timeEnd - timeStart) > PERF_TOLERANCE_THRESHOLD_MS
+                ? PERF_THRESHOLD_MESSAGE_ABOVE : PERF_THRESHOLD_MESSAGE_BELOW;
+            appInsights.trackEvent(GET_ACTIVITY_REQUEST_INFO.toString(), appInsights.trackingMap(
+                "GET /audit/caseAction", report));
             return new ResponseEntity<>(caseView, OK);
         } catch (final InvalidRequestException invalidRequestException) {
             log.error(
@@ -165,6 +184,8 @@ public final class CaseActionController {
                     invalidRequestException.getMessage(),
                     invalidRequestException
             );
+            appInsights.trackEvent(GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
+                "exception", invalidRequestException.getMessage()));
             return new ResponseEntity<>(null, BAD_REQUEST);
         }
     }
