@@ -13,7 +13,7 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'org.springframework.boot' version '2.5.13'
+  id 'org.springframework.boot' version '2.6.7'
   id 'org.owasp.dependencycheck' version '6.5.3'
   id 'com.github.ben-manes.versions' version '0.39.0'
   id 'org.sonarqube' version '3.3'
@@ -238,7 +238,7 @@ dependencyManagement {
     dependencySet(group: 'com.google.guava', version: '30.1.1-jre') {
       entry 'guava'
     }
-    dependencySet(group: 'org.springframework.cloud', version: '3.0.5') {
+    dependencySet(group: 'org.springframework.cloud', version: '3.1.2') {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
@@ -252,7 +252,7 @@ dependencyManagement {
     }
   }
   imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.3'
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.2'
   }
 }
 
@@ -282,7 +282,9 @@ def versions = [
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
-        fasterXmlJackson  : '2.13.2'
+        fasterXmlJackson  : '2.13.2',
+        springFramework   : '5.3.20',
+        springCloud       : '3.1.2'
 ]
 
 ext.libraries = [
@@ -320,6 +322,20 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 
+  implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-aspects', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-context', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-core', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-expression', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-jcl', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-jdbc', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-orm', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-oxm', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-tx', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
+  implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
+
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwaggerui
 
@@ -329,12 +345,13 @@ dependencies {
 
   compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0', withoutSpringCloudContext
 
-  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap',version: versions.springCloud
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.2'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.5'
+
 
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
