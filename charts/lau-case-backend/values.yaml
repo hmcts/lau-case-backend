@@ -22,6 +22,7 @@ java:
     DB_ALLOW_DELETE_RECORD: "false"
   keyVaults:
     lau:
+      resourceGroup: lau
       secrets:
         - name: AppInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
