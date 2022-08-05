@@ -22,11 +22,23 @@ java:
     DB_ALLOW_DELETE_RECORD: "false"
   keyVaults:
     lau:
-      resourceGroup: lau
       secrets:
-        - case-backend-POSTGRES-USER
-        - case-backend-POSTGRES-PASS
-        - case-backend-app-db-user
-        - case-backend-app-db-password
-        - flyway-password
-        - AppInsightsInstrumentationKey
+        - name: AppInsightsInstrumentationKey
+          alias: azure.application-insights.instrumentation-key
+        - name: case-backend-POSTGRES-PASS
+          alias: LAU_DB_ADMIN_PASSWORD
+        - name: case-backend-POSTGRES-USER
+          alias: LAU_DB_ADMIN_USERNAME
+        - name: case-backend-app-db-password
+          alias: LAU_DB_PASSWORD
+        - name: case-backend-app-db-user
+          alias: LAU_DB_USERNAME
+        - name: flyway-password
+          alias: flyway.password
+        - name: idam-client-secret
+          alias: IDAM_CLIENT_SECRET
+        - name: idam-username
+          alias: IDAM_USERNAME
+        - name: idam-password
+          alias: IDAM_PASSWORD
+

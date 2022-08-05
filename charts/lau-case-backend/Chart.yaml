@@ -10,25 +10,3 @@ dependencies:
   - name: java
     version: 4.0.1
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
-
-keyVaults:
-  lau:
-    secrets:
-      - name: AppInsightsInstrumentationKey
-        alias: azure.application-insights.instrumentation-key
-      - name: case-backend-POSTGRES-PASS
-        alias: LAU_DB_ADMIN_PASSWORD
-      - name: case-backend-POSTGRES-USER
-        alias: LAU_DB_ADMIN_USERNAME
-      - name: case-backend-app-db-password
-        alias: LAU_DB_PASSWORD
-      - name: case-backend-app-db-user
-        alias: LAU_DB_USERNAME
-      - name: flyway-password
-        alias: flyway.password
-      - name: idam-client-secret
-        alias: IDAM_CLIENT_SECRET
-      - name: idam-username
-        alias: IDAM_USERNAME
-      - name: idam-password
-        alias: IDAM_PASSWORD
