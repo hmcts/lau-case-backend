@@ -26,19 +26,18 @@ java:
         - name: AppInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
         - name: case-backend-POSTGRES-PASS
-          alias: LAU_DB_ADMIN_PASSWORD
+          alias: spring.flyway.password
         - name: case-backend-POSTGRES-USER
-          alias: LAU_DB_ADMIN_USERNAME
+          alias: spring.flyway.user
         - name: case-backend-app-db-password
-          alias: LAU_DB_PASSWORD
+          alias: spring.datasource.password
+        - name: case-backend-app-db-password
+          alias: spring.flyway.placeholders.LAU_DB_PASSWORD
         - name: case-backend-app-db-user
-          alias: LAU_DB_USERNAME
+          alias: spring.datasource.username
         - name: flyway-password
           alias: flyway.password
         - name: idam-client-secret
-          alias: IDAM_CLIENT_SECRET
-        - name: idam-username
-          alias: IDAM_USERNAME
-        - name: idam-password
-          alias: IDAM_PASSWORD
+          alias: idam.client.secret
+
 
