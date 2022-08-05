@@ -17,8 +17,10 @@ def flywaySecrets = [
 def secrets = [
         'lau-${env}': [
                 secret('case-backend-POSTGRES-USER', 'FLYWAY_USER'),
+                secret('case-backend-POSTGRES-USER', 'LAU_DB_ADMIN_USERNAME'),
                 secret('case-backend-POSTGRES-PASS', 'LAU_DB_ADMIN_PASSWORD'),
                 secret('case-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
+                secret('case-backend-app-db-user', 'LAU_DB_USERNAME'),
                 secret('case-backend-app-db-password', 'LAU_DB_PASSWORD'),
                 secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET'),
                 secret( 'idam-username', 'IDAM_USERNAME'),
