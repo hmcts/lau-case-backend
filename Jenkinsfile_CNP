@@ -9,7 +9,6 @@ def product = "lau"
 def component = "case-backend"
 def branchesToSync = ['demo','perftest','ithc']
 
-
 def flywaySecrets = [
     secret('case-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD')
 ]

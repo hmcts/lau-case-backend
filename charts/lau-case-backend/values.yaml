@@ -33,4 +33,3 @@ java:
         - flyway-password
         - idam-client-secret
 
-
