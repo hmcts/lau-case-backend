@@ -8,33 +8,41 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
+import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
+import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 class CaseSearchControllerTest {
 
     @Mock
     private CaseSearchService caseSearchService;
+
+    @Mock
+    private AppInsights appInsights;
 
     @InjectMocks
     private CaseSearchController caseSearchController;
@@ -42,7 +50,7 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForGetRequest() {
         final String userId = "1";
-        final String caseRef = randomNumeric(16);
+        final String caseRef = random(16, "123456");
         final CaseSearchGetResponse caseSearchGetResponse = mock(CaseSearchGetResponse.class);
 
         when(caseSearchService.getCaseSearch(any())).thenReturn(
@@ -60,6 +68,8 @@ class CaseSearchControllerTest {
         );
 
         verify(caseSearchService, times(1)).getCaseSearch(any());
+        verify(appInsights, times(1))
+            .trackEvent(eq(AppInsightsEvent.GET_SEARCH_REQUEST_INFO.toString()), anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
@@ -76,6 +86,8 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1))
+            .trackEvent(eq(AppInsightsEvent.GET_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION.toString()),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
@@ -83,10 +95,10 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForPostRequest() {
 
-        final SearchLog searchLog = new SearchLog("1",asList(randomNumeric(16)),"2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), "2021-08-23T22:20:05.023Z");
         final SearchLogPostResponse searchLogPostResponse = new SearchLogPostResponse("1",
                 "1",
-                asList(randomNumeric(16)),
+                asList(random(16, "123456")),
                 "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest(searchLog);
@@ -102,6 +114,7 @@ class CaseSearchControllerTest {
         );
 
         verify(caseSearchService, times(1)).saveCaseSearch(caseSearchPostRequest);
+        verifyNoInteractions(appInsights); // no telementry for successful posts.
         assertThat(responseEntity.getStatusCode()).isEqualTo(CREATED);
     }
 
@@ -110,7 +123,7 @@ class CaseSearchControllerTest {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
         // Validation will fail here
-        searchLog.setCaseRefs(asList(randomNumeric(18)));
+        searchLog.setCaseRefs(asList(random(18, "123456")));
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
@@ -120,6 +133,8 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1))
+            .trackEvent(eq(AppInsightsEvent.POST_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION.toString()),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
     }
 
@@ -127,7 +142,7 @@ class CaseSearchControllerTest {
     void shouldReturnInternalServerErrorForPostRequest() {
         final SearchLog searchLog = new SearchLog();
         searchLog.setUserId("1");
-        searchLog.setCaseRefs(asList(randomNumeric(16)));
+        searchLog.setCaseRefs(asList(random(16, "123456")));
         searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
@@ -141,6 +156,8 @@ class CaseSearchControllerTest {
                 null
         );
 
+        verify(appInsights, times(1)).trackEvent(
+            eq(AppInsightsEvent.POST_SEARCH_REQUEST_EXCEPTION.toString()),anyMap());
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
     }
 
