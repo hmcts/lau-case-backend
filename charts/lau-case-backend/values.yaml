@@ -30,3 +30,4 @@ java:
         - case-backend-app-db-password
         - flyway-password
         - AppInsightsInstrumentationKey
+        - idam-client-secret
