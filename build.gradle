@@ -91,12 +91,13 @@ test {
 
 configurations {
   cucumberRuntime {
-    extendsFrom testRuntime
+    extendsFrom testImplementation
   }
-  integrationTestCompile.extendsFrom testCompile
+  integrationTestImplementation.extendsFrom testCompile
   integrationTestRuntime.extendsFrom testRuntime
-  functionalTestCompile.extendsFrom testCompile
+  functionalTestImplementation.extendsFrom testCompile
   functionalTestRuntime.extendsFrom testRuntime
+  smokeTestRuntime.extendsFrom testRuntime
 }
 
 task unit(type: Test, description: 'Runs the unit tests.', group: 'Verification') {
@@ -316,12 +317,12 @@ dependencies {
 
   implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
 
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 
   implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
   implementation group: 'org.springframework', name:'spring-aspects', version: versions.springFramework
@@ -337,22 +338,22 @@ dependencies {
   implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
   implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
 
-  compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwaggerui
+  implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+  implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwaggerui
 
-  compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
-  compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
-  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+  implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
+  implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
   implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
   implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
   implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
-  compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0', withoutSpringCloudContext
+  implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0', withoutSpringCloudContext
 
-  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap',version: versions.springCloud
+  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap',version: versions.springCloud
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
   implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.2'
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.4.1'
@@ -362,40 +363,40 @@ dependencies {
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
 
-  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  compile group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
 
-  compile group: "com.networknt", name: "json-schema-validator", version: "1.0.69"
+  implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.69"
   implementation group: "com.gilecode.yagson", name: "j9-reflection-utils", version: "1.0"
-  compile group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-  compile("org.springframework.boot:spring-boot-devtools")
+  implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  implementation("org.springframework.boot:spring-boot-devtools")
 
-  compile group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '1.5.5'
+  implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '1.5.5'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
   implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.14.0'
 
-  testCompile group: 'org.pitest', name: 'pitest', version: versions.pitest
-  testCompile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
-  testCompile 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
+  testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
+  testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
+  testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 
-  testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
   testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
 
-  testCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  testCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
-  testCompile group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
+  testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '2.21.0'
 
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
-  integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  integrationTestImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
   implementation group: 'com.h2database', name: 'h2', version: '2.1.210'
 
@@ -405,8 +406,8 @@ dependencies {
   testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
   testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
 
-  integrationTestCompile group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
+  integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  integrationTestImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
   integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
@@ -419,8 +420,8 @@ dependencies {
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
-  functionalTestCompile sourceSets.main.runtimeClasspath
-  functionalTestCompile sourceSets.test.runtimeClasspath
+  functionalTestImplementation sourceSets.main.runtimeClasspath
+  functionalTestImplementation sourceSets.test.runtimeClasspath
   functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
@@ -429,8 +430,8 @@ dependencies {
   smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
   smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
 
-  smokeTestCompile sourceSets.main.runtimeClasspath
-  smokeTestCompile sourceSets.test.runtimeClasspath
+  smokeTestImplementation sourceSets.main.runtimeClasspath
+  smokeTestImplementation sourceSets.test.runtimeClasspath
   implementation 'junit:junit:4.13.2'
   implementation(group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.serviceAuthVersion)
 
@@ -509,6 +510,26 @@ bootJar {
   manifest {
     attributes('Implementation-Version': project.version.toString())
   }
+}
+
+rootProject.tasks.named("processSmokeTestResources") {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processIntegrationTestResources") {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processFunctionalTestResources") {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processTestResources") {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processResources") {
+  dependsOn("generateGitProperties")
 }
 
 wrapper {
