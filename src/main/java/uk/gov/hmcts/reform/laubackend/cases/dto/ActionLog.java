@@ -22,7 +22,7 @@ public class ActionLog implements Serializable {
     @ApiModelProperty(notes = "The user on whose behalf the operation took place")
     private String userId;
 
-    @ApiModelProperty(notes = "The action carried out on the case, i.e. CREATE, UPDATE, VIEW")
+    @ApiModelProperty(notes = "The action carried out on the case, i.e. CREATE, UPDATE, VIEW, DELETE")
     private String caseAction;
 
     @ApiModelProperty(notes = "The caseRef effected by the action")

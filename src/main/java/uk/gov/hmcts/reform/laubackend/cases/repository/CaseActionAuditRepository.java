@@ -19,6 +19,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
         + "WHERE (cast(:userId as text) IS NULL OR ca.user_id = cast(:userId as text)) "
         + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
         + "AND (cast(:caseTypeId as text) IS NULL OR ca.case_type_id = cast(:caseTypeId as text)) "
+        + "AND (cast(:caseAction as text) IS NULL OR ca.case_action = cast(:caseAction as text)) "
         + "AND (cast(:caseJurisdictionId as text) IS NULL "
         +   "OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
         + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL "
@@ -30,6 +31,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
             + "WHERE (cast(:userId as text) IS NULL OR ca.user_id = cast(:userId as text)) "
             + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
             + "AND (cast(:caseTypeId as text) IS NULL OR  ca.case_type_id = cast(:caseTypeId as text)) "
+            + "AND (cast(:caseAction as text) IS NULL OR  ca.case_action = cast(:caseAction as text)) "
             + "AND (cast(:caseJurisdictionId as text) IS NULL "
             +   "OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
             + "AND (cast(cast(:startTime as varchar) as timestamp) IS NULL "
@@ -41,6 +43,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
                                        final @Param("caseRef") String caseRef,
                                        final @Param("caseTypeId") String caseTypeId,
+                                       final @Param("caseAction") String caseAction,
                                        final @Param("caseJurisdictionId") String caseJurisdictionId,
                                        final @Param("startTime") Timestamp startTime,
                                        final @Param("endTime") Timestamp endTime,

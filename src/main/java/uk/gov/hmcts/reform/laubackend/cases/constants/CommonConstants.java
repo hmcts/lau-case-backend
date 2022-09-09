@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.constants;
 public final class CommonConstants {
     public static final String SERVICE_AUTHORISATION_HEADER = "ServiceAuthorization";
     public static final String AUTHORISATION_HEADER = "Authorization";
+    public static final String AUTHORISATION_AUDIT_INVESTIGATOR_ROLE = "cft-audit-investigator";
+    public static final String AUTHORISATION_SERVICE_LOGS_ROLE = "cft-service-logs";
 
     public static final long PERF_TOLERANCE_THRESHOLD_MS = 1500;
     public static final String PERF_THRESHOLD_MESSAGE_BELOW =

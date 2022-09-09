@@ -3,7 +3,7 @@
   CREATE TABLE case_action_audit (
    case_action_id SERIAL PRIMARY KEY,
    user_id VARCHAR(64) NOT NULL,
-   case_action VARCHAR(16)  NOT NULL CHECK (case_action in ('VIEW','UPDATE','CREATE')),
+   case_action VARCHAR(16)  NOT NULL CHECK (case_action in ('VIEW','UPDATE','CREATE','DELETE')),
    case_ref VARCHAR(16) NOT NULL,
    case_jurisdiction_id VARCHAR(70) NOT NULL,
    case_type_id VARCHAR(70) NOT NULL,

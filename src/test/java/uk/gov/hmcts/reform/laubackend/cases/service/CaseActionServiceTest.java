@@ -30,6 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +59,7 @@ class CaseActionServiceTest {
                 "1",
                 "2",
                 "3",
+                CREATE.name(),
                 "4",
                 null,
                 null,
@@ -65,14 +67,14 @@ class CaseActionServiceTest {
                 null);
 
         when(caseActionAuditRepository
-                .findCaseView("1", "2", "3", "4", null, null,
+                .findCaseView("1", "2", "3", "CREATE", "4", null, null,
                         PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
         verify(caseActionAuditRepository, times(1))
-                .findCaseView("1", "2", "3", "4", null, null,
+                .findCaseView("1", "2", "3", CREATE.name(), "4", null, null,
                         PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
 
         assertThat(caseView.getActionLog().size()).isEqualTo(1);
@@ -91,7 +93,7 @@ class CaseActionServiceTest {
         caseActionAudit.setCaseRef("2");
         caseActionAudit.setCaseJurisdictionId("3");
         caseActionAudit.setCaseTypeId("4");
-        caseActionAudit.setCaseAction("CREATE");
+        caseActionAudit.setCaseAction(CREATE.name());
         caseActionAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
 
 
@@ -100,7 +102,7 @@ class CaseActionServiceTest {
         actionLog.setCaseRef("2");
         actionLog.setCaseJurisdictionId("3");
         actionLog.setCaseTypeId("4");
-        actionLog.setCaseAction("CREATE");
+        actionLog.setCaseAction(CREATE.name());
         actionLog.setTimestamp("2021-08-23T22:20:05.023Z");
 
         when(caseActionAuditRepository.save(any())).thenReturn(caseActionAudit);
@@ -112,7 +114,7 @@ class CaseActionServiceTest {
         assertThat(caseView.getActionLog().getCaseRef()).isEqualTo("2");
         assertThat(caseView.getActionLog().getCaseJurisdictionId()).isEqualTo("3");
         assertThat(caseView.getActionLog().getCaseTypeId()).isEqualTo("4");
-        assertThat(caseView.getActionLog().getCaseAction()).isEqualTo("CREATE");
+        assertThat(caseView.getActionLog().getCaseAction()).isEqualTo(CREATE.name());
     }
 
     @Test
@@ -127,6 +129,7 @@ class CaseActionServiceTest {
         caseActionAudit.setCaseActionId(Long.valueOf(1));
         caseActionAudit.setCaseRef("2");
         caseActionAudit.setCaseTypeId("3");
+        caseActionAudit.setCaseAction(CREATE.name());
         caseActionAudit.setCaseJurisdictionId("4");
         caseActionAudit.setUserId("5");
         caseActionAudit.setTimestamp(timestamp);

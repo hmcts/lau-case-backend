@@ -3,10 +3,14 @@ package uk.gov.hmcts.reform.laubackend.cases.controllers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.laubackend.cases.constants.GetCaseActionAccess;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
 import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent;
@@ -31,7 +35,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -46,11 +49,52 @@ class CaseActionControllerTest {
     @InjectMocks
     private CaseActionController caseActionController;
 
+    @Captor
+    ArgumentCaptor<ActionInputParamsHolder> inputParamsHolderCaptor;
+
     @Test
-    void shouldReturnResponseEntityForGetRequest() {
+    void shouldReturnResponseEntityForGetRequestForAuditInvestigatorUser() {
         final String userId = "1";
         final String caseRef = random(16, "123456");
         final String caseTypeId = "3";
+        final String caseAction = "VIEW";
+        final CaseActionGetResponse caseActionGetResponse = mock(CaseActionGetResponse.class);
+
+        when(caseActionService.getCaseView(any())).thenReturn(
+            caseActionGetResponse);
+
+        final ResponseEntity<CaseActionGetResponse> responseEntity = caseActionController.getCaseAction(
+            null,
+            null,
+            userId,
+            caseRef,
+            caseTypeId,
+            caseAction,
+            null,
+            null,
+            null,
+            null,
+            null,
+            GetCaseActionAccess.FULL_ACCESS
+        );
+
+        verify(caseActionService, times(1)).getCaseView(any(ActionInputParamsHolder.class));
+        verify(caseActionService).getCaseView(inputParamsHolderCaptor.capture());
+        verify(appInsights, times(1))
+            .trackEvent(eq(AppInsightsEvent.GET_ACTIVITY_REQUEST_INFO.toString()), any());
+        assertThat(inputParamsHolderCaptor.getValue().getUserId()).isEqualTo(userId);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseRef()).isEqualTo(caseRef);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseTypeId()).isEqualTo(caseTypeId);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseAction()).isEqualTo("VIEW");
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    }
+
+    @Test
+    void shouldReturnResponseEntityForGetRequestForServceLogsUser() {
+        final String userId = "1";
+        final String caseRef = random(16, "123456");
+        final String caseTypeId = "3";
+        final String caseAction = "VIEW";
         final CaseActionGetResponse caseActionGetResponse = mock(CaseActionGetResponse.class);
 
         when(caseActionService.getCaseView(any())).thenReturn(
@@ -62,16 +106,23 @@ class CaseActionControllerTest {
                 userId,
                 caseRef,
                 caseTypeId,
+                caseAction,
                 null,
                 null,
                 null,
                 null,
-                null
+                null,
+                GetCaseActionAccess.DELETE_ONLY
         );
 
-        verify(caseActionService, times(1)).getCaseView(any());
+        verify(caseActionService, times(1)).getCaseView(any(ActionInputParamsHolder.class));
+        verify(caseActionService).getCaseView(inputParamsHolderCaptor.capture());
         verify(appInsights, times(1))
             .trackEvent(eq(AppInsightsEvent.GET_ACTIVITY_REQUEST_INFO.toString()), any());
+        assertThat(inputParamsHolderCaptor.getValue().getUserId()).isEqualTo(userId);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseRef()).isEqualTo(caseRef);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseTypeId()).isEqualTo(caseTypeId);
+        assertThat(inputParamsHolderCaptor.getValue().getCaseAction()).isEqualTo("DELETE");
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
@@ -83,6 +134,8 @@ class CaseActionControllerTest {
                 "1",
                 "2",
                 "3",
+                null,
+                null,
                 null,
                 null,
                 null,

@@ -10,6 +10,7 @@ public final class ExceptionMessageConstants {
     public static final String USERID_GET_EXCEPTION_MESSAGE = "Unable to verify userId path parameter pattern: ";
     public static final String CASETYPEID_GET_EXCEPTION_MESSAGE = "Unable to verify caseTypeId "
            + "path parameter pattern: ";
+    public static final String CASEACTION_GET_EXCEPTION_MESSAGE = "Unable to verify caseAction pattern: ";
     public static final String CASE_JURISDICTION_GET_EXCEPTION_MESSAGE = "Unable to verify "
             + "caseJurisdictionId path parameter pattern: ";
 

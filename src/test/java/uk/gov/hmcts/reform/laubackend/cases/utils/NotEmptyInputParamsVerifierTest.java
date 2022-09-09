@@ -27,6 +27,7 @@ public class NotEmptyInputParamsVerifierTest {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
+                null,
                 random(71, "123456"),
                 null,
                 null,
@@ -38,6 +39,7 @@ public class NotEmptyInputParamsVerifierTest {
     public void shouldVerifyRequestParamsAreNotEmptyForCaseRefCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 "345",
+                null,
                 null,
                 null,
                 null,
@@ -55,12 +57,27 @@ public class NotEmptyInputParamsVerifierTest {
                 null,
                 null,
                 null,
+                null,
+                null)));
+    }
+
+    @Test
+    public void shouldVerifyRequestParamsAreNotEmptyForActionTypeCaseAction() {
+        assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                null,
+                null,
+                "CREATE",
+                null,
+                null,
+                null,
+                null,
                 null)));
     }
 
     @Test
     public void shouldVerifyRequestParamsAreNotEmptyForStartTimeCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                null,
                 null,
                 null,
                 null,
@@ -77,6 +94,7 @@ public class NotEmptyInputParamsVerifierTest {
                 null,
                 null,
                 null,
+                null,
                 "765",
                 null,
                 null)));
@@ -86,6 +104,7 @@ public class NotEmptyInputParamsVerifierTest {
     public void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseAction() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                    null,
                     null,
                     null,
                     null,

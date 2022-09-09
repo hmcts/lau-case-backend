@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.laubackend.cases.constants.GetCaseActionAccess;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
@@ -28,6 +30,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.DELETE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACCESS;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACTION;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_JURISDICTION_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_REF;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_TYPE_ID;
@@ -147,6 +152,8 @@ public final class CaseActionController {
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @ApiParam(value = "Case Type ID", example = "GrantOfRepresentation")
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
+            @ApiParam(value = "Case Action", example = "VIEW")
+            @RequestParam(value = CASE_ACTION, required = false) final String caseAction,
             @ApiParam(value = "Case Jurisdiction ID", example = "PROBATE")
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
             @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
@@ -156,12 +163,15 @@ public final class CaseActionController {
             @ApiParam(value = "Size", example = "500")
             @RequestParam(value = SIZE, required = false) final String size,
             @ApiParam(value = "Page", example = "1")
-            @RequestParam(value = PAGE, required = false) final String page) {
-
+            @RequestParam(value = PAGE, required = false) final String page,
+            @RequestAttribute(CASE_ACCESS) GetCaseActionAccess getCaseActionAccess) {
         try {
+
+
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     caseRef,
                     caseTypeId,
+                    caseAction,
                     caseJurisdictionId,
                     startTime,
                     endTime,
@@ -170,6 +180,11 @@ public final class CaseActionController {
             final long timeStart = System.currentTimeMillis();
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
+
+            // Case Action to DELETE if getCaseActionAccess is DELETE_ONLY.
+            if (getCaseActionAccess.equals(GetCaseActionAccess.DELETE_ONLY)) {
+                inputParamsHolder.setCaseAction(DELETE.name());
+            }
 
             final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
             final long timeEnd = System.currentTimeMillis();

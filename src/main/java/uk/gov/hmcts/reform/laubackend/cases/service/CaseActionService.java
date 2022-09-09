@@ -43,6 +43,7 @@ public class CaseActionService {
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
                 upperCase(inputParamsHolder.getCaseTypeId()),
+                upperCase(inputParamsHolder.getCaseAction()),
                 upperCase(inputParamsHolder.getCaseJurisdictionId()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),

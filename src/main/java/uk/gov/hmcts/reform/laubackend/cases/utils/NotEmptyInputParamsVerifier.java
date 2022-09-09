@@ -21,6 +21,7 @@ public final class NotEmptyInputParamsVerifier {
                 && isEmpty(inputParamsHolder.getCaseRef())
                 && isEmpty(inputParamsHolder.getCaseTypeId())
                 && isEmpty(inputParamsHolder.getCaseJurisdictionId())
+                && isEmpty(inputParamsHolder.getCaseAction())
                 && isEmpty(inputParamsHolder.getStartTime())
                 && isEmpty(inputParamsHolder.getEndTime())) {
             throw new InvalidRequestException("At least one path parameter must be present", BAD_REQUEST);

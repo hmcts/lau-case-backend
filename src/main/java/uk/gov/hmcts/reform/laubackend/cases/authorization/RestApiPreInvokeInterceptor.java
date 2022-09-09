@@ -3,17 +3,22 @@ package uk.gov.hmcts.reform.laubackend.cases.authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
+import uk.gov.hmcts.reform.laubackend.cases.constants.GetCaseActionAccess;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACCESS;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_SERVICE_LOGS_ROLE;
 
 @Slf4j
 @SuppressWarnings({"PMD.LawOfDemeter"})
@@ -35,7 +40,12 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
 
             if (request.getMethod().equalsIgnoreCase(GET.name())
                     || request.getMethod().equalsIgnoreCase(DELETE.name())) {
-                authorizationAuthenticator.authorizeAuthorizationToken(request);
+                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request);
+                if (roles.contains(AUTHORISATION_AUDIT_INVESTIGATOR_ROLE)) {
+                    request.setAttribute(CASE_ACCESS, GetCaseActionAccess.FULL_ACCESS);
+                } else if (roles.contains(AUTHORISATION_SERVICE_LOGS_ROLE)) {
+                    request.setAttribute(CASE_ACCESS, GetCaseActionAccess.DELETE_ONLY);
+                }
             }
 
         } catch (final InvalidServiceAuthorizationException exception) {
