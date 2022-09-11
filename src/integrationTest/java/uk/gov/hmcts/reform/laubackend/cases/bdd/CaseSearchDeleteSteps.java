@@ -24,7 +24,7 @@ public class CaseSearchDeleteSteps extends AbstractSteps {
 
     @Before
     public void setUp() {
-        setupServiceAuthorisationStub();
+        setupAuthorisationStub();
     }
 
     @When("I request POST {string} endpoint using userId {string}")

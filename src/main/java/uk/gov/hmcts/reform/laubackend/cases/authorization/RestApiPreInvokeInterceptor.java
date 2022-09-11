@@ -44,6 +44,7 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                 if (roles.contains(AUTHORISATION_AUDIT_INVESTIGATOR_ROLE)) {
                     request.setAttribute(CASE_ACCESS, GetCaseActionAccess.FULL_ACCESS);
                 } else if (roles.contains(AUTHORISATION_SERVICE_LOGS_ROLE)) {
+                    log.info("User requests restricted to deleted cases only.");
                     request.setAttribute(CASE_ACCESS, GetCaseActionAccess.DELETE_ONLY);
                 }
             }
