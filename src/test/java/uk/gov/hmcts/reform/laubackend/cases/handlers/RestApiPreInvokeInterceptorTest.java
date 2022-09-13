@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorizationAuthenticator;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeInterceptor;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.ServiceAuthorizationAuthenticator;
-import uk.gov.hmcts.reform.laubackend.cases.constants.GetCaseActionAccess;
+import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
@@ -24,21 +24,19 @@ import java.util.List;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACCESS;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACTION;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_SERVICE_LOGS_ROLE;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings({"PMD.LawOfDemeter"})
 class RestApiPreInvokeInterceptorTest {
 
     @Mock
@@ -63,7 +61,7 @@ class RestApiPreInvokeInterceptorTest {
         final boolean isValidRequest = restApiPreInvokeInterceptor
                 .preHandle(httpServletRequest, httpServletResponse, object);
 
-        assertThat(isValidRequest).isEqualTo(true);
+        assertThat(isValidRequest).isTrue();
     }
 
     @Test
@@ -79,8 +77,7 @@ class RestApiPreInvokeInterceptorTest {
         final boolean isValidRequest = restApiPreInvokeInterceptor
             .preHandle(httpServletRequest, httpServletResponse, object);
 
-        verify(httpServletRequest, times(1)).setAttribute(eq(CASE_ACCESS), eq(GetCaseActionAccess.FULL_ACCESS));
-        assertThat(isValidRequest).isEqualTo(true);
+        assertThat(isValidRequest).isTrue();
     }
 
     @Test
@@ -91,13 +88,13 @@ class RestApiPreInvokeInterceptorTest {
         final List<String> roles = Collections.singletonList(AUTHORISATION_SERVICE_LOGS_ROLE);
 
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(httpServletRequest.getParameter(CASE_ACTION)).thenReturn(CaseAction.DELETE.name());
         when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
             .preHandle(httpServletRequest, httpServletResponse, object);
 
-        verify(httpServletRequest, times(1)).setAttribute(eq(CASE_ACCESS), eq(GetCaseActionAccess.DELETE_ONLY));
-        assertThat(isValidRequest).isEqualTo(true);
+        assertThat(isValidRequest).isTrue();
     }
 
     @Test
@@ -113,8 +110,7 @@ class RestApiPreInvokeInterceptorTest {
         final boolean isValidRequest = restApiPreInvokeInterceptor
             .preHandle(httpServletRequest, httpServletResponse, object);
 
-        verify(httpServletRequest, times(1)).setAttribute(eq(CASE_ACCESS), eq(GetCaseActionAccess.FULL_ACCESS));
-        assertThat(isValidRequest).isEqualTo(true);
+        assertThat(isValidRequest).isTrue();
     }
 
     @Test
@@ -134,7 +130,7 @@ class RestApiPreInvokeInterceptorTest {
                 .isEqualTo("Yabba Dabba Doo");
         assertThat(((MockHttpServletResponse) httpServletResponse).getStatus())
                 .isEqualTo(SC_FORBIDDEN);
-        assertThat(isValidRequest).isEqualTo(false);
+        assertThat(isValidRequest).isFalse();
     }
 
     @Test
@@ -149,7 +145,6 @@ class RestApiPreInvokeInterceptorTest {
                 .when(authorizationAuthenticator)
                 .authorizeAuthorizationToken(httpServletRequest);
 
-
         final boolean isValidRequest = restApiPreInvokeInterceptor
                 .preHandle(httpServletRequest, httpServletResponse, object);
 
@@ -157,7 +152,30 @@ class RestApiPreInvokeInterceptorTest {
                 .isEqualTo("Scooby Doo");
         assertThat(((MockHttpServletResponse) httpServletResponse).getStatus())
                 .isEqualTo(SC_UNAUTHORIZED);
-        assertThat(isValidRequest).isEqualTo(false);
+
+        assertThat(isValidRequest).isFalse();
     }
 
+    @Test
+    void shouldThrowInvalidAuthorizationExceptionWhenAccessingCaseActionFromIncorrectRole() throws IOException {
+        final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        final HttpServletResponse httpServletResponse = new MockHttpServletResponse();
+        final Object object = mock(Object.class);
+        List<String> roles = Arrays.asList(AUTHORISATION_SERVICE_LOGS_ROLE);
+
+        doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
+        when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
+        when(httpServletRequest.getParameter(CASE_ACTION)).thenReturn(CaseAction.VIEW.name());
+
+        final boolean isValidRequest = restApiPreInvokeInterceptor
+            .preHandle(httpServletRequest, httpServletResponse, object);
+
+        assertThat(((MockHttpServletResponse) httpServletResponse).getErrorMessage())
+            .isEqualTo("Not authorised to make HTTP GET request for CaseAction: VIEW");
+        assertThat(((MockHttpServletResponse) httpServletResponse).getStatus())
+            .isEqualTo(SC_UNAUTHORIZED);
+
+        assertThat(isValidRequest).isFalse();
+    }
 }

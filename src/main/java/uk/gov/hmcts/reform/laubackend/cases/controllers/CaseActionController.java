@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.laubackend.cases.constants.GetCaseActionAccess;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
@@ -30,8 +28,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.DELETE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACCESS;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACTION;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_JURISDICTION_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_REF;
@@ -46,8 +42,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PER
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_BELOW;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_TOLERANCE_THRESHOLD_MS;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INFO;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
@@ -93,7 +89,6 @@ public final class CaseActionController {
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
-
             verifyRequestActionParamsAreNotEmpty(caseActionPostRequest.getActionLog());
             verifyRequestActionParamsConditions(caseActionPostRequest.getActionLog());
 
@@ -163,8 +158,7 @@ public final class CaseActionController {
             @ApiParam(value = "Size", example = "500")
             @RequestParam(value = SIZE, required = false) final String size,
             @ApiParam(value = "Page", example = "1")
-            @RequestParam(value = PAGE, required = false) final String page,
-            @RequestAttribute(CASE_ACCESS) GetCaseActionAccess getCaseActionAccess) {
+            @RequestParam(value = PAGE, required = false) final String page) {
         try {
 
 
@@ -180,11 +174,6 @@ public final class CaseActionController {
             final long timeStart = System.currentTimeMillis();
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             verifyRequestActionParamsConditions(inputParamsHolder);
-
-            // Case Action to DELETE if getCaseActionAccess is DELETE_ONLY.
-            if (getCaseActionAccess.equals(GetCaseActionAccess.DELETE_ONLY)) {
-                inputParamsHolder.setCaseAction(DELETE.name());
-            }
 
             final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
             final long timeEnd = System.currentTimeMillis();

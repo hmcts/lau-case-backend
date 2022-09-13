@@ -21,13 +21,6 @@ Feature: The application's GET caseAction endpoint
     And And I GET "/audit/caseAction" using caseAction "UPDATE" query param
     Then a single caseAction response body is returned for caseAction "UPDATE"
 
-  Scenario: The backend is able to process caseAction caseAction GET requests as a service user for non deleted cases
-    Given LAU backend application is healthy
-    When I POST multiple records to "/audit/caseAction" endpoint using "VIEW,CREATE" caseAction
-    And I am logged in with the CFT-SERVICE-LOGS role
-    And And I GET "/audit/caseAction" using caseAction "CREATE" query param
-    Then a empty caseAction response body is returned for caseAction "CREATE"
-
   Scenario: The backend is able to process caseAction caseAction GET requests as a service user for deleted cases
     Given LAU backend application is healthy
     When I POST multiple records to "/audit/caseAction" endpoint using "DELETE,CREATE" caseAction
@@ -90,3 +83,10 @@ Feature: The application's GET caseAction endpoint
     Given LAU backend application is healthy
     When I request GET "/audit/caseAction" endpoint without mandatory params
     Then HTTP "400" Bad Request response is returned
+
+  Scenario: The backend is unable to process caseAction GET requests as a service user for non deleted cases
+    Given LAU backend application is healthy
+    When I POST multiple records to "/audit/caseAction" endpoint using "VIEW,CREATE" caseAction
+    And I am logged in with the CFT-SERVICE-LOGS role
+    And And I GET "/audit/caseAction" using caseAction "CREATE" query param
+    Then HTTP "401" Unauthorized response is returned for get request

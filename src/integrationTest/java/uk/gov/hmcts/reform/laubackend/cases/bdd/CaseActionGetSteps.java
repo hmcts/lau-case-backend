@@ -231,14 +231,6 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
 
-    @Then("a empty caseAction response body is returned for caseAction {string}")
-    public void assertEmptyCaseAction(final String caseAction) {
-        final CaseActionGetResponse caseActionGetResponse = jsonReader
-            .fromJson(caseActionPostResponseBody, CaseActionGetResponse.class);
-
-        assertEmpty(caseActionGetResponse);
-    }
-
     @Then("a single caseAction response body is returned for caseJurisdictionId {string}")
     public void assertCaseJurisdiction(final String caseJurisdictionId) {
         final CaseActionGetResponse caseActionGetResponse = jsonReader
@@ -280,6 +272,11 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
 
+    @Then("HTTP {string} Unauthorized response is returned for get request")
+    public void assertUnauthorizedRseponseForGetRequest(final String responseCode) {
+        assertThat(caseActionPostResponseBody).containsIgnoringCase(responseCode);
+    }
+
     private void assertObject(final CaseActionGetResponse caseActionGetResponse,
                               final CaseActionPostRequest caseSearchPostRequest) {
         assertThat(caseActionGetResponse.getActionLog().size()).isEqualTo(1);
@@ -292,10 +289,5 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertThat(caseActionGetResponse.getActionLog().get(0).getCaseTypeId())
                 .isEqualTo(caseSearchPostRequest.getActionLog().getCaseTypeId());
     }
-
-    private void assertEmpty(final CaseActionGetResponse caseActionGetResponse) {
-        assertThat(caseActionGetResponse.getActionLog().size()).isEqualTo(0);
-    }
-
 
 }
