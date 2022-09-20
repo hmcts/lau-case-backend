@@ -51,6 +51,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
+                null,
                 valueOf(now().plusDays(10)),
                 null,
                 null
@@ -63,6 +64,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     void shouldFindCaseByEndTime() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "1",
+                null,
                 null,
                 null,
                 null,
@@ -81,6 +83,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
+                null,
                 valueOf(now().plusDays(20)),
                 null,
                 null
@@ -96,6 +99,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
+                null,
                 valueOf(now().minusDays(1)),
                 null
         );
@@ -105,6 +109,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     @Test
     void shouldNotFindCaseByStartTimeAndEndTime() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                null,
                 null,
                 null,
                 null,

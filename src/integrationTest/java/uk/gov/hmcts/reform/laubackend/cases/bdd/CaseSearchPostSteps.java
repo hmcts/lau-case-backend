@@ -29,7 +29,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
     @Before
     public void setUp() {
-        setupServiceAuthorisationStub();
+        setupAuthorisationStub();
     }
 
     @When("I request POST {string} endpoint using s2s")

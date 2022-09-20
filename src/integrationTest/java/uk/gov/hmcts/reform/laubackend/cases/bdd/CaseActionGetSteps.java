@@ -14,6 +14,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_SERVICE_LOGS_ROLE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionGetHelper.getCaseActionPostRequest;
 
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
@@ -24,7 +26,7 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     @Before
     public void setUp() {
-        setupServiceAuthorisationStub();
+        setupAuthorisationStub();
     }
 
     @When("I POST multiple records to {string} endpoint using {string} userIds")
@@ -32,6 +34,7 @@ public class CaseActionGetSteps extends AbstractSteps {
         final List<String> pathParams = asList(pathParam.split(","));
         pathParams.forEach(userId -> {
             final Response response = restHelper.postObject(getCaseActionPostRequest(userId,
+                            null,
                             null,
                             null,
                             null,
@@ -50,6 +53,7 @@ public class CaseActionGetSteps extends AbstractSteps {
                             caseRef,
                             null,
                             null,
+                            null,
                             null),
                     baseUrl() + path);
 
@@ -65,6 +69,7 @@ public class CaseActionGetSteps extends AbstractSteps {
                             null,
                             caseJurisdictionParam,
                             null,
+                            null,
                             null),
                     baseUrl() + path);
 
@@ -79,8 +84,25 @@ public class CaseActionGetSteps extends AbstractSteps {
             final Response response = restHelper.postObject(getCaseActionPostRequest(null,
                             null,
                             null,
-                            caseTypeIdParam,
+                             caseTypeIdParam,
+                            null,
                             null),
+                    baseUrl() + path);
+
+            assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+        });
+    }
+
+    @When("I POST multiple records to {string} endpoint using {string} caseAction")
+    public void postCaseAction(final String path, final String caseAction) {
+        final List<String> caseActionList = asList(caseAction.split(","));
+        caseActionList.forEach(caseActionParam -> {
+            final Response response = restHelper.postObject(getCaseActionPostRequest(null,
+                             null,
+                             null,
+                             null,
+                              caseActionParam,
+                             null),
                     baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
@@ -95,11 +117,22 @@ public class CaseActionGetSteps extends AbstractSteps {
                             null,
                             null,
                             null,
+                            null,
                             timestampParam),
                     baseUrl() + path);
 
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
         });
+    }
+
+    @And("I am logged in with the CFT-SERVICE-LOGS role")
+    public void updateUserRoleServiceLogs() {
+        setupAuthorisationStubWithRole(AUTHORISATION_SERVICE_LOGS_ROLE);
+    }
+
+    @And("I am logged in with the CFT-AUDIT-INVESTIGATOR role")
+    public void updateUserRoleAuditInvestigator() {
+        setupAuthorisationStubWithRole(AUTHORISATION_AUDIT_INVESTIGATOR_ROLE);
     }
 
     @And("I GET {string} using userId {string} query param")
@@ -126,6 +159,12 @@ public class CaseActionGetSteps extends AbstractSteps {
         caseActionPostResponseBody = response.getBody().asString();
     }
 
+    @And("And I GET {string} using caseAction {string} query param")
+    public void retrieveCaseActionForCaseAction(final String path, final String caseAction) {
+        Response response = restHelper.getResponse(baseUrl() + path, "caseAction", caseAction);
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
     @And("And I GET {string} using caseJurisdictionId {string} query param")
     public void retrieveCaseJurisdiction(final String path, final String caseJurisdictionId) {
         Response response = restHelper.getResponse(baseUrl() + path, "caseJurisdictionId", caseJurisdictionId);
@@ -148,7 +187,8 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void assertResponse(final String userId) {
         final CaseActionGetResponse caseActionGetResponse = jsonReader
                 .fromJson(caseActionPostResponseBody, CaseActionGetResponse.class);
-        final CaseActionPostRequest caseSearchPostRequest = getCaseActionPostRequest(userId, null, null, null, null);
+        final CaseActionPostRequest caseSearchPostRequest
+            = getCaseActionPostRequest(userId, null, null, null, null,null);
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
@@ -157,7 +197,8 @@ public class CaseActionGetSteps extends AbstractSteps {
     public void assertCaseRefResponse(final String caseRef) {
         final CaseActionGetResponse caseActionGetResponse = jsonReader
                 .fromJson(caseActionPostResponseBody, CaseActionGetResponse.class);
-        final CaseActionPostRequest caseSearchPostRequest = getCaseActionPostRequest(null, caseRef, null, null, null);
+        final CaseActionPostRequest caseSearchPostRequest
+            = getCaseActionPostRequest(null, caseRef, null, null,null, null);
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
@@ -170,7 +211,22 @@ public class CaseActionGetSteps extends AbstractSteps {
                 null,
                 null,
                 caseTypeId,
+                null,
                 null);
+
+        assertObject(caseActionGetResponse, caseSearchPostRequest);
+    }
+
+    @Then("a single caseAction response body is returned for caseAction {string}")
+    public void assertCaseAction(final String caseAction) {
+        final CaseActionGetResponse caseActionGetResponse = jsonReader
+            .fromJson(caseActionPostResponseBody, CaseActionGetResponse.class);
+        final CaseActionPostRequest caseSearchPostRequest = getCaseActionPostRequest(null,
+                 null,
+                 null,
+                 null,
+                 caseAction,
+                 null);
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
     }
@@ -182,6 +238,7 @@ public class CaseActionGetSteps extends AbstractSteps {
         final CaseActionPostRequest caseSearchPostRequest = getCaseActionPostRequest(null,
                 null, caseJurisdictionId,
                 null,
+                null,
                 null);
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
@@ -192,6 +249,7 @@ public class CaseActionGetSteps extends AbstractSteps {
         final CaseActionGetResponse caseActionGetResponse = jsonReader
                 .fromJson(caseActionPostResponseBody, CaseActionGetResponse.class);
         final CaseActionPostRequest caseSearchPostRequest = getCaseActionPostRequest(null,
+                null,
                 null,
                 null,
                 null,
@@ -208,9 +266,15 @@ public class CaseActionGetSteps extends AbstractSteps {
                 null,
                 null,
                 null,
+                null,
                 endTimestamp);
 
         assertObject(caseActionGetResponse, caseSearchPostRequest);
+    }
+
+    @Then("HTTP {string} Unauthorized response is returned for get request")
+    public void assertUnauthorizedRseponseForGetRequest(final String responseCode) {
+        assertThat(caseActionPostResponseBody).containsIgnoringCase(responseCode);
     }
 
     private void assertObject(final CaseActionGetResponse caseActionGetResponse,
@@ -225,6 +289,5 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertThat(caseActionGetResponse.getActionLog().get(0).getCaseTypeId())
                 .isEqualTo(caseSearchPostRequest.getActionLog().getCaseTypeId());
     }
-
 
 }

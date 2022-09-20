@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
 
@@ -21,7 +22,7 @@ public class AuthorizationAuthenticator {
     @Autowired
     private AuthorisedServices authorisedServices;
 
-    public void authorizeAuthorizationToken(final HttpServletRequest request) {
+    public List<String> authorizeAuthorizationToken(final HttpServletRequest request) {
         try {
             final String authHeader = request.getHeader(AUTHORISATION_HEADER);
             final UserInfo userInfo = authService.authorize(authHeader);
@@ -31,6 +32,8 @@ public class AuthorizationAuthenticator {
                         .concat(userInfo.getFamilyName()));
                 throw new InvalidAuthorizationException("Unable to authorize user.");
             }
+            return userInfo.getRoles();
+
         } catch (final Exception exception) {
             throw new InvalidAuthorizationException(exception.getMessage());
         }

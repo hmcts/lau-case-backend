@@ -17,6 +17,7 @@ import java.util.List;
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
 @TestPropertySource(properties = {
@@ -55,6 +56,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -65,6 +67,7 @@ class CaseActionAuditRepositoryTest {
     void shouldFindCaseByUserId() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "10",
+                null,
                 null,
                 null,
                 null,
@@ -86,6 +89,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -93,8 +97,25 @@ class CaseActionAuditRepositoryTest {
     }
 
     @Test
+    void shouldFindCaseByCaseAction() {
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+            null,
+            null,
+            null,
+            "CREATE",
+            null,
+            null,
+            null,
+            null
+        );
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
+        assertResults(caseViewAuditList.getContent(), 1);
+    }
+
+    @Test
     void shouldFindCaseByCaseJurisdictionId() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                null,
                 null,
                 null,
                 null,
@@ -116,6 +137,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
+                null,
                 PageRequest.of(1, 10, Sort.by("log_timestamp"))
         );
         assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
@@ -125,6 +147,7 @@ class CaseActionAuditRepositoryTest {
     @Test
     void shouldGetAllRecords() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                null,
                 null,
                 null,
                 null,
@@ -152,6 +175,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -162,6 +186,7 @@ class CaseActionAuditRepositoryTest {
 
         final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository.findCaseView(
                 "3333",
+                null,
                 null,
                 null,
                 null,
@@ -188,6 +213,7 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
 
@@ -204,7 +230,7 @@ class CaseActionAuditRepositoryTest {
         assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
         assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo("CREATE");
+        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo(CREATE.name());
     }
 
     private CaseActionAudit getCaseViewAuditEntity(final String caseRef,
@@ -215,7 +241,7 @@ class CaseActionAuditRepositoryTest {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
         caseActionAudit.setCaseRef(caseRef);
         caseActionAudit.setCaseTypeId(caseTypeId);
-        caseActionAudit.setCaseAction("CREATE");
+        caseActionAudit.setCaseAction(CREATE.name());
         caseActionAudit.setCaseJurisdictionId(caseJurisdictionId);
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);

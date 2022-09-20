@@ -12,6 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static feign.form.ContentProcessor.CONTENT_TYPE_HEADER;
 import static java.util.List.of;
 import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTANCE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
 
 @Getter
 public class AbstractSteps {
@@ -29,7 +30,11 @@ public class AbstractSteps {
         return "http://localhost:" + port;
     }
 
-    public void setupServiceAuthorisationStub() {
+    public void setupAuthorisationStub() {
+        setupAuthorisationStubWithRole(AUTHORISATION_AUDIT_INVESTIGATOR_ROLE);
+    }
+
+    public void setupAuthorisationStubWithRole(String role) {
         wiremokInstantiator.getWireMockServer().stubFor(get(urlPathMatching("/details"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
@@ -39,14 +44,14 @@ public class AbstractSteps {
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
-                        .withBody(getUserInfoAsJson())));
+                        .withBody(getUserInfoAsJson(role))));
     }
 
-    private String getUserInfoAsJson() {
+    private String getUserInfoAsJson(String role) {
         return jsonReader.toJson(new UserInfo("sub",
                 "uid",
                 "test",
                 "given_name",
-                "family_Name", of("cft-audit-investigator")));
+                "family_Name", of(role)));
     }
 }

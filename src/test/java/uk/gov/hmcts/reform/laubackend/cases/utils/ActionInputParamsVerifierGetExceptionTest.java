@@ -9,6 +9,7 @@ import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASE_JURISDICTION_GET_EXCEPTION_MESSAGE;
@@ -25,6 +26,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
         final String userId = randomAlphanumeric(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
+                    null,
                     null,
                     null,
                     null,
@@ -51,6 +53,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
                     null,
                     null,
                     null,
+                    null,
                     null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid caseRef");
@@ -65,6 +68,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                    null,
                     null,
                     null,
                     null,
@@ -92,6 +96,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
                     null,
                     null,
                     null,
+                    null,
                     null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid case typeId");
@@ -102,10 +107,32 @@ public class ActionInputParamsVerifierGetExceptionTest {
     }
 
     @Test
+    public void shouldNotVerifyCaseAction() {
+        final String caseAction = "SUSPENDED";
+        try {
+            final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                                                                                          null,
+                                                                                          null,
+                                                                                          caseAction,
+                                                                                          null,
+                                                                                          null,
+                                                                                          null,
+                                                                                          null,
+                                                                                          null);
+            verifyRequestActionParamsConditions(inputParamsHolder);
+            fail("The method should have thrown InvalidRequestException due to invalid case action");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                .isEqualTo(appendExceptionParameter(CASEACTION_GET_EXCEPTION_MESSAGE, caseAction));
+        }
+    }
+
+    @Test
     public void shouldNotVerifyCaseJurisdictionId() {
         final String caseJurisdictionId = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                    null,
                     null,
                     null,
                     caseJurisdictionId,

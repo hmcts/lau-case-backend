@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
@@ -10,6 +11,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASE_JURISDICTION_GET_EXCEPTION_MESSAGE;
@@ -18,13 +20,14 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.appendExceptionParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ActionInputParamsVerifierTest {
 
     @Test
     public void shouldVerifyUserId() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder("3748238",
+                null,
                 null,
                 null,
                 null,
@@ -39,6 +42,7 @@ public class ActionInputParamsVerifierTest {
         final String userId = randomAlphanumeric(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
+                    null,
                     null,
                     null,
                     null,
@@ -63,6 +67,7 @@ public class ActionInputParamsVerifierTest {
                 null,
                 null,
                 null,
+                null,
                 null)));
     }
 
@@ -72,6 +77,7 @@ public class ActionInputParamsVerifierTest {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     caseRef,
+                    null,
                     null,
                     null,
                     null,
@@ -92,6 +98,7 @@ public class ActionInputParamsVerifierTest {
                 null,
                 null,
                 null,
+                null,
                 "2021-06-23T22:20:05",
                 null,
                 null,
@@ -103,6 +110,7 @@ public class ActionInputParamsVerifierTest {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                    null,
                     null,
                     null,
                     null,
@@ -127,6 +135,7 @@ public class ActionInputParamsVerifierTest {
                 null,
                 null,
                 null,
+                null,
                 null)));
     }
 
@@ -141,6 +150,7 @@ public class ActionInputParamsVerifierTest {
                     null,
                     null,
                     null,
+                    null,
                     null);
             verifyRequestActionParamsConditions(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException due to invalid case typeId");
@@ -151,8 +161,43 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
+    public void shouldVerifyCaseAction() {
+        assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
+                     null,
+                     null,
+                     CaseAction.CREATE.name(),
+                     null,
+                     null,
+                     null,
+                     null,
+                     null)));
+    }
+
+    @Test
+    public void shouldNotVerifyCaseAction() {
+        final String caseAction = "SUSPEND";
+        try {
+            final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                      null,
+                      null,
+                      caseAction,
+                      null,
+                      null,
+                      null,
+                      null,
+                      null);
+            verifyRequestActionParamsConditions(inputParamsHolder);
+            fail("The method should have thrown InvalidRequestException due to invalid case action");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                .isEqualTo(appendExceptionParameter(CASEACTION_GET_EXCEPTION_MESSAGE, caseAction));
+        }
+    }
+
+    @Test
     public void shouldVerifyCaseJurisdictionId() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
+                null,
                 null,
                 null,
                 random(69, "123456"),
@@ -167,6 +212,7 @@ public class ActionInputParamsVerifierTest {
         final String caseJurisdiction = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
+                    null,
                     null,
                     null,
                     caseJurisdiction,

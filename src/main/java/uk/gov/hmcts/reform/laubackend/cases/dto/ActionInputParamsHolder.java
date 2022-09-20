@@ -11,6 +11,7 @@ public class ActionInputParamsHolder {
     private String userId;
     private String caseRef;
     private String caseTypeId;
+    private String caseAction;
     private String caseJurisdictionId;
     private String startTime;
     private String endTime;

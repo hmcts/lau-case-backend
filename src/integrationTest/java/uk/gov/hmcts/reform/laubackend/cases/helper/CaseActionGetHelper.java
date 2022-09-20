@@ -13,9 +13,10 @@ public final class CaseActionGetHelper {
                                                                  final String caseRef,
                                                                  final String caseJurisdictionId,
                                                                  final String caseTypeId,
+                                                                 final String caseAction,
                                                                  final String timestamp) {
         final ActionLog actionLog = new ActionLog(userId == null ? "1" : userId,
-                "CREATE",
+                caseAction == null ? "CREATE" : caseAction,
                 caseRef == null ? "0000000000000000" : caseRef,
                 caseJurisdictionId == null ? "2" : caseJurisdictionId,
                 caseTypeId == null ? "3" : caseTypeId,

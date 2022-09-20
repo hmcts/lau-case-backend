@@ -12,12 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostDeleteActionRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingJurisdiction;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingMandatoryParameter;
 
-@SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
+@SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation", "PMD.TooManyMethods"})
 public class CaseActionPostSteps extends AbstractSteps {
 
     private String caseActionPostResponseBody;
@@ -26,13 +27,23 @@ public class CaseActionPostSteps extends AbstractSteps {
 
     @Before
     public void setUp() {
-        setupServiceAuthorisationStub();
+        setupAuthorisationStub();
     }
 
     @When("I POST case action using {string} endpoint using s2s")
     public void postCaseAction(final String path) {
 
         final Response response = restHelper.postObject(getCaseActionPostRequest(), baseUrl() + path);
+
+        assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
+    @When("I POST case action using {string} endpoint using case action delete")
+    public void postCaseActionWithDeleteAction(final String path) {
+
+        final Response response = restHelper.postObject(getCaseActionPostDeleteActionRequest(), baseUrl() + path);
 
         assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
 
@@ -76,6 +87,13 @@ public class CaseActionPostSteps extends AbstractSteps {
     @Then("caseAction response body is returned")
     public void caseSearchResponseBodyIsReturned() {
         final CaseActionPostRequest caseActionPostRequest = getCaseActionPostRequest();
+
+        assertResponse(caseActionPostRequest);
+    }
+
+    @Then("caseAction response body is returned as a delete action")
+    public void caseSearchResponseBodyDeleteIsReturned() {
+        final CaseActionPostRequest caseActionPostRequest = getCaseActionPostDeleteActionRequest();
 
         assertResponse(caseActionPostRequest);
     }

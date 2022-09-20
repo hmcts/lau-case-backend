@@ -28,6 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_ACTION;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_JURISDICTION_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_REF;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.CASE_TYPE_ID;
@@ -41,8 +42,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PER
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_BELOW;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_TOLERANCE_THRESHOLD_MS;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INFO;
+import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
@@ -88,7 +89,6 @@ public final class CaseActionController {
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
             @RequestBody final CaseActionPostRequest caseActionPostRequest) {
         try {
-
             verifyRequestActionParamsAreNotEmpty(caseActionPostRequest.getActionLog());
             verifyRequestActionParamsConditions(caseActionPostRequest.getActionLog());
 
@@ -147,6 +147,8 @@ public final class CaseActionController {
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @ApiParam(value = "Case Type ID", example = "GrantOfRepresentation")
             @RequestParam(value = CASE_TYPE_ID, required = false) final String caseTypeId,
+            @ApiParam(value = "Case Action", example = "VIEW")
+            @RequestParam(value = CASE_ACTION, required = false) final String caseAction,
             @ApiParam(value = "Case Jurisdiction ID", example = "PROBATE")
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
             @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
@@ -157,11 +159,13 @@ public final class CaseActionController {
             @RequestParam(value = SIZE, required = false) final String size,
             @ApiParam(value = "Page", example = "1")
             @RequestParam(value = PAGE, required = false) final String page) {
-
         try {
+
+
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     caseRef,
                     caseTypeId,
+                    caseAction,
                     caseJurisdictionId,
                     startTime,
                     endTime,
