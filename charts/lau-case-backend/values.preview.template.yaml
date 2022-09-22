@@ -25,9 +25,11 @@ java:
 
   postgresql:
     enabled: true
-    ingressHost: ${SERVICE_FQDN}
+    ingressHost: "${SERVICE_FQDN}"
+    image:
+      tag: '11.16.0'
     primary:
-      hostAliases: {{ .Release.Name }}-postgresql
+      hostAliases: ["{{ .Release.Name }}-postgresql","postgresql-${SERVICE_FQDN}"]
       initdb:
         user: "postgres"
         scripts:

@@ -95,6 +95,8 @@ withPipeline(type, product, component) {
     after('akschartsinstall') {
         // test if Postgres is reachable
         sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.svc.cluster.local 5432"
+
+        // lau-case-backend-pr-125-postgresql-0.lau-case-backend-pr-125-postgresql-hl.lau.svc.cluster.local
     }
 
     after('test') {
