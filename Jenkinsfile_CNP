@@ -92,6 +92,11 @@ withPipeline(type, product, component) {
     disableLegacyDeployment()
     syncBranchesWithMaster(branchesToSync)
 
+    after('akschartsinstall') {
+        // test if Postgres is reachable
+        sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.svc.cluster.local 5432"
+    }
+
     after('test') {
 
         junit 'build/test-results/test/**/*.xml'

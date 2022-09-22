@@ -25,7 +25,9 @@ java:
 
   postgresql:
     enabled: true
+    ingressHost: ${SERVICE_FQDN}
     primary:
+      hostAliases: {{ .Release.Name }}-postgresql
       initdb:
         user: "postgres"
         scripts:
