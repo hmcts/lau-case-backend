@@ -95,7 +95,7 @@ withPipeline(type, product, component) {
     after('akschartsinstall') {
         // test if Postgres is reachable
         try {
-          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432}"
+          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresq-0 5432}"
         } finally {
           echo "1 failed."
         }
