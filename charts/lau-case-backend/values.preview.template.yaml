@@ -29,7 +29,11 @@ java:
     image:
       tag: '11.16.0'
     primary:
-      hostAliases: ["{{ .Release.Name }}-postgresql","postgresql-${SERVICE_FQDN}"]
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - "{{ .Release.Name }}-postgresql"
+            - "postgresql-${SERVICE_FQDN}"
       initdb:
         user: "postgres"
         scripts:
