@@ -94,9 +94,25 @@ withPipeline(type, product, component) {
 
     after('akschartsinstall') {
         // test if Postgres is reachable
-        sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.svc.cluster.local 5432"
+        try {
+          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432}"
+        } finally {
+          echo "1 failed."
+        }
 
-        // lau-case-backend-pr-125-postgresql-0.lau-case-backend-pr-125-postgresql-hl.lau.svc.cluster.local
+        try {
+          sh "nc -zv lau-case-backend-pr-126-postgresql-0.lau-case-backend-pr-126-postgresql-hl.lau.svc.cluster.local 5432}"
+        } finally {
+          echo "2 failed."
+        }
+
+
+        sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432}"
+
+        //lau-case-backend-pr-126-postgresql-0.lau-case-backend-pr-126-postgresql-hl.lau.svc.cluster.local
+        //lau-case-backend-pr-126-postgresql-hl.lau.svc.cluster.local
+        //lau-case-backend-pr-126-postgresql-0.lau.svc.cluster.local
+
     }
 
     after('test') {
