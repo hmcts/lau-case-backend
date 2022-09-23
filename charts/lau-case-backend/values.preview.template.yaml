@@ -32,7 +32,7 @@ java:
       service:
         type: NodePort
         nodePorts:
-          postgresql: 35432
+          postgresql: 31432
         annotations:
           external-dns.alpha.kubernetes.io/hostname: lau-case-backend-pr-126-postgresql-0
           service.beta.kubernetes.io/azure-load-balancer-internal: "true"
