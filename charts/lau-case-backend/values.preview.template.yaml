@@ -30,7 +30,7 @@ java:
       tag: '11.16.0'
     primary:
       service:
-        type: LoadBalancer
+        type: NodePort
         annotations:
           external-dns.alpha.kubernetes.io/hostname: lau-case-backend-pr-126-postgresql-0
           service.beta.kubernetes.io/azure-load-balancer-internal: "true"
