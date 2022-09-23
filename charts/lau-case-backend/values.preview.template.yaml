@@ -29,11 +29,16 @@ java:
     image:
       tag: '11.16.0'
     primary:
-      hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
-            - "{{ .Release.Name }}-postgresql"
-            - "postgresql-${SERVICE_FQDN}"
+      service:
+        type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: lau-case-backend-pr-126-postgresql-0
+          service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+#      hostAliases:
+#        - ip: "127.0.0.1"
+#          hostnames:
+#            - "{{ .Release.Name }}-postgresql"
+#            - "postgresql-${SERVICE_FQDN}"
       initdb:
         user: "postgres"
         scripts:
@@ -41,3 +46,7 @@ java:
             CREATE ROLE lauuser WITH LOGIN PASSWORD 'javapassword';
             CREATE EXTENSION IF NOT EXISTS pgcrypto;
             CREATE EXTENSION IF NOT EXISTS citext;
+
+
+
+
