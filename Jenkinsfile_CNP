@@ -95,29 +95,52 @@ withPipeline(type, product, component) {
     after('akschartsinstall') {
         // test if Postgres is reachable
         try {
-          sh "nc -zv lau-case-backend-pr-126-postgresql-0 31432"
+          sh "nc -zv lau-case-backend-pr-126-postgresql-0 5432"
         } catch(Exception ex) {
           println("1.");
         }
 
         try {
-          sh "nc -zv lau-case-backend-pr-126-postgresql-0 5432"
-        } finally {
-          echo "2."
+          sh "nc -zv lau-case-backend-pr-126-postgresql 5432"
+        } catch(Exception ex) {
+          println("2.");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-126-postgresql-0.lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.lau.svc.cluster.local 5432"
-        } finally {
-          echo "3."
+        } catch(Exception ex) {
+          println("3.");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.lau.svc.cluster.local 5432"
-        } finally {
-          echo "4."
+        } catch(Exception ex) {
+          println("4.");
         }
 
+        try {
+          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.svc.cluster.local 5432"
+        } catch(Exception ex) {
+          println("5.");
+        }
+
+        try {
+          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.lau.svc.cluster.local 5432"
+        } catch(Exception ex) {
+          println("6.");
+        }
+
+        try {
+          sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.svc.cluster.local 5432"
+        } catch(Exception ex) {
+          println("7.");
+        }
+
+        try {
+          sh "nc -zv 10.101.129.158 5432"
+        } catch(Exception ex) {
+          println("8.");
+        }
 
         sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432"
 
