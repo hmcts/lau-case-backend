@@ -150,8 +150,6 @@ withPipeline(type, product, component) {
           println("8.Failed");
         }
 
-        sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432"
-
         //lau-case-backend-pr-126-postgresql-0.lau-case-backend-pr-126-postgresql-hl.lau.svc.cluster.local
         //lau-case-backend-pr-126-postgresql-hl.lau.svc.cluster.local
         //lau-case-backend-pr-126-postgresql-0.lau.svc.cluster.local

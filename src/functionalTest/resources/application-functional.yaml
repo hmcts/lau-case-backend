@@ -13,6 +13,52 @@ management:
       exposure:
         include: health, info, prometheus
 
+#If you use a database then uncomment below lines and update db properties accordingly
+spring:
+  config:
+    import: "optional:configtree:/mnt/secrets/"
+  application:
+    name: Case Log and Audit
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.101.129.158:5432/javadatabase
+    username: lauuser
+    password: javapassword
+    properties:
+      charSet: UTF-8
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 20
+      idleTimeout: 10000
+      poolName: LAUCaseHikariCP
+      maxLifetime: 7200000
+      connectionTimeout: 60000
+  #    tomcat:
+  #      max-active: 10
+  #      max-idle: 10
+  #      min-idle: 2
+  #      max-wait: 10000
+  #      test-on-borrow: true
+  #      test-on-connect: true
+  #      test-on-idle: true
+  #      validation-query: "SELECT 1"
+  #      time-between-eviction-runs-millis: 10000
+  #      test-while-idle: true
+  #      test-on-return: true
+  #      remove-abandoned: true
+  #      remove-abandoned-timeout: 60
+  #      log-abandoned: true
+  #      abandon-when-percentage-full: 0
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            # silence the 'wall-of-text' - unnecessary exception throw about blob types
+            non_contextual_creation: true
+
+
 #Application specific properties
 api-error-messages:
   bad_request: Invalid Request
