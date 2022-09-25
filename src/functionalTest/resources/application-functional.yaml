@@ -21,7 +21,7 @@ spring:
     name: Case Log and Audit
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.101.129.158:5432/javadatabase
+    url: jdbc:postgresql://11.101.129.158:5432/javadatabase
     username: lauuser
     password: javapassword
     properties:
