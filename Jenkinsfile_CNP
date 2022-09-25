@@ -96,50 +96,58 @@ withPipeline(type, product, component) {
         // test if Postgres is reachable
         try {
           sh "nc -zv lau-case-backend-pr-126-postgresql-0 5432"
+          println("1.Success");
         } catch(Exception ex) {
-          println("1.");
+          println("1.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-126-postgresql 5432"
+          println("2.Success");
         } catch(Exception ex) {
-          println("2.");
+          println("2.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-126-postgresql-0.lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.lau.svc.cluster.local 5432"
+          println("3.Success");
         } catch(Exception ex) {
-          println("3.");
+          println("3.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.lau.svc.cluster.local 5432"
+          println("4.Success");
         } catch(Exception ex) {
-          println("4.");
+          println("4.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-hl.svc.cluster.local 5432"
+          println("5.Success");
         } catch(Exception ex) {
-          println("5.");
+          println("5.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.lau.svc.cluster.local 5432"
+          println("6.Success");
         } catch(Exception ex) {
-          println("6.");
+          println("6.Failed");
         }
 
         try {
           sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0.svc.cluster.local 5432"
+          println("7.Success");
         } catch(Exception ex) {
-          println("7.");
+          println("7.Failed");
         }
 
         try {
           sh "nc -zv 10.101.129.158 5432"
+          println("8.Success");
         } catch(Exception ex) {
-          println("8.");
+          println("8.Failed");
         }
 
         sh "nc -zv lau-case-backend-pr-${CHANGE_ID}-postgresql-0 5432"
