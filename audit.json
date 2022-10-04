@@ -56,5 +56,6 @@
   "10104_User Agent Fuzzer_http://lau-case-backend-aat.service.core-compute-aat.internal/sitemap.xml_GET": "ignore",
   "90027_Cookie Slack Detector_http://lau-case-backend-aat.service.core-compute-aat.internal/_GET": "ignore",
   "90027_Cookie Slack Detector_http://lau-case-backend-aat.service.core-compute-aat.internal/sitemap.xml_GET": "ignore",
-  "90027_Cookie Slack Detector_http://lau-case-backend-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore"
+  "90027_Cookie Slack Detector_http://lau-case-backend-aat.service.core-compute-aat.internal/robots.txt_GET": "ignore",
+  "90027_Cookie Slack Detector_http://lau-case-backend-aat.service.core-compute-aat.internal_GET": "ignore"
 }
