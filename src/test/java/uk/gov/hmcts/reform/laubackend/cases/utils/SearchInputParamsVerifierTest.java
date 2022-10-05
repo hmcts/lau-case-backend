@@ -3,8 +3,12 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import java.util.ArrayList;
+
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -101,5 +105,27 @@ public class SearchInputParamsVerifierTest {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo(appendExceptionParameter(TIMESTAMP_GET_EXCEPTION_MESSAGE, timestamp));
         }
+    }
+
+    @Test
+    void shouldRemoveInvalidCaseRefsForCaseSearchPost() throws InvalidRequestException {
+        final String caseRef = random(16, "123458");
+        final SearchLog searchLog = new SearchLog(null, new ArrayList<>(asList(caseRef, "", "null")), null);
+
+        verifyRequestSearchParamsConditions(searchLog);
+
+        assertThat(searchLog.getCaseRefs().size()).isEqualTo(1);
+        assertThat(searchLog.getCaseRefs().get(0)).isEqualTo(caseRef);
+    }
+
+    @Test
+    void shouldRemoveInvalidCaseRefsForCaseSearchPost1() throws InvalidRequestException {
+        final String caseRef = random(16, "123459");
+        final SearchLog searchLog = new SearchLog(null, new ArrayList<>(asList(caseRef, "123", "567", "null")), null);
+
+        verifyRequestSearchParamsConditions(searchLog);
+
+        assertThat(searchLog.getCaseRefs().size()).isEqualTo(1);
+        assertThat(searchLog.getCaseRefs().get(0)).isEqualTo(caseRef);
     }
 }

@@ -6,7 +6,6 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -118,22 +117,6 @@ public class InputParamsVerifierPostExceptionTest {
         } catch (final InvalidRequestException invalidRequestException) {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo(appendExceptionParameter(USERID_POST_EXCEPTION_MESSAGE, userId));
-        }
-    }
-
-    @Test
-    public void shouldNotVerifyCaseRefForCaseSearch() {
-        final String caseFef = random(17, "123456");
-        try {
-            final SearchLog searchLog = new SearchLog();
-            searchLog.setCaseRefs(asList(caseFef, random(8, "123456")));
-
-            verifyRequestSearchParamsConditions(searchLog);
-
-            fail("The method should have thrown InvalidRequestException due to invalid caseRef");
-        } catch (final InvalidRequestException invalidRequestException) {
-            assertThat(invalidRequestException.getMessage())
-                    .isEqualTo(appendExceptionParameter(CASEREF_POST_EXCEPTION_MESSAGE, caseFef));
         }
     }
 

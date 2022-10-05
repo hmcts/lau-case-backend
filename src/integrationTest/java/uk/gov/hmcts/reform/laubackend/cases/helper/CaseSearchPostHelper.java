@@ -5,6 +5,7 @@ import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public final class CaseSearchPostHelper {
 
@@ -44,9 +45,9 @@ public final class CaseSearchPostHelper {
                 "2021-08-23T22:20:05.023Z"));
     }
 
-    public static CaseSearchPostRequest getCaseSearchPostRequestWithInvalidCaseRefs() {
-        return new CaseSearchPostRequest(new SearchLog("3748230",
-                asList("12"),
+    public static CaseSearchPostRequest getCaseSearchPostRequestWithInvalidUserId() {
+        return new CaseSearchPostRequest(new SearchLog(randomAlphanumeric(65),
+                asList("1615817621013678"),
                 "2021-08-26T22:20:05.023Z"));
     }
 }

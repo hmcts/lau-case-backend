@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequest;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidCaseRefs;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidUserId;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingUserId;
 
@@ -65,7 +65,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
     public void caseSearchWithInvalidBodyParameter(final String path) {
 
         final Response response = restHelper
-                .postObject(getCaseSearchPostRequestWithInvalidCaseRefs(), baseUrl() + path);
+                .postObject(getCaseSearchPostRequestWithInvalidUserId(), baseUrl() + path);
 
         httpStatusResponseCode = response.getStatusCode();
     }
@@ -73,7 +73,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
     @When("I request POST {string} endpoint with missing s2s header")
     public void caseSearchWithMissingAuthHeader(final String path) {
         final Response response = restHelper
-                .postObjectWithoutHeader(getCaseSearchPostRequestWithInvalidCaseRefs(), baseUrl() + path);
+                .postObjectWithoutHeader(getCaseSearchPostRequestWithInvalidUserId(), baseUrl() + path);
 
         httpStatusResponseCode = response.getStatusCode();
     }
