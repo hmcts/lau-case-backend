@@ -282,7 +282,7 @@ def versions = [
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
-        fasterXmlJackson  : '2.13.2',
+        fasterXmlJackson  : '2.14.0-rc1',
         springFramework   : '5.3.20',
         springCloud       : '3.1.2',
         log4j             : '2.17.2',
@@ -361,7 +361,7 @@ dependencies {
 
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
+  implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.0-rc1'
   implementation group: 'org.yaml', name: 'snakeyaml', version: '1.32'
 
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
