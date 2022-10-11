@@ -97,13 +97,11 @@ class CaseActionServiceTest {
         caseActionAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
 
 
-        final ActionLog actionLog = new ActionLog();
-        actionLog.setUserId("1");
-        actionLog.setCaseRef("2");
-        actionLog.setCaseJurisdictionId("3");
-        actionLog.setCaseTypeId("4");
-        actionLog.setCaseAction(CREATE.name());
-        actionLog.setTimestamp("2021-08-23T22:20:05.023Z");
+        final ActionLog actionLog = new ActionLog("1", CREATE.name(),
+                "2",
+                "3",
+                "4",
+                "2021-08-23T22:20:05.023Z");
 
         when(caseActionAuditRepository.save(any())).thenReturn(caseActionAudit);
 
