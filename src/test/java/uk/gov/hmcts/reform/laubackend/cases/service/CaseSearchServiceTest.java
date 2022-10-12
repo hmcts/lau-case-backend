@@ -90,7 +90,9 @@ class CaseSearchServiceTest {
         caseSearchAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
         caseSearchAudit.setCaseRefs(List.of(Long.valueOf(caseRef)));
 
-        final SearchLog searchLog = new SearchLog("1", asList(caseRef), null);
+        final SearchLog searchLog = new SearchLog();
+        searchLog.setUserId("1");
+        searchLog.setCaseRefs(asList(caseRef));
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
