@@ -16,8 +16,8 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -120,10 +120,7 @@ class CaseSearchControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForPostRequest() {
-        final SearchLog searchLog = new SearchLog();
-        searchLog.setUserId("1");
-        // Validation will fail here
-        searchLog.setCaseRefs(asList(random(18, "123456")));
+        final SearchLog searchLog = new SearchLog("1", asList(random(18, "123456")), null);
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
@@ -140,10 +137,9 @@ class CaseSearchControllerTest {
 
     @Test
     void shouldReturnInternalServerErrorForPostRequest() {
-        final SearchLog searchLog = new SearchLog();
-        searchLog.setUserId("1");
-        searchLog.setCaseRefs(asList(random(16, "123456")));
-        searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("1",
+                asList(random(16, "123456")),
+                "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
