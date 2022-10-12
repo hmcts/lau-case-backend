@@ -138,12 +138,8 @@ class CaseActionControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForPostRequest() {
-        final ActionLog actionLog = new ActionLog(null,
-                null,
-                "2",
-                null,
-                null,
-                null);
+        final ActionLog actionLog = new ActionLog();
+        actionLog.setCaseRef("2");
 
         final CaseActionPostRequest caseActionPostRequest = new CaseActionPostRequest();
         caseActionPostRequest.setActionLog(actionLog);

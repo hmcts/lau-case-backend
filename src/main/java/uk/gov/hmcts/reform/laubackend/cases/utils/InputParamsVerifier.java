@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_POST_EXCEPTION_MESSAGE;
@@ -75,16 +76,22 @@ public final class InputParamsVerifier {
     }
 
     public static void verifyRequestSearchCaseRefs(final List<String> caseRefs) {
-        final List<String> failedCaseRefs = new ArrayList<>();
-        caseRefs.forEach(caseRef -> {
-            try {
-                verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
-            } catch (final InvalidRequestException invalidRequestException) {
-                failedCaseRefs.add(caseRef); //Add invalid caseRef
-                log.warn("Invalid caseRef {} for saveCaseSearch POST request", caseRef);
-            }
-        });
-        //Remove all invalid caseRefs
-        caseRefs.removeAll(failedCaseRefs);
+        if (!isEmpty(caseRefs)) {
+
+            caseRefs.removeIf(caseRef -> caseRef == null || caseRef.equals("") || caseRef.equals("null"));
+
+            final List<String> failedCaseRefs = new ArrayList<>();
+
+            caseRefs.forEach(caseRef -> {
+                try {
+                    verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
+                } catch (final InvalidRequestException invalidRequestException) {
+                    failedCaseRefs.add(caseRef); //Add invalid caseRef
+                    log.warn("Invalid caseRef {} for saveCaseSearch POST request", caseRef);
+                }
+            });
+            //Remove all invalid caseRefs
+            caseRefs.removeAll(failedCaseRefs);
+        }
     }
 }
