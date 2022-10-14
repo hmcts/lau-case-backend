@@ -35,5 +35,14 @@ class ActionLogTest {
         assertThat(actionLog.getCaseRef()).isEqualTo("1234567891234567");
     }
 
+    @Test
+    void shouldRemoveInvalidCaseRef() {
+        final String caseRef = "123abc";
+        final ActionLog actionLog = new ActionLog();
+
+        actionLog.setCaseRef(caseRef);
+        assertThat(actionLog.getCaseRef()).isNull();
+    }
+
 
 }
