@@ -28,8 +28,13 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyUserIdForCaseAction() {
         final String userId = randomAlphanumeric(65);
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setUserId(userId);
+            final ActionLog actionLog = new ActionLog(userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -44,8 +49,12 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseRefForCaseAction() {
         final String caseRef = random(17, "123456");
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseRef(caseRef);
+            final ActionLog actionLog = new ActionLog(null,
+                    null,
+                    caseRef,
+                    null,
+                    null,
+                    null);
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -60,8 +69,12 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyTimestampForCaseAction() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setTimestamp(timestamp);
+            final ActionLog actionLog = new ActionLog(null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    timestamp);
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -76,8 +89,12 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseTypeIdForCaseAction() {
         final String caseTypeId = random(71, "123456");
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseTypeId(caseTypeId);
+            final ActionLog actionLog = new ActionLog(null,
+                    null,
+                    null,
+                    null,
+                    caseTypeId,
+                    null);
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -92,8 +109,12 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyCaseJurisdictionIdForCaseAction() {
         final String caseJurisdictionId = random(71, "123456");
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseJurisdictionId(caseJurisdictionId);
+            final ActionLog actionLog = new ActionLog(null,
+                    null,
+                    null,
+                    caseJurisdictionId,
+                    null,
+                    null);
 
             verifyRequestActionParamsConditions(actionLog);
 
@@ -108,8 +129,7 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyUserIdForCaseSearch() {
         final String userId = randomAlphanumeric(65);
         try {
-            final SearchLog searchLog = new SearchLog();
-            searchLog.setUserId(userId);
+            final SearchLog searchLog = new SearchLog(userId, null, null);
 
             verifyRequestSearchParamsConditions(searchLog);
 
@@ -124,8 +144,12 @@ public class InputParamsVerifierPostExceptionTest {
     public void shouldNotVerifyActionForCaseAction() {
         final String caseAction = "B";
         try {
-            final ActionLog actionLog = new ActionLog();
-            actionLog.setCaseAction(caseAction);
+            final ActionLog actionLog = new ActionLog(null,
+                    caseAction,
+                    null,
+                    null,
+                    null,
+                    null);
 
             verifyRequestActionParamsConditions(actionLog);
 

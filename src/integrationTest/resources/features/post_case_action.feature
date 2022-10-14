@@ -5,6 +5,11 @@ Feature: The application's POST caseAction endpoint
     When I POST case action using "/audit/caseAction" endpoint using s2s
     Then  caseAction response body is returned
 
+  Scenario: The backend is able to process caseAction POST requests with invalid caseRef
+    Given LAU backend application is healthy
+    When I POST case action using "/audit/caseAction" endpoint using invalid caseRef using s2s
+    Then  caseAction response body is returned with valid caseRef response
+
   Scenario: The backend is able to process caseAction POST requests with DELETE case action
     Given LAU backend application is healthy
     When I POST case action using "/audit/caseAction" endpoint using case action delete

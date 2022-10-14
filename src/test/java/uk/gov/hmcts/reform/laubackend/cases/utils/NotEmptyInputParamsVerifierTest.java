@@ -9,8 +9,8 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -166,9 +166,7 @@ public class NotEmptyInputParamsVerifierTest {
     @Test
     public void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseSearch() {
         try {
-            final SearchLog searchLog = new SearchLog();
-            searchLog.setUserId("1");
-            searchLog.setCaseRefs(asList(random(16, "123456")));
+            final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), null);
 
             final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
             caseSearchPostRequest.setSearchLog(searchLog);
@@ -183,9 +181,7 @@ public class NotEmptyInputParamsVerifierTest {
 
     @Test
     public void shouldVerifyRequestParamsAreNotEmptyForCaseSearchWithMissingCaseRefs() {
-        final SearchLog searchLog = new SearchLog();
-        searchLog.setUserId("1");
-        searchLog.setTimestamp("2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog("1", null, "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);

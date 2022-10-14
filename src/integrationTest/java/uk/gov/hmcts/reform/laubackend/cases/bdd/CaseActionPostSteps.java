@@ -17,13 +17,14 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.g
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingJurisdiction;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingMandatoryParameter;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithValidOrInvalidCaseRefParameter;
 
 @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation", "PMD.TooManyMethods"})
 public class CaseActionPostSteps extends AbstractSteps {
 
+    private final Gson jsonReader = new Gson();
     private String caseActionPostResponseBody;
     private int httpStatusResponseCode;
-    private final Gson jsonReader = new Gson();
 
     @Before
     public void setUp() {
@@ -84,6 +85,17 @@ public class CaseActionPostSteps extends AbstractSteps {
         httpStatusResponseCode = response.getStatusCode();
     }
 
+    @When("I POST case action using {string} endpoint using invalid caseRef using s2s")
+    public void postCaseActionUsingEndpointUsingInvalidCaseRef(final String path) {
+        final Response response = restHelper.postObject(
+                getCaseActionPostRequestWithValidOrInvalidCaseRefParameter(false),
+                baseUrl() + path);
+
+        assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
     @Then("caseAction response body is returned")
     public void caseSearchResponseBodyIsReturned() {
         final CaseActionPostRequest caseActionPostRequest = getCaseActionPostRequest();
@@ -101,6 +113,14 @@ public class CaseActionPostSteps extends AbstractSteps {
     @Then("caseAction response body is returned with missing jurisdiction")
     public void caseSearchResponseBodyIsReturnedWithMissingJurisdiction() {
         final CaseActionPostRequest caseActionPostRequest = getCaseActionPostRequestWithMissingJurisdiction();
+
+        assertResponse(caseActionPostRequest);
+    }
+
+    @Then("caseAction response body is returned with valid caseRef response")
+    public void caseActionResponseBodyIsReturnedWithValidCaseRefResponse() {
+        final CaseActionPostRequest caseActionPostRequest =
+                getCaseActionPostRequestWithValidOrInvalidCaseRefParameter(true);
 
         assertResponse(caseActionPostRequest);
     }

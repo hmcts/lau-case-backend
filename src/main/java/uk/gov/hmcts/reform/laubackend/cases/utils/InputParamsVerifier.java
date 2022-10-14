@@ -77,11 +77,7 @@ public final class InputParamsVerifier {
 
     public static void verifyRequestSearchCaseRefs(final List<String> caseRefs) {
         if (!isEmpty(caseRefs)) {
-
-            caseRefs.removeIf(caseRef -> caseRef == null || caseRef.equals("") || caseRef.equals("null"));
-
             final List<String> failedCaseRefs = new ArrayList<>();
-
             caseRefs.forEach(caseRef -> {
                 try {
                     verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);
