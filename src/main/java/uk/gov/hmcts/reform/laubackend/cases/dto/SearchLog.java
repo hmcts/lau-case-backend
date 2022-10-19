@@ -5,18 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.io.Serializable;
 import java.util.List;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseRefsUtils.cleanUpCaseRefList;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseSearchHelper.convertCaseRefsToString;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Setter
+@AllArgsConstructor
 @ApiModel(description = "Data model for the case search log")
 public class SearchLog implements Serializable {
 
@@ -38,4 +38,7 @@ public class SearchLog implements Serializable {
         return this;
     }
 
+    public void setCaseRefs(final List<String> caseRefs) {
+        this.caseRefs = isEmpty(caseRefs) ? caseRefs : cleanUpCaseRefList(caseRefs);
+    }
 }

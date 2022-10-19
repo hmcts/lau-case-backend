@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.helper;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -30,6 +32,15 @@ public final class CaseSearchPostHelper {
         return new CaseSearchPostRequest(searchLog);
     }
 
+    public static CaseSearchPostRequest getCaseSearchPostRequestWithValidOrInvalidCaseRefs(
+            final boolean isCaseRefsAreValid) {
+        final SearchLog searchLog = new SearchLog("3748230",
+                isCaseRefsAreValid ? getValidCaseRefList() : getInvalidCaseRefList(),
+                "2021-08-24T22:20:05.023Z");
+
+        return new CaseSearchPostRequest(searchLog);
+    }
+
     public static CaseSearchPostRequest getCaseSearchPostRequestWithMissingCaseRefs() {
         final SearchLog searchLog = new SearchLog("3748230", emptyList(), "2021-08-25T22:20:05.023Z");
 
@@ -49,5 +60,22 @@ public final class CaseSearchPostHelper {
         return new CaseSearchPostRequest(new SearchLog(randomAlphanumeric(65),
                 asList("1615817621013678"),
                 "2021-08-26T22:20:05.023Z"));
+    }
+
+    private static List<String> getInvalidCaseRefList() {
+        return asList("1615817621013888",
+                "161581762_1013900  ",
+                " 161581-762101_3111",
+                null,
+                "abv",
+                "",
+                "1615817621013555ABC");
+    }
+
+    private static List<String> getValidCaseRefList() {
+        return asList("1615817621013888",
+                "1615817621013900",
+                "1615817621013111",
+                "1615817621013555");
     }
 }

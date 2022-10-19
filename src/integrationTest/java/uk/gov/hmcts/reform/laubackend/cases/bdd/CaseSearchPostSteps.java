@@ -18,14 +18,15 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.g
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidUserId;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingUserId;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithValidOrInvalidCaseRefs;
 
-@SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
+@SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation","PMD.TooManyMethods"})
 public class CaseSearchPostSteps extends AbstractSteps {
 
-    private String caseSearchPostResponseBody;
-    private int httpStatusResponseCode;
     private final Gson jsonReader = new Gson();
     private final RestHelper restHelper = new RestHelper();
+    private String caseSearchPostResponseBody;
+    private int httpStatusResponseCode;
 
     @Before
     public void setUp() {
@@ -78,6 +79,16 @@ public class CaseSearchPostSteps extends AbstractSteps {
         httpStatusResponseCode = response.getStatusCode();
     }
 
+    @When("I request POST {string} endpoint using invalid caseRefs using s2s")
+    public void postCaseSearchUsingInvalidCaseRefs(final String path) {
+
+        final Response response = restHelper
+                .postObject(getCaseSearchPostRequestWithValidOrInvalidCaseRefs(false), baseUrl() + path);
+
+        assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+        caseSearchPostResponseBody = response.getBody().asString();
+    }
+
     @Then("http forbidden response is returned for POST caseSearch")
     public void unauthorisedResponseReturned() {
         assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
@@ -91,6 +102,14 @@ public class CaseSearchPostSteps extends AbstractSteps {
     @Then("caseSearch response body is returned")
     public void caseSearchResponseBodyIsReturned() {
         final CaseSearchPostRequest caseSearchPostRequest = getCaseSearchPostRequest();
+        final CaseSearchPostResponse caseSearchPostResponse = jsonReader
+                .fromJson(caseSearchPostResponseBody, CaseSearchPostResponse.class);
+        assertResponseBody(caseSearchPostRequest, caseSearchPostResponse);
+    }
+
+    @Then("caseSearch response body is returned with valid caseRefs response")
+    public void caseSearchResponseBodyIsReturnedWithValidCaseRefsResponse() {
+        final CaseSearchPostRequest caseSearchPostRequest = getCaseSearchPostRequestWithValidOrInvalidCaseRefs(true);
         final CaseSearchPostResponse caseSearchPostResponse = jsonReader
                 .fromJson(caseSearchPostResponseBody, CaseSearchPostResponse.class);
         assertResponseBody(caseSearchPostRequest, caseSearchPostResponse);

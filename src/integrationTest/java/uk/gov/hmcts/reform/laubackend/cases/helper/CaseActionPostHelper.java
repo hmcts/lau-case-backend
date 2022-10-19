@@ -74,4 +74,16 @@ public final class CaseActionPostHelper {
 
         return new CaseActionPostRequest(actionLog);
     }
+
+    public static CaseActionPostRequest getCaseActionPostRequestWithValidOrInvalidCaseRefParameter(
+            final boolean isCaseRefValid) {
+        final ActionLog actionLog = new ActionLog("1",
+                "CREATE",
+                isCaseRefValid ? "1615817621013640" : "16158176_21013640_ABC",
+                "3",
+                "4",
+                "2021-08-23T22:20:05.023Z");
+
+        return new CaseActionPostRequest(actionLog);
+    }
 }

@@ -41,7 +41,6 @@ public final class InputParamsVerifier {
     public static void verifyRequestActionParamsConditions(final ActionLog actionLog)
             throws InvalidRequestException {
         verifyUserId(actionLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
-        verifyCaseRef(actionLog.getCaseRef(), CASEREF_POST_EXCEPTION_MESSAGE);
         verifyAction(actionLog.getCaseAction(), CASE_ACTION_POST_EXCEPTION_MESSAGE);
         verifyCaseTypeId(actionLog.getCaseTypeId(), CASETYPEID_POST_EXCEPTION_MESSAGE);
         verifyCaseJurisdictionId(actionLog.getCaseJurisdictionId(), CASE_JURISDICTION_POST_EXCEPTION_MESSAGE);
@@ -77,11 +76,7 @@ public final class InputParamsVerifier {
 
     public static void verifyRequestSearchCaseRefs(final List<String> caseRefs) {
         if (!isEmpty(caseRefs)) {
-
-            caseRefs.removeIf(caseRef -> caseRef == null || caseRef.equals("") || caseRef.equals("null"));
-
             final List<String> failedCaseRefs = new ArrayList<>();
-
             caseRefs.forEach(caseRef -> {
                 try {
                     verifyCaseRef(caseRef, CASEREF_POST_EXCEPTION_MESSAGE);

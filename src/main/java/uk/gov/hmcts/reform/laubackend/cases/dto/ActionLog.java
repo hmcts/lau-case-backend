@@ -10,6 +10,9 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 
 import java.io.Serializable;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseRefsUtils.cleanUpCaseRef;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -48,4 +51,7 @@ public class ActionLog implements Serializable {
         return this;
     }
 
+    public void setCaseRef(final String caseRef) {
+        this.caseRef = isEmpty(caseRef) ? caseRef : cleanUpCaseRef(caseRef);
+    }
 }
