@@ -1,12 +1,24 @@
 # LAU Case Backend Application
 
-[![Build Status](https://travis-ci.org/hmcts/lau-case-backend.svg?branch=master)](https://travis-ci.org/hmcts/lau-case-backend)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Alau-case-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Alau-case-backend) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Alau-case-backend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Alau-case-backend) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Alau-case-backend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Alau-case-backend) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Alau-case-backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Alau-case-backend) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Alau-case-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Alau-case-backend)
 
 ## Purpose
 
 This is the Log and Audit Case Back-End application that will provide an endpoint to capture and retrieve case log actions for a users views and searches to the database.
 
 The API will be invoked by two components - LAU Case front-end which allows CFT Auditors to view log entries for case views and searches and for the source system to store log data into the Log and Audit system.
+
+## Overview
+
+<p align="center">
+<a href="https://github.com/hmcts/lau-frontend">lau-frontend</a> • <b><a href="https://github.com/hmcts/lau-case-backend">lau-case-backend</a></b> • <a href="https://github.com/hmcts/lau-idam-backend">lau-idam-backend</a> • <a href="https://github.com/hmcts/lau-shared-infrastructure">lau-shared-infrastructure</a>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hmcts/reform-api-docs/master/docs/c4/lau/images/structurizr-lau-overview.png" width="500"/>
+</p>
 
 ## What's inside
 
