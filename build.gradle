@@ -163,7 +163,6 @@ jacocoTestReport {
 }
 
 pitest {
-  pitestVersion.set('1.9.0')
   junit5PluginVersion.set('1.0.0')
   targetClasses = ['uk.gov.hmcts.reform.laubackend.*']
   excludedClasses = [
@@ -274,7 +273,7 @@ def versions = [
         springfoxSwaggerui: '2.9.2',
         serenity          : '2.5.10',
         gradlePitest      : '1.9.0',
-        pitest            : '1.9.0',
+        pitest            : '1.9.11',
         sonarPitest       : '0.5',
         lombok            : '1.18.12',
         testcontainers    : '1.16.2',
