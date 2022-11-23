@@ -277,7 +277,7 @@ def versions = [
         sonarPitest       : '0.5',
         lombok            : '1.18.12',
         testcontainers    : '1.16.2',
-        restAssured       : '4.4.0',
+        restAssured       : '5.3.0',
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
