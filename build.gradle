@@ -376,6 +376,14 @@ dependencies {
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
   implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.14.0'
+  // https://mvnrepository.com/artifact/org.apache.groovy/groovy
+  implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.6'
+  // https://mvnrepository.com/artifact/org.apache.groovy/groovy-json
+  implementation group: 'org.apache.groovy', name: 'groovy-json', version: '4.0.6'
+
+
+
+
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
