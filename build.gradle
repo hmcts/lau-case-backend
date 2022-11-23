@@ -277,7 +277,7 @@ def versions = [
         sonarPitest       : '0.5',
         lombok            : '1.18.12',
         testcontainers    : '1.16.2',
-        restAssured       : '5.3.0',
+        restAssured       : '4.5.1',
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
@@ -376,14 +376,6 @@ dependencies {
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
   implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.14.0'
-  // https://mvnrepository.com/artifact/org.apache.groovy/groovy
-  implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.6'
-  // https://mvnrepository.com/artifact/org.apache.groovy/groovy-json
-  implementation group: 'org.apache.groovy', name: 'groovy-json', version: '4.0.6'
-
-
-
-
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
