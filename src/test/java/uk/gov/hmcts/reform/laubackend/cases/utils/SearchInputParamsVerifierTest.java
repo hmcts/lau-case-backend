@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
@@ -110,7 +111,9 @@ public class SearchInputParamsVerifierTest {
     @Test
     void shouldRemoveInvalidCaseRefsForCaseSearchPost() throws InvalidRequestException {
         final String caseRef = random(16, "123458");
-        final SearchLog searchLog = new SearchLog(null, new ArrayList<>(asList(caseRef, "", "null")), null);
+        final List<String> caseRefList = new ArrayList<>(asList(caseRef, "", "null"));
+        final SearchLog searchLog = new SearchLog();
+        searchLog.setCaseRefs(caseRefList);
 
         verifyRequestSearchParamsConditions(searchLog);
 
@@ -121,7 +124,9 @@ public class SearchInputParamsVerifierTest {
     @Test
     void shouldRemoveInvalidCaseRefsForCaseSearchPost1() throws InvalidRequestException {
         final String caseRef = random(16, "123459");
-        final SearchLog searchLog = new SearchLog(null, new ArrayList<>(asList(caseRef, "123", "567", "null")), null);
+        final List<String> caseRefList = new ArrayList<>(asList(caseRef, "123", "567", "null"));
+        final SearchLog searchLog = new SearchLog();
+        searchLog.setCaseRefs(caseRefList);
 
         verifyRequestSearchParamsConditions(searchLog);
 
