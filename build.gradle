@@ -398,7 +398,7 @@ dependencies {
   integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   integrationTestImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
 
-  implementation group: 'com.h2database', name: 'h2', version: '2.1.210'
+  implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
 
   testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: versions.cucumber
   testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
