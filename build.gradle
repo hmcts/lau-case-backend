@@ -444,7 +444,7 @@ dependencies {
   testImplementation group: 'org.testng', name: 'testng', version: '7.5'
 
   testImplementation 'io.cucumber:cucumber-java:6.9.1'
-  testImplementation 'io.cucumber:cucumber-junit:6.9.1'
+  testImplementation 'io.cucumber:cucumber-junit:7.10.0'
 
   cucumberRuntime 'io.cucumber:cucumber-java:6.9.1'
   cucumberRuntime 'org.springframework:spring-web'
