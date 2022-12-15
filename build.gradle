@@ -12,7 +12,7 @@ plugins {
   id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'io.spring.dependency-management' version '1.1.0'
   id 'org.springframework.boot' version '2.7.0'
   id 'org.owasp.dependencycheck' version '7.1.0.1'
   id 'com.github.ben-manes.versions' version '0.44.0'
@@ -439,14 +439,14 @@ dependencies {
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
   testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
   testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
-  testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
+  testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
   testImplementation group: 'com.googlecode.junit-toolbox', name: 'junit-toolbox', version: '2.4'
   testImplementation group: 'org.testng', name: 'testng', version: '7.5'
 
-  testImplementation 'io.cucumber:cucumber-java:6.9.1'
-  testImplementation 'io.cucumber:cucumber-junit:6.9.1'
+  testImplementation 'io.cucumber:cucumber-java:7.10.0'
+  testImplementation 'io.cucumber:cucumber-junit:7.10.0'
 
-  cucumberRuntime 'io.cucumber:cucumber-java:6.9.1'
+  cucumberRuntime 'io.cucumber:cucumber-java:7.10.0'
   cucumberRuntime 'org.springframework:spring-web'
   cucumberRuntime group: 'org.springframework.security', name: 'spring-security-test'
   cucumberRuntime group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
