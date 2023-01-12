@@ -241,7 +241,7 @@ dependencyManagement {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
-    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.68') {
+    dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.69') {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
     }
@@ -375,7 +375,7 @@ dependencies {
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-  implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.20.0'
+  implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.21.1'
 
   testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
