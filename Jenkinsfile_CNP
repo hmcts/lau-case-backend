@@ -1,4 +1,5 @@
 #!groovy
+import uk.gov.hmcts.contino.GithubAPI
 
 @Library("Infrastructure")
 
@@ -43,13 +44,20 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 GradleBuilder builder = new GradleBuilder(this, product)
 
 withPipeline(type, product, component) {
+  onPR {
+    def githubApi = new GithubAPI(this)
+    if (!githubApi.getLabelsbyPattern(env.BRANCH_NAME, "keep-helm")) {
+        enableCleanupOfHelmReleaseOnSuccess()
+    }
+  }
+
     env.TEST_URL = "http://lau-case-backend-aat.service.core-compute-aat.internal"
     env.TEST_S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_IDAM_API_URL = 'https://idam-api.aat.platform.hmcts.net'
     env.TEST_IDAM_CLIENT_REDIRECT_URI = 'https://lau-case.aat.platform.hmcts.net/oauth2/callback'
     env.TEST_IDAM_CLIENT_NAME = 'lau'
 
-    after('test') {
+    afterAlways('test') {
         // Run integration tests
         builder.gradle('integration')
     }
@@ -92,7 +100,7 @@ withPipeline(type, product, component) {
     disableLegacyDeployment()
     syncBranchesWithMaster(branchesToSync)
 
-    after('test') {
+    afterAlways('test') {
 
         junit 'build/test-results/test/**/*.xml'
         archiveArtifacts 'build/reports/tests/test/index.html'
@@ -117,7 +125,7 @@ withPipeline(type, product, component) {
 
     }
 
-    after('functionalTest:aat') {
+    afterAlways('functionalTest:aat') {
         publishHTML target: [
                 reportDir            : "target/site/serenity/",
                 reportFiles          : "index.html",
@@ -128,7 +136,7 @@ withPipeline(type, product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-    after('functionalTest:preview') {
+    afterAlways('functionalTest:preview') {
         publishHTML target: [
                 reportDir            : "target/site/serenity/",
                 reportFiles          : "index.html",

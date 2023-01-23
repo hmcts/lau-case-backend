@@ -26,6 +26,7 @@
     <cve>CVE-2022-22968</cve>
     <cve>CVE-2022-22976</cve>
     <cve>CVE-2022-22978</cve>
+    <cve>CVE-2021-37533</cve>
   </suppress>
   <suppress>
     <packageUrl regex="true">^pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@.*$</packageUrl>
@@ -37,5 +38,21 @@
   </suppress>
   <suppress until="2023-01-07">
     <cve>CVE-2022-31569</cve>
+  </suppress>
+  <suppress>
+    <packageUrl regex="true">^pkg:maven/com.h2database/h2@.*$</packageUrl>
+    <cve>CVE-2022-45868</cve>
+  </suppress>
+  <suppress>
+    <packageUrl regex="true">^pkg:maven/org.latencyutils/LatencyUtils@.*$</packageUrl>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress>
+    <packageUrl regex="true">^pkg:maven/com.gilecode.yagson/j9-reflection-utils@.*$</packageUrl>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress>
+    <packageUrl regex="true">^pkg:maven/org.yaml/snakeyaml@.*$</packageUrl>
+    <cpe>cpe:/a:yaml_project:yaml</cpe>
   </suppress>
 </suppressions>
