@@ -285,7 +285,8 @@ def versions = [
         springFramework   : '5.3.20',
         springCloud       : '3.1.2',
         log4j             : '2.17.2',
-        springSecurity    : '5.7.5'
+        springSecurity    : '5.7.5',
+        commonsNet        : '3.9.0'
 ]
 
 ext.libraries = [
@@ -304,6 +305,9 @@ configurations.all {
       if (details.requested.group in ['org.apache.logging.log4j']) {
         details.useVersion versions.log4j
       }
+      if (details.requested.group in ['commons-net']) {
+              details.useVersion versions.commonsNet
+            }
     }
   }
 }
@@ -315,6 +319,7 @@ dependencies {
   }
 
   implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
+  implementation group: 'commons-net', name: 'commons-net', version: versions.commonsNet
 
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
