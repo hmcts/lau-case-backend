@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 class InvalidRequestExceptionTest {
 
     @Test
-    public void shouldCreateInstanceOfException() {
+    void shouldCreateInstanceOfException() {
         final InvalidRequestException invalidRequestException = new InvalidRequestException("error", BAD_REQUEST);
         assertThat(invalidRequestException).isInstanceOf(Exception.class);
     }

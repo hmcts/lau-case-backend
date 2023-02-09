@@ -22,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @NoArgsConstructor
-@SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement"})
+@SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement","PMD.UnusedAssignment"})
 @TypeDef(
     name = "list-array",
     typeClass = ListArrayType.class

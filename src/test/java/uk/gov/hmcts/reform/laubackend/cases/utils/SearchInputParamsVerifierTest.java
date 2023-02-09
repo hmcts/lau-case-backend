@@ -22,10 +22,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SearchInputParamsVerifierTest {
+class SearchInputParamsVerifierTest {
 
     @Test
-    public void shouldVerifyUserId() {
+    void shouldVerifyUserId() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder("3748238",
                 null,
                 null,
@@ -35,7 +35,7 @@ public class SearchInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyUserId() {
+    void shouldNotVerifyUserId() {
         final String userId = randomAlphanumeric(65);
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
@@ -53,7 +53,7 @@ public class SearchInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyCaseRef() {
+    void shouldVerifyCaseRef() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder(null,
                 random(16, "123456"),
                 null,
@@ -63,7 +63,7 @@ public class SearchInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseRef() {
+    void shouldNotVerifyCaseRef() {
         final String caseRef = random(17, "123456");
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
@@ -81,7 +81,7 @@ public class SearchInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyTimestamp() {
+    void shouldVerifyTimestamp() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder(null,
                 null,
                 "2021-06-23T22:20:05",
@@ -91,7 +91,7 @@ public class SearchInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyTimestamp() {
+    void shouldNotVerifyTimestamp() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,

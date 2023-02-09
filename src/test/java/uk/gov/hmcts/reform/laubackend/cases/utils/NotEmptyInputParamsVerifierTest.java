@@ -20,10 +20,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 
 @SuppressWarnings("PMD.TooManyMethods")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NotEmptyInputParamsVerifierTest {
+class NotEmptyInputParamsVerifierTest {
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForJurisdictionCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForJurisdictionCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -36,7 +36,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseRefCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForCaseRefCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 "345",
                 null,
@@ -49,7 +49,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseTypeCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForCaseTypeCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 "567",
@@ -62,7 +62,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForActionTypeCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForActionTypeCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -75,7 +75,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForStartTimeCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForStartTimeCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -88,7 +88,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForEndTimeCaseAction() {
+    void shouldVerifyRequestParamsAreNotEmptyForEndTimeCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -101,7 +101,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseAction() {
+    void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseAction() {
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     null,
@@ -120,7 +120,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPostRequestParamsAreEmptyForCaseAction() {
+    void shouldThrowExceptionWhenPostRequestParamsAreEmptyForCaseAction() {
         try {
             verifyRequestActionParamsAreNotEmpty(new ActionLog("1",
                     null,
@@ -137,7 +137,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
+    void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder(null,
                 random(71, "123456"),
                 null,
@@ -147,7 +147,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenGetRequestParamsAreEmptyForCaseSearch() {
+    void shouldThrowExceptionWhenGetRequestParamsAreEmptyForCaseSearch() {
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
                     null,
@@ -164,7 +164,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseSearch() {
+    void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseSearch() {
         try {
             final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), null);
 
@@ -180,7 +180,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseSearchWithMissingCaseRefs() {
+    void shouldVerifyRequestParamsAreNotEmptyForCaseSearchWithMissingCaseRefs() {
         final SearchLog searchLog = new SearchLog("1", null, "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
@@ -190,7 +190,7 @@ public class NotEmptyInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenIdIsNotPresent() {
+    void shouldThrowExceptionWhenIdIsNotPresent() {
         try {
             verifyIdNotEmpty(null);
             fail("The method should have thrown InvalidRequestException when id is missing");

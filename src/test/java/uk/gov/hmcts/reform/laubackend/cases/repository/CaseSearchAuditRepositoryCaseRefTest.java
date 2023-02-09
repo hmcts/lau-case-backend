@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.laubackend.cases.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
@@ -25,8 +24,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
         "spring.flyway.enabled=true"
 })
 @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-@Import({RemoveColumnTransformers.class})
-public class CaseSearchAuditRepositoryCaseRefTest {
+class CaseSearchAuditRepositoryCaseRefTest {
 
     @Autowired
     private CaseSearchAuditRepository caseSearchAuditRepository;

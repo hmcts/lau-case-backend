@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 
@@ -40,12 +39,12 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
             +   "OR ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp))"
             + "limit 10000) ca",
         nativeQuery = true)
-    Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
-                                       final @Param("caseRef") String caseRef,
-                                       final @Param("caseTypeId") String caseTypeId,
-                                       final @Param("caseAction") String caseAction,
-                                       final @Param("caseJurisdictionId") String caseJurisdictionId,
-                                       final @Param("startTime") Timestamp startTime,
-                                       final @Param("endTime") Timestamp endTime,
-                                       final Pageable pageable);
+    Page<CaseActionAudit> findCaseView(String userId,
+                                       String caseRef,
+                                       String caseTypeId,
+                                       String caseAction,
+                                       String caseJurisdictionId,
+                                       Timestamp startTime,
+                                       Timestamp endTime,
+                                       Pageable pageable);
 }

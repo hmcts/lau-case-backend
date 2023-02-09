@@ -19,10 +19,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ActionInputParamsVerifierGetExceptionTest {
+class ActionInputParamsVerifierGetExceptionTest {
 
     @Test
-    public void shouldNotVerifyUserId() {
+    void shouldNotVerifyUserId() {
         final String userId = randomAlphanumeric(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
@@ -43,7 +43,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseRef() {
+    void shouldNotVerifyCaseRef() {
         final String caseRef = random(17, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -64,7 +64,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyTimestamp() {
+    void shouldNotVerifyTimestamp() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -86,7 +86,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
 
 
     @Test
-    public void shouldNotVerifyCaseTypeId() {
+    void shouldNotVerifyCaseTypeId() {
         final String caseTypeId = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -107,7 +107,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseAction() {
+    void shouldNotVerifyCaseAction() {
         final String caseAction = "SUSPENDED";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -128,7 +128,7 @@ public class ActionInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseJurisdictionId() {
+    void shouldNotVerifyCaseJurisdictionId() {
         final String caseJurisdictionId = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,

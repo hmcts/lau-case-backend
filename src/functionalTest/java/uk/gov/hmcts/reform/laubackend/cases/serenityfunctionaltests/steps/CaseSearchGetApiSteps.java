@@ -71,7 +71,8 @@ public class CaseSearchGetApiSteps extends BaseSteps {
     public String thenTheGetCaseSearchResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                     CaseSearchGetResponseVO caseSearchGetResponseVO) {
         int startRecordNumber = caseSearchGetResponseVO.getStartRecordNumber();
-        Assert.assertTrue(startRecordNumber > 0);
+        Assert.assertTrue("Start record number should be greater than 0",
+                          startRecordNumber > 0);
         List<SearchLog> searchLogList = caseSearchGetResponseVO.getSearchLog();
         SearchLog searchLogObj = searchLogList == null || searchLogList.get(0) == null
                 ? new SearchLog() : searchLogList.get(0);
@@ -111,9 +112,11 @@ public class CaseSearchGetApiSteps extends BaseSteps {
         Date inputStartTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampStartInputParam);
         Date inputEndTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampEndInputParam);
         Date responseTimestamp = new SimpleDateFormat(responseDateFormat, Locale.UK).parse(timeStampResponse);
-        Assert.assertTrue(responseTimestamp.after(inputStartTimestamp) && responseTimestamp.before(
-                inputEndTimestamp) || responseTimestamp.getTime() == inputStartTimestamp.getTime()
-                || responseTimestamp.getTime() == inputEndTimestamp.getTime()
+        Assert.assertTrue("ResponseDate is not between startDate and endDate",
+                          responseTimestamp.after(inputStartTimestamp)
+                              && responseTimestamp.before(inputEndTimestamp)
+                              || responseTimestamp.getTime() == inputStartTimestamp.getTime()
+                              || responseTimestamp.getTime() == inputEndTimestamp.getTime()
         );
         return SUCCESS;
     }
@@ -126,9 +129,9 @@ public class CaseSearchGetApiSteps extends BaseSteps {
 
     @Step("Then bad response is returned")
     public String thenBadResponseIsReturned(Response response, int expectedStatusCode) {
-        Assert.assertTrue(
+        Assert.assertEquals(
                 "Response status code is not " + expectedStatusCode + ", but it is " + response.getStatusCode(),
-                response.statusCode() == expectedStatusCode
+                 expectedStatusCode,response.statusCode()
         );
         return SUCCESS;
     }

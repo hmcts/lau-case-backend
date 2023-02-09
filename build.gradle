@@ -30,9 +30,14 @@ apply plugin: "info.solidsoft.pitest"
 group = 'uk.gov.hmcts.reform'
 version = '0.0.1'
 
-allprojects {
-  sourceCompatibility = '11'
-  targetCompatibility = '11'
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+tasks.withType(JavaExec).configureEach {
+  javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
 gitProperties {
@@ -143,7 +148,6 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "6.18.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -265,8 +269,8 @@ repositories {
 }
 
 def versions = [
-        junit             : '5.9.1',
-        junitPlatform     : '1.9.1',
+        junit             : '5.9.2',
+        junitPlatform     : '1.9.2',
         reformLogging     : '5.1.7',
         springBoot        : springBoot.class.package.implementationVersion,
         springfoxSwagger  : '3.0.0',
@@ -275,13 +279,13 @@ def versions = [
         gradlePitest      : '1.9.0',
         pitest            : '1.9.11',
         sonarPitest       : '0.5',
-        lombok            : '1.18.12',
+        lombok            : '1.18.22',
         testcontainers    : '1.16.2',
         restAssured       : '4.5.1',
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
-        fasterXmlJackson  : '2.14.0-rc1',
+        fasterXmlJackson  : '2.14.1',
         springFramework   : '5.3.20',
         springCloud       : '3.1.2',
         log4j             : '2.17.2',
@@ -367,7 +371,6 @@ dependencies {
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
 
   implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.69"
-  implementation group: "com.gilecode.yagson", name: "j9-reflection-utils", version: "1.0"
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   implementation("org.springframework.boot:spring-boot-devtools")
 
