@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
@@ -23,7 +22,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@Import({RemoveColumnTransformers.class})
 class CaseActionAuditRepositoryStartEndTimeTest {
 
     @Autowired

@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 
 import java.sql.Timestamp;
 
-@SuppressWarnings({"PMD.UseObjectForClearerAPI","PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD.UseObjectForClearerAPI","PMD.AvoidDuplicateLiterals","PMD.FinalParameterInAbstractMethod"})
 @Repository
 public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit, Long> {
 
