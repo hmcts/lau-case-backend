@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,4 +47,13 @@ public class CaseActionAudit implements Serializable {
 
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
+
+    public CaseActionAudit(String userId, String caseRef, String caseAction, String caseJurisdictionId, String caseTypeId, Timestamp timestamp) {
+        this.userId = userId;
+        this.caseRef = caseRef;
+        this.caseAction = caseAction;
+        this.caseJurisdictionId = caseJurisdictionId;
+        this.caseTypeId = caseTypeId;
+        this.timestamp = timestamp;
+    }
 }

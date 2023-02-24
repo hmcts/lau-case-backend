@@ -51,7 +51,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 valueOf(now().plusDays(10)),
-                null,
+                valueOf(now().plusDays(30)),
                 null
         );
         //Will return 10 days because  the date start is +10 from now
@@ -66,7 +66,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
-                null,
+                valueOf(now()),
                 valueOf(now().plusDays(1)),
                 null
         );
@@ -83,7 +83,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 valueOf(now().plusDays(20)),
-                null,
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
@@ -97,7 +97,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
-                null,
+                valueOf(now().minusDays(2)),
                 valueOf(now().minusDays(1)),
                 null
         );

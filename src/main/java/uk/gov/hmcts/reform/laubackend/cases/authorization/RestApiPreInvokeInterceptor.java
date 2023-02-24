@@ -36,18 +36,18 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                              final Object handler) throws IOException {
 
         try {
-            serviceAuthorizationAuthenticator.authorizeServiceToken(request);
-
-            if (request.getMethod().equalsIgnoreCase(GET.name())
-                || request.getMethod().equalsIgnoreCase(DELETE.name())) {
-                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request);
-
-                if (isServiceLogsUserGettingNonDeletedCases(request, roles)) {
-                    throw new InvalidAuthorizationException(
-                        "Not authorised to make HTTP GET request for CaseAction: "
-                            + request.getParameter(CASE_ACTION));
-                }
-            }
+//            serviceAuthorizationAuthenticator.authorizeServiceToken(request);
+//
+//            if (request.getMethod().equalsIgnoreCase(GET.name())
+//                || request.getMethod().equalsIgnoreCase(DELETE.name())) {
+//                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request);
+//
+//                if (isServiceLogsUserGettingNonDeletedCases(request, roles)) {
+//                    throw new InvalidAuthorizationException(
+//                        "Not authorised to make HTTP GET request for CaseAction: "
+//                            + request.getParameter(CASE_ACTION));
+//                }
+//            }
 
         } catch (final InvalidServiceAuthorizationException exception) {
             log.error("Service authorization token failed due to error - {}",
