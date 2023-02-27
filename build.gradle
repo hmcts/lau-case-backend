@@ -285,7 +285,7 @@ def versions = [
         serviceAuthVersion: '4.0.0',
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
-        fasterXmlJackson  : '2.14.1',
+        fasterXmlJackson  : '2.14.2',
         springFramework   : '5.3.20',
         springCloud       : '3.1.2',
         log4j             : '2.17.2',
