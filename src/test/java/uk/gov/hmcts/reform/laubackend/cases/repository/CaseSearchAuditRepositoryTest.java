@@ -135,7 +135,6 @@ class CaseSearchAuditRepositoryTest {
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private CaseSearchAudit getCaseSearchAuditEntity(final List<Long> caseRefs,
                                                      final String userId,
                                                      final Timestamp timestamp) {
