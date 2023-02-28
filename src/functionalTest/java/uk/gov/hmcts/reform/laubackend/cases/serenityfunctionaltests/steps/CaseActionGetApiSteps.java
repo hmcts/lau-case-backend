@@ -64,7 +64,6 @@ public class CaseActionGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
-    @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
     @Step("Then the GET CaseAction response params match the input")
     public String thenTheGetCaseActionResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                     CaseActionResponseVO caseActionResponseVO) {
