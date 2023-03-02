@@ -2,15 +2,20 @@ package uk.gov.hmcts.reform.laubackend.cases.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -19,19 +24,26 @@ import java.util.List;
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
+@RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=update",
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals","PMD.TooManyMethods"})
+@Import({QueryBuilder.class, TimestampUtil.class})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods", "PMD.UnnecessaryFullyQualifiedName"})
 class CaseActionAuditRepositoryTest {
 
     @Autowired
     private CaseActionAuditRepository caseActionAuditRepository;
+
+    @Autowired
+    private QueryBuilder queryBuilder;
 
     @BeforeEach
     public void setUp() {
@@ -50,32 +62,38 @@ class CaseActionAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseRef() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 "2",
                 null,
                 null,
                 null,
                 null,
                 null,
-                null
-        );
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 2);
     }
 
     @Test
     void shouldFindCaseByUserId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "10",
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("10",
                 null,
                 null,
                 null,
                 null,
                 null,
                 null,
-                null
-        );
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 10);
     }
@@ -83,78 +101,84 @@ class CaseActionAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseTypeId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 "4",
                 null,
                 null,
                 null,
                 null,
-                null
-        );
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 4);
     }
 
     @Test
     void shouldFindCaseByCaseAction() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-            null,
-            null,
-            null,
-            "CREATE",
-            null,
-            null,
-            null,
-            null
-        );
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
+                null,
+                null,
+                "CREATE",
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
         assertResults(caseViewAuditList.getContent(), 1);
     }
 
     @Test
     void shouldFindCaseByCaseJurisdictionId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
                 "3",
                 null,
                 null,
-                null
-        );
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 3);
     }
 
     @Test
     void shouldFindPageableResults() {
-//        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                valueOf(now().minusDays(50)),
-//                valueOf(now().plusDays(50)),
-//                PageRequest.of(1, 10, Sort.by("log_timestamp"))
-//        );
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
+                null,
+                null,
+                null,
+                null,
+                now().minusDays(50).toString(),
+                now().plusDays(50).toString(),
+                null,
+                null);
 
-//        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-//        Example<CaseActionAudit> exampleQuery = Example.of(new CaseActionAudit(null, null,
-//                        null,"UPDATE", "PROBATE", null,null),
-//                matcher);
-//        Page<CaseActionAudit> results = caseActionAuditRepository.findAll(exampleQuery ,  PageRequest.of(0 , 10));
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder),
+                        PageRequest.of(1, 10, Sort.by("timestamp")));
 
-//        assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
-//        assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
+        assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
 
     @Test
     void shouldGetAllRecords() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
@@ -162,8 +186,11 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
     }
 
@@ -176,32 +203,27 @@ class CaseActionAuditRepositoryTest {
                 valueOf(now())));
 
 
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "3333",
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("3333",
                 null,
                 null,
                 null,
                 null,
                 null,
                 null,
-                null
-        );
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
 
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("3333");
 
         caseActionAuditRepository.deleteById(caseViewAuditList.getContent().get(0).getCaseActionId());
 
-        final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository.findCaseView(
-                "3333",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList1.getContent().size()).isEqualTo(0);
     }
@@ -215,16 +237,18 @@ class CaseActionAuditRepositoryTest {
                 "6666",
                 valueOf(now)));
 
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "6666",
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("6666",
                 null,
                 null,
                 null,
                 null,
-                valueOf(now.minusHours(1)),
-                valueOf(now.plusHours(1)),
-                null
-        );
+                now.minusHours(1).toString(),
+                now.plusHours(1).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("6666");
@@ -255,5 +279,9 @@ class CaseActionAuditRepositoryTest {
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);
         return caseActionAudit;
+    }
+
+    private Pageable getPage() {
+        return of(0, 20);
     }
 }

@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,13 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchGetHelper.ge
 
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.JUnit4TestShouldUseBeforeAnnotation"})
 public class CaseSearchGetSteps extends AbstractSteps {
+
+    private static final String START_TIME = "2021-07-23T22:20:05";
+    private static final String END_TIME = "2021-09-23T22:20:05";
+
+    private static final String START_TIME_PARAMETER = "startTimestamp";
+    private static final String END_TIME_PARAMETER = "endTimestamp";
+
 
     private String caseSearchPostResponseBody;
     private final Gson jsonReader = new Gson();
@@ -61,25 +69,30 @@ public class CaseSearchGetSteps extends AbstractSteps {
 
     @And("I GET {string} using userId {string} query parameter")
     public void caseSearchUsingUserId(final String path, final String userId) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path,
+                Map.of("userId", userId, START_TIME_PARAMETER, START_TIME, END_TIME_PARAMETER, END_TIME));
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
-    @And("And I GET {string} using startTimestamp {string} query parameter")
-    public void caseSearchUsingStartTimestamp(final String path, final String startTimestamp) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "startTimestamp", startTimestamp);
+    @And("And I GET {string} using startTimestamp {string} endTimestamp {string} query parameter")
+    public void caseSearchUsingStartTimestamp(final String path,
+                                              final String startTimestamp,
+                                              final String endTimestamp) {
+        final Response response = restHelper.getResponse(baseUrl() + path,
+                Map.of(START_TIME_PARAMETER, startTimestamp, END_TIME_PARAMETER, endTimestamp));
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
     @And("I GET {string} using caseRef {string} query parameter")
     public void caseSearchUsingCaseRef(final String path, final String caseRef) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "caseRef", caseRef);
+        final Response response = restHelper.getResponse(baseUrl() + path,
+                Map.of("caseRef", caseRef, START_TIME_PARAMETER, START_TIME, END_TIME_PARAMETER, END_TIME));
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using endTimestamp {string} query parameter")
     public void caseSearchUsingEndTimestamp(final String path, String endTimestamp) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "endTimestamp", endTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, Map.of(END_TIME_PARAMETER, endTimestamp));
         caseSearchPostResponseBody = response.getBody().asString();
     }
 

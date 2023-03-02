@@ -105,7 +105,6 @@ class CaseSearchServiceTest {
         assertThat(caseSearchPostResponse.getSearchLog().getCaseRefs().get(0)).isEqualTo(caseRef);
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private CaseSearchAudit getCaseSearchAuditEntity(final Timestamp timestamp) {
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setUserId("1");

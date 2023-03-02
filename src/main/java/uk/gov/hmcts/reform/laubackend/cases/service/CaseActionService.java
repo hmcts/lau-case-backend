@@ -41,12 +41,11 @@ public class CaseActionService {
     @Value("${default.page.size}")
     private String defaultPageSize;
 
-
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
 
         final Page<CaseActionAudit> caseView =
                 caseActionAuditRepository.findAll(queryBuilder.buildCaseActionRequest(inputParamsHolder),
-                getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage()));
+                        getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage()));
 
         final List<ActionLog> actionLogList = new ArrayList<>();
 

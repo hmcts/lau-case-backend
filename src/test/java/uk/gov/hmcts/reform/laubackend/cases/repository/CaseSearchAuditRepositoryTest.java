@@ -2,12 +2,15 @@ package uk.gov.hmcts.reform.laubackend.cases.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
@@ -19,6 +22,8 @@ import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
+@RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=update",
         "spring.liquibase.enabled=false",
@@ -45,11 +50,11 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseRef() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 "2",
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
@@ -58,11 +63,11 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByUserId() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 "10",
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
@@ -71,11 +76,11 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldFindPageableResults() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 PageRequest.of(1, 10, Sort.by("log_timestamp"))
         );
         assertThat(caseSearchAuditList.getTotalElements()).isEqualTo(20);
@@ -84,11 +89,11 @@ class CaseSearchAuditRepositoryTest {
 
     @Test
     void shouldGetAllRecords() {
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(20);
@@ -122,7 +127,11 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.save(caseSearchAudit);
 
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository
-                .findCaseSearchH2("3333", null, null, null, null);
+                .findCaseSearch("3333",
+                        null,
+                        valueOf(now().minusDays(50)),
+                        valueOf(now().plusDays(50)),
+                        null);
 
         assertThat(caseSearch.getContent().size()).isEqualTo(1);
         assertThat(caseSearch.getContent().get(0).getUserId()).isEqualTo("3333");
@@ -130,7 +139,10 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.deleteById(caseSearch.getContent().get(0).getId());
 
         final Page<CaseSearchAudit> caseSearch1 = caseSearchAuditRepository
-                .findCaseSearchH2("3333", null, null, null, null);
+                .findCaseSearch("3333",
+                        null,
+                        valueOf(now().minusDays(50)),
+                        valueOf(now().plusDays(50)), null);
 
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
     }

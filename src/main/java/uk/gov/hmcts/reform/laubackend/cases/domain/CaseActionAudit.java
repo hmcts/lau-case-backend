@@ -1,17 +1,15 @@
 package uk.gov.hmcts.reform.laubackend.cases.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.io.Serializable;
-import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -48,12 +46,15 @@ public class CaseActionAudit implements Serializable {
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
 
-    public CaseActionAudit(String userId, String caseRef, String caseAction, String caseJurisdictionId, String caseTypeId, Timestamp timestamp) {
+    public CaseActionAudit(final String userId,
+                           final String caseRef,
+                           final String caseAction,
+                           final String caseJurisdictionId,
+                           String caseTypeId) {
         this.userId = userId;
         this.caseRef = caseRef;
         this.caseAction = caseAction;
         this.caseJurisdictionId = caseJurisdictionId;
         this.caseTypeId = caseTypeId;
-        this.timestamp = timestamp;
     }
 }

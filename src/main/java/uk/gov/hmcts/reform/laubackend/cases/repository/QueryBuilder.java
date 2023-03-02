@@ -15,47 +15,41 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.Predicate;
 
-import static java.lang.Integer.parseInt;
 import static org.apache.commons.lang3.StringUtils.upperCase;
-import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 public class QueryBuilder {
 
+    private static final String TIMESTAMP = "timestamp";
     @Autowired
     private TimestampUtil timestampUtil;
 
     public Specification<CaseActionAudit> buildCaseActionRequest(final ActionInputParamsHolder inputParamsHolder) {
         final CaseActionAudit caseActionAudit = createCaseActionAudit(inputParamsHolder);
 
-        return getSpecFromDatesAndExample(
+        return getCaseActionAuditSpec(
                 timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 Example.of(caseActionAudit, getExampleMatcher()));
     }
 
-    public Specification<CaseActionAudit> getSpecFromDatesAndExample(final Timestamp startTime,
-                                                                     final Timestamp endTime,
-                                                                     final Example<CaseActionAudit> example) {
+
+    private Specification<CaseActionAudit> getCaseActionAuditSpec(final Timestamp startTime,
+                                                                  final Timestamp endTime,
+                                                                  final Example<CaseActionAudit> example) {
         return (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
 
             if (startTime != null) {
-                predicates.add(builder.greaterThan(root.get("timestamp"), startTime));
+                predicates.add(builder.greaterThanOrEqualTo(root.get(TIMESTAMP), startTime));
             }
             if (endTime != null) {
-                predicates.add(builder.lessThan(root.get("timestamp"), endTime));
+                predicates.add(builder.lessThanOrEqualTo(root.get(TIMESTAMP), endTime));
             }
             predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
 
-            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+            return builder.and(predicates.toArray(new Predicate[0]));
         };
-    }
-
-    private ExampleMatcher getExampleMatcher() {
-        return ExampleMatcher.matching()
-                .withNullHandler(ExampleMatcher.NullHandler.IGNORE)
-                .withIgnoreNullValues();
     }
 
     private CaseActionAudit createCaseActionAudit(final ActionInputParamsHolder inputParamsHolder) {
@@ -64,8 +58,12 @@ public class QueryBuilder {
                 inputParamsHolder.getCaseRef(),
                 upperCase(inputParamsHolder.getCaseAction()),
                 upperCase(inputParamsHolder.getCaseJurisdictionId()),
-                upperCase(inputParamsHolder.getCaseTypeId()),
-                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime())
+                upperCase(inputParamsHolder.getCaseTypeId())
         );
+    }
+
+    private ExampleMatcher getExampleMatcher() {
+        return ExampleMatcher.matching()
+                .withIgnoreNullValues();
     }
 }

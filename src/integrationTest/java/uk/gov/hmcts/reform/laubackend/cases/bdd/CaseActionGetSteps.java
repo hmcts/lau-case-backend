@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -137,49 +138,49 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     @And("I GET {string} using userId {string} query param")
     public void searchUsingUserId(final String path, String userId) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path, Map.of("userId", userId));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("I GET {string} using caseRef query param")
     public void searchUsingCaseRef(final String path) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseRef", "1");
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of("caseRef", "1"));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseRef {string} query param")
     public void retrieveCaseActionCaseRefResponse(final String path, final String caseRef) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseRef", caseRef);
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of("caseRef", caseRef));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseTypeId {string} query param")
     public void retrieveCaseActionForCaseType(final String path, final String caseTypeId) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseTypeId", caseTypeId);
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of("caseTypeId", caseTypeId));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseAction {string} query param")
     public void retrieveCaseActionForCaseAction(final String path, final String caseAction) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseAction", caseAction);
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of("caseAction", caseAction));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using caseJurisdictionId {string} query param")
     public void retrieveCaseJurisdiction(final String path, final String caseJurisdictionId) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseJurisdictionId", caseJurisdictionId);
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of("caseJurisdictionId", caseJurisdictionId));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using endTimestamp {string} query param")
     public void retrieveWithEndTimestamp(final String path, final String endTimestamp) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "endTimestamp", endTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, Map.of("endTimestamp", endTimestamp));
         caseActionPostResponseBody = response.getBody().asString();
     }
 
     @And("And I GET {string} using startTimestamp {string} query param")
     public void retrieveWithStartTime(final String path, final String startTimestamp) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "startTimestamp", startTimestamp);
+        final Response response = restHelper.getResponse(baseUrl() + path, Map.of("startTimestamp", startTimestamp));
         caseActionPostResponseBody = response.getBody().asString();
     }
 

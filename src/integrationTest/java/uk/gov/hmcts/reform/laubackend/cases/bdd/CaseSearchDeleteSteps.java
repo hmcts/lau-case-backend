@@ -9,6 +9,8 @@ import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -49,7 +51,7 @@ public class CaseSearchDeleteSteps extends AbstractSteps {
 
     @And("I GET {string} using userId {string}")
     public void searchByCaseSearchId(final String path, final String userId) {
-        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path, Map.of("userId", userId));
         caseSearchResponseBody = response.getBody().asString();
     }
 
