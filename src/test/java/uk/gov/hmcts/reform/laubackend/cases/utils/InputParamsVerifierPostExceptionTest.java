@@ -21,10 +21,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.ver
 
 @SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class InputParamsVerifierPostExceptionTest {
+class InputParamsVerifierPostExceptionTest {
 
     @Test
-    public void shouldNotVerifyUserIdForCaseAction() {
+    void shouldNotVerifyUserIdForCaseAction() {
         final String userId = randomAlphanumeric(65);
         try {
             final ActionLog actionLog = new ActionLog(userId,
@@ -45,7 +45,7 @@ public class InputParamsVerifierPostExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyTimestampForCaseAction() {
+    void shouldNotVerifyTimestampForCaseAction() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final ActionLog actionLog = new ActionLog(null,
@@ -65,7 +65,7 @@ public class InputParamsVerifierPostExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseTypeIdForCaseAction() {
+    void shouldNotVerifyCaseTypeIdForCaseAction() {
         final String caseTypeId = random(71, "123456");
         try {
             final ActionLog actionLog = new ActionLog(null,
@@ -85,7 +85,7 @@ public class InputParamsVerifierPostExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseJurisdictionIdForCaseAction() {
+    void shouldNotVerifyCaseJurisdictionIdForCaseAction() {
         final String caseJurisdictionId = random(71, "123456");
         try {
             final ActionLog actionLog = new ActionLog(null,
@@ -105,7 +105,7 @@ public class InputParamsVerifierPostExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyUserIdForCaseSearch() {
+    void shouldNotVerifyUserIdForCaseSearch() {
         final String userId = randomAlphanumeric(65);
         try {
             final SearchLog searchLog = new SearchLog(userId, null, null);
@@ -120,7 +120,7 @@ public class InputParamsVerifierPostExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyActionForCaseAction() {
+    void shouldNotVerifyActionForCaseAction() {
         final String caseAction = "B";
         try {
             final ActionLog actionLog = new ActionLog(null,

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
         "spring.flyway.enabled=true"
 })
 @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops","PMD.AvoidDuplicateLiterals"})
-@Import({RemoveColumnTransformers.class})
 class CaseSearchAuditRepositoryTest {
 
     @Autowired
@@ -137,7 +135,6 @@ class CaseSearchAuditRepositoryTest {
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private CaseSearchAudit getCaseSearchAuditEntity(final List<Long> caseRefs,
                                                      final String userId,
                                                      final Timestamp timestamp) {

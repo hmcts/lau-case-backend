@@ -10,7 +10,8 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
 
-@SuppressWarnings({"PMD.UseObjectForClearerAPI","PMD.UnnecessaryAnnotationValueElement","PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD.UseObjectForClearerAPI","PMD.UnnecessaryAnnotationValueElement",
+    "PMD.AvoidDuplicateLiterals","PMD.FinalParameterInAbstractMethod"})
 @Repository
 public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit, Long> {
 
@@ -34,10 +35,10 @@ public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit
             + "limit 10000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearch(final @Param("userId") String userId,
-                                                   final @Param("caseRef") String caseRef,
-                                                   final @Param("startTime") Timestamp startTime,
-                                                   final @Param("endTime") Timestamp endTime,
-                                                   final Pageable pageable);
+                                         final @Param("caseRef") String caseRef,
+                                         final @Param("startTime") Timestamp startTime,
+                                         final @Param("endTime") Timestamp endTime,
+                                         final Pageable pageable);
 
     @Query(value = "SELECT cs.id, cs.user_id, cs.log_timestamp, cs.case_refs FROM case_search_audit cs "
         + "WHERE (cast(:userId as text) IS NULL OR cs.user_id=cast(:userId as text)) "
@@ -59,8 +60,8 @@ public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit
             + "limit 10000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearchH2(final @Param("userId") String userId,
-                                         final @Param("caseRef") String caseRef,
-                                         final @Param("startTime") Timestamp startTime,
-                                         final @Param("endTime") Timestamp endTime,
-                                         final Pageable pageable);
+                                           final @Param("caseRef") String caseRef,
+                                           final @Param("startTime") Timestamp startTime,
+                                           final @Param("endTime") Timestamp endTime,
+                                           final Pageable pageable);
 }

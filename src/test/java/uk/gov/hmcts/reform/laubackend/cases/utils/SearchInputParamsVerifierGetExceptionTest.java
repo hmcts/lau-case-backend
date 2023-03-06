@@ -16,10 +16,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SearchInputParamsVerifierGetExceptionTest {
+class SearchInputParamsVerifierGetExceptionTest {
 
     @Test
-    public void shouldNotVerifyUserId() {
+    void shouldNotVerifyUserId() {
         final String userId = randomAlphanumeric(65);
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
@@ -37,7 +37,7 @@ public class SearchInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseRef() {
+    void shouldNotVerifyCaseRef() {
         final String caseRef = random(17, "123456");
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
@@ -55,7 +55,7 @@ public class SearchInputParamsVerifierGetExceptionTest {
     }
 
     @Test
-    public void shouldNotVerifyTimestamp() {
+    void shouldNotVerifyTimestamp() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,

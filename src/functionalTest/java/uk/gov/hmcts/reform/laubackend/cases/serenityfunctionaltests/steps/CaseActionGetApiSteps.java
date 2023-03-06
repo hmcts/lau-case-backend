@@ -64,12 +64,12 @@ public class CaseActionGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
-    @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
     @Step("Then the GET CaseAction response params match the input")
     public String thenTheGetCaseActionResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                     CaseActionResponseVO caseActionResponseVO) {
         int startRecordNumber = caseActionResponseVO.getStartRecordNumber();
-        Assert.assertTrue(startRecordNumber > 0);
+        Assert.assertTrue("Start record number should be greater than 0",
+                          startRecordNumber > 0);
         List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
         ActionLog actionLogObj = actionLogList == null || actionLogList.get(0) == null
                 ? new ActionLog() : actionLogList.get(0);
@@ -135,9 +135,11 @@ public class CaseActionGetApiSteps extends BaseSteps {
         LOGGER.info("Input end date : " + inputEndTimestamp.getTime());
         LOGGER.info("Output date : " + responseTimestamp.getTime());
 
-        Assert.assertTrue(responseTimestamp.after(inputStartTimestamp) && responseTimestamp.before(
-                inputEndTimestamp) || responseTimestamp.getTime() == inputStartTimestamp.getTime()
-                || responseTimestamp.getTime() == inputEndTimestamp.getTime()
+        Assert.assertTrue("ResponseDate is not between startDate and endDate",
+                          responseTimestamp.after(inputStartTimestamp)
+                              && responseTimestamp.before(inputEndTimestamp)
+                              || responseTimestamp.getTime() == inputStartTimestamp.getTime()
+                              || responseTimestamp.getTime() == inputEndTimestamp.getTime()
         );
         return SUCCESS;
     }
@@ -168,9 +170,9 @@ public class CaseActionGetApiSteps extends BaseSteps {
 
     @Step("Then bad response is returned")
     public String thenBadResponseIsReturned(Response response, int expectedStatusCode) {
-        Assert.assertTrue(
+        Assert.assertEquals(
                 "Response status code is not " + expectedStatusCode + ", but it is " + response.getStatusCode(),
-                response.statusCode() == expectedStatusCode
+                expectedStatusCode,response.statusCode()
         );
         return SUCCESS;
     }

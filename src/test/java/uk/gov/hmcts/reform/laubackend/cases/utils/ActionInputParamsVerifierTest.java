@@ -22,10 +22,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.ver
 
 @SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ActionInputParamsVerifierTest {
+class ActionInputParamsVerifierTest {
 
     @Test
-    public void shouldVerifyUserId() {
+    void shouldVerifyUserId() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder("3748238",
                 null,
                 null,
@@ -38,7 +38,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyUserId() {
+    void shouldNotVerifyUserId() {
         final String userId = randomAlphanumeric(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
@@ -59,7 +59,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyCaseRef() {
+    void shouldVerifyCaseRef() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
                 random(16, "123456"),
                 null,
@@ -72,7 +72,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseRef() {
+    void shouldNotVerifyCaseRef() {
         final String caseRef = random(17, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -93,7 +93,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyTimestamp() {
+    void shouldVerifyTimestamp() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -106,7 +106,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyTimestamp() {
+    void shouldNotVerifyTimestamp() {
         final String timestamp = "2021-106-23T22:20:05";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -127,7 +127,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyCaseTypeId() {
+    void shouldVerifyCaseTypeId() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
                 null,
                 random(69, "123456"),
@@ -140,7 +140,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseTypeId() {
+    void shouldNotVerifyCaseTypeId() {
         final String caseTypeId = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -161,7 +161,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyCaseAction() {
+    void shouldVerifyCaseAction() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
                      null,
                      null,
@@ -174,7 +174,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseAction() {
+    void shouldNotVerifyCaseAction() {
         final String caseAction = "SUSPEND";
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
@@ -195,7 +195,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyCaseJurisdictionId() {
+    void shouldVerifyCaseJurisdictionId() {
         assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
                 null,
                 null,
@@ -208,7 +208,7 @@ public class ActionInputParamsVerifierTest {
     }
 
     @Test
-    public void shouldNotVerifyCaseJurisdictionId() {
+    void shouldNotVerifyCaseJurisdictionId() {
         final String caseJurisdiction = random(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
