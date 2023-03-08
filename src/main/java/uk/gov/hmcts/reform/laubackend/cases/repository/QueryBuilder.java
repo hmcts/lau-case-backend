@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository;
 
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -40,6 +42,7 @@ public class QueryBuilder {
         return (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
 
+
             if (startTime != null) {
                 predicates.add(builder.greaterThanOrEqualTo(root.get(TIMESTAMP), startTime));
             }
@@ -47,6 +50,7 @@ public class QueryBuilder {
                 predicates.add(builder.lessThanOrEqualTo(root.get(TIMESTAMP), endTime));
             }
             predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
+
 
             return builder.and(predicates.toArray(new Predicate[0]));
         };

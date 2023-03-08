@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
@@ -43,9 +44,21 @@ public class CaseActionService {
 
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
 
-        final Page<CaseActionAudit> caseView =
-                caseActionAuditRepository.findAll(queryBuilder.buildCaseActionRequest(inputParamsHolder),
-                        getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage()));
+//        final Page<CaseActionAudit> caseView =
+//                caseActionAuditRepository.findAll(queryBuilder.buildCaseActionRequest(inputParamsHolder),
+//                        getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage()));
+
+        final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
+                inputParamsHolder.getUserId(),
+                inputParamsHolder.getCaseRef(),
+                upperCase(inputParamsHolder.getCaseTypeId()),
+                upperCase(inputParamsHolder.getCaseAction()),
+                upperCase(inputParamsHolder.getCaseJurisdictionId()),
+                timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
+                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
+                getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
+        );
+
 
         final List<ActionLog> actionLogList = new ArrayList<>();
 
@@ -92,6 +105,6 @@ public class CaseActionService {
         final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
         final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
     }
 }

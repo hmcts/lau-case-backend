@@ -36,7 +36,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
         "spring.flyway.enabled=true"
 })
 @Import({QueryBuilder.class, TimestampUtil.class})
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods", "PMD.UnnecessaryFullyQualifiedName"})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 class CaseActionAuditRepositoryTest {
 
     @Autowired

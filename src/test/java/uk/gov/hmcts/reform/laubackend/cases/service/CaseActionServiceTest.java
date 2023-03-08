@@ -74,10 +74,10 @@ class CaseActionServiceTest {
         final Specification<CaseActionAudit> specification = mock(Specification.class);
         when(queryBuilder.buildCaseActionRequest(inputParamsHolder)).thenReturn(specification);
 
-        when(caseActionAuditRepository
-                .findAll(specification,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
-                .thenReturn(pageResults);
+//        when(caseActionAuditRepository
+//                .findAll(specification,
+//                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
+//                .thenReturn(pageResults);
 
         final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
