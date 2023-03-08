@@ -10,6 +10,8 @@ import static java.util.Arrays.asList;
 
 public final class CaseSearchGetHelper {
 
+    private static final String TIMESTAMP = "2021-08-23T22:20:05.023Z";
+
     private static List<String> caseRefs;
 
     private CaseSearchGetHelper() {
@@ -19,10 +21,11 @@ public final class CaseSearchGetHelper {
                                                                  final List<String> caseRefsList,
                                                                  final String timestamp) {
 
+
         final SearchLog searchLog = new SearchLog(userId == null ? "1" : userId,
                 caseRefsList == null
                         ? asList("3769509556751473", "2155980079888170", "1203768774671784") : caseRefsList,
-                timestamp == null ? "2021-08-23T22:20:05.023Z" : timestamp);
+                timestamp == null ? TIMESTAMP : timestamp);
 
         caseRefs = searchLog.getCaseRefs();
         return new CaseSearchPostRequest(searchLog);

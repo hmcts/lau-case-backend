@@ -2,13 +2,18 @@ package uk.gov.hmcts.reform.laubackend.cases.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,12 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
+@RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=update",
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals","PMD.TooManyMethods"})
+@Import({TimestampUtil.class})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 class CaseActionAuditRepositoryTest {
 
     @Autowired
@@ -53,8 +61,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -69,8 +77,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -86,8 +94,8 @@ class CaseActionAuditRepositoryTest {
                 "4",
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -97,14 +105,14 @@ class CaseActionAuditRepositoryTest {
     @Test
     void shouldFindCaseByCaseAction() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-            null,
-            null,
-            null,
-            "CREATE",
-            null,
-            null,
-            null,
-            null
+                null,
+                null,
+                null,
+                "CREATE",
+                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
+                null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
         assertResults(caseViewAuditList.getContent(), 1);
@@ -118,8 +126,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 "3",
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -134,10 +142,11 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
-                PageRequest.of(1, 10, Sort.by("log_timestamp"))
-        );
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
+                PageRequest.of(1, 10, Sort.by("log_timestamp")));
+
+
         assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
@@ -150,8 +159,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
@@ -172,8 +181,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -188,8 +197,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
 
@@ -210,8 +219,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
 

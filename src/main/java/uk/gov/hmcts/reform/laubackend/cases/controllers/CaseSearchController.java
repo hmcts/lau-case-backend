@@ -142,9 +142,9 @@ public class CaseSearchController {
             @ApiParam(value = "Case Reference ID", example = "1615817621013640")
             @RequestParam(value = CASE_REF, required = false) final String caseRef,
             @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
-            @RequestParam(value = START_TIME, required = false) final String startTime,
+            @RequestParam(value = START_TIME) final String startTime,
             @ApiParam(value = "End Timestamp", example = "2021-08-23T22:20:05")
-            @RequestParam(value = END_TIME, required = false) final String endTime,
+            @RequestParam(value = END_TIME) final String endTime,
             @ApiParam(value = "Size", example = "500")
             @RequestParam(value = SIZE, required = false) final String size,
             @ApiParam(value = "Page", example = "1")
