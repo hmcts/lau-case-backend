@@ -151,10 +151,10 @@ public final class CaseActionController {
             @RequestParam(value = CASE_ACTION, required = false) final String caseAction,
             @ApiParam(value = "Case Jurisdiction ID", example = "PROBATE")
             @RequestParam(value = CASE_JURISDICTION_ID, required = false) final String caseJurisdictionId,
-            @ApiParam(value = "Start Timestamp", example = "2021-06-23T22:20:05")
-            @RequestParam(value = START_TIME) final String startTime,
+            @ApiParam(value = "Start Timestamp",  example = "2021-06-23T22:20:05")
+            @RequestParam(value = START_TIME, required = false) final String startTime,
             @ApiParam(value = "End Timestamp", example = "2021-08-23T22:20:05")
-            @RequestParam(value = END_TIME) final String endTime,
+            @RequestParam(value = END_TIME, required = false) final String endTime,
             @ApiParam(value = "Size", example = "500")
             @RequestParam(value = SIZE, required = false) final String size,
             @ApiParam(value = "Page", example = "1")

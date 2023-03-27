@@ -9,16 +9,10 @@ import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequest;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.END_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.END_TIME_PARAMETER;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME_PARAMETER;
 
 @SuppressWarnings({"PMD.JUnit4TestShouldUseBeforeAnnotation"})
 public class CaseActionDeleteSteps extends AbstractSteps {
@@ -55,9 +49,7 @@ public class CaseActionDeleteSteps extends AbstractSteps {
 
     @And("I GET {string} caseAction using userId {string}")
     public void searchByCaseActionId(final String path, final String userId) {
-        final Response response = restHelper.getResponse(baseUrl() + path, Map.of("userId", userId,
-                START_TIME_PARAMETER, START_TIME,
-                END_TIME_PARAMETER, END_TIME));
+        final Response response = restHelper.getResponse(baseUrl() + path,"userId", userId);
         caseActionResponseBody = response.getBody().asString();
     }
 
