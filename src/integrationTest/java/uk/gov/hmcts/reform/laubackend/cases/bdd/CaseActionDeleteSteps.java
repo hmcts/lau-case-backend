@@ -49,7 +49,7 @@ public class CaseActionDeleteSteps extends AbstractSteps {
 
     @And("I GET {string} caseAction using userId {string}")
     public void searchByCaseActionId(final String path, final String userId) {
-        final Response response = restHelper.getResponse(baseUrl() + path,"userId", userId);
+        final Response response = restHelper.getResponse(baseUrl() + path, "userId", userId);
         caseActionResponseBody = response.getBody().asString();
     }
 

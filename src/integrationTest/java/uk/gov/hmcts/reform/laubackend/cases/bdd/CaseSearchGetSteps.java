@@ -65,7 +65,7 @@ public class CaseSearchGetSteps extends AbstractSteps {
         caseSearchPostResponseBody = response.getBody().asString();
     }
 
-    @And("And I GET {string} using startTimestamp {string}  query parameter")
+    @And("And I GET {string} using startTimestamp {string} query parameter")
     public void caseSearchUsingStartTimestamp(final String path, final String startTimestamp) {
         final Response response = restHelper.getResponse(baseUrl() + path, "startTimestamp", startTimestamp);
         caseSearchPostResponseBody = response.getBody().asString();
