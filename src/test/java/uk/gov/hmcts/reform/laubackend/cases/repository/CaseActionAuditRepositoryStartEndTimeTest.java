@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
@@ -50,7 +51,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     }
 
     @Test
-    void shouldFindCaseByStartTimeEndTime() {
+    void shouldFindCaseByStartTime() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
@@ -58,13 +59,43 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 valueOf(now().plusDays(10)),
-                valueOf(now().plusDays(30)),
+                null,
                 null
         );
         //Will return 10 days because  the date start is +10 from now
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
 
+    @Test
+    void shouldFindCaseByEndTime() {
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                "1",
+                null,
+                null,
+                null,
+                null,
+                null,
+                valueOf(now().plusDays(1)),
+                null
+        );
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertResults(caseViewAuditList.getContent(), 1);
+    }
+
+    @Test
+    void shouldNotFindCaseByStartTime() {
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+                "10",
+                null,
+                null,
+                null,
+                null,
+                valueOf(now().plusDays(20)),
+                null,
+                null
+        );
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
+    }
 
     @Test
     void shouldNotFindCaseByEndTime() {
@@ -74,10 +105,10 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(2)),
+                null,
                 valueOf(now().minusDays(1)),
-                null);
-
+                null
+        );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
     }
 
@@ -91,11 +122,20 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 valueOf(now().minusDays(1)),
                 valueOf(now().minusDays(2)),
-                null);
-
+                null
+        );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
     }
 
+
+    private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
+        final String stringValue = String.valueOf(value);
+        assertThat(caseActionAuditList.get(0).getCaseRef()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo(CREATE.name());
+    }
 
     private CaseActionAudit getCaseViewAuditEntity(final String caseRef,
                                                    final String caseJurisdictionId,

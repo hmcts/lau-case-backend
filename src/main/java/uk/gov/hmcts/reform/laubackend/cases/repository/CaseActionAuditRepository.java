@@ -15,45 +15,25 @@ import java.sql.Timestamp;
 @Repository
 public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit, Long> {
 
-    @Query(value = "SELECT * FROM case_action_audit ca "
-            + "WHERE  ca.log_timestamp >= cast(cast(:startTime as varchar) as timestamp) "
-            + "AND ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp)"
-            +   "AND  (CASE "
-            + "WHEN (cast(:userId as text) is not null) "
-            + "THEN cast(ca.user_id as text) = cast(:userId as text) ELSE 1=1 END) "
-            + "AND (CASE "
-            + "WHEN (cast(:caseRef as text) is not null)  "
-            + "THEN cast(ca.case_ref as text) = cast(:caseRef as text) ELSE 1=1 END) "
-            + "AND (CASE "
-            + "WHEN (cast(:caseTypeId as text) is not null ) "
-            + "THEN cast(ca.case_type_id as text) = cast(:caseTypeId as text) ELSE 1=1 END) "
-            + "AND (CASE "
-            + "WHEN (cast(:caseAction as text) is not null ) "
-            + "THEN cast(ca.case_action as text) = cast(:caseAction as text) ELSE 1=1 END) "
-            + "AND (CASE "
-            + "WHEN (cast(:caseJurisdictionId as text) is not null) "
-            + "THEN cast(ca.case_jurisdiction_id as text) = cast(:caseJurisdictionId as text) ELSE 1=1 END) ",
-            countQuery = "SELECT count(*) FROM ( "
-                    + "SELECT 1 FROM case_action_audit ca "
-                    + "WHERE  ca.log_timestamp >= cast(cast(:startTime as varchar) as timestamp) "
-                    + "AND ca.log_timestamp <= cast(cast(:endTime as varchar) as timestamp) "
-                    + "AND (CASE "
-                    + "WHEN (cast(:userId as text) is not null) "
-                    + "THEN cast(ca.user_id as text) = cast(:userId as text) ELSE 1=1 END) "
-                    + "AND (CASE "
-                    + "WHEN (cast(:caseRef as text) is not null)  "
-                    + "THEN cast(ca.case_ref as text) = cast(:caseRef as text) ELSE 1=1 END) "
-                    + "AND (CASE "
-                    + "WHEN (cast(:caseTypeId as text) is not null ) "
-                    + "THEN cast(ca.case_type_id as text) = cast(:caseTypeId as text) ELSE 1=1 END) "
-                    + "AND (CASE "
-                    + "WHEN (cast(:caseAction as text) is not null ) "
-                    + "THEN cast(ca.case_action as text) = cast(:caseAction as text) ELSE 1=1 END) "
-                    + "AND (CASE "
-                    + "WHEN (cast(:caseJurisdictionId as text) is not null) "
-                    + "THEN cast(ca.case_jurisdiction_id as text) = cast(:caseJurisdictionId as text) ELSE 1=1 END) "
-                    + "limit 10000) ca",
-            nativeQuery = true)
+    @Query(value = "SELECT ca.* FROM case_action_audit ca "
+        + "WHERE ca.user_id = COALESCE(cast(:userId as text), ca.user_id) "
+        + "AND ca.case_ref = COALESCE(cast(:caseRef as text) , ca.case_ref) "
+        + "AND ca.case_type_id = COALESCE(cast(:caseTypeId as text), ca.case_type_id) "
+        + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
+        + "AND ca.case_jurisdiction_id = COALESCE(cast(:caseJurisdictionId as text),ca.case_jurisdiction_id) "
+        + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
+        + "AND ca.log_timestamp >= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) ",
+        countQuery = "SELECT count(*) FROM ( "
+            + "SELECT 1 FROM case_action_audit ca "
+            + "WHERE ca.user_id = COALESCE(cast(:userId as text), ca.user_id) "
+            + "AND ca.case_ref = COALESCE(cast(:caseRef as text) , ca.case_ref) "
+            + "AND ca.case_type_id = COALESCE(cast(:caseTypeId as text), ca.case_type_id) "
+            + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
+            + "AND ca.case_jurisdiction_id = COALESCE(cast(:caseJurisdictionId as text),ca.case_jurisdiction_id) "
+            + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
+            + "AND ca.log_timestamp >= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) "
+            + "limit 10000) ca",
+        nativeQuery = true)
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
                                        final @Param("caseRef") String caseRef,
                                        final @Param("caseTypeId") String caseTypeId,

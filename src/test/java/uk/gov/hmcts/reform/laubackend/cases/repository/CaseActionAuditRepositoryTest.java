@@ -61,8 +61,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -77,8 +77,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -94,8 +94,8 @@ class CaseActionAuditRepositoryTest {
                 "4",
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -105,14 +105,14 @@ class CaseActionAuditRepositoryTest {
     @Test
     void shouldFindCaseByCaseAction() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
-                null,
-                null,
-                "CREATE",
-                null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
-                null
+            null,
+            null,
+            null,
+            "CREATE",
+            null,
+            null,
+            null,
+            null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
         assertResults(caseViewAuditList.getContent(), 1);
@@ -126,8 +126,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 "3",
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -142,11 +142,10 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
-                PageRequest.of(1, 10, Sort.by("log_timestamp")));
-
-
+                null,
+                null,
+                PageRequest.of(1, 10, Sort.by("log_timestamp"))
+        );
         assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
@@ -159,8 +158,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
@@ -181,8 +180,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -197,8 +196,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
 
@@ -219,8 +218,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
 

@@ -53,8 +53,8 @@ class CaseSearchAuditRepositoryTest {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 "2",
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
@@ -66,8 +66,8 @@ class CaseSearchAuditRepositoryTest {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 "10",
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(1);
@@ -79,8 +79,8 @@ class CaseSearchAuditRepositoryTest {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 PageRequest.of(1, 10, Sort.by("log_timestamp"))
         );
         assertThat(caseSearchAuditList.getTotalElements()).isEqualTo(20);
@@ -92,8 +92,8 @@ class CaseSearchAuditRepositoryTest {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 null,
                 null,
-                valueOf(now().minusDays(50)),
-                valueOf(now().plusDays(50)),
+                null,
+                null,
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(20);
@@ -127,11 +127,7 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.save(caseSearchAudit);
 
         final Page<CaseSearchAudit> caseSearch = caseSearchAuditRepository
-                .findCaseSearch("3333",
-                        null,
-                        valueOf(now().minusDays(50)),
-                        valueOf(now().plusDays(50)),
-                        null);
+                .findCaseSearch("3333", null, null, null, null);
 
         assertThat(caseSearch.getContent().size()).isEqualTo(1);
         assertThat(caseSearch.getContent().get(0).getUserId()).isEqualTo("3333");
@@ -139,10 +135,7 @@ class CaseSearchAuditRepositoryTest {
         caseSearchAuditRepository.deleteById(caseSearch.getContent().get(0).getId());
 
         final Page<CaseSearchAudit> caseSearch1 = caseSearchAuditRepository
-                .findCaseSearch("3333",
-                        null,
-                        valueOf(now().minusDays(50)),
-                        valueOf(now().plusDays(50)), null);
+                .findCaseSearch("3333", null, null, null, null);
 
         assertThat(caseSearch1.getContent().size()).isEqualTo(0);
     }
