@@ -22,7 +22,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
         + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
         + "AND ca.case_jurisdiction_id = COALESCE(cast(:caseJurisdictionId as text),ca.case_jurisdiction_id) "
         + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
-        + "AND ca.log_timestamp >= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) ",
+        + "AND ca.log_timestamp <= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) ",
         countQuery = "SELECT count(*) FROM ( "
             + "SELECT 1 FROM case_action_audit ca "
             + "WHERE ca.user_id = COALESCE(cast(:userId as text), ca.user_id) "
@@ -31,7 +31,7 @@ public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit
             + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
             + "AND ca.case_jurisdiction_id = COALESCE(cast(:caseJurisdictionId as text),ca.case_jurisdiction_id) "
             + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
-            + "AND ca.log_timestamp >= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) "
+            + "AND ca.log_timestamp <= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) "
             + "limit 10000) ca",
         nativeQuery = true)
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
