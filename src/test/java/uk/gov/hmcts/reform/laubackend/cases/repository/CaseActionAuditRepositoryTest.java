@@ -205,7 +205,7 @@ class CaseActionAuditRepositoryTest {
     }
 
     @Test
-    void shouldSaveCaseAuctionWithoutCaseJurisdiction() {
+    void shouldSaveCaseActionWithoutCaseJurisdiction() {
         caseActionAuditRepository.save(getCaseViewAuditEntity("1",
                 null,
                 "4444",
@@ -229,6 +229,56 @@ class CaseActionAuditRepositoryTest {
         assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo(null);
     }
 
+    @Test
+    void shouldSaveCaseActionWithoutCaseType() {
+        caseActionAuditRepository.save(getCaseViewAuditEntity("1",
+                                                              "1",
+                                                              null,
+                                                              "7777",
+                                                              valueOf(now())));
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+            "7777",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("7777");
+        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo(null);
+        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
+    }
+
+    @Test
+    void shouldSaveCaseActionWithoutCaseRef() {
+        caseActionAuditRepository.save(getCaseViewAuditEntity(null,
+                                                              "1",
+                                                              "5555",
+                                                              "8888",
+                                                              valueOf(now())));
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+            "8888",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+
+        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent().get(0).getCaseRef()).isEqualTo(null);
+        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("8888");
+        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo("5555");
+        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
+    }
 
     private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
         final String stringValue = String.valueOf(value);
