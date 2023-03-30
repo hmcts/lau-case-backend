@@ -143,7 +143,7 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     @And("I GET {string} using caseRef query param")
     public void searchUsingCaseRef(final String path) {
-        Response response = restHelper.getResponse(baseUrl() + path, "caseRef", "1");
+        final Response response = restHelper.getResponse(baseUrl() + path, "caseRef", "1");
         caseActionPostResponseBody = response.getBody().asString();
     }
 

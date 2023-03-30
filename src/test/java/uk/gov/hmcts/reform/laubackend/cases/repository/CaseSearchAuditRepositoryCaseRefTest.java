@@ -1,10 +1,13 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
@@ -18,6 +21,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @DataJpaTest
+@RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
         "spring.jpa.hibernate.ddl-auto=update",
         "spring.liquibase.enabled=false",
@@ -37,7 +42,7 @@ class CaseSearchAuditRepositoryCaseRefTest {
         caseSearchAuditRepository.save(getCaseSearchAuditEntity("1", emptyList(), timestamp));
         caseSearchAuditRepository.save(getCaseSearchAuditEntity("2", asList(1L, 2L, 3L), timestamp));
 
-        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearchH2(
+        final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 "1",
                 null,
                 null,
