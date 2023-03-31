@@ -13,7 +13,7 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.0'
-  id 'org.springframework.boot' version '2.7.0'
+  id 'org.springframework.boot' version '2.7.10'
   id 'org.owasp.dependencycheck' version '8.2.1'
   id 'com.github.ben-manes.versions' version '0.46.0'
   id 'org.sonarqube' version '4.0.0.2929'
@@ -365,7 +365,7 @@ dependencies {
   implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
   implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
-  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
   implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5'
   implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
 
