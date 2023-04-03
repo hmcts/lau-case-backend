@@ -61,8 +61,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -77,8 +77,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -94,8 +94,8 @@ class CaseActionAuditRepositoryTest {
                 "4",
                 null,
                 null,
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -110,8 +110,8 @@ class CaseActionAuditRepositoryTest {
             null,
             "CREATE",
             null,
-            null,
-            null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
             null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
@@ -126,8 +126,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 "3",
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -142,8 +142,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 PageRequest.of(1, 10, Sort.by("log_timestamp"))
         );
         assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
@@ -158,8 +158,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now()),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
@@ -180,8 +180,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(1)),
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
@@ -196,8 +196,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(1)),
+                valueOf(now().plusDays(30)),
                 null
         );
 
@@ -218,8 +218,8 @@ class CaseActionAuditRepositoryTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(1)),
+                valueOf(now().plusDays(30)),
                 null
         );
 
@@ -243,8 +243,8 @@ class CaseActionAuditRepositoryTest {
             null,
             null,
             null,
-            null,
-            null,
+            valueOf(now().minusDays(1)),
+            valueOf(now().plusDays(30)),
             null
         );
 
@@ -268,8 +268,8 @@ class CaseActionAuditRepositoryTest {
             null,
             null,
             null,
-            null,
-            null,
+            valueOf(now().minusDays(1)),
+            valueOf(now().plusDays(30)),
             null
         );
 

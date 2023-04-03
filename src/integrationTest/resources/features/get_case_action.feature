@@ -42,18 +42,12 @@ Feature: The application's GET caseAction endpoint
     And And I GET "/audit/caseAction" using caseJurisdictionId "12" query param
     Then a single caseAction response body is returned for caseJurisdictionId "12"
 
-  Scenario: The backend is able to process startTime caseAction GET requests
+  Scenario: The backend is able to process startTime endTime caseAction GET requests
     Given LAU backend application is healthy
     When I POST multiple records to "/audit/caseAction" endpoint using "2021-08-23T22:20:05.023Z,2022-08-23T22:20:05.023Z,2023-08-23T22:20:05.023Z" timestamp
-    And And I GET "/audit/caseAction" using startTimestamp "2022-08-24T22:20:05" query param
+    And And I GET "/audit/caseAction" using startTimestamp "2023-08-22T22:20:05" endTimestamp "2023-08-25T22:20:05" caseRef "0000000000000000" query param
     Then a single caseAction response body is returned for startTimestamp "2023-08-23T22:20:05.023Z"
 
-  Scenario: The backend is able to process endTime caseAction GET requests
-    Given LAU backend application is healthy
-    When I POST multiple records to "/audit/caseAction" endpoint using "2018-08-23T22:20:05.023Z,2019-08-23T22:20:05.023Z,2020-08-23T22:20:05.023Z" timestamp
-    And I am logged in with the CFT-AUDIT-INVESTIGATOR role
-    And And I GET "/audit/caseAction" using endTimestamp "2019-08-23T21:20:05" query param
-    Then a single caseAction response body is returned for endTimestamp "2018-08-23T22:20:05.023Z"
 
   Scenario: The backend is able to process case insensitive caseTypeId caseAction GET requests
     Given LAU backend application is healthy

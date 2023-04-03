@@ -3,6 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.helper;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
+import java.util.Map;
+
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.AUTHORISATION_HEADER;
@@ -37,13 +39,12 @@ public class RestHelper {
 
 
     public Response getResponse(final String path,
-                                final String parameterName,
-                                final String parameterValue) {
+                                final Map<String, String> queryParams) {
         return RestAssured
                 .given()
                 .relaxedHTTPSValidation()
                 .baseUri(path)
-                .queryParam(parameterName, parameterValue)
+                .queryParams(queryParams)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
                 .header(AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
@@ -51,6 +52,7 @@ public class RestHelper {
                 .get()
                 .andReturn();
     }
+
 
     public Response deleteResponse(final String path,
                                    final String parameterName,

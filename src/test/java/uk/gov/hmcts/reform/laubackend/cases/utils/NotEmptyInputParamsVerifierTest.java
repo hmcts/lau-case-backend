@@ -18,7 +18,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods","PMD.AvoidDuplicateLiterals"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NotEmptyInputParamsVerifierTest {
 
@@ -29,8 +29,8 @@ class NotEmptyInputParamsVerifierTest {
                 null,
                 null,
                 random(71, "123456"),
-                null,
-                null,
+                "123",
+                "456",
                 null,
                 null)));
     }
@@ -42,8 +42,8 @@ class NotEmptyInputParamsVerifierTest {
                 null,
                 null,
                 null,
-                null,
-                null,
+                "123",
+                "456",
                 null,
                 null)));
     }
@@ -55,8 +55,8 @@ class NotEmptyInputParamsVerifierTest {
                 "567",
                 null,
                 null,
-                null,
-                null,
+                "123",
+                "345",
                 null,
                 null)));
     }
@@ -68,36 +68,94 @@ class NotEmptyInputParamsVerifierTest {
                 null,
                 "CREATE",
                 null,
-                null,
-                null,
-                null,
-                null)));
-    }
-
-    @Test
-    void shouldVerifyRequestParamsAreNotEmptyForStartTimeCaseAction() {
-        assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
-                null,
-                null,
-                null,
-                null,
-                "678",
-                null,
+                "456",
+                "123",
                 null,
                 null)));
     }
 
     @Test
-    void shouldVerifyRequestParamsAreNotEmptyForEndTimeCaseAction() {
-        assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                "765",
-                null,
-                null)));
+    void shouldThrowExceptionWhenStartTimeAndEndTimeProvided() {
+        try {
+            verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "123",
+                    "765",
+                    null,
+                    null));
+            fail("The method should have thrown InvalidRequestException when startTime and endTime input params are "
+                    + "provided");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage()).isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                    + "caseAction) must not be empty");
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenStartTimeIsMissing() {
+        try {
+            verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                    "123",
+                    null,
+                    null,
+                    null,
+                    null,
+                    "765",
+                    null,
+                    null));
+            fail("The method should have thrown InvalidRequestException when startTime  input param is missing");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                    + "caseAction) must not be empty");
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEndTimeIsMissing() {
+        try {
+            verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                    "123",
+                    null,
+                    null,
+                    null,
+                    "123",
+                    null,
+                    null,
+                    null));
+            fail("The method should have thrown InvalidRequestException when endTime input param is missing");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("Both startTime and endTime must be present "
+                            + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                            + "caseAction) must not be empty");
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAllParametersAreMissing() {
+        try {
+            verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null));
+            fail("The method should have thrown InvalidRequestException when endTime input param is missing");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("Both startTime and endTime must be present "
+                            + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                            + "caseAction) must not be empty");
+        }
     }
 
     @Test
@@ -115,7 +173,10 @@ class NotEmptyInputParamsVerifierTest {
             verifyRequestActionParamsAreNotEmpty(inputParamsHolder);
             fail("The method should have thrown InvalidRequestException when CaseAction input params are empty");
         } catch (final InvalidRequestException invalidRequestException) {
-            assertThat(invalidRequestException.getMessage()).isEqualTo("At least one path parameter must be present");
+            assertThat(invalidRequestException.getMessage())
+                    .isEqualTo("Both startTime and endTime must be present "
+                            + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                            + "caseAction) must not be empty");
         }
     }
 
@@ -140,10 +201,74 @@ class NotEmptyInputParamsVerifierTest {
     void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
         assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder(null,
                 random(71, "123456"),
-                null,
-                null,
+                "123",
+                "345",
                 null,
                 null)));
+    }
+
+    @Test
+    void shouldVerifyRequestParamsAreNotEmptyWhenUserIdNotEmpty() {
+        assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder("123",
+                null,
+                "123",
+                "345",
+                null,
+                null)));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenGetRequestParamsWhenStartTimeEndTimeOnlyPresent() {
+        try {
+            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
+                    null,
+                    "123",
+                    "4556",
+                    null,
+                    null);
+            verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
+            fail("The method should have thrown InvalidRequestException when all mandatory CaseSearch "
+                    + "params are not present");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage()).isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef) must not be empty");
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenGetRequestParamsWhenEndTimeEndTimeOnlyPresent() {
+        try {
+            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder("123",
+                    null,
+                    null,
+                    "4556",
+                    null,
+                    null);
+            verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
+            fail("The method should have thrown InvalidRequestException when all mandatory CaseSearch "
+                    + "params are not present");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage()).isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef) must not be empty");
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenGetRequestParamsWhenStartTimeOnlyPresent() {
+        try {
+            final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder("123",
+                    null,
+                    "123",
+                    null,
+                    null,
+                    null);
+            verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
+            fail("The method should have thrown InvalidRequestException when all mandatory CaseSearch "
+                    + "params are not present");
+        } catch (final InvalidRequestException invalidRequestException) {
+            assertThat(invalidRequestException.getMessage()).isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef) must not be empty");
+        }
     }
 
     @Test
@@ -159,7 +284,8 @@ class NotEmptyInputParamsVerifierTest {
             fail("The method should have thrown InvalidRequestException when all mandatory CaseSearch "
                     + "params are not present");
         } catch (final InvalidRequestException invalidRequestException) {
-            assertThat(invalidRequestException.getMessage()).isEqualTo("At least one path parameter must be present");
+            assertThat(invalidRequestException.getMessage()).isEqualTo("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef) must not be empty");
         }
     }
 

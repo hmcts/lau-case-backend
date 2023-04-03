@@ -51,7 +51,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     }
 
     @Test
-    void shouldFindCaseByStartTime() {
+    void shouldFindCaseByStartTimeEndTime1() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 null,
                 null,
@@ -59,7 +59,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 valueOf(now().plusDays(10)),
-                null,
+                valueOf(now().plusDays(30)),
                 null
         );
         //Will return 10 days because  the date start is +10 from now
@@ -67,14 +67,14 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     }
 
     @Test
-    void shouldFindCaseByEndTime() {
+    void shouldFindCaseByStartTimeEndTime2() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "1",
                 null,
                 null,
                 null,
                 null,
-                null,
+                valueOf(now()),
                 valueOf(now().plusDays(1)),
                 null
         );
@@ -83,7 +83,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     }
 
     @Test
-    void shouldNotFindCaseByStartTime() {
+    void shouldNotFindCaseByStartTimeEndTime1() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "10",
                 null,
@@ -91,37 +91,22 @@ class CaseActionAuditRepositoryStartEndTimeTest {
                 null,
                 null,
                 valueOf(now().plusDays(20)),
-                null,
+                valueOf(now().plusDays(30)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
     }
 
     @Test
-    void shouldNotFindCaseByEndTime() {
+    void shouldNotFindCaseByStartTimeEndTime2() {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
                 "10",
                 null,
                 null,
                 null,
                 null,
-                null,
+                valueOf(now().minusDays(5)),
                 valueOf(now().minusDays(1)),
-                null
-        );
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
-    }
-
-    @Test
-    void shouldNotFindCaseByStartTimeAndEndTime() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
-                null,
-                null,
-                null,
-                null,
-                valueOf(now().minusDays(1)),
-                valueOf(now().minusDays(2)),
                 null
         );
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);

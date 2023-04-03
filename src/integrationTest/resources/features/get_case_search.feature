@@ -12,17 +12,12 @@ Feature: The application's GET caseSearch endpoint
     And I GET "/audit/caseSearch" using caseRef "1615817621019877" query parameter
     Then a single caseSearch response body is returned for caseRef "1615817621019877"
 
-  Scenario: The backend is able to process caseSearch GET requests using startTimestamp query
+  Scenario: The backend is able to process caseSearch GET requests using startTimestamp endTimestamp query
     Given LAU backend application is healthy
     When I POST multiple caseSearch records to "/audit/caseSearch" endpoint endpoint using "2021-08-23T22:20:05.023Z,2022-08-23T22:20:05.023Z,2023-08-23T22:20:05.023Z" timestamp
-    And And I GET "/audit/caseSearch" using startTimestamp "2022-08-24T22:20:05" query parameter
-    Then a single caseSearch response body is returned for startTimestamp "2023-08-23T22:20:05.023Z"
+    And And I GET "/audit/caseSearch" using startTimestamp "2022-08-22T22:20:05" endTimestamp "2022-08-25T22:20:05" caseRef "3769509556751473" query parameter
+    Then a single caseSearch response body is returned for startTimestamp "2022-08-23T22:20:05.023Z"
 
-  Scenario: The backend is able to process caseSearch GET requests using endTimestamp query
-    Given LAU backend application is healthy
-    When I POST multiple caseSearch records to "/audit/caseSearch" endpoint endpoint using "2018-08-23T22:20:05.023Z,2019-08-23T22:20:05.023Z,2020-08-23T22:20:05.023Z" timestamp
-    And And I GET "/audit/caseSearch" using endTimestamp "2019-08-23T21:20:05" query parameter
-    Then a single caseSearch response body is returned for endTimestamp "2018-08-23T22:20:05.023Z"
 
   Scenario: The backend is unable to process caseSearch GET requests due to missing s2s
     Given LAU backend application is healthy
