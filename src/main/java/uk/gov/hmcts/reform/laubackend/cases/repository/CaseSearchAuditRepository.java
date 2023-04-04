@@ -16,18 +16,18 @@ import java.sql.Timestamp;
 public interface CaseSearchAuditRepository extends JpaRepository<CaseSearchAudit, Long> {
 
     @Query(value = "SELECT cs.id, cs.user_id, cs.log_timestamp, cs.case_refs FROM case_search_audit cs "
-        + "WHERE cs.user_id = COALESCE(cast(:userId as text), cs.user_id) "
-        + "AND (cast(:caseRef as text) IS NULL "
-        +   "OR case_refs @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
-        + "AND cs.log_timestamp >= COALESCE(cast(:startTime as timestamp), cs.log_timestamp) "
-        + "AND cs.log_timestamp <= cast(:endTime as timestamp) ",
+        + "WHERE cs.user_id = COALESCE(:userId, cs.user_id) "
+        + "AND (:caseRef IS NULL "
+        +   "OR case_refs @> ARRAY[coalesce(cast(:caseRef as bigint), 10000000000)]) "
+        + "AND cs.log_timestamp >= :startTime "
+        + "AND cs.log_timestamp <= :endTime ",
         countQuery = "SELECT count(*) FROM ( "
             + "SELECT 1 FROM case_search_audit cs "
-            + "WHERE cs.user_id = COALESCE(cast(:userId as text), cs.user_id) "
-            + "AND (cast(:caseRef as text) IS NULL "
-            +   "OR case_refs @> ARRAY[coalesce(cast(cast(:caseRef as text) as bigint), 10000000000)]) "
-            + "AND cs.log_timestamp >= cast(:startTime as timestamp) "
-            + "AND cs.log_timestamp <= cast(:endTime as timestamp) "
+            + "WHERE cs.user_id = COALESCE(:userId, cs.user_id) "
+            + "AND (:caseRef IS NULL "
+            +   "OR case_refs @> ARRAY[coalesce(cast(:caseRef as bigint), 10000000000)]) "
+            + "AND cs.log_timestamp >= :startTime "
+            + "AND cs.log_timestamp <= :endTime "
             + "limit 10000) cs",
         nativeQuery = true)
     Page<CaseSearchAudit> findCaseSearch(final @Param("userId") String userId,
