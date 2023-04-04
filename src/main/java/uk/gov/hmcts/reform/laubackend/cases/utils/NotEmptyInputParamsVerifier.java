@@ -10,6 +10,7 @@ import static java.lang.String.valueOf;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+@SuppressWarnings("PMD.UselessParentheses")
 public final class NotEmptyInputParamsVerifier {
 
     private NotEmptyInputParamsVerifier() {
@@ -17,14 +18,20 @@ public final class NotEmptyInputParamsVerifier {
 
     public static void verifyRequestActionParamsAreNotEmpty(final ActionInputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
-        if (isEmpty(inputParamsHolder.getUserId())
-                && isEmpty(inputParamsHolder.getCaseRef())
-                && isEmpty(inputParamsHolder.getCaseTypeId())
-                && isEmpty(inputParamsHolder.getCaseJurisdictionId())
-                && isEmpty(inputParamsHolder.getCaseAction())
-                && isEmpty(inputParamsHolder.getStartTime())
-                && isEmpty(inputParamsHolder.getEndTime())) {
-            throw new InvalidRequestException("At least one path parameter must be present", BAD_REQUEST);
+        final boolean isUserIdNotEmpty = !isEmpty(inputParamsHolder.getUserId());
+        final boolean isCaseRefNotEmpty = !isEmpty(inputParamsHolder.getCaseRef());
+        final boolean isCaseTypeIdNotEmpty = !isEmpty(inputParamsHolder.getCaseTypeId());
+        final boolean isCaseJurisdictionIdNotEmpty = !isEmpty(inputParamsHolder.getCaseJurisdictionId());
+        final boolean isCaseActionNotEmpty = !isEmpty(inputParamsHolder.getCaseAction());
+        final boolean isStartTimeNotEmpty = !isEmpty(inputParamsHolder.getStartTime());
+        final boolean isEndTimeNotEmpty = !isEmpty(inputParamsHolder.getEndTime());
+
+        if (!((isStartTimeNotEmpty && isEndTimeNotEmpty)
+                && (isUserIdNotEmpty || isCaseRefNotEmpty || isCaseTypeIdNotEmpty || isCaseJurisdictionIdNotEmpty
+                || isCaseActionNotEmpty))) {
+            throw new InvalidRequestException("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef, caseTypeId, caseJurisdictionId, "
+                   + "caseAction) must not be empty", BAD_REQUEST);
         }
     }
 
@@ -42,11 +49,14 @@ public final class NotEmptyInputParamsVerifier {
 
     public static void verifyRequestSearchParamsAreNotEmpty(final SearchInputParamsHolder inputParamsHolder)
             throws InvalidRequestException {
-        if (isEmpty(inputParamsHolder.getUserId())
-                && isEmpty(inputParamsHolder.getCaseRef())
-                && isEmpty(inputParamsHolder.getStartTime())
-                && isEmpty(inputParamsHolder.getEndTime())) {
-            throw new InvalidRequestException("At least one path parameter must be present", BAD_REQUEST);
+        final boolean isUserIdNotEmpty = !isEmpty(inputParamsHolder.getUserId());
+        final boolean isCaseRefNotEmpty = !isEmpty(inputParamsHolder.getCaseRef());
+        final boolean isStartTimeNotEmpty = !isEmpty(inputParamsHolder.getStartTime());
+        final boolean isEndTimeNotEmpty = !isEmpty(inputParamsHolder.getEndTime());
+
+        if (!((isStartTimeNotEmpty && isEndTimeNotEmpty) && (isUserIdNotEmpty || isCaseRefNotEmpty))) {
+            throw new InvalidRequestException("Both startTime and endTime must be present "
+                    + "and at least one of the parameters (userId, caseRef) must not be empty", BAD_REQUEST);
         }
     }
 

@@ -70,8 +70,8 @@ class CaseActionControllerTest {
             caseTypeId,
             caseAction,
             null,
-            null,
-            null,
+            "2021-06-23T22:20:05",
+            "2021-06-23T22:20:05",
             null,
             null
         );

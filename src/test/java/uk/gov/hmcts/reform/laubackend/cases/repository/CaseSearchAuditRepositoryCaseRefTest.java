@@ -45,8 +45,8 @@ class CaseSearchAuditRepositoryCaseRefTest {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditRepository.findCaseSearch(
                 "1",
                 null,
-                null,
-                null,
+                valueOf(now().minusDays(50)),
+                valueOf(now().plusDays(50)),
                 null
         );
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(2);

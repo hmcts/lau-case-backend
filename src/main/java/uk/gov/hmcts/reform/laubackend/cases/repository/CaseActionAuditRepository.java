@@ -16,26 +16,26 @@ import java.sql.Timestamp;
 public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit, Long> {
 
     @Query(value = "SELECT ca.* FROM case_action_audit ca "
-        + "WHERE ca.user_id = COALESCE(cast(:userId as text), ca.user_id) "
-        + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
-        + "AND (cast(:caseTypeId as text) IS NULL OR ca.case_type_id = cast(:caseTypeId as text)) "
-        + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
-        + "AND (cast(:caseJurisdictionId as text) IS NULL "
-        +   "OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
-        + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
-        + "AND ca.log_timestamp <= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) ",
-        countQuery = "SELECT count(*) FROM ( "
-            + "SELECT 1 FROM case_action_audit ca "
-            + "WHERE ca.user_id = COALESCE(cast(:userId as text), ca.user_id) "
-            + "AND (cast(:caseRef as text) IS NULL OR ca.case_ref = cast(:caseRef as text)) "
-            + "AND (cast(:caseTypeId as text) IS NULL OR ca.case_type_id = cast(:caseTypeId as text)) "
-            + "AND ca.case_action = COALESCE(cast(:caseAction as text), ca.case_action) "
-            + "AND (cast(:caseJurisdictionId as text) IS NULL "
-            +   "OR ca.case_jurisdiction_id = cast(:caseJurisdictionId as text)) "
-            + "AND ca.log_timestamp >= COALESCE(cast(:startTime as timestamp), ca.log_timestamp) "
-            + "AND ca.log_timestamp <= COALESCE(cast(:endTime as timestamp), ca.log_timestamp) "
-            + "limit 10000) ca",
-        nativeQuery = true)
+            + "WHERE ca.user_id = COALESCE(:userId, ca.user_id) "
+            + "AND (:caseRef IS NULL OR ca.case_ref = :caseRef) "
+            + "AND (:caseTypeId IS NULL OR ca.case_type_id = :caseTypeId) "
+            + "AND ca.case_action = COALESCE(:caseAction, ca.case_action) "
+            + "AND (:caseJurisdictionId IS NULL "
+            +   "OR ca.case_jurisdiction_id = :caseJurisdictionId) "
+            + "AND ca.log_timestamp >= :startTime "
+            + "AND ca.log_timestamp <= :endTime ",
+            countQuery = "SELECT count(*) FROM ( "
+                    + "SELECT 1 FROM case_action_audit ca "
+                    + "WHERE ca.user_id = COALESCE(:userId, ca.user_id) "
+                    + "AND (:caseRef IS NULL OR ca.case_ref = :caseRef) "
+                    + "AND (:caseTypeId IS NULL OR ca.case_type_id = :caseTypeId) "
+                    + "AND ca.case_action = COALESCE(:caseAction, ca.case_action) "
+                    + "AND (:caseJurisdictionId IS NULL "
+                    +   "OR ca.case_jurisdiction_id = :caseJurisdictionId) "
+                    + "AND ca.log_timestamp >= :startTime "
+                    + "AND ca.log_timestamp <= :endTime "
+                    + "limit 10000) ca",
+            nativeQuery = true)
     Page<CaseActionAudit> findCaseView(final @Param("userId") String userId,
                                        final @Param("caseRef") String caseRef,
                                        final @Param("caseTypeId") String caseTypeId,
