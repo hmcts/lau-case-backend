@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
+import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
@@ -34,21 +35,16 @@ public class CaseActionService {
     @Autowired
     private TimestampUtil timestampUtil;
 
+    @Autowired
+    private QueryBuilder queryBuilder;
+
     @Value("${default.page.size}")
     private String defaultPageSize;
 
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
-
-        final Page<CaseActionAudit> caseView = caseActionAuditRepository.findCaseView(
-                inputParamsHolder.getUserId(),
-                inputParamsHolder.getCaseRef(),
-                upperCase(inputParamsHolder.getCaseTypeId()),
-                upperCase(inputParamsHolder.getCaseAction()),
-                upperCase(inputParamsHolder.getCaseJurisdictionId()),
-                timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
-                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
-                getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage())
-        );
+        final Page<CaseActionAudit> caseView =
+                caseActionAuditRepository.findAll(queryBuilder.buildCaseActionRequest(inputParamsHolder),
+                        getPage(inputParamsHolder.getSize(), inputParamsHolder.getPage()));
 
         final List<ActionLog> actionLogList = new ArrayList<>();
 
@@ -95,6 +91,6 @@ public class CaseActionService {
         final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
         final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
     }
 }
