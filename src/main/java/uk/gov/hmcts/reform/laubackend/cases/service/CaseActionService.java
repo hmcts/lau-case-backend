@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
@@ -41,6 +42,7 @@ public class CaseActionService {
     @Value("${default.page.size}")
     private String defaultPageSize;
 
+    @Transactional(readOnly = true)
     public CaseActionGetResponse getCaseView(final ActionInputParamsHolder inputParamsHolder) {
         final Page<CaseActionAudit> caseView =
                 caseActionAuditRepository.findAll(queryBuilder.buildCaseActionRequest(inputParamsHolder),

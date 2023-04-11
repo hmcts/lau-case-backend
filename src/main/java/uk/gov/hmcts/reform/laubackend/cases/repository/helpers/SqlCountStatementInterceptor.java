@@ -14,11 +14,15 @@ public class SqlCountStatementInterceptor implements StatementInspector {
     private static final String COUNT_REGEX = "count\\(.*?\\)";
 
     @Override
-    public String inspect(String sql) {
-        if (!isEmpty(sql) && containsIgnoreCase(sql, COUNT_SEARCH_STRING)) {
+    public String inspect(final String sql) {
+        if (!isEmpty(sql) && isCountCaseAction(sql)) {
             final String updatedCountSqlStatement = sql.replaceAll(COUNT_REGEX, "1").concat(LIMIT_CRITERIA);
             return COUNT_STATEMENT.concat(updatedCountSqlStatement);
         }
         return sql;
+    }
+
+    private static boolean isCountCaseAction(final String sql) {
+        return containsIgnoreCase(sql, COUNT_SEARCH_STRING) && containsIgnoreCase(sql, "case_action_audit");
     }
 }
