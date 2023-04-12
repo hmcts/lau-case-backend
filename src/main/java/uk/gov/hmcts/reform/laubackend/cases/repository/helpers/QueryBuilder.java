@@ -40,13 +40,10 @@ public class QueryBuilder {
                                                                   final Example<CaseActionAudit> example) {
         return (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
-
-            if (startTime != null) {
-                predicates.add(builder.greaterThanOrEqualTo(root.get(TIMESTAMP), startTime));
-            }
-            if (endTime != null) {
-                predicates.add(builder.lessThanOrEqualTo(root.get(TIMESTAMP), endTime));
-            }
+            
+            predicates.add(builder.greaterThanOrEqualTo(root.get(TIMESTAMP), startTime));
+            predicates.add(builder.lessThanOrEqualTo(root.get(TIMESTAMP), endTime));
+            
             predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
 
             return builder.and(predicates.toArray(new Predicate[0]));
