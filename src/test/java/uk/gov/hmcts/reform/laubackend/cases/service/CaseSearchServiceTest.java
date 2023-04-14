@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
+import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditFindCaseRepository;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
@@ -42,6 +43,9 @@ class CaseSearchServiceTest {
     private CaseSearchAuditRepository caseSearchAuditRepository;
 
     @Mock
+    private CaseSearchAuditFindCaseRepository caseSearchAuditFindCaseRepository;
+
+    @Mock
     private TimestampUtil timestampUtil;
 
     @InjectMocks
@@ -63,14 +67,14 @@ class CaseSearchServiceTest {
                 null,
                 null);
 
-        when(caseSearchAuditRepository
+        when(caseSearchAuditFindCaseRepository
                 .findCaseSearch("1", "2", null, null,
                         PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
-        verify(caseSearchAuditRepository, times(1))
+        verify(caseSearchAuditFindCaseRepository, times(1))
                 .findCaseSearch("1", "2", null, null,
                         PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
 
