@@ -45,4 +45,16 @@ public class CaseActionAudit implements Serializable {
 
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
+
+    public CaseActionAudit(final String userId,
+                           final String caseRef,
+                           final String caseAction,
+                           final String caseJurisdictionId,
+                           String caseTypeId) {
+        this.userId = userId;
+        this.caseRef = caseRef;
+        this.caseAction = caseAction;
+        this.caseJurisdictionId = caseJurisdictionId;
+        this.caseTypeId = caseTypeId;
+    }
 }
