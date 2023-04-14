@@ -8,19 +8,23 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
@@ -31,12 +35,15 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@Import({TimestampUtil.class})
+@Import({QueryBuilder.class, TimestampUtil.class})
 @SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 class CaseActionAuditRepositoryTest {
 
     @Autowired
     private CaseActionAuditRepository caseActionAuditRepository;
+
+    @Autowired
+    private QueryBuilder queryBuilder;
 
     @BeforeEach
     public void setUp() {
@@ -55,32 +62,39 @@ class CaseActionAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseRef() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 "2",
                 null,
                 null,
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now().toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 2);
     }
 
     @Test
     void shouldFindCaseByUserId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "10",
+
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("10",
                 null,
                 null,
                 null,
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now().toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 10);
     }
@@ -88,80 +102,96 @@ class CaseActionAuditRepositoryTest {
 
     @Test
     void shouldFindCaseByCaseTypeId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 "4",
                 null,
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now().toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 4);
     }
 
     @Test
     void shouldFindCaseByCaseAction() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-            null,
-            null,
-            null,
-            "CREATE",
-            null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-            null
-        );
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
+                null,
+                null,
+                "CREATE",
+                null,
+                now().toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
         assertResults(caseViewAuditList.getContent(), 1);
     }
 
     @Test
     void shouldFindCaseByCaseJurisdictionId() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                null,
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
                 "3",
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now().toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 3);
     }
 
     @Test
     void shouldFindPageableResults() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
                 null,
+                now().minusDays(50).toString(),
+                now().plusDays(50).toString(),
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                PageRequest.of(1, 10, Sort.by("log_timestamp"))
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder),
+                        of(1, 10, Sort.by("timestamp")));
+
         assertThat(caseViewAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
 
     @Test
     void shouldGetAllRecords() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
                 null,
+                now().toString(),
+                now().plusDays(30).toString(),
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
     }
 
@@ -174,54 +204,52 @@ class CaseActionAuditRepositoryTest {
                 valueOf(now())));
 
 
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "3333",
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("3333",
                 null,
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(1)),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now().minusDays(1).toString(),
+                now().plusDays(30).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
 
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("3333");
 
         caseActionAuditRepository.deleteById(caseViewAuditList.getContent().get(0).getCaseActionId());
 
-        final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository.findCaseView(
-                "3333",
-                null,
-                null,
-                null,
-                null,
-                valueOf(now().minusDays(1)),
-                valueOf(now().plusDays(30)),
-                null
-        );
+        final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList1.getContent().size()).isEqualTo(0);
     }
 
     @Test
-    void shouldSaveCaseActionWithoutCaseJurisdiction() {
+    void shouldSaveCaseAuctionWithoutCaseJurisdiction() {
+        final LocalDateTime now = now();
         caseActionAuditRepository.save(getCaseViewAuditEntity("1",
                 null,
                 "4444",
                 "6666",
-                valueOf(now())));
+                valueOf(now)));
 
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-                "6666",
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("6666",
                 null,
                 null,
                 null,
                 null,
-                valueOf(now().minusDays(1)),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                now.minusHours(1).toString(),
+                now.plusHours(1).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("6666");
@@ -230,23 +258,25 @@ class CaseActionAuditRepositoryTest {
     }
 
     @Test
-    void shouldSaveCaseActionWithoutCaseType() {
-        caseActionAuditRepository.save(getCaseViewAuditEntity("1",
+    void shouldSaveCaseActionWithoutCaseTypeAndCaseRef() {
+        caseActionAuditRepository.save(getCaseViewAuditEntity(null,
                                                               "1",
                                                               null,
                                                               "7777",
                                                               valueOf(now())));
 
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-            "7777",
-            null,
-            null,
-            null,
-            null,
-            valueOf(now().minusDays(1)),
-            valueOf(now().plusDays(30)),
-            null
-        );
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("7777",
+                null,
+                null,
+                null,
+                null,
+                now().minusHours(1).toString(),
+                now().plusHours(1).toString(),
+                null,
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("7777");
@@ -254,31 +284,6 @@ class CaseActionAuditRepositoryTest {
         assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
     }
 
-    @Test
-    void shouldSaveCaseActionWithoutCaseRef() {
-        caseActionAuditRepository.save(getCaseViewAuditEntity(null,
-                                                              "1",
-                                                              "5555",
-                                                              "8888",
-                                                              valueOf(now())));
-
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
-            "8888",
-            null,
-            null,
-            null,
-            null,
-            valueOf(now().minusDays(1)),
-            valueOf(now().plusDays(30)),
-            null
-        );
-
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
-        assertThat(caseViewAuditList.getContent().get(0).getCaseRef()).isEqualTo(null);
-        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("8888");
-        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo("5555");
-        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
-    }
 
     private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
         final String stringValue = String.valueOf(value);
@@ -302,5 +307,9 @@ class CaseActionAuditRepositoryTest {
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);
         return caseActionAudit;
+    }
+
+    private Pageable getPage() {
+        return of(0, 20);
     }
 }

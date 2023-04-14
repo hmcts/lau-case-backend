@@ -10,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
+import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
@@ -35,7 +37,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings({"PMD.UnusedPrivateField"})
+@SuppressWarnings({"PMD.UnusedPrivateField", "unchecked"})
 class CaseActionServiceTest {
 
     @Mock
@@ -43,6 +45,9 @@ class CaseActionServiceTest {
 
     @Mock
     private TimestampUtil timestampUtil;
+
+    @Mock
+    private QueryBuilder queryBuilder;
 
     @InjectMocks
     private CaseActionService caseActionService;
@@ -66,16 +71,19 @@ class CaseActionServiceTest {
                 null,
                 null);
 
+        final Specification<CaseActionAudit> specification = mock(Specification.class);
+        when(queryBuilder.buildCaseActionRequest(inputParamsHolder)).thenReturn(specification);
+
         when(caseActionAuditRepository
-                .findCaseView("1", "2", "3", "CREATE", "4", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
+                .findAll(specification,
+                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
         verify(caseActionAuditRepository, times(1))
-                .findCaseView("1", "2", "3", CREATE.name(), "4", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
+                .findAll(specification,
+                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
 
         assertThat(caseView.getActionLog().size()).isEqualTo(1);
         assertThat(caseView.getActionLog().get(0).getUserId()).isEqualTo("5");

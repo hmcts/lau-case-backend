@@ -8,9 +8,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -19,6 +22,7 @@ import java.util.List;
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 @DataJpaTest
@@ -29,11 +33,14 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
         "spring.liquibase.enabled=false",
         "spring.flyway.enabled=true"
 })
-@Import({TimestampUtil.class})
+@Import({QueryBuilder.class, TimestampUtil.class})
 class CaseActionAuditRepositoryStartEndTimeTest {
 
     @Autowired
     private CaseActionAuditRepository caseActionAuditRepository;
+
+    @Autowired
+    private QueryBuilder queryBuilder;
 
     @BeforeEach
     public void setUp() {
@@ -51,64 +58,78 @@ class CaseActionAuditRepositoryStartEndTimeTest {
     }
 
     @Test
-    void shouldFindCaseByStartTimeEndTime1() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+    void shouldFindCaseByStartTime1() {
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 null,
                 null,
                 null,
                 null,
+                now().plusDays(10).toString(),
+                now().plusDays(30).toString(),
                 null,
-                valueOf(now().plusDays(10)),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
+
         //Will return 10 days because  the date start is +10 from now
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
     }
 
     @Test
-    void shouldFindCaseByStartTimeEndTime2() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+    void shouldFindCaseByEndTime2() {
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 "1",
                 null,
                 null,
                 null,
+                now().toString(),
+                now().plusDays(1).toString(),
                 null,
-                valueOf(now()),
-                valueOf(now().plusDays(1)),
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
         assertResults(caseViewAuditList.getContent(), 1);
     }
 
     @Test
     void shouldNotFindCaseByStartTimeEndTime1() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 "10",
                 null,
                 null,
                 null,
+                now().plusDays(20).toString(),
+                now().plusDays(30).toString(),
                 null,
-                valueOf(now().plusDays(20)),
-                valueOf(now().plusDays(30)),
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
     }
 
     @Test
     void shouldNotFindCaseByStartTimeEndTime2() {
-        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository.findCaseView(
+
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(null,
                 "10",
                 null,
                 null,
                 null,
+                now().minusDays(2).toString(),
+                now().minusDays(1).toString(),
                 null,
-                valueOf(now().minusDays(5)),
-                valueOf(now().minusDays(1)),
-                null
-        );
+                null);
+
+        final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
+                .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
+
         assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
     }
 
@@ -135,5 +156,10 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         caseActionAudit.setUserId(userId);
         caseActionAudit.setTimestamp(timestamp);
         return caseActionAudit;
+    }
+
+
+    private Pageable getPage() {
+        return of(0, 100);
     }
 }

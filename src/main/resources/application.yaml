@@ -26,9 +26,8 @@ spring:
     properties:
       charSet: UTF-8
     hikari:
-      maximumPoolSize: 20
+      maximumPoolSize: 5
       poolName: LAUCaseHikariCP
-      maxLifetime: 7200000
       connectionTimeout: 60000
       data-source-properties:
         socketTimeout: 60
@@ -52,6 +51,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        session_factory:
+          statement_inspector: uk.gov.hmcts.reform.laubackend.cases.repository.helpers.SqlCountStatementInterceptor
         jdbc:
           lob:
             # silence the 'wall-of-text' - unnecessary exception throw about blob types
