@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.laubackend.cases.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
-import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditFindCaseRepository;
+import uk.gov.hmcts.reform.laubackend.cases.repository.CaseSearchAuditRepository;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
@@ -86,8 +87,14 @@ public class CaseSearchService {
         return new CaseSearchPostResponse(new SearchLogPostResponse().toDto(caseSearchAuditResponse, timestamp));
     }
 
-    public void deleteCaseSearchBbyId(final String id) {
+    public void deleteCaseSearchById(final String id) {
         caseSearchAuditRepository.deleteById(valueOf(id));
+    }
+
+    public void verifyCaseSearchExists(final String id) {
+        if (caseSearchAuditRepository.findById(valueOf(id)).isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
     }
 
     private int calculateStartRecordNumber(final Page<CaseSearchAudit> caseView) {

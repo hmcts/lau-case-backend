@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.authorization;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

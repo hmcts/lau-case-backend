@@ -24,7 +24,7 @@ java:
     lau:
       resourceGroup: lau
       secrets:
-        - AppInsightsInstrumentationKey
+        - app-insights-connection-string
         - case-backend-POSTGRES-PASS
         - case-backend-POSTGRES-USER
         - case-backend-app-db-password

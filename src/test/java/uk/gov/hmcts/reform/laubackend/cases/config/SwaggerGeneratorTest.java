@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
@@ -26,8 +27,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * Built-in feature which saves service's swagger specs in temporary directory.
  * Each travis run on master should automatically save and upload (if updated) documentation.
  */
-@SpringBootTest
+
 @SuppressWarnings({"PMD.UnusedPrivateField"})
+@SpringBootTest
+@TestPropertySource(properties = {"idam.api.url = localhost:5000", "idam.s2s-auth.url = localhost:4502"})
 class SwaggerGeneratorTest {
 
     private MockMvc mvc;

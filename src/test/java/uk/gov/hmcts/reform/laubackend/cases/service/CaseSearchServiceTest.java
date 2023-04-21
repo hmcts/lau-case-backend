@@ -119,7 +119,7 @@ class CaseSearchServiceTest {
 
     @Test
     void shouldDeleteCaseSearchId() {
-        caseSearchService.deleteCaseSearchBbyId("1");
+        caseSearchService.deleteCaseSearchById("1");
         verify(caseSearchAuditRepository, times(1)).deleteById(Long.valueOf("1"));
     }
 }

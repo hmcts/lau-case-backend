@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.response;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,21 +16,21 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseSearchHelper.conver
 @AllArgsConstructor
 @Getter
 @Setter
-@ApiModel(description = "Data model for the case search log")
+@Schema(description = "Data model for the case search log")
 public class SearchLogPostResponse implements Serializable {
 
     public static final long serialVersionUID = 432973322;
 
-    @ApiModelProperty(notes = "The database unique id")
+    @Schema(description = "The database unique id")
     private String id;
 
-    @ApiModelProperty(notes = "The user on whose behalf the operation took place")
+    @Schema(description = "The user on whose behalf the operation took place")
     private String userId;
 
-    @ApiModelProperty(notes = "The caseRefs effected by the search operation")
+    @Schema(description = "The caseRefs effected by the search operation")
     private List<String> caseRefs;
 
-    @ApiModelProperty(notes = "When the operation took place with microseconds in iso-8601-date-and-time-format")
+    @Schema(description = "When the operation took place with microseconds in iso-8601-date-and-time-format")
     private String timestamp;
 
     public SearchLogPostResponse toDto(final CaseSearchAudit caseSearchAuditResponse, final String timestamp) {

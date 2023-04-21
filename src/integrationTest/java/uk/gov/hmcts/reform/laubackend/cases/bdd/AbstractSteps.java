@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.laubackend.cases.helper.RestHelper;
 

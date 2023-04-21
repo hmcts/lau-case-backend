@@ -1,32 +1,27 @@
 package uk.gov.hmcts.reform.laubackend.cases.domain;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "case_search_audit")
 @Getter
 @Setter
 @NoArgsConstructor
 @SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement","PMD.UnusedAssignment"})
-@TypeDef(
-    name = "list-array",
-    typeClass = ListArrayType.class
-)
 public class CaseSearchAudit implements Serializable {
 
     public static final long serialVersionUID = 5428747L;
@@ -42,7 +37,7 @@ public class CaseSearchAudit implements Serializable {
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;
 
-    @Type(type = "list-array")
+    @Type(ListArrayType.class)
     @Column(name = "case_refs", columnDefinition = "bigint[]")
     private List<Long> caseRefs = new ArrayList<>();
 

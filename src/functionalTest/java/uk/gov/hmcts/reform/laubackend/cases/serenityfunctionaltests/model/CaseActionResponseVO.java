@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Generated;
 
-import javax.annotation.Generated;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
