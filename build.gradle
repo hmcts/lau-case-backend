@@ -286,7 +286,7 @@ def versions = [
         commonsIo         : '2.7',
         cucumber          : '6.8.0',
         fasterXmlJackson  : '2.14.2',
-        springFramework   : '5.3.26',
+        springFramework   : '5.3.27',
         springCloud       : '3.1.2',
         log4j             : '2.17.2',
         springSecurity    : '5.7.5'
