@@ -38,11 +38,11 @@ class DeleteControllerTest {
     @Test
     void shouldReturnResponseEntityForDeleteCaseSearchRequest() {
 
-        doNothing().when(caseSearchService).deleteCaseSearchBbyId("1");
+        doNothing().when(caseSearchService).deleteCaseSearchById("1");
 
         final ResponseEntity<Object> responseEntity = deleteController.deleteCaseSearchRecordById("1");
 
-        verify(caseSearchService, times(1)).deleteCaseSearchBbyId("1");
+        verify(caseSearchService, times(1)).deleteCaseSearchById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
 
@@ -59,11 +59,11 @@ class DeleteControllerTest {
     void shouldReturnNotFoundResponseEntityForDeleteCaseRequest() {
         doThrow(new EmptyResultDataAccessException(1))
                 .when(caseSearchService)
-                .deleteCaseSearchBbyId("1");
+                .deleteCaseSearchById("1");
 
         final ResponseEntity<Object> responseEntity = deleteController.deleteCaseSearchRecordById("1");
 
-        verify(caseSearchService, times(1)).deleteCaseSearchBbyId("1");
+        verify(caseSearchService, times(1)).deleteCaseSearchById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
     }
 
@@ -71,11 +71,11 @@ class DeleteControllerTest {
     void shouldReturnInternalServerErrorResponseEntityForDeleteSearchRequest() {
         doThrow(new RuntimeException())
                 .when(caseSearchService)
-                .deleteCaseSearchBbyId("1");
+                .deleteCaseSearchById("1");
 
         final ResponseEntity<Object> responseEntity = deleteController.deleteCaseSearchRecordById("1");
 
-        verify(caseSearchService, times(1)).deleteCaseSearchBbyId("1");
+        verify(caseSearchService, times(1)).deleteCaseSearchById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
     }
 

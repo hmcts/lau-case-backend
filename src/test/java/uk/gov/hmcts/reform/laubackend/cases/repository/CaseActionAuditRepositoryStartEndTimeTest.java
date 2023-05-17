@@ -29,9 +29,9 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=update",
-        "spring.liquibase.enabled=false",
-        "spring.flyway.enabled=true"
+    "spring.jpa.hibernate.ddl-auto=update",
+    "spring.liquibase.enabled=false",
+    "spring.flyway.enabled=true"
 })
 @Import({QueryBuilder.class, TimestampUtil.class})
 class CaseActionAuditRepositoryStartEndTimeTest {
@@ -72,9 +72,8 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-
         //Will return 10 days because  the date start is +10 from now
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(10);
+        assertThat(caseViewAuditList.getContent()).hasSize(10);
     }
 
     @Test
@@ -92,7 +91,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertResults(caseViewAuditList.getContent(), 1);
     }
 
@@ -111,7 +110,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
+        assertThat(caseViewAuditList.getContent()).isEmpty();
     }
 
     @Test
@@ -130,7 +129,7 @@ class CaseActionAuditRepositoryStartEndTimeTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(0);
+        assertThat(caseViewAuditList.getContent()).isEmpty();
     }
 
 

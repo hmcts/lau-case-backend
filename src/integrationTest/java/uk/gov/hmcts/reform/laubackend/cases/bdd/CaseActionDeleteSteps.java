@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
-import com.google.gson.Gson;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -25,8 +24,8 @@ public class CaseActionDeleteSteps extends AbstractSteps {
 
     private int httpStatusResponseCode;
     private String caseActionResponseBody;
-    private final Gson jsonReader = new Gson();
     private String caseActionId;
+    private static final String CASE_ACTION_ID_PARAM_NAME = "caseActionId";
 
     @Before
     public void setUp() {
@@ -49,7 +48,10 @@ public class CaseActionDeleteSteps extends AbstractSteps {
 
     @And("I request DELETE {string} caseAction endpoint")
     public void deleteCaseAction(final String path) {
-        final Response response = restHelper.deleteResponse(baseUrl() + path, "caseActionId", caseActionId);
+        final Response response = restHelper.deleteResponse(
+            baseUrl() + path,
+            CASE_ACTION_ID_PARAM_NAME,
+            caseActionId);
         assertThat(response.getStatusCode()).isEqualTo(OK.value());
     }
 
@@ -76,20 +78,26 @@ public class CaseActionDeleteSteps extends AbstractSteps {
 
     @And("I request DELETE {string} caseAction endpoint with invalid caseActionId {string}")
     public void deleteCaseActionWithInvalidcaseActionId(final String path, final String caseActionId) {
-        final Response response = restHelper.deleteResponse(baseUrl() + path, "caseActionId", caseActionId);
+        final Response response = restHelper.deleteResponse(
+            baseUrl() + path,
+            CASE_ACTION_ID_PARAM_NAME,
+            caseActionId);
         httpStatusResponseCode = response.getStatusCode();
     }
 
     @And("I request DELETE {string} caseAction endpoint with missing caseActionId")
     public void deleteCaseActionWithMissingcaseActionId(final String path) {
-        final Response response = restHelper.deleteResponse(baseUrl() + path, "caseActionId", null);
+        final Response response = restHelper.deleteResponse(
+            baseUrl() + path,
+            CASE_ACTION_ID_PARAM_NAME,
+            null);
         httpStatusResponseCode = response.getStatusCode();
 
     }
 
     @Then("http {string} response is returned for DELETE caseAction")
     public void assertHttpResponse(final String httpResponse) {
-        assertThat(Integer.parseInt(httpResponse)).isEqualTo(httpStatusResponseCode);
+        assertThat(httpStatusResponseCode).isEqualTo(Integer.parseInt(httpResponse));
     }
 
     @Then("An empty result for DELETE caseAction is returned")

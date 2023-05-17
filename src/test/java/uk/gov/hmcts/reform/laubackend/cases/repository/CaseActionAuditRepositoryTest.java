@@ -31,9 +31,9 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.jpa.hibernate.ddl-auto=update",
-        "spring.liquibase.enabled=false",
-        "spring.flyway.enabled=true"
+    "spring.jpa.hibernate.ddl-auto=update",
+    "spring.liquibase.enabled=false",
+    "spring.flyway.enabled=true"
 })
 @Import({QueryBuilder.class, TimestampUtil.class})
 @SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
@@ -75,7 +75,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertResults(caseViewAuditList.getContent(), 2);
     }
 
@@ -95,7 +95,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertResults(caseViewAuditList.getContent(), 10);
     }
 
@@ -115,7 +115,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertResults(caseViewAuditList.getContent(), 4);
     }
 
@@ -134,7 +134,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(20);
+        assertThat(caseViewAuditList.getContent()).hasSize(20);
         assertResults(caseViewAuditList.getContent(), 1);
     }
 
@@ -153,7 +153,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertResults(caseViewAuditList.getContent(), 3);
     }
 
@@ -217,7 +217,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
 
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("3333");
 
@@ -226,7 +226,7 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList1 = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList1.getContent().size()).isEqualTo(0);
+        assertThat(caseViewAuditList1.getContent()).isEmpty();
     }
 
     @Test
@@ -251,10 +251,10 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("6666");
         assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo("4444");
-        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo(null);
+        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isNull();
     }
 
     @Test
@@ -278,9 +278,9 @@ class CaseActionAuditRepositoryTest {
         final Page<CaseActionAudit> caseViewAuditList = caseActionAuditRepository
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
-        assertThat(caseViewAuditList.getContent().size()).isEqualTo(1);
+        assertThat(caseViewAuditList.getContent()).hasSize(1);
         assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("7777");
-        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isEqualTo(null);
+        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isNull();
         assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
     }
 

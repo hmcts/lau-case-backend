@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testcontainers.shaded.org.apache.commons.lang.reflect.FieldUtils;
+import org.testcontainers.shaded.org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.util.List;
 

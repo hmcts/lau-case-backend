@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,9 +13,6 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 

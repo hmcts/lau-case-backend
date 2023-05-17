@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,6 +84,13 @@ public class CaseActionService {
 
     public void deleteCaseActionById(final String id) {
         caseActionAuditRepository.deleteById(valueOf(id));
+    }
+
+    public void verifyCaseActionExists(final String id) {
+        if (caseActionAuditRepository.findById(valueOf(id)).isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+
     }
 
     private int calculateStartRecordNumber(final Page<CaseActionAudit> caseView) {
