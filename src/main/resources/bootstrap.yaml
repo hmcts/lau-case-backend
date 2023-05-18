@@ -5,7 +5,7 @@ spring:
       prefixed: false
       paths: /mnt/secrets/lau
       aliases:
-        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
+        app-insights-connection-string: app-insights-connection-string
         case-backend-POSTGRES-PASS: ${LAU_DB_ADMIN_PASSWORD:LAU_DB_ADMIN_PASSWORD}
         case-backend-POSTGRES-USER: ${LAU_DB_ADMIN_USERNAME:LAU_DB_ADMIN_USERNAME}
         case-backend-app-db-password: ${LAU_DB_PASSWORD:LAU_DB_PASSWORD}
