@@ -25,6 +25,8 @@ public class CaseSearchAuditFindCaseRepository {
     private static final String FROM_CRITERIA = " FROM case_search_audit csa where "
             + "csa.log_timestamp>=:startTime AND csa.log_timestamp<=:endTime";
 
+    private static final String ORDER = " ORDER by csa.log_timestamp DESC";
+
     @PersistenceContext
     private final EntityManager entityManager;
 
@@ -42,6 +44,7 @@ public class CaseSearchAuditFindCaseRepository {
         final StringBuilder queryString = new StringBuilder(SELECT_CRITERIA + FROM_CRITERIA);
 
         addSearchCriteria(queryString, userId, caseRef);
+        queryString.append(ORDER);
 
         final Query query = entityManager.createNativeQuery(queryString.toString(), CaseSearchAudit.class);
 

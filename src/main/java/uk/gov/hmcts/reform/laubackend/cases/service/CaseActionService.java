@@ -101,6 +101,6 @@ public class CaseActionService {
         final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
         final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by(Sort.Direction.DESC, "timestamp"));
     }
 }

@@ -76,14 +76,14 @@ class CaseActionServiceTest {
 
         when(caseActionAuditRepository
                 .findAll(specification,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp"))))
+                        PageRequest.of(0, parseInt("10000"), Sort.by(Sort.Direction.DESC, "timestamp"))))
                 .thenReturn(pageResults);
 
         final CaseActionGetResponse caseView = caseActionService.getCaseView(inputParamsHolder);
 
         verify(caseActionAuditRepository, times(1))
                 .findAll(specification,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("timestamp")));
+                        PageRequest.of(0, parseInt("10000"), Sort.by(Sort.Direction.DESC, "timestamp")));
 
         assertThat(caseView.getActionLog().size()).isEqualTo(1);
         assertThat(caseView.getActionLog().get(0).getUserId()).isEqualTo("5");
