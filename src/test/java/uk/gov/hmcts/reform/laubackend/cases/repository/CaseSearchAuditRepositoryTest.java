@@ -10,18 +10,18 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.sql.Timestamp.valueOf;
 import static java.time.LocalDateTime.now;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.data.domain.PageRequest.of;
 
 @DataJpaTest
@@ -91,14 +91,15 @@ class CaseSearchAuditRepositoryTest {
                 null,
                 valueOf(now().minusDays(50)),
                 valueOf(now().plusDays(50)),
-                of(1, 10, Sort.by("log_timestamp"))
+                of(1, 10)
         );
         assertThat(caseSearchAuditList.getTotalElements()).isEqualTo(20);
         assertThat(caseSearchAuditList.getContent().size()).isEqualTo(10);
     }
 
     @Test
-    void shouldGetAllRecords() {
+    @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
+    void shouldGetAllRecordsDescOrder() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditFindCaseRepository.findCaseSearch(
                 null,
                 null,
@@ -106,7 +107,10 @@ class CaseSearchAuditRepositoryTest {
                 valueOf(now().plusDays(50)),
                 getPage()
         );
-        assertThat(caseSearchAuditList.getContent().size()).isEqualTo(20);
+        assertThat(caseSearchAuditList.getContent()).hasSize(20);
+        assertThat(caseSearchAuditList.getContent())
+            .extracting("timestamp", Timestamp.class)
+            .isSortedAccordingTo(Comparator.reverseOrder());
     }
 
     @Test

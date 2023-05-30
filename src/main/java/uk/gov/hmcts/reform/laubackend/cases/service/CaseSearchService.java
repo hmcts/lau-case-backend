@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
@@ -105,6 +104,6 @@ public class CaseSearchService {
         final String pageSize = isEmpty(size) ? defaultPageSize : size.trim();
         final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
-        return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by("log_timestamp"));
+        return of(parseInt(pageNumber) - 1, parseInt(pageSize));
     }
 }

@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
@@ -23,10 +22,10 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.apache.commons.lang3.RandomStringUtils.random;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -69,16 +68,16 @@ class CaseSearchServiceTest {
 
         when(caseSearchAuditFindCaseRepository
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp"))))
+                        PageRequest.of(0, parseInt("10000"))))
                 .thenReturn(pageResults);
 
         final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
 
         verify(caseSearchAuditFindCaseRepository, times(1))
                 .findCaseSearch("1", "2", null, null,
-                        PageRequest.of(0, parseInt("10000"), Sort.by("log_timestamp")));
+                        PageRequest.of(0, parseInt("10000")));
 
-        assertThat(caseSearch.getSearchLog().size()).isEqualTo(1);
+        assertThat(caseSearch.getSearchLog()).hasSize(1);
         assertThat(caseSearch.getSearchLog().get(0).getUserId()).isEqualTo("1");
         assertThat(caseSearch.getSearchLog().get(0).getCaseRefs().get(0)).isEqualTo("2");
     }
