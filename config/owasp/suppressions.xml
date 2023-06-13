@@ -29,7 +29,7 @@
     <cve>CVE-2022-22978</cve>
   </suppress>
   <suppress>
-    <notes><![CDATA[name: spring-boot-3.0.6.]]></notes>
+    <packageUrl regex="true">^pkg:maven/org.springframework.boot/spring-boot@3.0.6@.*$</packageUrl>
     <cve>CVE-2023-20883</cve>
   </suppress>
   <suppress>
