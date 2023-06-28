@@ -16,7 +16,7 @@ import java.security.Security;
 @EnableWebSecurity
 @Order(1)
 public class SecurityConfiguration {
-    
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
@@ -37,16 +37,17 @@ public class SecurityConfiguration {
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() //NOSONAR not used in secure contexts
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .exceptionHandling().authenticationEntryPoint(
+            .csrf(csrf -> csrf.disable()) //NOSONAR not used in secure contexts
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+            .exceptionHandling(exc -> exc.authenticationEntryPoint(
                 (req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers("/**").permitAll()
-            .requestMatchers("/lau/cases/s**")
-            .authenticated();
+            )
+            .authorizeHttpRequests(
+                authz -> authz.requestMatchers("/**").permitAll()
+                    .requestMatchers("/lau/cases/s**")
+                    .authenticated()
+            );
 
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
