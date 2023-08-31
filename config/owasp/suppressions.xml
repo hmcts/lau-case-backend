@@ -7,4 +7,8 @@
     ]]></notes>
     <cve>CVE-2023-35116</cve>
   </suppress>
+  <suppress>
+    <notes>Affects Spring-Kafka which we do not have, nor use: https://spring.io/security/cve-2023-34040</notes>
+    <cve>CVE-2023-34040</cve>
+  </suppress>
 </suppressions>
