@@ -95,5 +95,9 @@
   "10049_Non-Storable Content_http://lau-case-backend-aat.service.core-compute-aat.internal/audit/caseAction?User%20ID=3748238&Case%20Reference%20ID=1615817621013640&Case%20Type%20ID=GrantOfRepresentation&Case%20Action=VIEW&Case%20Jurisdiction%20ID=PROBATE&Start%20Timestamp=2021-06-23T22:20:05&End%20Timestamp=2021-08-23T22:20:05&Size=500&Page=1_GET": "ignore",
   "10049_Non-Storable Content_http://lau-case-backend-aat.service.core-compute-aat.internal/audit/caseSearch?User%20ID=3748238&Case%20Reference%20ID=1615817621013640&Start%20Timestamp=2021-06-23T22:20:05&End%20Timestamp=2021-08-23T22:20:05&Size=500&Page=1_GET": "ignore",
   "10049_Storable and Cacheable Content_http://lau-case-backend-aat.service.core-compute-aat.internal/_GET": "ignore",
-  "10049_Storable and Cacheable Content_http://lau-case-backend-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
+  "10049_Storable and Cacheable Content_http://lau-case-backend-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "10112_Session Management Response Identified_http://lau-case-backend-aat.service.core-compute-aat.internal/_GET": "ignore",
+  "10112_Session Management Response Identified_http://lau-case-backend-aat.service.core-compute-aat.internal/audit/caseAction?User%20ID=3748238&Case%20Reference%20ID=1615817621013640&Case%20Type%20ID=GrantOfRepresentation&Case%20Action=VIEW&Case%20Jurisdiction%20ID=PROBATE&Start%20Timestamp=2021-06-23T22:20:05&End%20Timestamp=2021-08-23T22:20:05&Size=500&Page=1_GET": "ignore",
+  "10112_Session Management Response Identified_http://lau-case-backend-aat.service.core-compute-aat.internal/audit/caseSearch?User%20ID=3748238&Case%20Reference%20ID=1615817621013640&Start%20Timestamp=2021-06-23T22:20:05&End%20Timestamp=2021-08-23T22:20:05&Size=500&Page=1_GET": "ignore",
+  "10112_Session Management Response Identified_http://lau-case-backend-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
