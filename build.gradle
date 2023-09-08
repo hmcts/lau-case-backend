@@ -316,7 +316,7 @@ dependencies {
   implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.69"
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
-  implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.4.12'
+  implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.4.16'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.4.16'
   implementation group: 'com.vladmihalcea', name: 'hibernate-types-60', version: '2.21.1'
   implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.0.Final'
