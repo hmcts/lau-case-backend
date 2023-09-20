@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
-import net.thucydides.core.annotations.Step;
+import net.serenitybdd.annotations.Step;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
 

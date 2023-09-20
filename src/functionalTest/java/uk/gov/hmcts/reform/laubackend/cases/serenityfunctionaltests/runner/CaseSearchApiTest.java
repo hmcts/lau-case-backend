@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.runner;
 
 import io.restassured.response.Response;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.annotations.Title;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.annotations.Title;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
