@@ -280,7 +280,7 @@ def versions = [
         commonsIo         : '2.14.0',
         cucumber          : '7.14.0',
         springCloud       : '4.0.4',
-        log4j             : '2.20.0',
+        log4j             : '2.21.0',
         flywaydb          : '9.0.4',
 ]
 
