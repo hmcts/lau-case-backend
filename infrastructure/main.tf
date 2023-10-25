@@ -49,6 +49,8 @@ module "lau-case-db-flexible" {
 
   common_tags = var.common_tags
 
+  pgsql_storage_mb = 131072
+
   pgsql_admin_username = "lauadmin"
   pgsql_version   = "15"
 
@@ -140,5 +142,3 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT_FLEXIBLE" {
   name      = "${var.component}-POSTGRES-PORT-FLEXIBLE"
   value     =  var.postgresql_flexible_server_port
 }
-
-
