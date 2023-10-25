@@ -270,7 +270,7 @@ def versions = [
         junit             : '5.9.3',
         junitPlatform     : '1.9.3',
         springBoot        : springBoot.class.package.implementationVersion,
-        serenity          : '4.0.15',
+        serenity          : '4.0.18',
         gradlePitest      : '1.15.0',
         pitest            : '1.15.2',
         sonarPitest       : '0.5',
