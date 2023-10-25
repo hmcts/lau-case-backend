@@ -11,4 +11,8 @@
     <notes>Affects Spring-Kafka which we do not have, nor use: https://spring.io/security/cve-2023-34040</notes>
     <cve>CVE-2023-34040</cve>
   </suppress>
+  <suppress>
+    <notes>No fix till netty 5 release or fix applied to netty 4</notes>
+    <cve>CVE-2023-4586</cve>
+  </suppress>
 </suppressions>
