@@ -49,7 +49,7 @@ module "lau-case-db-flexible" {
 
   common_tags = var.common_tags
 
-  pgsql_storage_mb = 131072
+  pgsql_storage_mb = var.pgsql_storage_mb
 
   pgsql_admin_username = "lauadmin"
   pgsql_version   = "15"
