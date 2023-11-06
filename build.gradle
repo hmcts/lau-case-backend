@@ -281,7 +281,7 @@ def versions = [
         cucumber          : '7.14.0',
         springCloud       : '4.0.4',
         log4j             : '2.21.1',
-        flywaydb          : '9.0.4',
+        flywaydb          : '10.0.0',
 ]
 
 configurations.all {
