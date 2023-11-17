@@ -275,7 +275,7 @@ def versions = [
         pitest            : '1.15.3',
         sonarPitest       : '0.5',
         lombok            : '1.18.30',
-        testcontainers    : '1.19.1',
+        testcontainers    : '1.19.2',
         restAssured       : '5.3.2',
         commonsIo         : '2.15.0',
         cucumber          : '7.14.0',
