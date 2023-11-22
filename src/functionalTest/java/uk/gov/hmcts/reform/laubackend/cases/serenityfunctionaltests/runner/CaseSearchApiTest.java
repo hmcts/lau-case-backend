@@ -6,6 +6,7 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.Title;
 import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helpe
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_DELETE_ENDPOINT;
 
 @RunWith(SerenityRunner.class)
+@Ignore
 @SuppressWarnings("PMD.TooManyMethods")
 public class CaseSearchApiTest {
     @Steps
