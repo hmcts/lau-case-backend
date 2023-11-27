@@ -278,7 +278,7 @@ def versions = [
         testcontainers    : '1.19.3',
         restAssured       : '5.3.2',
         commonsIo         : '2.15.0',
-        cucumber          : '7.14.0',
+        cucumber          : '7.14.1',
         springCloud       : '4.0.4',
         log4j             : '2.22.0',
         flywaydb          : '9.0.4',
