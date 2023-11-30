@@ -277,7 +277,7 @@ def versions = [
         lombok            : '1.18.30',
         testcontainers    : '1.19.3',
         restAssured       : '5.3.2',
-        commonsIo         : '2.15.0',
+        commonsIo         : '2.15.1',
         cucumber          : '7.14.1',
         springCloud       : '4.0.4',
         log4j             : '2.22.0',
