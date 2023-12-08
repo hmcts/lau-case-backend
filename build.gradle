@@ -155,7 +155,7 @@ jacocoTestReport {
 }
 
 pitest {
-  junit5PluginVersion.set('1.0.0')
+  junit5PluginVersion.set('1.2.1')
   targetClasses = ['uk.gov.hmcts.reform.laubackend.*']
   excludedClasses = [
     'uk.gov.hmcts.reform.laubackend.cases.madeup.*'
@@ -299,19 +299,8 @@ configurations.all {
 }
 
 dependencies {
-  // exclude spring-cloud-context as it is already included in spring-cloud-starter-netflix-hystrix
-  def withoutSpringCloudContext = {
-    exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
-  }
-
   implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', {
-    // CVE-2023-41080
-    exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-websocket'
-    exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-core'
-  }
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.1.16'
-  implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.1.16'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
