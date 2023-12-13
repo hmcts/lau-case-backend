@@ -42,6 +42,11 @@ variable "appinsights_instrumentation_key" {
   default     = ""
 }
 
+variable "lau_case_db_name" {
+  description = "Name of database to use"
+  default = "lau_case"
+}
+
 variable "aks_subscription_id" {}
 
 variable "postgresql_flexible_server_port" {
