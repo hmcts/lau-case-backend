@@ -299,6 +299,12 @@ configurations.all {
 }
 
 dependencies {
+  modules {
+    module("com.google.collections:google-collections") {
+      replacedBy("com.google.guava:guava", "google-collections is part of guava")
+    }
+  }
+
   implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
