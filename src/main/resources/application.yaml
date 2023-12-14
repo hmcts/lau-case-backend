@@ -21,8 +21,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://${LAU_DB_HOST:localhost}:${LAU_DB_PORT:5432}/${LAU_DB_NAME:lau_case}${LAU_DB_CONN_OPTIONS:}
-    username: ${LAU_DB_ADMIN_USERNAME:lauadmin}
-    password: ${LAU_DB_ADMIN_PASSWORD:}
+    username: ${LAU_DB_USERNAME:lauuser}
+    password: ${LAU_DB_PASSWORD:}
     properties:
       charSet: UTF-8
     hikari:
