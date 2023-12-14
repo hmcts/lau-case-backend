@@ -1,5 +1,9 @@
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 provider "azurerm" {
@@ -17,22 +21,6 @@ locals {
   asp_name               = "${var.product}-${var.env}"
   env                    = var.env
 }
-
-module "lau-case-db" {
-  source                 = "git@github.com:hmcts/cnp-module-postgres?ref=master"
-  product                = "${var.product}-${var.component}"
-  location               = var.location_db
-  env                    = var.env
-  database_name          = "lau_case"
-  postgresql_user        = "lauadmin"
-  postgresql_version     = "11"
-  postgresql_listen_port = "5432"
-  sku_name               = "GP_Gen5_2"
-  sku_tier               = "GeneralPurpose"
-  common_tags            = var.common_tags
-  subscription           = var.subscription
-}
-
 
 module "lau-case-db-flexible" {
   providers = {
@@ -122,32 +110,4 @@ resource "azurerm_key_vault_secret" "lau_case_db_user" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name  = "case-backend-app-db-user-flexible"
   value = "lauuser"
-}
-
-///////////////////////////////////////
-// Populate Vault with Flexible DB info
-//////////////////////////////////////
-
-resource "azurerm_key_vault_secret" "POSTGRES-USER-FLEXIBLE" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-USER-FLEXIBLE"
-  value        = module.lau-case-db-flexible.username
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PASS-FLEXIBLE" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-PASS-FLEXIBLE"
-  value        = module.lau-case-db-flexible.password
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_HOST_FLEXIBLE" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "${var.component}-POSTGRES-HOST-FLEXIBLE"
-  value        = module.lau-case-db-flexible.fqdn
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_PORT_FLEXIBLE" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name      = "${var.component}-POSTGRES-PORT-FLEXIBLE"
-  value     =  var.postgresql_flexible_server_port
 }
