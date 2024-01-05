@@ -25,6 +25,7 @@ module "lau-case-db-flexible" {
 
   source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
   env = var.env
+  subnet_suffix = var.subnet_suffix
 
   product = var.product
   component = var.component
