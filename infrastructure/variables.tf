@@ -58,3 +58,9 @@ variable "pgsql_storage_mb" {
   description = "Flexible Postgres DB size in mb"
   default = 131072
 }
+
+variable "subnet_suffix" {
+  default     = null
+  type        = string
+  description = "Suffix to append to the subnet name, the originally created one used by this module is full in a number of environments."
+}
