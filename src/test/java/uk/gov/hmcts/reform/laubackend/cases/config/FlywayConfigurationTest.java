@@ -13,17 +13,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FlywayConfigurationTest {
 
-    private final FlywayConfiguration flywayConfiguration = new FlywayConfiguration();
+    private final FlywayMigrationStrategyConfiguration flywayMigrationStrategyConfiguration =
+        new FlywayMigrationStrategyConfiguration();
 
 
     @Test
     void shouldReturnInstanceOfFlywayMigrationStrategy() {
-        assertThat(flywayConfiguration.flywayMigrationStrategy()).isInstanceOf(FlywayMigrationStrategy.class);
-        assertThat(flywayConfiguration.flywayMigrationStrategy()).isInstanceOf(FlywayNoOpStrategy.class);
+        assertThat(flywayMigrationStrategyConfiguration.flywayMigrationStrategy())
+            .isInstanceOf(FlywayMigrationStrategy.class);
+        assertThat(flywayMigrationStrategyConfiguration.flywayMigrationStrategy())
+            .isInstanceOf(FlywayNoOpStrategy.class);
     }
 
     @Test
     void shouldReturnNullFlyWayMigrationStrategy() {
-        assertThat(flywayConfiguration.flywayVoidMigrationStrategy()).isNull();
+        assertThat(flywayMigrationStrategyConfiguration.flywayVoidMigrationStrategy()).isNull();
     }
 }

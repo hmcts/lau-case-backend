@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.FlywayNoOpStrategy;
 @Configuration
 @ConditionalOnClass(Flyway.class)
 @ConditionalOnProperty(prefix = "spring.flyway", name = "enabled", matchIfMissing = true)
-public class FlywayConfiguration {
+public class FlywayMigrationStrategyConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "flyway.noop", name = "strategy", matchIfMissing = true)
