@@ -1,3 +1,9 @@
+buildscript {
+  dependencies {
+    classpath("org.flywaydb:flyway-database-postgresql:10.5.0")
+  }
+}
+
 plugins {
   id 'application'
   id 'checkstyle'
