@@ -3,5 +3,6 @@
   "extends": [
     "local>hmcts/.github:renovate-config",
     "local>hmcts/.github//renovate/automerge-minor"
-  ]
+  ],
+  "ignoreDeps": ["org.flywaydb:flyway-core", "org.flywaydb.flyway"]
 }
