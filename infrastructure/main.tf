@@ -56,6 +56,7 @@ module "lau-case-db-flexible" {
   ]
 
   admin_user_object_id = var.jenkins_AAD_objectId
+  auto_grow_enabled = var.auto_grow_enabled
 }
 data "azurerm_key_vault" "key_vault" {
   name                = local.vault_name
