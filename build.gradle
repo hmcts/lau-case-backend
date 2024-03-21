@@ -278,7 +278,7 @@ def versions = [
         gradlePitest      : '1.15.0',
         pitest            : '1.15.8',
         sonarPitest       : '0.5',
-        lombok            : '1.18.30',
+        lombok            : '1.18.32',
         testcontainers    : '1.19.7',
         restAssured       : '5.4.0',
         commonsIo         : '2.15.1',
