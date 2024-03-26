@@ -3,23 +3,25 @@
   "role": {
     "name": "lau-case-backend"
   },
-  "sampling": {
-    "overrides": [
-      {
-        "telemetryType": "request",
-        "attributes": [
-          {
-            "key": "http.url",
-            "value": "https?://[^/]+/health.*",
-            "matchType": "regexp"
-          }
-        ],
-        "percentage": 1
-      },
-      {
-        "telemetryType": "dependency",
-        "percentage": 0
-      }
-    ]
+  "preview": {
+    "sampling": {
+      "overrides": [
+        {
+          "telemetryType": "request",
+          "attributes": [
+            {
+              "key": "http.url",
+              "value": "https?://[^/]+/health.*",
+              "matchType": "regexp"
+            }
+          ],
+          "percentage": 1
+        },
+        {
+          "telemetryType": "dependency",
+          "percentage": 0
+        }
+      ]
+    }
   }
 }
