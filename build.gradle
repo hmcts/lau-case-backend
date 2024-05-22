@@ -270,6 +270,8 @@ repositories {
   }
 }
 
+ext['selenium.version'] = '4.21.0'
+
 def versions = [
         junit             : '5.9.3',
         junitPlatform     : '1.9.3',
