@@ -1,18 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-  <suppress>
-    <notes><![CDATA[
-      name: jackson-databind
-      Does not seem to be considered as CVE: https://github.com/FasterXML/jackson-databind/issues/3972
-    ]]></notes>
-    <cve>CVE-2023-35116</cve>
-  </suppress>
-  <suppress>
-    <notes>Affects Spring-Kafka which we do not have, nor use: https://spring.io/security/cve-2023-34040</notes>
-    <cve>CVE-2023-34040</cve>
-  </suppress>
-  <suppress>
-    <notes>No fix till netty 5 release or fix applied to netty 4</notes>
-    <cve>CVE-2023-4586</cve>
-  </suppress>
 </suppressions>

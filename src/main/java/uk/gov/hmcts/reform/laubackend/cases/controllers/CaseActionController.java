@@ -179,8 +179,6 @@ public final class CaseActionController {
             @Parameter(name = "Page", example = "1")
             @RequestParam(value = PAGE, required = false) final String page) {
         try {
-
-
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     caseRef,
                     caseTypeId,
