@@ -44,7 +44,7 @@ variable "appinsights_instrumentation_key" {
 
 variable "lau_case_db_name" {
   description = "Name of database to use"
-  default = "lau_case"
+  default     = "lau_case"
 }
 
 variable "aks_subscription_id" {}
@@ -54,9 +54,9 @@ variable "postgresql_flexible_server_port" {
 }
 
 variable "pgsql_storage_mb" {
-  type = number
+  type        = number
   description = "Flexible Postgres DB size in mb"
-  default = 131072
+  default     = 131072
 }
 
 variable "subnet_suffix" {
