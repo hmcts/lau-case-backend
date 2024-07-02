@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 
 import java.sql.Timestamp;
 
-import static java.lang.Long.valueOf;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -17,7 +16,7 @@ class ActionLogTest {
     @Test
     void shouldCreteDtoFromEntity() {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
-        caseActionAudit.setCaseActionId(valueOf(1));
+        caseActionAudit.setCaseActionId(1L);
         caseActionAudit.setUserId("2");
         caseActionAudit.setCaseTypeId("3");
         caseActionAudit.setTimestamp(Timestamp.valueOf("2021-09-07 14:00:46.852754"));
@@ -28,7 +27,7 @@ class ActionLogTest {
 
         assertThat(caseActionAudit.getUserId()).isEqualTo(actionLogDto.getUserId());
         assertThat(caseActionAudit.getCaseTypeId()).isEqualTo(actionLogDto.getCaseTypeId());
-        assertThat(caseActionAudit.getTimestamp().toString()).isEqualTo("2021-09-07 14:00:46.852754");
+        assertThat(caseActionAudit.getTimestamp()).hasToString("2021-09-07 14:00:46.852754");
         assertThat(caseActionAudit.getCaseRef()).isEqualTo(actionLogDto.getCaseRef());
         assertThat(caseActionAudit.getCaseJurisdictionId()).isEqualTo(actionLogDto.getCaseJurisdictionId());
         assertThat(caseActionAudit.getUserId()).isEqualTo(actionLogDto.getUserId());

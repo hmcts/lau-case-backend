@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -29,16 +29,14 @@ import static org.springframework.data.domain.PageRequest.of;
 import static uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse.caseViewResponse;
 
 @Service
+@RequiredArgsConstructor
 public class CaseActionService {
 
-    @Autowired
-    private CaseActionAuditRepository caseActionAuditRepository;
+    private final CaseActionAuditRepository caseActionAuditRepository;
 
-    @Autowired
-    private TimestampUtil timestampUtil;
+    private final TimestampUtil timestampUtil;
 
-    @Autowired
-    private QueryBuilder queryBuilder;
+    private final QueryBuilder queryBuilder;
 
     @Value("${default.page.size}")
     private String defaultPageSize;

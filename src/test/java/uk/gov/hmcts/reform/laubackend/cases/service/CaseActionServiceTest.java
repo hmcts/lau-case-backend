@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,11 +20,10 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -36,7 +34,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings({"PMD.UnusedPrivateField", "unchecked"})
 class CaseActionServiceTest {
 
@@ -55,7 +52,7 @@ class CaseActionServiceTest {
     @Test
     void shouldGetRepositoryResponse() {
         final Timestamp timestamp = mock(Timestamp.class);
-        final List<CaseActionAudit> caseActionAuditList = Arrays.asList(getCaseViewAuditEntity(timestamp));
+        final List<CaseActionAudit> caseActionAuditList = List.of(getCaseViewAuditEntity(timestamp));
         final Page<CaseActionAudit> pageResults = new PageImpl<>(caseActionAuditList);
 
         setField(caseActionService, "defaultPageSize", "10000");
@@ -85,18 +82,18 @@ class CaseActionServiceTest {
                 .findAll(specification,
                         PageRequest.of(0, parseInt("10000"), Sort.by(Sort.Direction.DESC, "timestamp")));
 
-        assertThat(caseView.getActionLog().size()).isEqualTo(1);
-        assertThat(caseView.getActionLog().get(0).getUserId()).isEqualTo("5");
-        assertThat(caseView.getActionLog().get(0).getCaseRef()).isEqualTo("2");
-        assertThat(caseView.getActionLog().get(0).getCaseTypeId()).isEqualTo("3");
-        assertThat(caseView.getActionLog().get(0).getCaseJurisdictionId()).isEqualTo("4");
+        assertThat(caseView.getActionLog()).hasSize(1);
+        assertThat(caseView.getActionLog().getFirst().getUserId()).isEqualTo("5");
+        assertThat(caseView.getActionLog().getFirst().getCaseRef()).isEqualTo("2");
+        assertThat(caseView.getActionLog().getFirst().getCaseTypeId()).isEqualTo("3");
+        assertThat(caseView.getActionLog().getFirst().getCaseJurisdictionId()).isEqualTo("4");
     }
 
 
     @Test
     void shouldPostCaseView() {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
-        caseActionAudit.setCaseActionId(Long.valueOf(45));
+        caseActionAudit.setCaseActionId(45L);
         caseActionAudit.setUserId("1");
         caseActionAudit.setCaseRef("2");
         caseActionAudit.setCaseJurisdictionId("3");
@@ -134,7 +131,7 @@ class CaseActionServiceTest {
 
     private CaseActionAudit getCaseViewAuditEntity(final Timestamp timestamp) {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();
-        caseActionAudit.setCaseActionId(Long.valueOf(1));
+        caseActionAudit.setCaseActionId(1L);
         caseActionAudit.setCaseRef("2");
         caseActionAudit.setCaseTypeId("3");
         caseActionAudit.setCaseAction(CREATE.name());
