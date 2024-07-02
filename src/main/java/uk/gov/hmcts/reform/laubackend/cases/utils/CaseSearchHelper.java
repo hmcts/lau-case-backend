@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 public final class CaseSearchHelper {
@@ -13,7 +12,7 @@ public final class CaseSearchHelper {
 
     public static List<Long> convertCaseRefsToLong(final List<String> caseRefs) {
         if (!isEmpty(caseRefs)) {
-            return caseRefs.stream().map(Long::parseLong).collect(toList());
+            return caseRefs.stream().map(Long::parseLong).toList();
         }
         return emptyList();
     }
