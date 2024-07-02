@@ -6,7 +6,8 @@ import org.junit.jupiter.api.TestInstance;
 import java.util.ArrayList;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SearchLogTest {
@@ -20,7 +21,7 @@ class SearchLogTest {
         searchLog.setCaseRefs(new ArrayList<>(asList(caseRefWithDash,
                 caseRefWithUnderscore)));
 
-        assertThat(searchLog.getCaseRefs().size()).isEqualTo(2);
+        assertThat(searchLog.getCaseRefs()).hasSize(2);
         assertThat(searchLog.getCaseRefs().get(0)).isEqualTo("1234567891234567");
         assertThat(searchLog.getCaseRefs().get(1)).isEqualTo("1234567891234588");
     }
@@ -33,7 +34,7 @@ class SearchLogTest {
 
         searchLog.setCaseRefs(new ArrayList<>(asList(caseRef1, caseRef2)));
 
-        assertThat(searchLog.getCaseRefs().size()).isEqualTo(2);
+        assertThat(searchLog.getCaseRefs()).hasSize(2);
         assertThat(searchLog.getCaseRefs().get(0)).isEqualTo("1234567891234567");
         assertThat(searchLog.getCaseRefs().get(1)).isEqualTo("1234567891234588");
     }

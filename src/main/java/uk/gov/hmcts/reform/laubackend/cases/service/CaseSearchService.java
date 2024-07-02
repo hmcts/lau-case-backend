@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -30,19 +30,17 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseSearchHelper.conver
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CaseSearchService {
 
-    @Autowired
-    private CaseSearchAuditRepository caseSearchAuditRepository;
-    @Autowired
-    private CaseSearchAuditFindCaseRepository caseSearchAuditFindCaseRepository;
+    private final CaseSearchAuditRepository caseSearchAuditRepository;
 
-    @Autowired
-    private TimestampUtil timestampUtil;
+    private final CaseSearchAuditFindCaseRepository caseSearchAuditFindCaseRepository;
+
+    private final TimestampUtil timestampUtil;
 
     @Value("${default.page.size}")
     private String defaultPageSize;
-
 
     public CaseSearchGetResponse getCaseSearch(final SearchInputParamsHolder inputParamsHolder) {
 

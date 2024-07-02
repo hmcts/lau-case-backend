@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository.helpers;
 
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
@@ -18,12 +18,12 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 @Service
+@RequiredArgsConstructor
 public class QueryBuilder {
 
     private static final String TIMESTAMP = "timestamp";
-    @Autowired
-    private TimestampUtil timestampUtil;
 
+    private final TimestampUtil timestampUtil;
 
     public Specification<CaseActionAudit> buildCaseActionRequest(final ActionInputParamsHolder inputParamsHolder) {
         final CaseActionAudit caseActionAudit = createCaseActionAudit(inputParamsHolder);

@@ -5,17 +5,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
@@ -53,45 +51,41 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @Tag(name = "Case action database operations.", description = "This is the Log and Audit "
         + "Back-End API that will audit case actions. "
         + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
 @SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement","PMD.ExcessiveParameterList"})
 public final class CaseActionController {
 
-    @Autowired
-    private CaseActionService caseActionService;
+    private final CaseActionService caseActionService;
 
-    @Autowired
-    private AppInsights appInsights;
+    private final AppInsights appInsights;
 
     @Operation(tags = "POST end-points", summary = "Save case action audits", description = "This operation will "
             + "persist CCD case action entries which are posted in the request. Single CaseAction per request will "
             + "be stored in the database.")
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created actionLog case response - includes caseActionId from DB.",
-            content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))}),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid case action",
-            content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))}),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Forbidden",
-            content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))}),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
-    })
+    @ApiResponse(
+        responseCode = "201",
+        description = "Created actionLog case response - includes caseActionId from DB.",
+        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
+    @ApiResponse(
+        responseCode = "400",
+        description = "Invalid case action",
+        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
+    @ApiResponse(
+        responseCode = "403",
+        description = "Forbidden",
+        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
     @PostMapping(
         path = "/audit/caseAction",
         produces = APPLICATION_JSON_VALUE,
         consumes = APPLICATION_JSON_VALUE
     )
-    @ResponseBody
     public ResponseEntity<CaseActionPostResponse> saveCaseAction(
             @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
@@ -125,36 +119,33 @@ public final class CaseActionController {
 
     @Operation(tags = "GET end-points", summary = "Retrieve case action audits", description = "This operation will "
             + "query and return a list of case actions based on the search conditions provided in the URL path.")
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Request executed successfully. Response contains of case view logs",
-            content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))}),
-        @ApiResponse(
-            responseCode = "400",
-            description =
-                "Missing userId, caseTypeId, caseJurisdictionId, "
-                    + "caseRef, startTimestamp or endTimestamp parameters.",
-            content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))}),
-        @ApiResponse(
-            responseCode = "401",
-            description = "Unauthorized",
-            content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))}),
-        @ApiResponse(
-            responseCode = "403",
-            description = "Forbidden",
-            content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))}),
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
-    })
+    @ApiResponse(
+        responseCode = "200",
+        description = "Request executed successfully. Response contains of case view logs",
+        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
+    @ApiResponse(
+        responseCode = "400",
+        description =
+            "Missing userId, caseTypeId, caseJurisdictionId, "
+                + "caseRef, startTimestamp or endTimestamp parameters.",
+        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized",
+        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
+    @ApiResponse(
+        responseCode = "403",
+        description = "Forbidden",
+        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
+    @ApiResponse(
+        responseCode = "500",
+        description = "Internal Server Error",
+        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
     @GetMapping(
         path = "/audit/caseAction",
         produces = APPLICATION_JSON_VALUE
     )
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
-    @ResponseBody
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
             @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = AUTHORISATION_HEADER) String authToken,

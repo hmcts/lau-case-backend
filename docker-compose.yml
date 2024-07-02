@@ -27,7 +27,7 @@ services:
 
   lau-case-database:
     container_name: lau-case-database
-    image: postgres:11-alpine
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: ${LAU_DB_ADMIN_USERNAME}
       POSTGRES_PASSWORD: ${LAU_DB_ADMIN_PASSWORD}

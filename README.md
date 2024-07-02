@@ -50,12 +50,12 @@ To build the project execute the following command:
 
 ### Running the application
 
-To run the PostgreSQL 11 LAU database, execute docker-compose to build the database from the postgreSQL docker image:
+To run the PostgreSQL 15 LAU database, execute docker-compose to build the database from the postgreSQL docker image:
 ```
   docker-compose -f docker-compose.yml up lau-case-database
 ```
 
-To apply flyway database scripts for PostgreSQL 11 LAU database, execute gradle migratePostgresDatabase task command - this will create all necessary users and tables.
+To apply flyway database scripts for PostgreSQL 15 LAU database, execute gradle migratePostgresDatabase task command - this will create all necessary users and tables.
 ```
   ./gradlew migratePostgresDatabase
 ```

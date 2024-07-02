@@ -12,7 +12,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -117,8 +117,8 @@ class SearchInputParamsVerifierTest {
 
         verifyRequestSearchParamsConditions(searchLog);
 
-        assertThat(searchLog.getCaseRefs().size()).isEqualTo(1);
-        assertThat(searchLog.getCaseRefs().get(0)).isEqualTo(caseRef);
+        assertThat(searchLog.getCaseRefs()).hasSize(1);
+        assertThat(searchLog.getCaseRefs().getFirst()).isEqualTo(caseRef);
     }
 
     @Test
@@ -130,7 +130,7 @@ class SearchInputParamsVerifierTest {
 
         verifyRequestSearchParamsConditions(searchLog);
 
-        assertThat(searchLog.getCaseRefs().size()).isEqualTo(1);
-        assertThat(searchLog.getCaseRefs().get(0)).isEqualTo(caseRef);
+        assertThat(searchLog.getCaseRefs()).hasSize(1);
+        assertThat(searchLog.getCaseRefs().getFirst()).isEqualTo(caseRef);
     }
 }
