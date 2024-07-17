@@ -14,7 +14,7 @@ public final class TestConstants {
     public static final String TOKEN_URL = "https://idam-api.aat.platform.hmcts.net/o/token";
 
 
-    /*CaseViw endPoint*/
+    /*CaseView endPoint*/
     public static final String AUDIT_CASE_ACTION_ENDPOINT = "/audit/caseAction";
     public static final String AUDIT_CASE_ACTION_DELETE_ENDPOINT = "/audit/caseAction/deleteCaseActionRecord";
 
@@ -24,6 +24,8 @@ public final class TestConstants {
     public static final String AUDIT_CASE_SEARCH_ENDPOINT = "/audit/caseSearch";
     public static final String AUDIT_CASE_SEARCH_DELETE_ENDPOINT = "/audit/caseSearch/deleteCaseSearchRecord";
 
+    // jurisdictions and case types GET endpoint
+    public static final String JURISDICTIONS_CASE_TYPES_ENDPOINT = "/audit/jurisdictionsCaseTypes";
 
     private TestConstants() {
 

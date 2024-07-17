@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestCo
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.DatabaseCleaner.deleteRecord;
@@ -64,6 +65,24 @@ public class CaseActionApiTest {
         );
 
         deleteRecord(AUDIT_CASE_ACTION_DELETE_ENDPOINT, false, postResponse);
+    }
+
+    @Test
+    @Title("Assert response code od f 200 for GET jurisdictionsCaseTypes with valid headers")
+    public void assertHttpSuccessResponseCodeForJurisdictionsCaseTypesApi() throws JSONException {
+        String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
+        final String authorizationToken = caseActionGetApiSteps.validAuthorizationTokenIsGenerated();
+        Response response = caseActionGetApiSteps.whenTheGetJurisdictionsCaseTypesServiceIsInvoked(
+                authServiceToken,
+                authorizationToken
+        );
+        String successOrFailure = caseActionGetApiSteps.thenASuccessResposeIsReturned(response);
+        Assert.assertEquals(successOrFailure, TestConstants.SUCCESS,
+                "The assertion for GET jurisdictionsCaseTypes API response code 200 is not successful"
+        );
+        assertThat(response.getBody().asString())
+            .contains("{\"jurisdictions\":[")
+            .contains("\"caseTypes\":[");
     }
 
     @Test

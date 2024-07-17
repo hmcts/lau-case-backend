@@ -48,7 +48,6 @@ Feature: The application's GET caseAction endpoint
     And And I GET "/audit/caseAction" using startTimestamp "2023-08-22T22:20:05" endTimestamp "2023-08-25T22:20:05" caseRef "0000000000000000" query param
     Then a single caseAction response body is returned for startTimestamp "2023-08-23T22:20:05.023Z"
 
-
   Scenario: The backend is able to process case insensitive caseTypeId caseAction GET requests
     Given LAU backend application is healthy
     When I POST multiple records to "/audit/caseAction" endpoint using "TEST1,TEST2,TEST3" caseTypeId
@@ -84,3 +83,10 @@ Feature: The application's GET caseAction endpoint
     And I am logged in with the CFT-SERVICE-LOGS role
     And And I GET "/audit/caseAction" using caseAction "CREATE" query param
     Then HTTP "401" Unauthorized response is returned for get request
+
+  Scenario: The backend is able to process getJurisdictionsCaseTypes GET requests
+    Given LAU backend application is healthy
+    When I POST multiple records to "/audit/caseAction" endpoint using "10,11,12" caseJurisdictionId
+    And I am logged in with the CFT-AUDIT-INVESTIGATOR role
+    And And I GET "/audit/jurisdictionsCaseTypes"
+    Then all jurisdictions and case types are returned

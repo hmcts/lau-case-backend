@@ -291,6 +291,22 @@ public class CaseActionGetSteps extends AbstractSteps {
         assertThat(caseActionPostResponseBody).containsIgnoringCase(responseCode);
     }
 
+    @When("And I GET {string}")
+    public void getJurisdictionsAndCaseTypes(String path) {
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of());
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
+    @Then("all jurisdictions and case types are returned")
+    public void allJurisdictionsAndCaseTypesAreReturned() {
+        assertThat(caseActionPostResponseBody).isEqualToIgnoringWhitespace("""
+            {
+                "jurisdictions":["TEST2","11","12","TEST3","2","TEST1","10"],
+                "caseTypes":["TEST2","TEST3","3","4","5","6","TEST1"]
+            }
+            """);
+    }
+
     private void assertObject(final CaseActionGetResponse caseActionGetResponse,
                               final CaseActionPostRequest caseSearchPostRequest) {
         assertThat(caseActionGetResponse.getActionLog().size()).isEqualTo(1);

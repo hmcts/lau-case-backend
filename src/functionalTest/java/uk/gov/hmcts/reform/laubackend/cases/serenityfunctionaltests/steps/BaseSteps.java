@@ -37,7 +37,7 @@ public class BaseSteps {
                 .setBaseUri(EnvConfig.API_URL)
                 .setRelaxedHTTPSValidation();
 
-        LOGGER.info("Using base API URL: " + EnvConfig.API_URL);
+        LOGGER.info("Using base API URL: {}", EnvConfig.API_URL);
         if (proxyHost != null) {
             specBuilder.setProxy(proxyHost, proxyPort);
         }

@@ -31,7 +31,7 @@ spring:
     name: LAU Case Backend
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql:11://localhost/lau-case
+    url: jdbc:tc:postgresql:15://localhost/lau-case
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

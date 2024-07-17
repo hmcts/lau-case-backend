@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.domain.JurisdictionCaseTypePair;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
@@ -16,10 +17,13 @@ import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.response.ActionLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.JurisdictionsCaseTypesResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.valueOf;
@@ -88,7 +92,6 @@ public class CaseActionService {
         if (caseActionAuditRepository.findById(valueOf(id)).isEmpty()) {
             throw new EmptyResultDataAccessException(1);
         }
-
     }
 
     private int calculateStartRecordNumber(final Page<CaseActionAudit> caseView) {
@@ -100,5 +103,18 @@ public class CaseActionService {
         final String pageNumber = isEmpty(page) ? "1" : page.trim();
 
         return of(parseInt(pageNumber) - 1, parseInt(pageSize), Sort.by(Sort.Direction.DESC, "timestamp"));
+    }
+
+    public JurisdictionsCaseTypesResponse getJurisdictionsAndCaseTypes() {
+        List<JurisdictionCaseTypePair> pairs = caseActionAuditRepository.getJurisdictionsCaseTypes();
+        Set<String> jurisdictions = new HashSet<>();
+        Set<String> caseTypes = new HashSet<>();
+        pairs.forEach(pair -> {
+            jurisdictions.add(pair.getJurisdiction());
+            caseTypes.add(pair.getCaseType());
+        });
+        return new JurisdictionsCaseTypesResponse(
+            jurisdictions.toArray(new String[0]),
+            caseTypes.toArray(new String[0]));
     }
 }

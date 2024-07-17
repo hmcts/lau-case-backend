@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_ENDPOINT;
+import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.JURISDICTIONS_CASE_TYPES_ENDPOINT;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 
 @SuppressWarnings("PMD.TooManyMethods")
@@ -57,6 +58,11 @@ public class CaseActionGetApiSteps extends BaseSteps {
         return performGetOperation(AUDIT_CASE_ACTION_ENDPOINT,
                 null, queryParamMap, serviceToken, authorizationToken
         );
+    }
+
+    @Step("When the CaseAction GET jurisidictionsCaseTypes service is invoked")
+    public Response whenTheGetJurisdictionsCaseTypesServiceIsInvoked(String serviceToken, String authorizationToken) {
+        return performGetOperation(JURISDICTIONS_CASE_TYPES_ENDPOINT, null, null, serviceToken, authorizationToken);
     }
 
     @Step("Then at least one record number should exist")
@@ -120,7 +126,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
                                                                      CaseActionResponseVO caseActionResponseVO)
             throws ParseException {
         List<ActionLog> actionLogList = caseActionResponseVO.getActionLog();
-        ActionLog actionLogObject = actionLogList.get(0);
+        ActionLog actionLogObject = actionLogList.getFirst();
         String timeStampResponse = actionLogObject.getTimestamp();
         String timeStampStartInputParam = inputQueryParamMap.get("startTimestamp");
         String timeStampEndInputParam = inputQueryParamMap.get("endTimestamp");
@@ -131,9 +137,9 @@ public class CaseActionGetApiSteps extends BaseSteps {
         Date inputEndTimestamp = new SimpleDateFormat(dateFormat, Locale.UK).parse(timeStampEndInputParam);
         Date responseTimestamp = new SimpleDateFormat(responseDateFormat, Locale.UK).parse(timeStampResponse);
 
-        LOGGER.info("Input start date : " + inputStartTimestamp.getTime());
-        LOGGER.info("Input end date : " + inputEndTimestamp.getTime());
-        LOGGER.info("Output date : " + responseTimestamp.getTime());
+        LOGGER.info("Input start date : {}", inputStartTimestamp.getTime());
+        LOGGER.info("Input end date : {}", inputEndTimestamp.getTime());
+        LOGGER.info("Output date : {}", responseTimestamp.getTime());
 
         Assert.assertTrue("ResponseDate is not between startDate and endDate",
                           responseTimestamp.after(inputStartTimestamp)
