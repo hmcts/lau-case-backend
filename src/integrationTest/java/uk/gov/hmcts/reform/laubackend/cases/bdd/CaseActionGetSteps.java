@@ -6,8 +6,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.service.ScheduledCacheManager;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,9 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     private String caseActionPostResponseBody;
     private final Gson jsonReader = new Gson();
+
+    @Autowired
+    private ScheduledCacheManager cacheManager;
 
     @Before
     public void setUp() {
@@ -293,6 +298,7 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     @When("And I GET {string}")
     public void getJurisdictionsAndCaseTypes(String path) {
+        cacheManager.cacheData();
         Response response = restHelper.getResponse(baseUrl() + path, Map.of());
         caseActionPostResponseBody = response.getBody().asString();
     }

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository;
 
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,7 @@ import java.util.List;
 public interface CaseActionAuditRepository extends JpaRepository<CaseActionAudit, Long>,
         JpaSpecificationExecutor<CaseActionAudit> {
 
+    @Cacheable("jurisdictionsCaseTypes")
     @Query(
         value = "SELECT case_jurisdiction_id jurisdiction, case_type_id caseType FROM case_action_audit "
         + "GROUP BY jurisdiction, caseType", nativeQuery = true)
