@@ -3,8 +3,10 @@ package uk.gov.hmcts.reform.laubackend.cases.bdd;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
+import org.springframework.cache.annotation.EnableCaching;
 
 
+@EnableCaching
 @RunWith(Cucumber.class)
 @CucumberOptions(
     features = "classpath:features",

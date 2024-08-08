@@ -276,19 +276,26 @@ class CaseActionAuditRepositoryTest {
                 .findAll(queryBuilder.buildCaseActionRequest(actionInputParamsHolder), getPage());
 
         assertThat(caseViewAuditList.getContent()).hasSize(1);
-        assertThat(caseViewAuditList.getContent().get(0).getUserId()).isEqualTo("7777");
-        assertThat(caseViewAuditList.getContent().get(0).getCaseTypeId()).isNull();
-        assertThat(caseViewAuditList.getContent().get(0).getCaseJurisdictionId()).isEqualTo("1");
+        assertThat(caseViewAuditList.getContent().getFirst().getUserId()).isEqualTo("7777");
+        assertThat(caseViewAuditList.getContent().getFirst().getCaseTypeId()).isNull();
+        assertThat(caseViewAuditList.getContent().getFirst().getCaseJurisdictionId()).isEqualTo("1");
     }
 
+    @Test
+    void shouldGetJurisdictionsAndCases() {
+        caseActionAuditRepository.save(
+            getCaseViewAuditEntity("21", "1", "2", "6666", valueOf(now())));
+        var result = caseActionAuditRepository.getJurisdictionsCaseTypes();
+        assertThat(result).hasSize(21);
+    }
 
     private void assertResults(final List<CaseActionAudit> caseActionAuditList, final int value) {
         final String stringValue = String.valueOf(value);
-        assertThat(caseActionAuditList.get(0).getCaseRef()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getCaseJurisdictionId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getCaseTypeId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getUserId()).isEqualTo(stringValue);
-        assertThat(caseActionAuditList.get(0).getCaseAction()).isEqualTo(CREATE.name());
+        assertThat(caseActionAuditList.getFirst().getCaseRef()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.getFirst().getCaseJurisdictionId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.getFirst().getCaseTypeId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.getFirst().getUserId()).isEqualTo(stringValue);
+        assertThat(caseActionAuditList.getFirst().getCaseAction()).isEqualTo(CREATE.name());
     }
 
     private CaseActionAudit getCaseViewAuditEntity(final String caseRef,

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
+import uk.gov.hmcts.reform.laubackend.cases.domain.JurisdictionCaseTypePair;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.CaseActionAuditRepository;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -128,6 +130,32 @@ class CaseActionServiceTest {
         verify(caseActionAuditRepository, times(1)).deleteById(Long.valueOf("1"));
     }
 
+    @Test
+    void shouldGetJurisdictionsAndCaseTypes() {
+        List<JurisdictionCaseTypePair> pairs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            pairs.add(createJurisdictionCaseTypePair(i, i));
+            pairs.add(createJurisdictionCaseTypePair(i, i + 1));
+        }
+        when(caseActionAuditRepository.getJurisdictionsCaseTypes()).thenReturn(pairs);
+        var response = caseActionService.getJurisdictionsAndCaseTypes();
+        assertThat(response.getJurisdictions()).hasSize(10);
+        assertThat(response.getJurisdictions()).contains("j0", "j1", "j2", "j3", "j4", "j5", "j6", "j7", "j8", "j9");
+        assertThat(response.getCaseTypes()).hasSize(11);
+        assertThat(response.getCaseTypes()).contains("c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10");
+    }
+
+    private JurisdictionCaseTypePair createJurisdictionCaseTypePair(int counter1, int counter2) {
+        return new JurisdictionCaseTypePair() {
+            @Override public String getJurisdiction() {
+                return "j" + counter1;
+            }
+
+            @Override public String getCaseType() {
+                return "c" + counter2;
+            }
+        };
+    }
 
     private CaseActionAudit getCaseViewAuditEntity(final Timestamp timestamp) {
         final CaseActionAudit caseActionAudit = new CaseActionAudit();

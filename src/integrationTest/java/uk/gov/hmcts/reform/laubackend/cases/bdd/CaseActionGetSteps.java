@@ -6,8 +6,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
+import uk.gov.hmcts.reform.laubackend.cases.service.ScheduledCacheManager;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,9 @@ public class CaseActionGetSteps extends AbstractSteps {
 
     private String caseActionPostResponseBody;
     private final Gson jsonReader = new Gson();
+
+    @Autowired
+    private ScheduledCacheManager cacheManager;
 
     @Before
     public void setUp() {
@@ -289,6 +294,23 @@ public class CaseActionGetSteps extends AbstractSteps {
     @Then("HTTP {string} Unauthorized response is returned for get request")
     public void assertUnauthorizedRseponseForGetRequest(final String responseCode) {
         assertThat(caseActionPostResponseBody).containsIgnoringCase(responseCode);
+    }
+
+    @When("And I GET {string}")
+    public void getJurisdictionsAndCaseTypes(String path) {
+        cacheManager.cacheData();
+        Response response = restHelper.getResponse(baseUrl() + path, Map.of());
+        caseActionPostResponseBody = response.getBody().asString();
+    }
+
+    @Then("all jurisdictions and case types are returned")
+    public void allJurisdictionsAndCaseTypesAreReturned() {
+        assertThat(caseActionPostResponseBody).isEqualToIgnoringWhitespace("""
+            {
+                "jurisdictions":["TEST2","11","12","TEST3","2","TEST1","10"],
+                "caseTypes":["TEST2","TEST3","3","4","5","6","TEST1"]
+            }
+            """);
     }
 
     private void assertObject(final CaseActionGetResponse caseActionGetResponse,

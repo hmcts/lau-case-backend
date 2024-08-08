@@ -5,7 +5,6 @@ import net.serenitybdd.rest.SerenityRest;
 import org.springframework.http.HttpStatus;
 
 @Slf4j
-@SuppressWarnings({"unchecked", "PMD.AvoidDuplicateLiterals"})
 public class LauCaseBackEndServiceClient {
 
     private final String lauCaseBackEndApiUrl;

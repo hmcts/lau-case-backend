@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +19,7 @@ import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
+import uk.gov.hmcts.reform.laubackend.cases.response.JurisdictionsCaseTypesResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -62,25 +61,15 @@ public final class CaseActionController {
 
     private final AppInsights appInsights;
 
+    private static final String EXCEPTION = "exception";
+
     @Operation(tags = "POST end-points", summary = "Save case action audits", description = "This operation will "
             + "persist CCD case action entries which are posted in the request. Single CaseAction per request will "
             + "be stored in the database.")
-    @ApiResponse(
-        responseCode = "201",
-        description = "Created actionLog case response - includes caseActionId from DB.",
-        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
-    @ApiResponse(
-        responseCode = "400",
-        description = "Invalid case action",
-        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
-    @ApiResponse(
-        responseCode = "403",
-        description = "Forbidden",
-        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
-    @ApiResponse(
-        responseCode = "500",
-        description = "Internal Server Error",
-        content = { @Content(schema = @Schema(implementation = CaseActionPostResponse.class))})
+    @ApiResponse(responseCode = "201", description = "Created actionLog case - includes caseActionId from DB.")
+    @ApiResponse(responseCode = "400", description = "Invalid case action")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
     @PostMapping(
         path = "/audit/caseAction",
         produces = APPLICATION_JSON_VALUE,
@@ -104,16 +93,16 @@ public final class CaseActionController {
                     invalidRequestException
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", invalidRequestException.getMessage()));
-            return new ResponseEntity<>(null, BAD_REQUEST);
+                EXCEPTION, invalidRequestException.getMessage()));
+            return new ResponseEntity<>(BAD_REQUEST);
         } catch (final Exception exception) {
             log.error("saveCaseAction API call failed due to error - {}",
                     exception.getMessage(),
                     exception
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", exception.getMessage()));
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+                EXCEPTION, exception.getMessage()));
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,30 +110,16 @@ public final class CaseActionController {
             + "query and return a list of case actions based on the search conditions provided in the URL path.")
     @ApiResponse(
         responseCode = "200",
-        description = "Request executed successfully. Response contains of case view logs",
-        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
+        description = "Request executed successfully. Response contains of case view logs")
     @ApiResponse(
         responseCode = "400",
         description =
             "Missing userId, caseTypeId, caseJurisdictionId, "
-                + "caseRef, startTimestamp or endTimestamp parameters.",
-        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
-    @ApiResponse(
-        responseCode = "401",
-        description = "Unauthorized",
-        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
-    @ApiResponse(
-        responseCode = "403",
-        description = "Forbidden",
-        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
-    @ApiResponse(
-        responseCode = "500",
-        description = "Internal Server Error",
-        content = { @Content(schema = @Schema(implementation = CaseActionGetResponse.class))})
-    @GetMapping(
-        path = "/audit/caseAction",
-        produces = APPLICATION_JSON_VALUE
-    )
+                + "caseRef, startTimestamp or endTimestamp parameters.")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @GetMapping(path = "/audit/caseAction", produces = APPLICATION_JSON_VALUE)
     @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
             @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
@@ -197,9 +172,29 @@ public final class CaseActionController {
                     invalidRequestException
             );
             appInsights.trackEvent(GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", invalidRequestException.getMessage()));
-            return new ResponseEntity<>(null, BAD_REQUEST);
+                EXCEPTION, invalidRequestException.getMessage()));
+            return new ResponseEntity<>(BAD_REQUEST);
         }
+    }
+
+    @Operation(
+        tags = "GET end-points",
+        summary = "Retrieve jurisdictions and case types",
+        description = "Endpoint that returns list of jurisdictions and list of case types"
+    )
+    @ApiResponse(responseCode = "200", description = "Data retrieved successfully.")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @GetMapping(path = "/audit/jurisdictionsCaseTypes", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<JurisdictionsCaseTypesResponse> getJurisdictionsCaseTypes(
+        @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
+        @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
+        @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
+        @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken
+    ) {
+        JurisdictionsCaseTypesResponse response = caseActionService.getJurisdictionsAndCaseTypes();
+        return new ResponseEntity<>(response, OK);
     }
 
 }
