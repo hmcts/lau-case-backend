@@ -5,8 +5,8 @@ CREATE TABLE access_request_audit (
   case_ref VARCHAR(16) NOT NULL,
   reason VARCHAR NOT NULL,
   action VARCHAR(64) NOT NULL,
-  time_limit TIMESTAMP WITH TIME ZONE,
-  log_timestamp TIMESTAMP WITH TIME ZONE NOT NULL
+  time_limit TIMESTAMP WITHOUT TIME ZONE,
+  log_timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
 -- access_request_audit comments
