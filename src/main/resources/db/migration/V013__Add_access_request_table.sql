@@ -24,3 +24,6 @@ CREATE INDEX access_request_audit_user_id_idx ON access_request_audit (user_id);
 CREATE INDEX access_request_audit_case_id_idx ON access_request_audit (case_ref);
 CREATE INDEX access_request_audit_request_type_idx ON access_request_audit (request_type);
 CREATE INDEX access_request_audit_log_timestamp_idx ON access_request_audit (log_timestamp ASC);
+
+GRANT USAGE, SELECT ON SEQUENCE access_request_audit_id_seq TO lauuser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE access_request_audit TO lauuser;
