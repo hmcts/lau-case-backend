@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.service.AccessRequestService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
@@ -36,6 +37,8 @@ public class DeleteController {
     private final CaseSearchService caseSearchService;
 
     private final CaseActionService caseActionService;
+
+    private final AccessRequestService accessRequestService;
 
     @Operation(
             tags = "DELETE end-points", summary = "Delete case search record from the database.",
@@ -95,6 +98,37 @@ public class DeleteController {
             // therefore we manually check if case action exists and throw an exception if not
             caseActionService.verifyCaseActionExists(caseActionId);
             caseActionService.deleteCaseActionById(caseActionId);
+
+            return new ResponseEntity<>(OK);
+        } catch (final InvalidRequestException invalidRequestException) {
+            return getExceptionResponseEntity(invalidRequestException, BAD_REQUEST);
+        } catch (final EmptyResultDataAccessException emptyResultDataAccessException) {
+            return getExceptionResponseEntity(emptyResultDataAccessException, NOT_FOUND);
+        } catch (final Exception exception) {
+            return getExceptionResponseEntity(exception, INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Operation(
+        tags = "DELETE end-points", summary = "Delete request access record from the database.",
+        description = "This API will delete a record from the lau database by the given request access user id "
+            + "and caseRef. It is intended to be called from the test api for testing purposes."
+    )
+    @ApiResponse(responseCode = "200", description = "Access request record has been deleted")
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @ApiResponse(responseCode = "404", description = "Access request not found in the database")
+    @ApiResponse(responseCode = "400", description = "Missing user id and/or caseRef from the API request")
+    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    @DeleteMapping(
+        path = "/audit/accessRequest/deleteAccessRequestRecord",
+        produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Object> deleteAccessRequestRecord(@RequestParam String userId, @RequestParam String caseRef) {
+        try {
+            verifyIdNotEmpty(userId);
+            verifyIdNotEmpty(caseRef);
+            accessRequestService.deleteAccessRequestRecord(userId, caseRef);
 
             return new ResponseEntity<>(OK);
         } catch (final InvalidRequestException invalidRequestException) {

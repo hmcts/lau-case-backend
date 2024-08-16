@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchRequestVO;
@@ -40,7 +41,8 @@ public class CaseSearchPostApiSteps extends BaseSteps {
 
     @Step("When the POST service is invoked")
     public Response whenThePostServiceIsInvoked(String serviceToken, Object searchLog) throws JsonProcessingException {
-        return performPostOperation(TestConstants.AUDIT_CASE_SEARCH_ENDPOINT, null, null, searchLog, serviceToken);
+        String bodyJsonStr = null == searchLog ? "" : new ObjectMapper().writeValueAsString(searchLog);
+        return performPostOperation(TestConstants.AUDIT_CASE_SEARCH_ENDPOINT, null, null, bodyJsonStr, serviceToken);
     }
 
 }

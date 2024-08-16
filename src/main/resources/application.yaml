@@ -47,6 +47,9 @@ spring:
   #      remove-abandoned-timeout: 60
   #      log-abandoned: true
   #      abandon-when-percentage-full: 0
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   jpa:
     properties:
       hibernate:

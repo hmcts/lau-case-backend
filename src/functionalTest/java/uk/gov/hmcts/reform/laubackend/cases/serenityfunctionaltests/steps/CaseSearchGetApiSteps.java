@@ -23,11 +23,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils
 @SuppressWarnings("PMD.TooManyMethods")
 public class CaseSearchGetApiSteps extends BaseSteps {
 
-    @Step("Given a valid service token is generated")
-    public String givenAValidServiceTokenIsGenerated() {
-        return authorizationHeaderHelper.getServiceToken();
-    }
-
     @Step("And valid Authorization token is generated")
     public String validAuthorizationTokenIsGenerated() throws JSONException {
         return authorizationHeaderHelper.getAuthorizationToken();
