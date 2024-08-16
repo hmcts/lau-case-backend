@@ -1,10 +1,15 @@
 package uk.gov.hmcts.reform.laubackend.cases.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
+
+@Getter
 public class InvalidRequestException extends Exception {
 
-    public static final long serialVersionUID = 432973322;
+    @Serial
+    private static final long serialVersionUID = 432973322;
 
     private final HttpStatus errorCode;
 
@@ -13,7 +18,4 @@ public class InvalidRequestException extends Exception {
         errorCode = errCode;
     }
 
-    public HttpStatus getErrorCode() {
-        return errorCode;
-    }
 }

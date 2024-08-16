@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @NoArgsConstructor
@@ -14,7 +15,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CaseActionPostRequest implements Serializable {
 
-    public static final long serialVersionUID = 432973322;
+    @Serial
+    private static final long serialVersionUID = 432973322;
 
     private ActionLog actionLog;
 }

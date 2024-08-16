@@ -1,13 +1,12 @@
 package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import net.serenitybdd.annotations.Step;
 import net.serenitybdd.rest.SerenityRest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class BaseSteps {
                 .setBaseUri(EnvConfig.API_URL)
                 .setRelaxedHTTPSValidation();
 
-        LOGGER.info("Using base API URL: " + EnvConfig.API_URL);
+        LOGGER.info("Using base API URL: {}", EnvConfig.API_URL);
         if (proxyHost != null) {
             specBuilder.setProxy(proxyHost, proxyPort);
         }
@@ -63,14 +62,14 @@ public class BaseSteps {
 
 
         if (null != headers && !headers.isEmpty()) {
-            for (String headerKey : headers.keySet()) {
-                requestSpecification.header(createHeader(headerKey, headers.get(headerKey)));
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                requestSpecification.header(createHeader(entry.getKey(), entry.getValue()));
             }
         }
 
         if (null != queryParams && !queryParams.isEmpty()) {
-            for (String queryParamKey : queryParams.keySet()) {
-                requestSpecification.queryParam(queryParamKey, queryParams.get(queryParamKey));
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                requestSpecification.queryParam(entry.getKey(), entry.getValue());
             }
         }
 
@@ -83,32 +82,42 @@ public class BaseSteps {
         return new Header(headerKey, headerValue);
     }
 
+    public Response performPostOperation(String endpoint, String bodyJson, String serviceToken) {
+        return performPostOperation(endpoint, null, null, bodyJson, serviceToken);
+    }
 
     public Response performPostOperation(String endpoint,
                                          Map<String, String> headers,
                                          Map<String, String> queryParams,
-                                         Object body,
+                                         String bodyAsJsonString,
                                          String authServiceToken
-    ) throws JsonProcessingException {
+    ) {
 
         RequestSpecification requestSpecification = rest()
                 .given().header("ServiceAuthorization", authServiceToken)
                 .header("Content-Type", "application/json");
         if (null != headers && !headers.isEmpty()) {
-            for (String headerKey : headers.keySet()) {
-                requestSpecification.header(createHeader(headerKey, headers.get(headerKey)));
+            for (Map.Entry<String, String> entry: headers.entrySet()) {
+                requestSpecification.header(createHeader(entry.getKey(), entry.getValue()));
             }
         }
         if (null != queryParams && !queryParams.isEmpty()) {
-            for (String queryParamKey : queryParams.keySet()) {
-                requestSpecification.param(queryParamKey, queryParams.get(queryParamKey));
+            for (Map.Entry<String, String> entry: queryParams.entrySet()) {
+                requestSpecification.param(entry.getKey(), entry.getValue());
             }
         }
-        String bodyJsonStr = null == body ? "" : new ObjectMapper().writeValueAsString(body);
-        return requestSpecification.urlEncodingEnabled(true).body(bodyJsonStr).post(endpoint)
+
+        return requestSpecification.urlEncodingEnabled(true).body(bodyAsJsonString).post(endpoint)
                 .then()
                 .extract().response();
     }
+
+
+    @Step("Given a valid service token is generated")
+    public String givenAValidServiceTokenIsGenerated() {
+        return authorizationHeaderHelper.getServiceToken();
+    }
+
 
 }
 

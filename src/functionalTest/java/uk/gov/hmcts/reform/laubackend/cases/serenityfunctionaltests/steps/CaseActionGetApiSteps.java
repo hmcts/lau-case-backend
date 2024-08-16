@@ -27,11 +27,6 @@ public class CaseActionGetApiSteps extends BaseSteps {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CaseActionGetApiSteps.class);
 
-    @Step("Given a valid service token is generated")
-    public String givenAValidServiceTokenIsGenerated() {
-        return authorizationHeaderHelper.getServiceToken();
-    }
-
     @Step("And valid Authorization token is generated")
     public String validAuthorizationTokenIsGenerated() throws JSONException {
         return authorizationHeaderHelper.getAuthorizationToken();

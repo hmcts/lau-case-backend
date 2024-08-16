@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.json.JSONException;
+import org.json.JSONObject;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionPostResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchPostResponseVO;
+
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -40,6 +43,38 @@ public final class DatabaseCleaner {
                 .andReturn();
 
         assertThat(deleteResponse.getStatusCode()).isEqualTo(OK.value());
+    }
+
+    private static void deleteRecord(String endpoint, Map<String, String> queryParams) throws JSONException {
+        final AuthorizationHeaderHelper authorizationHeaderHelper = new AuthorizationHeaderHelper();
+        String authToken = authorizationHeaderHelper.getAuthorizationToken();
+
+        final Response deleteResponse = RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(API_URL + endpoint)
+            .queryParams(queryParams)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .header(SERVICE_AUTHORISATION_HEADER, authorizationHeaderHelper.getServiceToken())
+            .header(AUTHORISATION_HEADER, authToken)
+            .when()
+            .delete()
+            .andReturn();
+
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(OK.value());
+    }
+
+    public static void deleteAccessRequestRecord(String endpoint, Response response) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(response.getBody().asString());
+            JSONObject accessLog = jsonObject.getJSONObject("accessLog");
+            String userId = accessLog.getString("userId");
+            String caseRef = accessLog.getString("caseRef");
+            deleteRecord(endpoint, Map.of("userId", userId, "caseRef", caseRef));
+        } catch (JSONException je) {
+            throw new RuntimeException("Error while creating JSON object", je);
+        }
     }
 
     private static String getQueryParamValue(final Response response, final boolean isCaseSearch) {

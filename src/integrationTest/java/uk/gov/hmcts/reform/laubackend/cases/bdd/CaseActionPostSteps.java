@@ -139,8 +139,7 @@ public class CaseActionPostSteps extends AbstractSteps {
         final CaseActionPostResponse caseActionPostResponse = jsonReader
                 .fromJson(caseActionPostResponseBody, CaseActionPostResponse.class);
 
-        assertThat(caseActionPostResponse.getActionLog().getCaseActionId())
-                .isNotEqualTo(null);
+        assertThat(caseActionPostResponse.getActionLog().getCaseActionId()).isNotNull();
         assertThat(caseActionPostRequest.getActionLog().getUserId())
                 .isEqualTo(caseActionPostResponse.getActionLog().getUserId());
         assertThat(caseActionPostRequest.getActionLog().getTimestamp())

@@ -8,10 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.laubackend.cases.service.AccessRequestService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -24,15 +25,21 @@ import static org.springframework.http.HttpStatus.OK;
 @ExtendWith(MockitoExtension.class)
 class DeleteControllerTest {
 
+    private static final String CASEREF = "1234567890123456";
+
     @Mock
     private CaseSearchService caseSearchService;
 
     @Mock
     private CaseActionService caseActionService;
 
+    @Mock
+    private AccessRequestService accessRequestService;
+
     @InjectMocks
     private DeleteController deleteController;
 
+    // Case Search
     @Test
     void shouldReturnResponseEntityForDeleteCaseSearchRequest() {
 
@@ -43,7 +50,6 @@ class DeleteControllerTest {
         verify(caseSearchService, times(1)).deleteCaseSearchById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
-
 
     @Test
     void shouldReturnBadRequestResponseEntityForDeleteCaseSearchRequest() {
@@ -76,7 +82,9 @@ class DeleteControllerTest {
         verify(caseSearchService, times(1)).deleteCaseSearchById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
     }
+    // -- Case Search end
 
+    // Case Action
     @Test
     void shouldReturnResponseEntityForDeleteCaseActionRequest() {
 
@@ -87,7 +95,6 @@ class DeleteControllerTest {
         verify(caseActionService, times(1)).deleteCaseActionById("1");
         assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     }
-
 
     @Test
     void shouldReturnBadRequestResponseEntityForDeleteCaseActionRequest() {
@@ -118,6 +125,49 @@ class DeleteControllerTest {
         final ResponseEntity<Object> responseEntity = deleteController.deleteCaseActionRecordById("1");
 
         verify(caseActionService, times(1)).deleteCaseActionById("1");
+        assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
+    }
+    // -- Case Action end
+
+    // Access Request
+    @Test
+    void shouldReturnOkForDeleteAccessRequestRecord() {
+        doNothing().when(accessRequestService).deleteAccessRequestRecord("1", CASEREF);
+
+        final ResponseEntity<Object> responseEntity = deleteController.deleteAccessRequestRecord("1", CASEREF);
+
+        verify(accessRequestService, times(1)).deleteAccessRequestRecord("1", CASEREF);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    }
+
+    @Test
+    void shouldReturnBadRequestForDeleteAccessRequestRecord() {
+        final ResponseEntity<Object> responseEntity = deleteController.deleteAccessRequestRecord(null, null);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(BAD_REQUEST);
+    }
+
+    @Test
+    void shouldReturnNotFoundForDeleteAccessRequestRecord() {
+        doThrow(new EmptyResultDataAccessException(1))
+                .when(accessRequestService)
+                .deleteAccessRequestRecord("1", CASEREF);
+
+        final ResponseEntity<Object> responseEntity = deleteController.deleteAccessRequestRecord("1", CASEREF);
+
+        verify(accessRequestService, times(1)).deleteAccessRequestRecord("1", CASEREF);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
+    }
+
+    @Test
+    void shouldReturnInternalServerErrorForDeleteAccessRequestRecord() {
+        doThrow(new RuntimeException())
+                .when(accessRequestService)
+                .deleteAccessRequestRecord("1", CASEREF);
+
+        final ResponseEntity<Object> responseEntity = deleteController.deleteAccessRequestRecord("1", CASEREF);
+
+        verify(accessRequestService, times(1)).deleteAccessRequestRecord("1", CASEREF);
         assertThat(responseEntity.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
     }
 }

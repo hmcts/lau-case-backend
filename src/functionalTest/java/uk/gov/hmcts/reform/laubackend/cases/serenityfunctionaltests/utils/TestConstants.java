@@ -24,6 +24,9 @@ public final class TestConstants {
     public static final String AUDIT_CASE_SEARCH_ENDPOINT = "/audit/caseSearch";
     public static final String AUDIT_CASE_SEARCH_DELETE_ENDPOINT = "/audit/caseSearch/deleteCaseSearchRecord";
 
+    // accessRequest endpoints
+    public static final String AUDIT_ACCESS_REQUEST_ENDPOINT = "/audit/accessRequest";
+    public static final String AUDIT_ACCESS_REQUEST_DELETE_ENDPOINT = "/audit/accessRequest/deleteAccessRequestRecord";
 
     private TestConstants() {
 
