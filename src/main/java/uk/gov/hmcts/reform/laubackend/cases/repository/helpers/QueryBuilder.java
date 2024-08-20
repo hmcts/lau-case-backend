@@ -7,8 +7,11 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
+import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -26,18 +29,23 @@ public class QueryBuilder {
     private final TimestampUtil timestampUtil;
 
     public Specification<CaseActionAudit> buildCaseActionRequest(final ActionInputParamsHolder inputParamsHolder) {
-        final CaseActionAudit caseActionAudit = createCaseActionAudit(inputParamsHolder);
+        final CaseActionAudit caseActionAudit = createExampleCaseActionAudit(inputParamsHolder);
 
-        return getCaseActionAuditSpec(
+        return getAuditRecordSpec(
                 timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
                 timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
                 Example.of(caseActionAudit, getExampleMatcher()));
     }
 
+    public Specification<AccessRequest> buildAccessRequestQuerySpec(final AccessRequestGetRequest queryParams) {
+        final Timestamp startTime = timestampUtil.getTimestampValue(queryParams.getStartTimestamp());
+        final Timestamp endTime = timestampUtil.getTimestampValue(queryParams.getEndTimestamp());
+        final AccessRequest accessRequest = createExampleAccessRequest(queryParams);
+        return getAuditRecordSpec(startTime, endTime, Example.of(accessRequest, getExampleMatcher()));
+    }
 
-    private Specification<CaseActionAudit> getCaseActionAuditSpec(final Timestamp startTime,
-                                                                  final Timestamp endTime,
-                                                                  final Example<CaseActionAudit> example) {
+    private <T> Specification<T> getAuditRecordSpec(Timestamp startTime, Timestamp endTime, Example<T> example) {
+
         return (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
 
@@ -53,7 +61,7 @@ public class QueryBuilder {
         };
     }
 
-    private CaseActionAudit createCaseActionAudit(final ActionInputParamsHolder inputParamsHolder) {
+    private CaseActionAudit createExampleCaseActionAudit(final ActionInputParamsHolder inputParamsHolder) {
         return new CaseActionAudit(
                 inputParamsHolder.getUserId(),
                 inputParamsHolder.getCaseRef(),
@@ -63,8 +71,19 @@ public class QueryBuilder {
         );
     }
 
+    private AccessRequest createExampleAccessRequest(AccessRequestGetRequest queryParams) {
+        AccessRequest accessRequest = new AccessRequest();
+        AccessRequestType requestType = queryParams.getRequestType();
+        accessRequest.setRequestType(requestType == null ? null : requestType.name());
+        accessRequest.setUserId(queryParams.getUserId());
+        accessRequest.setCaseRef(queryParams.getCaseRef());
+        return accessRequest;
+    }
+
     private ExampleMatcher getExampleMatcher() {
         return ExampleMatcher.matching()
                 .withIgnoreNullValues();
     }
+
+
 }

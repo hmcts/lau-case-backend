@@ -8,6 +8,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.rest.SerenityRest;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig;
@@ -118,6 +119,9 @@ public class BaseSteps {
         return authorizationHeaderHelper.getServiceToken();
     }
 
-
+    @Step("And valid Authorization token is generated")
+    public String validAuthorizationTokenIsGenerated() throws JSONException {
+        return authorizationHeaderHelper.getAuthorizationToken();
+    }
 }
 

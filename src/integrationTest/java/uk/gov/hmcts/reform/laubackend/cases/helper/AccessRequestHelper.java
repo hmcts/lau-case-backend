@@ -9,9 +9,9 @@ import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestPostRequest;
 
 import java.util.Map;
 
-public class AccessRequestPostHelper {
+public class AccessRequestHelper {
 
-    private AccessRequestPostHelper() {
+    private AccessRequestHelper() {
     }
 
     public static AccessRequestPostRequest getAccessRequestPostRequest() {

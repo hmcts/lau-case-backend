@@ -6,18 +6,28 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.repository.AccessRequestRepository;
+import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
+import uk.gov.hmcts.reform.laubackend.cases.response.AccessRequestGetResponse;
 
 import java.sql.Timestamp;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,6 +37,9 @@ class AccessRequestServiceTest {
 
     @Mock
     private AccessRequestRepository accessRequestRepository;
+
+    @Mock
+    private QueryBuilder queryBuilder;
 
     @InjectMocks
     private AccessRequestService accessRequestService;
@@ -41,7 +54,7 @@ class AccessRequestServiceTest {
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
         accessRequest.setTimeLimit(Timestamp.valueOf("2021-08-01 00:00:00.000"));
-        accessRequest.setLogTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
 
         when(accessRequestRepository.save(any(AccessRequest.class))).thenReturn(accessRequest);
 
@@ -97,4 +110,42 @@ class AccessRequestServiceTest {
         verify(accessRequestRepository, times(1)).deleteAccessRequestByUserIdAndCaseRef("1", "2");
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    void shouldRetrieveRecords() {
+        final Specification<AccessRequest> specification = mock(Specification.class);
+        when(queryBuilder.buildAccessRequestQuerySpec(any())).thenReturn(specification);
+        List<AccessRequest> records = List.of(getAccessRequest());
+        Page<AccessRequest> pagedResults = new PageImpl<>(records);
+        PageRequest pageRequest = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "timestamp"));
+        when(accessRequestRepository.findAll(specification, pageRequest)).thenReturn(pagedResults);
+
+        AccessRequestGetResponse accessRequestGetResponse = accessRequestService.getAccessRequestRecords(
+            AccessRequestGetRequest.builder().size(100).page(1).build()
+        );
+
+        verify(accessRequestRepository, times(1)).findAll(specification, pageRequest);
+        List<AccessRequestLog> accessRequestLogs = accessRequestGetResponse.getAccessLog();
+        assertThat(accessRequestLogs).hasSize(1);
+        AccessRequestLog accessLog = accessRequestLogs.getFirst();
+        assertThat(accessLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
+        assertThat(accessLog.getUserId()).isEqualTo("user-id");
+        assertThat(accessLog.getCaseRef()).isEqualTo("case-ref");
+        assertThat(accessLog.getReason()).isEqualTo("reason");
+        assertThat(accessLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
+        assertThat(accessLog.getTimeLimit()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
+    }
+
+    private AccessRequest getAccessRequest() {
+        AccessRequest accessRequest =  new AccessRequest();
+        accessRequest.setRequestType("CHALLENGED");
+        accessRequest.setUserId("user-id");
+        accessRequest.setCaseRef("case-ref");
+        accessRequest.setReason("reason");
+        accessRequest.setAction("APPROVED");
+        accessRequest.setTimeLimit(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        return accessRequest;
+    }
 }

@@ -18,8 +18,4 @@ public class AccessRequestPostRequest {
     @Valid
     @NotNull(message = "accessLog is required")
     private AccessRequestLog accessLog;
-
-    public AccessRequestLog getAccessRequestLog() {
-        return accessLog;
-    }
 }

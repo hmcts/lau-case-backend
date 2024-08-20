@@ -108,12 +108,12 @@ public class RestHelper {
                 .andReturn();
     }
 
-    public Response postObjectAsString(final String object, final String path) {
+    public Response postObjectAsString(final String requestBody, final String path) {
         return RestAssured
             .given()
             .relaxedHTTPSValidation()
             .baseUri(path)
-            .body(object)
+            .body(requestBody)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
             .when()

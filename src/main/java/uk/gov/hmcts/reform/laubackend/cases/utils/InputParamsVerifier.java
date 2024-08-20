@@ -1,12 +1,14 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,19 @@ public final class InputParamsVerifier {
             });
             //Remove all invalid caseRefs
             caseRefs.removeAll(failedCaseRefs);
+        }
+    }
+
+    public static void verifyAccessRequestGetTimestamp(final String timestamp) throws InvalidRequestException {
+        try {
+            if (timestamp == null) {
+                throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);
+            }
+            TimestampUtil timestampUtil = new TimestampUtil();
+            timestampUtil.getTimestampValue(timestamp);
+        } catch (DateTimeParseException dtpe) {
+            log.error("Invalid request received - {}", dtpe.getMessage());
+            throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 }
