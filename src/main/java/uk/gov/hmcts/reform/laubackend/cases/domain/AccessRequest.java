@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -18,11 +20,15 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccessRequest {
+public class AccessRequest implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column
     @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "request_type", nullable = false)
     private String requestType;
@@ -43,5 +49,5 @@ public class AccessRequest {
     private Timestamp timeLimit;
 
     @Column(name = "log_timestamp", nullable = false)
-    private Timestamp logTimestamp;
+    private Timestamp timestamp;
 }

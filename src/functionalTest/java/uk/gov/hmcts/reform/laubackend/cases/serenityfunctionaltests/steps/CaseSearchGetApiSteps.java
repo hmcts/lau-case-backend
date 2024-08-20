@@ -23,11 +23,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils
 @SuppressWarnings("PMD.TooManyMethods")
 public class CaseSearchGetApiSteps extends BaseSteps {
 
-    @Step("And valid Authorization token is generated")
-    public String validAuthorizationTokenIsGenerated() throws JSONException {
-        return authorizationHeaderHelper.getAuthorizationToken();
-    }
-
     @Step("When valid params are supplied for Get CaseSearch API")
     public Map<String, String> givenValidParamsAreSuppliedForGetCaseSearchApi() {
         HashMap<String, String> queryParamMap = new HashMap<>();

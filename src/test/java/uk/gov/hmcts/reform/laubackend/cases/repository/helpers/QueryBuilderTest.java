@@ -7,8 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
+import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import static org.apache.commons.lang3.RandomStringUtils.random;
@@ -45,5 +47,20 @@ class QueryBuilderTest {
         verify(timestampUtil, times(1)).getTimestampValue("2001-08-23T22:20:05.200");
 
         assertNotNull(caseActionAuditSpecification, "Should be not null");
+    }
+
+    @Test
+    void shouldReturnAccessRequestSpecification() {
+        AccessRequestGetRequest queryParams = AccessRequestGetRequest.builder()
+            .startTimestamp("2023-08-23T22:20:05.200")
+            .endTimestamp("2024-08-23T22:20:05.200")
+            .caseRef("1234")
+            .build();
+        Specification<AccessRequest> spec = queryBuilder.buildAccessRequestQuerySpec(queryParams);
+
+        verify(timestampUtil, times(1)).getTimestampValue("2023-08-23T22:20:05.200");
+        verify(timestampUtil, times(1)).getTimestampValue("2024-08-23T22:20:05.200");
+
+        assertNotNull(spec, "Should be not null");
     }
 }

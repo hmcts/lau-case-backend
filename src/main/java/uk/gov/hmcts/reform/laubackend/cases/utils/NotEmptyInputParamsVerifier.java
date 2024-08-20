@@ -4,6 +4,7 @@ import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.lang.String.valueOf;
@@ -68,6 +69,18 @@ public final class NotEmptyInputParamsVerifier {
                     + "userId: ".concat(valueOf(caseSearchPostRequest.getSearchLog().getUserId())).concat(", ")
                     + "timestamp: ".concat(valueOf(caseSearchPostRequest.getSearchLog().getTimestamp())),
                     BAD_REQUEST);
+        }
+    }
+
+    public static void verifyRequestAccessRequestParamsPresence(final AccessRequestGetRequest queryParams)
+        throws InvalidRequestException {
+        final boolean userIdEmpty = isEmpty(queryParams.getUserId());
+        final boolean caseRefEmpty = isEmpty(queryParams.getCaseRef());
+        final boolean requestTypeEmpty = queryParams.getRequestType() == null;
+        boolean allMissing = userIdEmpty && caseRefEmpty && requestTypeEmpty;
+        if (allMissing) {
+            throw new InvalidRequestException("At least one of the parameters (userId, caseRef, requestType) "
+                    + "must not be empty", BAD_REQUEST);
         }
     }
 

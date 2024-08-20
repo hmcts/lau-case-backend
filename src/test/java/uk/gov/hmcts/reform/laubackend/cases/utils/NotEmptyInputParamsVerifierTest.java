@@ -2,19 +2,25 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyIdNotEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestAccessRequestParamsPresence;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestActionParamsAreNotEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
@@ -324,5 +330,36 @@ class NotEmptyInputParamsVerifierTest {
             assertThat(invalidRequestException.getMessage())
                     .isEqualTo("Id must be present");
         }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "abcd,     ,           ",
+        "    , 1234,           ",
+        "    ,     , CHALLENGED",
+        "abcd, 1234,           ",
+        "abcd,     , CHALLENGED",
+        "    , 1234, SPECIFIC  ",
+        "abcd, 1234, CHALLENGED"
+    })
+    void shouldVerifyAccessRequestParams1(String caseRef, String userId, AccessRequestType requestType) {
+        final AccessRequestGetRequest request = AccessRequestGetRequest.builder()
+            .caseRef(caseRef)
+            .userId(userId)
+            .requestType(requestType)
+            .build();
+        assertDoesNotThrow(() -> verifyRequestAccessRequestParamsPresence(request));
+    }
+
+    @Test
+    void shouldThrowIfAllAccessRequestParamsAreEmpty() {
+        final AccessRequestGetRequest request = AccessRequestGetRequest.builder().build();
+        Throwable thrown = assertThrows(
+            InvalidRequestException.class,
+            () -> verifyRequestAccessRequestParamsPresence(request));
+
+        assertThat(thrown.getMessage())
+            .isEqualTo("At least one of the parameters (userId, caseRef, requestType) must not be empty");
+
     }
 }

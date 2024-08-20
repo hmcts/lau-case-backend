@@ -54,7 +54,7 @@ public class AccessRequestLog {
         if (this.getTimeLimit() != null) {
             accessRequest.setTimeLimit(timestampUtil.getUtcTimestampValue(this.getTimeLimit()));
         }
-        accessRequest.setLogTimestamp(timestampUtil.getUtcTimestampValue(this.getTimestamp()));
+        accessRequest.setTimestamp(timestampUtil.getUtcTimestampValue(this.getTimestamp()));
         return accessRequest;
     }
 
@@ -67,7 +67,7 @@ public class AccessRequestLog {
             .caseRef(accessRequest.getCaseRef())
             .reason(accessRequest.getReason())
             .action(AccessRequestAction.valueOf(accessRequest.getAction()))
-            .timestamp(timestampUtil.timestampConvertor(accessRequest.getLogTimestamp()));
+            .timestamp(timestampUtil.timestampConvertor(accessRequest.getTimestamp()));
         if (accessRequest.getTimeLimit() != null) {
             builder.timeLimit(timestampUtil.timestampConvertor(accessRequest.getTimeLimit()));
         }

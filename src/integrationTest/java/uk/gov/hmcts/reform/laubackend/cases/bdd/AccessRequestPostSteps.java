@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestPostHelper.getAccessRequestPostRequest;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestPostHelper.mapToAccessRequestPostRequestBody;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestHelper.getAccessRequestPostRequest;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestHelper.mapToAccessRequestPostRequestBody;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
 
 public class AccessRequestPostSteps extends AbstractSteps {
@@ -71,16 +71,16 @@ public class AccessRequestPostSteps extends AbstractSteps {
             accessRequestPostResponseBody, AccessRequestPostRequest.class);
 
         assertThat(response).isNotNull();
-        AccessRequestLog accessRequestLog = response.getAccessRequestLog();
+        AccessRequestLog accessRequestLog = response.getAccessLog();
         assertThat(accessRequestLog).isNotNull();
 
-        assertThat(accessRequestLog.getRequestType()).isEqualTo(request.getAccessRequestLog().getRequestType());
-        assertThat(accessRequestLog.getUserId()).isEqualTo(request.getAccessRequestLog().getUserId());
-        assertThat(accessRequestLog.getCaseRef()).isEqualTo(request.getAccessRequestLog().getCaseRef());
-        assertThat(accessRequestLog.getReason()).isEqualTo(request.getAccessRequestLog().getReason());
-        assertThat(accessRequestLog.getAction()).isEqualTo(request.getAccessRequestLog().getAction());
-        assertThat(accessRequestLog.getTimeLimit()).isEqualTo(request.getAccessRequestLog().getTimeLimit());
-        assertThat(accessRequestLog.getTimestamp()).isEqualTo(request.getAccessRequestLog().getTimestamp());
+        assertThat(accessRequestLog.getRequestType()).isEqualTo(request.getAccessLog().getRequestType());
+        assertThat(accessRequestLog.getUserId()).isEqualTo(request.getAccessLog().getUserId());
+        assertThat(accessRequestLog.getCaseRef()).isEqualTo(request.getAccessLog().getCaseRef());
+        assertThat(accessRequestLog.getReason()).isEqualTo(request.getAccessLog().getReason());
+        assertThat(accessRequestLog.getAction()).isEqualTo(request.getAccessLog().getAction());
+        assertThat(accessRequestLog.getTimeLimit()).isEqualTo(request.getAccessLog().getTimeLimit());
+        assertThat(accessRequestLog.getTimestamp()).isEqualTo(request.getAccessLog().getTimestamp());
     }
 
 

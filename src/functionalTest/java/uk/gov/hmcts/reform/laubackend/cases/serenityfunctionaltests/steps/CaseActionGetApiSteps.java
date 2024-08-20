@@ -27,11 +27,6 @@ public class CaseActionGetApiSteps extends BaseSteps {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CaseActionGetApiSteps.class);
 
-    @Step("And valid Authorization token is generated")
-    public String validAuthorizationTokenIsGenerated() throws JSONException {
-        return authorizationHeaderHelper.getAuthorizationToken();
-    }
-
     @Step("When valid params are supplied for Get CaseAction API")
     public Map<String, String> givenValidParamsAreSuppliedForGetCaseAction() {
         HashMap<String, String> queryParamMap = new HashMap<>();

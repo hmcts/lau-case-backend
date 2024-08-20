@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
 @Schema(description = "Case Action GET Response")
 public class CaseActionGetResponse implements Serializable {
 
-    public static final long serialVersionUID = 432973322;
+    @Serial
+    private static final long serialVersionUID = 432973322;
 
     private List<ActionLog> actionLog;
 
