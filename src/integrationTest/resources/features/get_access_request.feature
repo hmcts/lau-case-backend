@@ -3,25 +3,25 @@ Feature: The application's GET accessRequest endpoint
   Background:
     Given LAU backend application is healthy
     When I POST multiple Access Request records to "/audit/accessRequest" endpoint once using data:
-    |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-    |SPECIFIC   |123   |1234567890123456|nosy  |CREATED |2024-04-02T22:20:05.023Z|2024-02-25T22:20:05.023Z|
-    |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-03-20T22:20:05.023Z|
-    |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-04-15T22:20:05.023Z|
-    |SPECIFIC   |789   |6543210987654321|meh   |CREATED |2024-02-02T22:20:05.023Z|2024-05-10T22:20:05.023Z|
-    |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-06-05T22:20:05.023Z|
-    |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-08-02T22:20:05.023Z|
-    |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-08-05T22:20:05.023Z|
-    |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-08-08T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     | timestamp              |
+      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
+      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-03-20T22:20:05.023Z|
+      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
+      |SPECIFIC   |789   |6543210987654321|meh   |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-06-05T22:20:05.023Z|
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-08-02T22:20:05.023Z|
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-08-05T22:20:05.023Z|
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-08-08T22:20:05.023Z|
     And I am logged in with the CFT-AUDIT-INVESTIGATOR role
 
   Scenario: The backend is able to process accessRequest GET requests by userId
     When I GET "/audit/accessRequest" using params:
-    |userId        |123                |
-    |startTimestamp|2024-02-20T22:00:00|
-    |endTimestamp  |2024-03-02T22:00:00|
+      |userId        |123                |
+      |startTimestamp|2024-02-20T22:00:00|
+      |endTimestamp  |2024-03-02T22:00:00|
     Then the list of accessRequest records returned is (expected total 1):
-    |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-    |SPECIFIC   |123   |1234567890123456|nosy  |CREATED |2024-04-02T22:20:05.023Z|2024-02-25T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
 
   Scenario: The backend is able to process accessRequest GET requests by caseRef
     When I GET "/audit/accessRequest" using params:
@@ -29,9 +29,9 @@ Feature: The application's GET accessRequest endpoint
       |startTimestamp|2024-02-20T22:00:00|
       |endTimestamp  |2024-06-02T22:00:00|
     Then the list of accessRequest records returned is (expected total 2):
-      |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-      |SPECIFIC   |789   |6543210987654321|meh   |CREATED |2024-02-02T22:20:05.023Z|2024-05-10T22:20:05.023Z|
-      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-04-15T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |SPECIFIC   |789   |6543210987654321|meh   |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
+      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
 
   Scenario: The backend is able to process accessRequest GET requests by requestType
     When I GET "/audit/accessRequest" using params:
@@ -39,10 +39,10 @@ Feature: The application's GET accessRequest endpoint
       |startTimestamp|2024-02-20T22:00:00|
       |endTimestamp  |2024-06-06T22:00:00|
     Then the list of accessRequest records returned is (expected total 3):
-      |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-06-05T22:20:05.023Z|
-      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-04-15T22:20:05.023Z|
-      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-03-20T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-06-05T22:20:05.023Z|
+      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
+      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-03-20T22:20:05.023Z|
 
   Scenario: The backend is able to process accessRequest GET requests by requestType and userId
     When I GET "/audit/accessRequest" using params:
@@ -51,9 +51,9 @@ Feature: The application's GET accessRequest endpoint
       |startTimestamp|2024-02-20T22:00:00|
       |endTimestamp  |2024-06-06T22:00:00|
     Then the list of accessRequest records returned is (expected total 2):
-      |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-04-15T22:20:05.023Z|
-      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-03-20T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |CHALLENGED |456   |6543210987654321|meh   |REJECTED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
+      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-03-20T22:20:05.023Z|
 
   Scenario: The backend is able to process accessRequest GET requests by caseRef and userId
     When I GET "/audit/accessRequest" using params:
@@ -62,8 +62,8 @@ Feature: The application's GET accessRequest endpoint
       |startTimestamp|2024-02-20T22:00:00|
       |endTimestamp  |2024-06-06T22:00:00|
     Then the list of accessRequest records returned is (expected total 1):
-      |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-03-20T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |CHALLENGED |456   |1234567890123456|fun   |APPROVED|2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-03-20T22:20:05.023Z|
 
   Scenario: The backend is able to return accessRequest GET requests paged
     When I GET "/audit/accessRequest" using params:
@@ -73,9 +73,9 @@ Feature: The application's GET accessRequest endpoint
       |page          |2                  |
       |size          |2                  |
     Then the list of accessRequest records returned is (expected total 6):
-      |requestType|userId|caseRef         |reason|action  |timeLimit               |timestamp               |
-      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-08-02T22:20:05.023Z|
-      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-06-05T22:20:05.023Z|
+      |requestType|userId|caseRef         |reason|action  |requestStartTimestamp   |requestEndTimestamp     |timestamp               |
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-08-02T22:20:05.023Z|
+      |CHALLENGED |789   |1122334455667788|nosy  |CREATED |2024-02-02T22:20:05.023Z|2024-02-03T22:20:05.023Z|2024-06-05T22:20:05.023Z|
 
 
   Scenario: The backend is unable to process accessRequest GET requests due to missing s2s

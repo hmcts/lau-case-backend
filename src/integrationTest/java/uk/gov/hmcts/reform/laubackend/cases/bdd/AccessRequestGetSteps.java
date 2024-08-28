@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -43,8 +45,13 @@ public class AccessRequestGetSteps extends AbstractSteps {
     }
 
     @Then("the list of accessRequest records returned is \\(expected total {int}):")
-    public void listOfAccessRequestRecordsReturned(int expectedNumber, List<Map<String, String>> expectedRecords) {
-        AccessRequestGetResponse response = jsonReader.fromJson(responseBody, AccessRequestGetResponse.class);
+    public void listOfAccessRequestRecordsReturned(int expectedNumber, List<Map<String, String>> expectedRecords)
+        throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        final AccessRequestGetResponse response = objectMapper.readValue(
+            responseBody, AccessRequestGetResponse.class);
+
         assertThat(response.getTotalNumberOfRecords()).isEqualTo(expectedNumber);
         List<AccessRequestLog> logs = response.getAccessLog();
         assertThat(logs).hasSameSizeAs(expectedRecords);
@@ -57,7 +64,8 @@ public class AccessRequestGetSteps extends AbstractSteps {
             assertThat(logs.get(i).getCaseRef()).isEqualTo(expectedRecords.get(i).get("caseRef"));
             assertThat(logs.get(i).getReason()).isEqualTo(expectedRecords.get(i).get("reason"));
             assertThat(logs.get(i).getAction()).isEqualTo(expectedAction);
-            assertThat(logs.get(i).getTimeLimit()).isEqualTo(expectedRecords.get(i).get("timeLimit"));
+            assertThat(logs.get(i).getRequestStart()).isEqualTo(expectedRecords.get(i).get("requestStartTimestamp"));
+            assertThat(logs.get(i).getRequestEnd()).isEqualTo(expectedRecords.get(i).get("requestEndTimestamp"));
             assertThat(logs.get(i).getTimestamp()).isEqualTo(expectedRecords.get(i).get("timestamp"));
         }
     }

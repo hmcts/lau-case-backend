@@ -1,11 +1,14 @@
 package uk.gov.hmcts.reform.laubackend.cases.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
@@ -17,6 +20,8 @@ import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccessRequestLog {
 
     @NotNull(message = "requestType is required")
@@ -36,9 +41,15 @@ public class AccessRequestLog {
     @NotNull(message = "action is required")
     private AccessRequestAction action;
 
-    private String timeLimit;
+    @JsonProperty("requestStartTimestamp")
+    @NotBlank(message = "requestStartTimestamp is required")
+    private String requestStart;
 
-    @NotNull(message = "timestamp is required")
+    @JsonProperty("requestEndTimestamp")
+    @NotBlank(message = "requestEndTimestamp is required")
+    private String requestEnd;
+
+    @NotBlank(message = "timestamp is required")
     private String timestamp;
 
     public AccessRequest toModel() {
@@ -50,11 +61,10 @@ public class AccessRequestLog {
         accessRequest.setCaseRef(this.getCaseRef());
         accessRequest.setReason(this.getReason());
         accessRequest.setAction(this.getAction().name());
-
-        if (this.getTimeLimit() != null) {
-            accessRequest.setTimeLimit(timestampUtil.getUtcTimestampValue(this.getTimeLimit()));
-        }
+        accessRequest.setRequestStart(timestampUtil.getUtcTimestampValue(this.getRequestStart()));
+        accessRequest.setRequestEnd(timestampUtil.getUtcTimestampValue(this.getRequestEnd()));
         accessRequest.setTimestamp(timestampUtil.getUtcTimestampValue(this.getTimestamp()));
+
         return accessRequest;
     }
 
@@ -67,10 +77,10 @@ public class AccessRequestLog {
             .caseRef(accessRequest.getCaseRef())
             .reason(accessRequest.getReason())
             .action(AccessRequestAction.valueOf(accessRequest.getAction()))
+            .requestStart(timestampUtil.timestampConvertor(accessRequest.getRequestStart()))
+            .requestEnd(timestampUtil.timestampConvertor(accessRequest.getRequestEnd()))
             .timestamp(timestampUtil.timestampConvertor(accessRequest.getTimestamp()));
-        if (accessRequest.getTimeLimit() != null) {
-            builder.timeLimit(timestampUtil.timestampConvertor(accessRequest.getTimeLimit()));
-        }
+
         return builder.build();
 
     }

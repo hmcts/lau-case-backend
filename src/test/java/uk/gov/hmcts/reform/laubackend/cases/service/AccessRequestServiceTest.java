@@ -53,7 +53,8 @@ class AccessRequestServiceTest {
         accessRequest.setCaseRef("case-ref");
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
-        accessRequest.setTimeLimit(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setRequestStart(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
 
         when(accessRequestRepository.save(any(AccessRequest.class))).thenReturn(accessRequest);
@@ -65,7 +66,8 @@ class AccessRequestServiceTest {
             .caseRef("case-ref")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
-            .timeLimit("2021-08-01T00:00:00.000Z")
+            .requestStart("2021-08-01T00:00:00.000Z")
+            .requestEnd("2021-08-01T23:59:59.999Z")
             .timestamp("2021-08-01T00:00:00.000Z")
             .build();
 
@@ -79,7 +81,8 @@ class AccessRequestServiceTest {
         assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo("case-ref");
         assertThat(savedAccessRequestLog.getReason()).isEqualTo("reason");
         assertThat(savedAccessRequestLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(savedAccessRequestLog.getTimeLimit()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(savedAccessRequestLog.getRequestStart()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
         assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
 
@@ -92,6 +95,8 @@ class AccessRequestServiceTest {
             .caseRef("case-ref")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
+            .requestStart("2021-08-01T00:00:00.000Z")
+            .requestEnd("2021-08-01T23:59:59.999Z")
             .timestamp("2021-08-01") // missing time part in timestamp
             .build();
 
@@ -133,7 +138,8 @@ class AccessRequestServiceTest {
         assertThat(accessLog.getCaseRef()).isEqualTo("case-ref");
         assertThat(accessLog.getReason()).isEqualTo("reason");
         assertThat(accessLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(accessLog.getTimeLimit()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(accessLog.getRequestStart()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(accessLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
         assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
 
@@ -144,7 +150,8 @@ class AccessRequestServiceTest {
         accessRequest.setCaseRef("case-ref");
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
-        accessRequest.setTimeLimit(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setRequestStart(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
         return accessRequest;
     }

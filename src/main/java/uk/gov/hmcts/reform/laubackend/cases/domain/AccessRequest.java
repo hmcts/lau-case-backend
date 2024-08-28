@@ -45,8 +45,11 @@ public class AccessRequest implements Serializable {
     @Column(name = "action", nullable = false)
     private String action;
 
-    @Column(name = "time_limit")
-    private Timestamp timeLimit;
+    @Column(name = "request_start_timestamp", nullable = false)
+    private Timestamp requestStart;
+
+    @Column(name = "request_end_timestamp", nullable = false)
+    private Timestamp requestEnd;
 
     @Column(name = "log_timestamp", nullable = false)
     private Timestamp timestamp;

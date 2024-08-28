@@ -40,28 +40,32 @@ class AccessRequestLogTest {
             .caseRef("1234567890123456")
             .reason("I really really need this access")
             .action(AccessRequestAction.CREATED)
+            .requestStart("2022-01-01T12:00:00Z")
+            .requestEnd("2024-08-01T12:00:00Z")
             .timestamp("2021-08-01T12:00:00Z")
             .build();
 
         assertThat(validator.validate(accessRequestLog)).isEmpty();
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     @ParameterizedTest
     @CsvSource({
-        "          , userid, 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 1",
-        "CHALLENGED,       , 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 1",
-        "CHALLENGED, userid,                 , reason, CREATED, 2021-08-01T12:00:00Z, 1",
-        "CHALLENGED, userid, 1234567890123456, reason,        , 2021-08-01T12:00:00Z, 1",
-        "CHALLENGED, userid, 1234567890123456, reason, CREATED,                     , 1",
-        "          ,       , 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 2",
-        "CHALLENGED, userid, invalid         , reason, CREATED, 2021-08-01T12:00:00Z, 1",
-        "CHALLENGED, userid, 123456789012    ,       , CREATED,                     , 3",
-        "CHALLENGED,       , caseref123456   , reason, CREATED,                     , 3",
-        ", only-long-user-id-given-that-exceeds-sixty-four-characters-and-it-should-fail-validation, , , ,  , 6"
+        "          , userid, 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
+        "CHALLENGED,       , 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
+        "CHALLENGED, userid,                 , reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
+        "CHALLENGED, userid, 1234567890123456, reason,        , 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
+        "CHALLENGED, userid, 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z,                     , 1",
+        "          ,       , 1234567890123456, reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2",
+        "CHALLENGED, userid, invalid         , reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
+        "CHALLENGED, userid, 123456789012    ,       , CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z,                     , 3",
+        "CHALLENGED,       , caseref123456   , reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z,                     , 3",
+        "CHALLENGED, userid, 1234567890123456, reason, CREATED,                     ,                     , 2021-08-01T12:00:00Z, 2",
+        ", only-long-user-id-given-that-exceeds-sixty-four-characters-and-it-should-fail-validation, , , , , , , 8"
     })
     void invalidAccessRequestShouldFailValidation(
         AccessRequestType requestType, String userId, String caseRef, String reason, AccessRequestAction action,
-        String timestamp, int expectedErrorCount
+        String requestStart, String requestEnd, String timestamp, int expectedErrorCount
     ) {
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(requestType)
@@ -69,6 +73,8 @@ class AccessRequestLogTest {
             .caseRef(caseRef)
             .reason(reason)
             .action(action)
+            .requestStart(requestStart)
+            .requestEnd(requestEnd)
             .timestamp(timestamp)
             .build();
 

@@ -72,8 +72,11 @@ public class AccessRequestGetApiSteps extends BaseSteps {
         assertThat(accessLog.getString("reason")).isEqualTo(expected.getString("reason"));
         assertThat(accessLog.getString("action")).isEqualTo(expected.getString("action"));
 
-        assertThat(truncateMillisFromTimestamp(accessLog.getString("timeLimit")))
-            .isEqualTo(truncateMillisFromTimestamp(expected.getString("timeLimit")));
+        assertThat(truncateMillisFromTimestamp(accessLog.getString("requestStartTimestamp")))
+            .isEqualTo(truncateMillisFromTimestamp(expected.getString("requestStartTimestamp")));
+
+        assertThat(truncateMillisFromTimestamp(accessLog.getString("requestEndTimestamp")))
+            .isEqualTo(truncateMillisFromTimestamp(expected.getString("requestEndTimestamp")));
 
         assertThat(truncateMillisFromTimestamp(accessLog.getString("timestamp")))
             .isEqualTo(truncateMillisFromTimestamp(expected.getString("timestamp")));
