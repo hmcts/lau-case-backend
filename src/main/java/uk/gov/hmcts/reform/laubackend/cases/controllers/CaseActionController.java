@@ -58,6 +58,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 @SuppressWarnings({"PMD.ExcessiveImports","PMD.UnnecessaryAnnotationValueElement","PMD.ExcessiveParameterList"})
 public final class CaseActionController {
 
+    private static final String EXCEPTION = "exception";
+
     private final CaseActionService caseActionService;
 
     private final AppInsights appInsights;
@@ -104,7 +106,7 @@ public final class CaseActionController {
                     invalidRequestException
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", invalidRequestException.getMessage()));
+                EXCEPTION, invalidRequestException.getMessage()));
             return new ResponseEntity<>(null, BAD_REQUEST);
         } catch (final Exception exception) {
             log.error("saveCaseAction API call failed due to error - {}",
@@ -112,7 +114,7 @@ public final class CaseActionController {
                     exception
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", exception.getMessage()));
+                EXCEPTION, exception.getMessage()));
             return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
         }
     }
@@ -197,7 +199,7 @@ public final class CaseActionController {
                     invalidRequestException
             );
             appInsights.trackEvent(GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                "exception", invalidRequestException.getMessage()));
+                EXCEPTION, invalidRequestException.getMessage()));
             return new ResponseEntity<>(null, BAD_REQUEST);
         }
     }

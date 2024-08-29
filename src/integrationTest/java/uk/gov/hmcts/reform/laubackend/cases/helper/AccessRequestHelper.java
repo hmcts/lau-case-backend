@@ -21,7 +21,8 @@ public class AccessRequestHelper {
             .caseRef("1234567890123456")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
-            .timeLimit("2021-08-01T09:23:00.000Z")
+            .requestStart("2021-08-01T09:23:00.000Z")
+            .requestEnd("2021-08-02T09:23:00.000Z")
             .timestamp("2021-08-01T14:34:00.000Z")
             .build();
 
@@ -32,13 +33,9 @@ public class AccessRequestHelper {
         JSONObject jsonRequestBody = new JSONObject();
         JSONObject jsonAccessLog = new JSONObject();
         try {
-            jsonAccessLog.put("requestType", dataMap.get("requestType"));
-            jsonAccessLog.put("userId", dataMap.get("userId"));
-            jsonAccessLog.put("caseRef", dataMap.get("caseRef"));
-            jsonAccessLog.put("reason", dataMap.get("reason"));
-            jsonAccessLog.put("action", dataMap.get("action"));
-            jsonAccessLog.put("timeLimit", dataMap.get("timeLimit"));
-            jsonAccessLog.put("timestamp", dataMap.get("timestamp"));
+            for (Map.Entry<String, String> entry : dataMap.entrySet()) {
+                jsonAccessLog.put(entry.getKey(), entry.getValue());
+            }
             jsonRequestBody.put("accessLog", jsonAccessLog);
             return jsonRequestBody.toString();
         } catch (JSONException je) {

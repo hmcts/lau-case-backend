@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -37,13 +39,13 @@ public class AccessRequestPostSteps extends AbstractSteps {
     }
 
     @Then("accessRequest response body is returned")
-    public void accessRequestResponseBodyIsReturned() {
+    public void accessRequestResponseBodyIsReturned() throws JsonProcessingException {
         final AccessRequestPostRequest request = getAccessRequestPostRequest();
 
         assertResponse(request);
     }
 
-    @When("POST to {string} endpoint with missing required body parameter using s2s returns Bad Request")
+    @When("POST to {string} endpoint with bad request body using s2s returns Bad Request")
     public void postAccessRequestMissingParameter(String path, List<Map<String, String>> data) {
         for (Map<String, String> map : data) {
             String requestBody = mapToAccessRequestPostRequestBody(map);
@@ -66,8 +68,9 @@ public class AccessRequestPostSteps extends AbstractSteps {
         assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
     }
 
-    private void assertResponse(final AccessRequestPostRequest request) {
-        final AccessRequestPostRequest response = jsonReader.fromJson(
+    private void assertResponse(final AccessRequestPostRequest request) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        final AccessRequestPostRequest response = objectMapper.readValue(
             accessRequestPostResponseBody, AccessRequestPostRequest.class);
 
         assertThat(response).isNotNull();
@@ -79,7 +82,8 @@ public class AccessRequestPostSteps extends AbstractSteps {
         assertThat(accessRequestLog.getCaseRef()).isEqualTo(request.getAccessLog().getCaseRef());
         assertThat(accessRequestLog.getReason()).isEqualTo(request.getAccessLog().getReason());
         assertThat(accessRequestLog.getAction()).isEqualTo(request.getAccessLog().getAction());
-        assertThat(accessRequestLog.getTimeLimit()).isEqualTo(request.getAccessLog().getTimeLimit());
+        assertThat(accessRequestLog.getRequestStart()).isEqualTo(request.getAccessLog().getRequestStart());
+        assertThat(accessRequestLog.getRequestEnd()).isEqualTo(request.getAccessLog().getRequestEnd());
         assertThat(accessRequestLog.getTimestamp()).isEqualTo(request.getAccessLog().getTimestamp());
     }
 
