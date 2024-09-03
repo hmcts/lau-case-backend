@@ -279,7 +279,7 @@ def versions = [
   junitPlatform     : '1.9.3',
   log4j             : '2.23.1',
   lombok            : '1.18.34',
-  pitest            : '1.16.2',
+  pitest            : '1.16.3',
   restAssured       : '5.5.0',
   serenity          : '4.2.0',
   sonarPitest       : '0.5',
