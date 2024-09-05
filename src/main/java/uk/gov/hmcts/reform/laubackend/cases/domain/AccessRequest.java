@@ -4,10 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Convert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uk.gov.hmcts.reform.laubackend.cases.utils.StringCryptoConverter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -40,6 +42,7 @@ public class AccessRequest implements Serializable {
     private String caseRef;
 
     @Column(nullable = false)
+    @Convert(converter = StringCryptoConverter.class)
     private String reason;
 
     @Column(name = "action", nullable = false)

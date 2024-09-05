@@ -45,6 +45,10 @@ flyway:
   noop:
     strategy: "false"
 
+jasypt:
+  encryptor:
+    password: ${ACCESS_BACKEND_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+
 idam:
   s2s-auth:
     url: http://localhost:4554

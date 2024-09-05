@@ -41,3 +41,5 @@ java:
           alias: flyway.password
         - name: idam-client-secret
           alias: IDAM_CLIENT_SECRET
+        - name: access-backend-encryption-key
+          alias: ACCESS_BACKEND_ENCRYPTION_KEY

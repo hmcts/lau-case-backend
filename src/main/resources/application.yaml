@@ -67,6 +67,10 @@ spring:
     placeholders:
       LAU_DB_PASSWORD: ${LAU_DB_PASSWORD:}
 
+jasypt:
+  encryptor:
+    password: ${ACCESS_BACKEND_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+
 idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4502}
