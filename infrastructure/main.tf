@@ -109,3 +109,14 @@ resource "azurerm_key_vault_secret" "lau_case_db_user" {
   name         = "case-backend-app-db-user-flexible"
   value        = "lauuser"
 }
+
+resource "azurerm_key_vault_secret" "access_request_key" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "access-backend-encryption-key"
+  value        = random_password.password.result
+}
+
+resource "random_password" "password" {
+  length           = 32
+  override_special = "()-_"
+}
