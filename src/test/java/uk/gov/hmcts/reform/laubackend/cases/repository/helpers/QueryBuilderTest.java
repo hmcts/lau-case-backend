@@ -50,17 +50,17 @@ class QueryBuilderTest {
     }
 
     @Test
-    void shouldReturnAccessRequestSpecification() {
+    void shouldReturnAccessRequest() {
         AccessRequestGetRequest queryParams = AccessRequestGetRequest.builder()
             .startTimestamp("2023-08-23T22:20:05.200")
             .endTimestamp("2024-08-23T22:20:05.200")
             .caseRef("1234")
             .build();
-        Specification<AccessRequest> spec = queryBuilder.buildAccessRequestQuerySpec(queryParams);
+        AccessRequest accessRequest = queryBuilder.buildAccessRequest(queryParams);
 
         verify(timestampUtil, times(1)).getTimestampValue("2023-08-23T22:20:05.200");
         verify(timestampUtil, times(1)).getTimestampValue("2024-08-23T22:20:05.200");
 
-        assertNotNull(spec, "Should be not null");
+        assertNotNull(accessRequest, "Should be not null");
     }
 }
