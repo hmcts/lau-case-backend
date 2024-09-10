@@ -125,13 +125,13 @@ class AccessRequestServiceTest {
         List<AccessRequest> records = List.of(accessRequest);
         Page<AccessRequest> pagedResults = new PageImpl<>(records);
         PageRequest pageRequest = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "timestamp"));
-        when(accessRequestFindRepository.find(accessRequest,null, pageRequest)).thenReturn(pagedResults);
+        when(accessRequestFindRepository.findAll(accessRequest,null, pageRequest)).thenReturn(pagedResults);
 
         AccessRequestGetResponse accessRequestGetResponse = accessRequestService.getAccessRequestRecords(
             AccessRequestGetRequest.builder().size(100).page(1).build()
         );
 
-        verify(accessRequestFindRepository, times(1)).find(accessRequest,null, pageRequest);
+        verify(accessRequestFindRepository, times(1)).findAll(accessRequest,null, pageRequest);
         List<AccessRequestLog> accessRequestLogs = accessRequestGetResponse.getAccessLog();
         assertThat(accessRequestLogs).hasSize(1);
         AccessRequestLog accessLog = accessRequestLogs.getFirst();

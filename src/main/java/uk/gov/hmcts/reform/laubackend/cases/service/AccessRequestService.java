@@ -55,7 +55,7 @@ public class AccessRequestService {
     }
 
     public AccessRequestGetResponse getAccessRequestRecords(AccessRequestGetRequest queryParams) {
-        Page<AccessRequest> records = accessRequestFindRepository.find(
+        Page<AccessRequest> records = accessRequestFindRepository.findAll(
             queryBuilder.buildAccessRequest(queryParams),
             securityDbBackendEncryptionKey,
             getPage(queryParams.getSize(), queryParams.getPage())
