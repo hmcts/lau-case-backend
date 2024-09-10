@@ -43,7 +43,7 @@ public class AccessRequestFindRepository {
     }
 
     @Transactional(readOnly = true)
-    public Page<AccessRequest> findAccessRequest(final AccessRequest accessRequest,
+    public Page<AccessRequest> find(final AccessRequest accessRequest,
                                                  final String encryptionKey,
                                                  final Pageable pageable) {
         final List<String> queryParts = new LinkedList<>();
