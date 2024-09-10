@@ -61,7 +61,7 @@ azure:
   application-insights:
     instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
 
-authorised.services: lau_frontend
+authorised.services: ${LAU_AUTHORISED_SERVICES:lau_frontend}
 authorised.roles: cft-audit-investigator,cft-service-logs
 
 db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}
