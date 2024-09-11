@@ -63,13 +63,12 @@ public class AccessRequestFindRepository {
         query.setMaxResults(pageable.getPageSize());
 
         final List<AccessRequest> results = query.getResultList();
-        long totalCount = countResults(encryptionKey, accessRequest);
+        long totalCount = countResults(accessRequest);
 
         return new PageImpl<>(results, pageable, totalCount);
     }
 
-    private long countResults(final String encryptionKey,
-                              final AccessRequest accessRequest) {
+    private long countResults(final AccessRequest accessRequest) {
 
         final List<String> queryParts = new LinkedList<>();
         queryParts.add("SELECT count(*) FROM (");

@@ -4,10 +4,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 
 @Repository
+@AllArgsConstructor
 public class AccessRequestInsertRepository {
 
     private static final String INSERT_QUERY_WITH_ENCRYPTION = """
@@ -21,10 +23,6 @@ public class AccessRequestInsertRepository {
 
     @PersistenceContext
     private final EntityManager entityManager;
-
-    public AccessRequestInsertRepository(final EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     @Transactional
     public AccessRequest saveAccessRequestAuditWithEncryption(

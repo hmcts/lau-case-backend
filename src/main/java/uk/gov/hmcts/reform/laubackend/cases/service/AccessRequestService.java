@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.laubackend.cases.repository.AccessRequestRepository;
 import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.AccessRequestGetResponse;
-import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,6 @@ public class AccessRequestService {
     private final AccessRequestInsertRepository accessRequestInsertRepository;
     private final AccessRequestFindRepository accessRequestFindRepository;
     private final QueryBuilder queryBuilder;
-    private final TimestampUtil timestampUtil;
 
     @Value("${default.page.size}")
     private Integer defaultPageSize;
