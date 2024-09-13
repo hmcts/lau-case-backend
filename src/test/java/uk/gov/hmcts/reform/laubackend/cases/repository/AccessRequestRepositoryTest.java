@@ -27,7 +27,8 @@ import static org.springframework.data.domain.PageRequest.of;
     "spring.liquibase.enabled=false",
     "spring.flyway.enabled=true"
 })
-public class AccessRequestRepositoryTest {
+
+class AccessRequestRepositoryTest {
     private static final String ENCRYPTION_KEY = "ThisIsATestKeyForEncryption";
 
     private AccessRequestFindRepository accessRequestFindRepository;
@@ -146,5 +147,5 @@ public class AccessRequestRepositoryTest {
         assertThat(content.get(0).getReason()).isEqualTo("reason");
         assertThat(content.get(0).getAction()).isEqualTo("APPROVED");
     }
-    
+
 }

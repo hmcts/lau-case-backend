@@ -47,7 +47,7 @@ public class AccessRequestService {
             accessRequest = accessRequestInsertRepository
                 .saveAccessRequestAuditWithEncryption(accessRequestLog.toModel(), securityDbBackendEncryptionKey);
         } else {
-            accessRequest = accessRequestRepository.save(accessRequestLog.toModel());;
+            accessRequest = accessRequestRepository.save(accessRequestLog.toModel());
         }
         return AccessRequestLog.modelToDto(accessRequest);
     }
