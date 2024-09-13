@@ -82,7 +82,7 @@ idam:
     secret: ${IDAM_CLIENT_SECRET:12345678}
     redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:3451/oauth2redirect}
 
-authorised.services: lau_frontend,ccd_data,ccd_case_disposer
+authorised.services: ${LAU_AUTHORISED_SERVICES:lau_frontend,ccd_data,ccd_case_disposer}
 authorised.roles: cft-audit-investigator,cft-service-logs
 db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}
 
