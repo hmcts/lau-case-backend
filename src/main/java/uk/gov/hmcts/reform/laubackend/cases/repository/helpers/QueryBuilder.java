@@ -37,11 +37,8 @@ public class QueryBuilder {
                 Example.of(caseActionAudit, getExampleMatcher()));
     }
 
-    public Specification<AccessRequest> buildAccessRequestQuerySpec(final AccessRequestGetRequest queryParams) {
-        final Timestamp startTime = timestampUtil.getTimestampValue(queryParams.getStartTimestamp());
-        final Timestamp endTime = timestampUtil.getTimestampValue(queryParams.getEndTimestamp());
-        final AccessRequest accessRequest = createExampleAccessRequest(queryParams);
-        return getAuditRecordSpec(startTime, endTime, Example.of(accessRequest, getExampleMatcher()));
+    public AccessRequest buildAccessRequest(final AccessRequestGetRequest queryParams) {
+        return createExampleAccessRequest(queryParams);
     }
 
     private <T> Specification<T> getAuditRecordSpec(Timestamp startTime, Timestamp endTime, Example<T> example) {
@@ -77,6 +74,8 @@ public class QueryBuilder {
         accessRequest.setRequestType(requestType == null ? null : requestType.name());
         accessRequest.setUserId(queryParams.getUserId());
         accessRequest.setCaseRef(queryParams.getCaseRef());
+        accessRequest.setRequestStart(timestampUtil.getTimestampValue(queryParams.getStartTimestamp()));
+        accessRequest.setRequestEnd(timestampUtil.getTimestampValue(queryParams.getEndTimestamp()));
         return accessRequest;
     }
 
@@ -84,6 +83,4 @@ public class QueryBuilder {
         return ExampleMatcher.matching()
                 .withIgnoreNullValues();
     }
-
-
 }

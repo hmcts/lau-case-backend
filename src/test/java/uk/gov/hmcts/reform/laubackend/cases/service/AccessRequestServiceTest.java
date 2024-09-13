@@ -10,11 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
+import uk.gov.hmcts.reform.laubackend.cases.repository.AccessRequestFindRepository;
 import uk.gov.hmcts.reform.laubackend.cases.repository.AccessRequestRepository;
 import uk.gov.hmcts.reform.laubackend.cases.repository.helpers.QueryBuilder;
 import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
@@ -27,7 +27,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +36,9 @@ class AccessRequestServiceTest {
 
     @Mock
     private AccessRequestRepository accessRequestRepository;
+
+    @Mock
+    private AccessRequestFindRepository accessRequestFindRepository;
 
     @Mock
     private QueryBuilder queryBuilder;
@@ -118,18 +120,18 @@ class AccessRequestServiceTest {
     @SuppressWarnings("unchecked")
     @Test
     void shouldRetrieveRecords() {
-        final Specification<AccessRequest> specification = mock(Specification.class);
-        when(queryBuilder.buildAccessRequestQuerySpec(any())).thenReturn(specification);
-        List<AccessRequest> records = List.of(getAccessRequest());
+        AccessRequest accessRequest = getAccessRequest();
+        when(queryBuilder.buildAccessRequest(any())).thenReturn(accessRequest);
+        List<AccessRequest> records = List.of(accessRequest);
         Page<AccessRequest> pagedResults = new PageImpl<>(records);
         PageRequest pageRequest = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "timestamp"));
-        when(accessRequestRepository.findAll(specification, pageRequest)).thenReturn(pagedResults);
+        when(accessRequestFindRepository.findAll(accessRequest,null, pageRequest)).thenReturn(pagedResults);
 
         AccessRequestGetResponse accessRequestGetResponse = accessRequestService.getAccessRequestRecords(
             AccessRequestGetRequest.builder().size(100).page(1).build()
         );
 
-        verify(accessRequestRepository, times(1)).findAll(specification, pageRequest);
+        verify(accessRequestFindRepository, times(1)).findAll(accessRequest,null, pageRequest);
         List<AccessRequestLog> accessRequestLogs = accessRequestGetResponse.getAccessLog();
         assertThat(accessRequestLogs).hasSize(1);
         AccessRequestLog accessLog = accessRequestLogs.getFirst();
