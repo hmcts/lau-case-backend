@@ -69,8 +69,8 @@ spring:
 
 security:
   db:
-    backend-encryption-key: ${ACCESS_REQUEST_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
-    encryption-enabled: ${ACCESS_REQUEST_ENCRYPTION_ENABLED:Yes}
+    backend-encryption-key: ${CASE_BACKEND_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+    encryption-enabled: ${CASE_BACKEND_ENCRYPTION_ENABLED:Yes}
 
 idam:
   s2s-auth:
