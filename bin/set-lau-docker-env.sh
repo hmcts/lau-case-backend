@@ -10,7 +10,7 @@ export LAU_DB_USERNAME=lauuser
 export LAU_DB_PASSWORD=laupass
 export LAU_DB_ADMIN_USERNAME=lauadmin
 export LAU_DB_ADMIN_PASSWORD=laupass
-export ACCESS_REQUEST_ENCRYPTION_KEY=my_very_secure_key
+export CASE_BACKEND_ENCRYPTION_KEY=my_very_secure_key
 
 export FLYWAY_PLACEHOLDERS_LAU_DB_USERNAME=lauuser
 export FLYWAY_PLACEHOLDERS_LAU_DB_PASSWORD=laupass
