@@ -10,7 +10,7 @@ plugins {
   id 'org.flywaydb.flyway' version '9.22.3'
   id 'org.owasp.dependencycheck' version '10.0.4'
   id 'org.sonarqube' version '5.1.0.4882'
-  id 'org.springframework.boot' version '3.3.3'
+  id 'org.springframework.boot' version '3.3.4'
   id 'uk.gov.hmcts.java' version '0.12.63'
   id "info.solidsoft.pitest" version '1.15.0'
 }
@@ -272,14 +272,13 @@ repositories {
 
 def versions = [
   commonsIo         : '2.17.0',
-  cucumber          : '7.18.1',
+  cucumber          : '7.19.0',
   flywaydb          : '9.0.4',
   gradlePitest      : '1.15.0',
   junit             : '5.9.3',
   junitPlatform     : '1.9.3',
   log4j             : '2.24.0',
   lombok            : '1.18.34',
-  pitest            : '1.17.0',
   restAssured       : '5.5.0',
   serenity          : '4.2.1',
   sonarPitest       : '0.5',
@@ -331,7 +330,7 @@ dependencies {
   implementation group: 'commons-net', name: 'commons-net', version: '3.11.1'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
-  implementation group: "com.networknt", name: "json-schema-validator", version: "1.5.1"
+  implementation group: "com.networknt", name: "json-schema-validator", version: "1.5.2"
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.5.4'
@@ -341,7 +340,6 @@ dependencies {
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-  testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
   testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
   testImplementation group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', version: '0.5'
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.4', classifier: 'all'
