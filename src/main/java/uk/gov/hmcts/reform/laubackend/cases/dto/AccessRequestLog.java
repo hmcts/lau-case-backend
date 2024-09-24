@@ -42,11 +42,9 @@ public class AccessRequestLog {
     private AccessRequestAction action;
 
     @JsonProperty("requestStartTimestamp")
-    @NotBlank(message = "requestStartTimestamp is required")
     private String requestStart;
 
     @JsonProperty("requestEndTimestamp")
-    @NotBlank(message = "requestEndTimestamp is required")
     private String requestEnd;
 
     @NotBlank(message = "timestamp is required")

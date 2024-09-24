@@ -60,8 +60,8 @@ class AccessRequestLogTest {
         "CHALLENGED, userid, invalid         , reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z, 1",
         "CHALLENGED, userid, 123456789012    ,       , CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z,                     , 3",
         "CHALLENGED,       , caseref123456   , reason, CREATED, 2021-08-01T12:00:00Z, 2021-08-01T12:00:00Z,                     , 3",
-        "CHALLENGED, userid, 1234567890123456, reason, CREATED,                     ,                     , 2021-08-01T12:00:00Z, 2",
-        ", only-long-user-id-given-that-exceeds-sixty-four-characters-and-it-should-fail-validation, , , , , , , 8"
+        "CHALLENGED, userid, 1234567890123456, reason, CREATED,                     ,                     , 2021-08-01T12:00:00Z, 0",
+        ", only-long-user-id-given-that-exceeds-sixty-four-characters-and-it-should-fail-validation, , , , , , , 6"
     })
     void invalidAccessRequestShouldFailValidation(
         AccessRequestType requestType, String userId, String caseRef, String reason, AccessRequestAction action,
