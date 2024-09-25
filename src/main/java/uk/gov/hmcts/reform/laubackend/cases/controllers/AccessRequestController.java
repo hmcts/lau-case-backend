@@ -86,7 +86,7 @@ public class AccessRequestController {
         @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
         @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
         @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
-        @Valid @ParameterObject AccessRequestGetRequest requestQuery
+        @ParameterObject AccessRequestGetRequest requestQuery
     ) {
         try {
             verifyRequestAccessRequestParamsPresence(requestQuery);

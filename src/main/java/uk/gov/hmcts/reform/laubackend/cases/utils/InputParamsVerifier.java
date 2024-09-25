@@ -94,10 +94,11 @@ public final class InputParamsVerifier {
 
     public static void verifyAccessRequestGetTimestamp(final String timestamp) throws InvalidRequestException {
         try {
-            if (timestamp != null) {
-                TimestampUtil timestampUtil = new TimestampUtil();
-                timestampUtil.getTimestampValue(timestamp);
+            if (timestamp != null && timestamp.length() == 0) {
+                throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);
             }
+            TimestampUtil timestampUtil = new TimestampUtil();
+            timestampUtil.getTimestampValue(timestamp);
         } catch (DateTimeParseException dtpe) {
             log.error("Invalid request received - {}", dtpe.getMessage());
             throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);

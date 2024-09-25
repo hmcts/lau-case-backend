@@ -19,15 +19,21 @@ public class TimestampUtil {
     private static final String TIMESTAMP_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     public String timestampConvertor(final Timestamp timestamp) {
-        return new SimpleDateFormat(TIMESTAMP_PATTERN).format(timestamp);
+        if (timestamp != null) {
+            return new SimpleDateFormat(TIMESTAMP_PATTERN).format(timestamp);
+        }
+        return null;
     }
 
     public Timestamp getUtcTimestampValue(final String timestamp) {
-        final LocalDateTime localDateTime = Instant.parse(timestamp)
+        if (!isEmpty(timestamp)) {
+            final LocalDateTime localDateTime = Instant.parse(timestamp)
                 .atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
 
-        return valueOf(localDateTime);
+            return valueOf(localDateTime);
+        }
+        return null;
     }
 
     public Timestamp getTimestampValue(final String timestamp) {
