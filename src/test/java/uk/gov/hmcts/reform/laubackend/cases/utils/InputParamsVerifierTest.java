@@ -21,8 +21,5 @@ class InputParamsVerifierTest {
         assertThrows(
             InvalidRequestException.class,
             () -> InputParamsVerifier.verifyAccessRequestGetTimestamp("2021-01-01T00:00:00Z"));
-        assertThrows(
-            InvalidRequestException.class,
-            () -> InputParamsVerifier.verifyAccessRequestGetTimestamp(null));
     }
 }

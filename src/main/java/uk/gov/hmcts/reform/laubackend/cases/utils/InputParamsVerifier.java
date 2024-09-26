@@ -94,9 +94,6 @@ public final class InputParamsVerifier {
 
     public static void verifyAccessRequestGetTimestamp(final String timestamp) throws InvalidRequestException {
         try {
-            if (timestamp == null) {
-                throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);
-            }
             TimestampUtil timestampUtil = new TimestampUtil();
             timestampUtil.getTimestampValue(timestamp);
         } catch (DateTimeParseException dtpe) {

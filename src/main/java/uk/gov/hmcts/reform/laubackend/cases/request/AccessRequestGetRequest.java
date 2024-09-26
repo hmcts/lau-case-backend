@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.request;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,11 +28,9 @@ public class AccessRequestGetRequest {
     private AccessRequestType requestType;
 
     @Parameter(name = "Start Timestamp", example = "2021-06-23T22:20:05")
-    @NotBlank(message = "startTimestamp is required")
     private String startTimestamp;
 
     @Parameter(name = "End Timestamp", example = "2021-08-23T22:20:05")
-    @NotBlank(message = "endTimestamp is required")
     private String endTimestamp;
 
     @Parameter(name = "Size", example = "500")
