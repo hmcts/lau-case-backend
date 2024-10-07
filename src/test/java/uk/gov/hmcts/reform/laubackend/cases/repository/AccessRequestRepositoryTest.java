@@ -58,7 +58,7 @@ class AccessRequestRepositoryTest {
     @Test
     void shouldReturnInDescendingOrderByTimestamp() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
-            .findAll(searchAccessRequest(), ENCRYPTION_KEY, getPage());
+            .findAll(getAccessRequestGetRequest(), ENCRYPTION_KEY, getPage());
         List<AccessRequest> items = accessRequests.getContent();
 
         assertThat(items)
@@ -69,7 +69,7 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByUserId() {
-        AccessRequestGetRequest accessRequest = searchAccessRequest();
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
         accessRequest.setUserId("1");
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
@@ -80,7 +80,7 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByCaseRef() {
-        AccessRequestGetRequest accessRequest = searchAccessRequest();
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
         accessRequest.setCaseRef("2");
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
@@ -91,7 +91,7 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByRequestType() {
-        AccessRequestGetRequest accessRequest = searchAccessRequest();
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
         accessRequest.setRequestType(AccessRequestType.CHALLENGED);
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
@@ -103,7 +103,7 @@ class AccessRequestRepositoryTest {
     @Test
     void shouldGetAllRecords() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
-            .findAll(searchAccessRequest(), ENCRYPTION_KEY, getPage());
+            .findAll(getAccessRequestGetRequest(), ENCRYPTION_KEY, getPage());
 
         assertThat(accessRequests.getContent()).hasSize(20);
     }
@@ -111,7 +111,7 @@ class AccessRequestRepositoryTest {
     @Test
     void shouldFindPageableResults() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository.findAll(
-            searchAccessRequest(), ENCRYPTION_KEY, of(1, 10)
+            getAccessRequestGetRequest(), ENCRYPTION_KEY, of(1, 10)
         );
 
         assertThat(accessRequests.getTotalElements()).isEqualTo(20);
@@ -134,7 +134,7 @@ class AccessRequestRepositoryTest {
         return of(0, 100);
     }
 
-    private AccessRequestGetRequest searchAccessRequest() {
+    private AccessRequestGetRequest getAccessRequestGetRequest() {
         AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
         accessRequest.setStartTimestamp(now().toString());
         accessRequest.setEndTimestamp(now().plusDays(20).toString());

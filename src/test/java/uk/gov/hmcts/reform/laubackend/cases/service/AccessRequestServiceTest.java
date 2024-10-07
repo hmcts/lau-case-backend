@@ -50,7 +50,7 @@ class AccessRequestServiceTest {
     @Test
     void shouldSaveAccessRequestLog() {
 
-        AccessRequest accessRequest = getRequest();
+        AccessRequest accessRequest = getAccessRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
         accessRequest.setCaseRef("case-ref");
@@ -111,11 +111,11 @@ class AccessRequestServiceTest {
     @Test
     void shouldRetrieveAccessRequestRecords() {
         // Given
-        AccessRequestGetRequest queryParams = getAccessRequest();
+        AccessRequestGetRequest queryParams = getAccessRequestGetAccessRequest();
         queryParams.setSize(10);
         queryParams.setPage(1);
 
-        AccessRequest accessRequest = getRequest();
+        AccessRequest accessRequest = getAccessRequest();
         List<AccessRequest> accessRequestList = Collections.singletonList(accessRequest);
         Page<AccessRequest> accessRequestPage = new PageImpl<>(
             accessRequestList,
@@ -156,7 +156,7 @@ class AccessRequestServiceTest {
         assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
 
-    private AccessRequest getRequest() {
+    private AccessRequest getAccessRequest() {
         AccessRequest accessRequest = new AccessRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
@@ -168,7 +168,7 @@ class AccessRequestServiceTest {
         return accessRequest;
     }
 
-    private AccessRequestGetRequest getAccessRequest() {
+    private AccessRequestGetRequest getAccessRequestGetAccessRequest() {
         AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
         accessRequest.setRequestType(AccessRequestType.CHALLENGED);
         accessRequest.setUserId("user-id");
