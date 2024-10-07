@@ -21,7 +21,6 @@ public class AccessRequestHelper {
             .caseRef("1234567890123456")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
-            .requestStart("2021-08-01T09:23:00.000Z")
             .requestEnd("2021-08-02T09:23:00.000Z")
             .timestamp("2021-08-01T14:34:00.000Z")
             .build();

@@ -40,7 +40,6 @@ class AccessRequestLogTest {
             .caseRef("1234567890123456")
             .reason("I really really need this access")
             .action(AccessRequestAction.CREATED)
-            .requestStart("2022-01-01T12:00:00Z")
             .requestEnd("2024-08-01T12:00:00Z")
             .timestamp("2021-08-01T12:00:00Z")
             .build();
@@ -73,7 +72,6 @@ class AccessRequestLogTest {
             .caseRef(caseRef)
             .reason(reason)
             .action(action)
-            .requestStart(requestStart)
             .requestEnd(requestEnd)
             .timestamp(timestamp)
             .build();

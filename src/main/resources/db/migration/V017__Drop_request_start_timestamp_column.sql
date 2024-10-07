@@ -1,0 +1,1 @@
+ALTER TABLE access_request_audit DROP COLUMN request_start_timestamp;

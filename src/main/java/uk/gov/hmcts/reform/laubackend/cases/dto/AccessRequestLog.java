@@ -41,9 +41,6 @@ public class AccessRequestLog {
     @NotNull(message = "action is required")
     private AccessRequestAction action;
 
-    @JsonProperty("requestStartTimestamp")
-    private String requestStart;
-
     @JsonProperty("requestEndTimestamp")
     private String requestEnd;
 
@@ -59,7 +56,6 @@ public class AccessRequestLog {
         accessRequest.setCaseRef(this.getCaseRef());
         accessRequest.setReason(this.getReason());
         accessRequest.setAction(this.getAction().name());
-        accessRequest.setRequestStart(timestampUtil.getUtcTimestampValue(this.getRequestStart()));
         accessRequest.setRequestEnd(timestampUtil.getUtcTimestampValue(this.getRequestEnd()));
         accessRequest.setTimestamp(timestampUtil.getUtcTimestampValue(this.getTimestamp()));
 
@@ -75,7 +71,6 @@ public class AccessRequestLog {
             .caseRef(accessRequest.getCaseRef())
             .reason(accessRequest.getReason())
             .action(AccessRequestAction.valueOf(accessRequest.getAction()))
-            .requestStart(timestampUtil.timestampConvertor(accessRequest.getRequestStart()))
             .requestEnd(timestampUtil.timestampConvertor(accessRequest.getRequestEnd()))
             .timestamp(timestampUtil.timestampConvertor(accessRequest.getTimestamp()));
 

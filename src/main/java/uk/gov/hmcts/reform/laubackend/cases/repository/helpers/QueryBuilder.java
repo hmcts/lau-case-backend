@@ -7,11 +7,8 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
-import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
-import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
@@ -32,13 +29,10 @@ public class QueryBuilder {
         final CaseActionAudit caseActionAudit = createExampleCaseActionAudit(inputParamsHolder);
 
         return getAuditRecordSpec(
-                timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
-                timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
-                Example.of(caseActionAudit, getExampleMatcher()));
-    }
-
-    public AccessRequest buildAccessRequest(final AccessRequestGetRequest queryParams) {
-        return createExampleAccessRequest(queryParams);
+            timestampUtil.getTimestampValue(inputParamsHolder.getStartTime()),
+            timestampUtil.getTimestampValue(inputParamsHolder.getEndTime()),
+            Example.of(caseActionAudit, getExampleMatcher())
+        );
     }
 
     private <T> Specification<T> getAuditRecordSpec(Timestamp startTime, Timestamp endTime, Example<T> example) {
@@ -60,27 +54,16 @@ public class QueryBuilder {
 
     private CaseActionAudit createExampleCaseActionAudit(final ActionInputParamsHolder inputParamsHolder) {
         return new CaseActionAudit(
-                inputParamsHolder.getUserId(),
-                inputParamsHolder.getCaseRef(),
-                upperCase(inputParamsHolder.getCaseAction()),
-                upperCase(inputParamsHolder.getCaseJurisdictionId()),
-                upperCase(inputParamsHolder.getCaseTypeId())
+            inputParamsHolder.getUserId(),
+            inputParamsHolder.getCaseRef(),
+            upperCase(inputParamsHolder.getCaseAction()),
+            upperCase(inputParamsHolder.getCaseJurisdictionId()),
+            upperCase(inputParamsHolder.getCaseTypeId())
         );
-    }
-
-    private AccessRequest createExampleAccessRequest(AccessRequestGetRequest queryParams) {
-        AccessRequest accessRequest = new AccessRequest();
-        AccessRequestType requestType = queryParams.getRequestType();
-        accessRequest.setRequestType(requestType == null ? null : requestType.name());
-        accessRequest.setUserId(queryParams.getUserId());
-        accessRequest.setCaseRef(queryParams.getCaseRef());
-        accessRequest.setRequestStart(timestampUtil.getTimestampValue(queryParams.getStartTimestamp()));
-        accessRequest.setRequestEnd(timestampUtil.getTimestampValue(queryParams.getEndTimestamp()));
-        return accessRequest;
     }
 
     private ExampleMatcher getExampleMatcher() {
         return ExampleMatcher.matching()
-                .withIgnoreNullValues();
+            .withIgnoreNullValues();
     }
 }

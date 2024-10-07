@@ -22,6 +22,7 @@ import uk.gov.hmcts.reform.laubackend.cases.response.AccessRequestGetResponse;
 
 import java.sql.Timestamp;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,13 +50,12 @@ class AccessRequestServiceTest {
     @Test
     void shouldSaveAccessRequestLog() {
 
-        AccessRequest accessRequest = new AccessRequest();
+        AccessRequest accessRequest = getRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
         accessRequest.setCaseRef("case-ref");
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
-        accessRequest.setRequestStart(Timestamp.valueOf("2021-08-01 00:00:00.000"));
         accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
 
@@ -68,7 +68,6 @@ class AccessRequestServiceTest {
             .caseRef("case-ref")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
-            .requestStart("2021-08-01T00:00:00.000Z")
             .requestEnd("2021-08-01T23:59:59.999Z")
             .timestamp("2021-08-01T00:00:00.000Z")
             .build();
@@ -83,7 +82,6 @@ class AccessRequestServiceTest {
         assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo("case-ref");
         assertThat(savedAccessRequestLog.getReason()).isEqualTo("reason");
         assertThat(savedAccessRequestLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(savedAccessRequestLog.getRequestStart()).isEqualTo("2021-08-01T00:00:00.000Z");
         assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
         assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
@@ -97,7 +95,6 @@ class AccessRequestServiceTest {
             .caseRef("case-ref")
             .reason("reason")
             .action(AccessRequestAction.APPROVED)
-            .requestStart("2021-08-01T00:00:00.000Z")
             .requestEnd("2021-08-01T23:59:59.999Z")
             .timestamp("2021-08-01") // missing time part in timestamp
             .build();
@@ -112,49 +109,72 @@ class AccessRequestServiceTest {
     }
 
     @Test
-    void shouldDeleteCaseSearchId() {
-        accessRequestService.deleteAccessRequestRecord("1", "2");
-        verify(accessRequestRepository, times(1)).deleteAccessRequestByUserIdAndCaseRef("1", "2");
-    }
+    void shouldRetrieveAccessRequestRecords() {
+        // Given
+        AccessRequestGetRequest queryParams = getAccessRequest();
+        queryParams.setSize(10);
+        queryParams.setPage(1);
 
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldRetrieveRecords() {
-        AccessRequest accessRequest = getAccessRequest();
-        when(queryBuilder.buildAccessRequest(any())).thenReturn(accessRequest);
-        List<AccessRequest> records = List.of(accessRequest);
-        Page<AccessRequest> pagedResults = new PageImpl<>(records);
-        PageRequest pageRequest = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "timestamp"));
-        when(accessRequestFindRepository.findAll(accessRequest,null, pageRequest)).thenReturn(pagedResults);
-
-        AccessRequestGetResponse accessRequestGetResponse = accessRequestService.getAccessRequestRecords(
-            AccessRequestGetRequest.builder().size(100).page(1).build()
+        AccessRequest accessRequest = getRequest();
+        List<AccessRequest> accessRequestList = Collections.singletonList(accessRequest);
+        Page<AccessRequest> accessRequestPage = new PageImpl<>(
+            accessRequestList,
+            PageRequest.of(0, 10, Sort.by("timestamp").descending()),
+            1
         );
 
-        verify(accessRequestFindRepository, times(1)).findAll(accessRequest,null, pageRequest);
-        List<AccessRequestLog> accessRequestLogs = accessRequestGetResponse.getAccessLog();
-        assertThat(accessRequestLogs).hasSize(1);
-        AccessRequestLog accessLog = accessRequestLogs.getFirst();
+        when(accessRequestFindRepository
+                 .findAll(queryParams, null,
+                          PageRequest.of(0, 10, Sort.by("timestamp").descending())
+                 ))
+            .thenReturn(accessRequestPage);
+
+        // When
+        AccessRequestGetResponse response = accessRequestService.getAccessRequestRecords(queryParams);
+
+        // Then
+        verify(accessRequestFindRepository, times(1))
+            .findAll(queryParams, null,
+                     PageRequest.of(0, 10, Sort.by("timestamp").descending())
+            );
+
+        assertThat(response).isNotNull();
+        assertThat(response.getAccessLog()).hasSize(1);
+        assertThat(response.getAccessLog().get(0)).isInstanceOf(AccessRequestLog.class);
+        assertThat(response.getStartRecordNumber()).isEqualTo(1);
+        assertThat(response.isMoreRecords()).isFalse();
+        assertThat(response.getTotalNumberOfRecords()).isEqualTo(1);
+
+
+        AccessRequestLog accessLog = response.getAccessLog().getFirst();
         assertThat(accessLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
         assertThat(accessLog.getUserId()).isEqualTo("user-id");
         assertThat(accessLog.getCaseRef()).isEqualTo("case-ref");
         assertThat(accessLog.getReason()).isEqualTo("reason");
         assertThat(accessLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(accessLog.getRequestStart()).isEqualTo("2021-08-01T00:00:00.000Z");
         assertThat(accessLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
         assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
 
-    private AccessRequest getAccessRequest() {
-        AccessRequest accessRequest =  new AccessRequest();
+    private AccessRequest getRequest() {
+        AccessRequest accessRequest = new AccessRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
         accessRequest.setCaseRef("case-ref");
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
-        accessRequest.setRequestStart(Timestamp.valueOf("2021-08-01 00:00:00.000"));
         accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
+        return accessRequest;
+    }
+
+    private AccessRequestGetRequest getAccessRequest() {
+        AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
+        accessRequest.setRequestType(AccessRequestType.CHALLENGED);
+        accessRequest.setUserId("user-id");
+        accessRequest.setCaseRef("case-ref");
+        accessRequest.setStartTimestamp("2021-08-01 23:59:59.999");
+        accessRequest.setEndTimestamp("2021-08-01 00:00:00.000");
         return accessRequest;
     }
 }

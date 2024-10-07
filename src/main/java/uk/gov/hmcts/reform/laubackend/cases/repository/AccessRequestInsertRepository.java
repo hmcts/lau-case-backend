@@ -14,9 +14,9 @@ public class AccessRequestInsertRepository {
 
     private static final String INSERT_QUERY_WITH_ENCRYPTION = """
         INSERT INTO public.access_request_audit
-            (request_type,user_id, case_ref, action, log_timestamp, request_start_timestamp, request_end_timestamp,
+            (request_type,user_id, case_ref, action, log_timestamp, request_end_timestamp,
             reason)
-        VALUES (:requestType, :userId, :caseRef, :action, :logTimestamp, :requestStartTimestamp, :requestEndTimestamp,
+        VALUES (:requestType, :userId, :caseRef, :action, :logTimestamp, :requestEndTimestamp,
             encode(pgp_sym_encrypt(cast(:reason as text), cast(:encryptionKey as text)), 'base64'))
             RETURNING id;
         """;
@@ -35,7 +35,6 @@ public class AccessRequestInsertRepository {
             .setParameter("caseRef", accessRequestAudit.getCaseRef())
             .setParameter("action", accessRequestAudit.getAction())
             .setParameter("logTimestamp", accessRequestAudit.getTimestamp())
-            .setParameter("requestStartTimestamp", accessRequestAudit.getRequestStart())
             .setParameter("requestEndTimestamp", accessRequestAudit.getRequestEnd())
             .setParameter("reason", accessRequestAudit.getReason())
             .setParameter("encryptionKey", securityDbBackendEncryptionKey);

@@ -64,7 +64,6 @@ public class AccessRequestGetSteps extends AbstractSteps {
             assertThat(logs.get(i).getCaseRef()).isEqualTo(expectedRecords.get(i).get("caseRef"));
             assertThat(logs.get(i).getReason()).isEqualTo(expectedRecords.get(i).get("reason"));
             assertThat(logs.get(i).getAction()).isEqualTo(expectedAction);
-            assertThat(logs.get(i).getRequestStart()).isEqualTo(expectedRecords.get(i).get("requestStartTimestamp"));
             assertThat(logs.get(i).getRequestEnd()).isEqualTo(expectedRecords.get(i).get("requestEndTimestamp"));
             assertThat(logs.get(i).getTimestamp()).isEqualTo(expectedRecords.get(i).get("timestamp"));
         }
