@@ -111,7 +111,7 @@ class AccessRequestServiceTest {
     @Test
     void shouldRetrieveAccessRequestRecords() {
         // Given
-        AccessRequestGetRequest queryParams = getAccessRequestGetAccessRequest();
+        AccessRequestGetRequest queryParams = getAccessRequestGetRequest();
         queryParams.setSize(10);
         queryParams.setPage(1);
 
@@ -168,7 +168,7 @@ class AccessRequestServiceTest {
         return accessRequest;
     }
 
-    private AccessRequestGetRequest getAccessRequestGetAccessRequest() {
+    private AccessRequestGetRequest getAccessRequestGetRequest() {
         AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
         accessRequest.setRequestType(AccessRequestType.CHALLENGED);
         accessRequest.setUserId("user-id");
