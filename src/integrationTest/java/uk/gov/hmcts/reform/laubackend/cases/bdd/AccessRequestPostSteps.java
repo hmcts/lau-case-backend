@@ -82,7 +82,6 @@ public class AccessRequestPostSteps extends AbstractSteps {
         assertThat(accessRequestLog.getCaseRef()).isEqualTo(request.getAccessLog().getCaseRef());
         assertThat(accessRequestLog.getReason()).isEqualTo(request.getAccessLog().getReason());
         assertThat(accessRequestLog.getAction()).isEqualTo(request.getAccessLog().getAction());
-        assertThat(accessRequestLog.getRequestStart()).isEqualTo(request.getAccessLog().getRequestStart());
         assertThat(accessRequestLog.getRequestEnd()).isEqualTo(request.getAccessLog().getRequestEnd());
         assertThat(accessRequestLog.getTimestamp()).isEqualTo(request.getAccessLog().getTimestamp());
     }

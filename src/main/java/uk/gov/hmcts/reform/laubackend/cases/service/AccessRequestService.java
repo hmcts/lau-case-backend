@@ -52,12 +52,12 @@ public class AccessRequestService {
         return AccessRequestLog.modelToDto(accessRequest);
     }
 
-    public AccessRequestGetResponse getAccessRequestRecords(AccessRequestGetRequest queryParams) {
+    public AccessRequestGetResponse getAccessRequestRecords(final AccessRequestGetRequest queryParams) {
         Page<AccessRequest> records = accessRequestFindRepository.findAll(
-            queryBuilder.buildAccessRequest(queryParams),
+            queryParams,
             securityDbBackendEncryptionKey,
             getPage(queryParams.getSize(), queryParams.getPage())
-            );
+        );
 
         List<AccessRequestLog> accessLogs = new LinkedList<>();
         records.getContent().forEach(accessRequest -> accessLogs.add(AccessRequestLog.modelToDto(accessRequest)));

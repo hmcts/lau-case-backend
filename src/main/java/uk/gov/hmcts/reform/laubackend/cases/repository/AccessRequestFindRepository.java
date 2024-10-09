@@ -10,10 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @SuppressWarnings("unchecked")
@@ -22,7 +25,7 @@ public class AccessRequestFindRepository {
 
     private static final String SELECT_CRITERIA = """
         SELECT ara.id, ara.request_type, ara.user_id, ara.case_ref, ara.action, ara.log_timestamp,
-            ara.request_start_timestamp, ara.request_end_timestamp,
+            ara.request_end_timestamp,
             pgp_sym_decrypt(decode(ara.reason, 'base64'), cast(:encryptionKey as text)) as reason""";
 
     private static final String FROM = "FROM access_request_audit ara";
@@ -37,13 +40,16 @@ public class AccessRequestFindRepository {
     @PersistenceContext
     private final EntityManager entityManager;
 
+    private final TimestampUtil timestampUtil;
+
     @Autowired
-    public AccessRequestFindRepository(final EntityManager entityManager) {
+    public AccessRequestFindRepository(final EntityManager entityManager, final TimestampUtil timestampUtil) {
+        this.timestampUtil = timestampUtil;
         this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true)
-    public Page<AccessRequest> findAll(final AccessRequest accessRequest,
+    public Page<AccessRequest> findAll(final AccessRequestGetRequest accessRequestGetRequest,
                                                  final String encryptionKey,
                                                  final Pageable pageable) {
         final List<String> queryParts = new LinkedList<>();
@@ -51,42 +57,42 @@ public class AccessRequestFindRepository {
         queryParts.add(SELECT_CRITERIA);
         queryParts.add(FROM);
 
-        addSearchCriteria(queryParts, accessRequest);
+        addSearchCriteria(queryParts, accessRequestGetRequest);
 
         queryParts.add(ORDER);
 
         final String queryString = String.join(" ", queryParts);
         final Query query = entityManager.createNativeQuery(queryString, AccessRequest.class);
-        setSearchParams(query, accessRequest);
+        setSearchParams(query, accessRequestGetRequest);
         query.setParameter("encryptionKey", encryptionKey);
         query.setFirstResult((int) pageable.getOffset());
         query.setMaxResults(pageable.getPageSize());
 
         final List<AccessRequest> results = query.getResultList();
-        long totalCount = countResults(accessRequest);
+        long totalCount = countResults(accessRequestGetRequest);
 
         return new PageImpl<>(results, pageable, totalCount);
     }
 
-    private long countResults(final AccessRequest accessRequest) {
+    private long countResults(final AccessRequestGetRequest accessRequestGetRequest) {
 
         final List<String> queryParts = new LinkedList<>();
         queryParts.add("SELECT count(*) FROM (");
         queryParts.add("SELECT 1");
         queryParts.add(FROM);
 
-        addSearchCriteria(queryParts, accessRequest);
+        addSearchCriteria(queryParts, accessRequestGetRequest);
 
         queryParts.add("limit 10000) ara");
         final String queryString = String.join(" ", queryParts);
         final Query countQuery = entityManager.createNativeQuery(queryString);
-        setSearchParams(countQuery, accessRequest);
+        setSearchParams(countQuery, accessRequestGetRequest);
         return ((Number) countQuery.getSingleResult()).intValue();
     }
 
     private void addSearchCriteria(List<String> queryParts,
-                                  AccessRequest accessRequest) {
-        List<String> searchParts = createSearchCriteria(accessRequest);
+                                   AccessRequestGetRequest accessRequestGetRequest) {
+        List<String> searchParts = createSearchCriteria(accessRequestGetRequest);
         if (!searchParts.isEmpty()) {
             queryParts.add(WHERE);
             queryParts.add(String.join(" AND ", searchParts));
@@ -94,48 +100,40 @@ public class AccessRequestFindRepository {
     }
 
 
-    private List<String> createSearchCriteria(final AccessRequest accessRequest) {
+    private List<String> createSearchCriteria(final AccessRequestGetRequest accessRequestGetRequest) {
         final List<String> criteria = new LinkedList<>();
-        if (!isEmpty(accessRequest.getUserId())) {
+        if (!isEmpty(accessRequestGetRequest.getUserId())) {
             criteria.add(USER_ID_CRITERIA);
         }
 
-        if (!isEmpty(accessRequest.getCaseRef())) {
+        if (!isEmpty(accessRequestGetRequest.getCaseRef())) {
             criteria.add(CASE_REF_CRITERIA);
         }
 
-        if (!isEmpty(accessRequest.getRequestType())) {
+        if (!isNull(accessRequestGetRequest.getRequestType())) {
             criteria.add(REQUEST_TYPE_CRITERIA);
         }
 
-        if (accessRequest.getRequestStart() != null) {
-            criteria.add(TIMESTAMP_START_CRITERIA);
-        }
+        criteria.add(TIMESTAMP_START_CRITERIA);
+        criteria.add(TIMESTAMP_END_CRITERIA);
 
-        if (accessRequest.getRequestEnd() != null) {
-            criteria.add(TIMESTAMP_END_CRITERIA);
-        }
         return criteria;
     }
 
     private void setSearchParams(final Query query,
-                                 final AccessRequest accessRequest) {
-        if (accessRequest.getRequestStart() != null) {
-            query.setParameter("startTime", accessRequest.getRequestStart());
-        }
+                                 final AccessRequestGetRequest accessRequestGetRequest) {
 
-        if (accessRequest.getRequestEnd() != null) {
-            query.setParameter("endTime", accessRequest.getRequestEnd());
-        }
+        query.setParameter("startTime",  timestampUtil.getTimestampValue(accessRequestGetRequest.getStartTimestamp()));
+        query.setParameter("endTime", timestampUtil.getTimestampValue(accessRequestGetRequest.getEndTimestamp()));
 
-        if (!isEmpty(accessRequest.getUserId())) {
-            query.setParameter("userId", accessRequest.getUserId());
+        if (!isEmpty(accessRequestGetRequest.getUserId())) {
+            query.setParameter("userId", accessRequestGetRequest.getUserId());
         }
-        if (!isEmpty(accessRequest.getCaseRef())) {
-            query.setParameter("caseRef", accessRequest.getCaseRef());
+        if (!isEmpty(accessRequestGetRequest.getCaseRef())) {
+            query.setParameter("caseRef", accessRequestGetRequest.getCaseRef());
         }
-        if (!isEmpty(accessRequest.getRequestType())) {
-            query.setParameter("requestType", accessRequest.getRequestType());
+        if (!isNull(accessRequestGetRequest.getRequestType())) {
+            query.setParameter("requestType", accessRequestGetRequest.getRequestType().name());
         }
     }
 }

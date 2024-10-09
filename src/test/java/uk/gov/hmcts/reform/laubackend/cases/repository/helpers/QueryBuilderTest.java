@@ -7,10 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
-import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
-import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import static org.apache.commons.lang3.RandomStringUtils.random;
@@ -30,37 +28,24 @@ class QueryBuilderTest {
 
     @Test
     void shouldReturnSpecification() {
-        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder("123",
-                "345",
-                "CAVEAT",
-                "VIEW",
-                random(71, "123456"),
-                "2000-08-23T22:20:05.200",
-                "2001-08-23T22:20:05.200",
-                "1",
-                "1");
+        final ActionInputParamsHolder actionInputParamsHolder = new ActionInputParamsHolder(
+            "123",
+            "345",
+            "CAVEAT",
+            "VIEW",
+            random(71, "123456"),
+            "2000-08-23T22:20:05.200",
+            "2001-08-23T22:20:05.200",
+            "1",
+            "1"
+        );
 
         final Specification<CaseActionAudit> caseActionAuditSpecification = queryBuilder
-                .buildCaseActionRequest(actionInputParamsHolder);
+            .buildCaseActionRequest(actionInputParamsHolder);
 
         verify(timestampUtil, times(1)).getTimestampValue("2000-08-23T22:20:05.200");
         verify(timestampUtil, times(1)).getTimestampValue("2001-08-23T22:20:05.200");
 
         assertNotNull(caseActionAuditSpecification, "Should be not null");
-    }
-
-    @Test
-    void shouldReturnAccessRequest() {
-        AccessRequestGetRequest queryParams = AccessRequestGetRequest.builder()
-            .startTimestamp("2023-08-23T22:20:05.200")
-            .endTimestamp("2024-08-23T22:20:05.200")
-            .caseRef("1234")
-            .build();
-        AccessRequest accessRequest = queryBuilder.buildAccessRequest(queryParams);
-
-        verify(timestampUtil, times(1)).getTimestampValue("2023-08-23T22:20:05.200");
-        verify(timestampUtil, times(1)).getTimestampValue("2024-08-23T22:20:05.200");
-
-        assertNotNull(accessRequest, "Should be not null");
     }
 }

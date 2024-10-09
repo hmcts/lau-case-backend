@@ -9,7 +9,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.domain.AccessRequest;
+import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
+import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -40,7 +43,7 @@ class AccessRequestRepositoryTest {
     public void setUp() {
         final AccessRequestInsertRepository accessRequestInsertRepository =
             new AccessRequestInsertRepository(entityManager);
-        //Insert 20 records
+        // Insert 20 records
         for (int i = 1; i < 21; i++) {
             accessRequestInsertRepository
                 .saveAccessRequestAuditWithEncryption(getAccessRequest(
@@ -49,13 +52,13 @@ class AccessRequestRepositoryTest {
                     valueOf(now().plusDays(i))
                 ), ENCRYPTION_KEY);
         }
-        accessRequestFindRepository = new AccessRequestFindRepository(entityManager);
+        accessRequestFindRepository = new AccessRequestFindRepository(entityManager, new TimestampUtil());
     }
 
     @Test
     void shouldReturnInDescendingOrderByTimestamp() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
-            .findAll(searchAccessRequest(), ENCRYPTION_KEY, getPage());
+            .findAll(getAccessRequestGetRequest(), ENCRYPTION_KEY, getPage());
         List<AccessRequest> items = accessRequests.getContent();
 
         assertThat(items)
@@ -66,7 +69,7 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByUserId() {
-        AccessRequest accessRequest = searchAccessRequest();
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
         accessRequest.setUserId("1");
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
@@ -77,7 +80,7 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByCaseRef() {
-        AccessRequest accessRequest = searchAccessRequest();
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
         accessRequest.setCaseRef("2");
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
@@ -88,8 +91,8 @@ class AccessRequestRepositoryTest {
 
     @Test
     void shouldSearchByRequestType() {
-        AccessRequest accessRequest = searchAccessRequest();
-        accessRequest.setRequestType("CHALLENGED");
+        AccessRequestGetRequest accessRequest = getAccessRequestGetRequest();
+        accessRequest.setRequestType(AccessRequestType.CHALLENGED);
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
             .findAll(accessRequest, ENCRYPTION_KEY, getPage());
 
@@ -100,7 +103,7 @@ class AccessRequestRepositoryTest {
     @Test
     void shouldGetAllRecords() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository
-            .findAll(searchAccessRequest(), ENCRYPTION_KEY, getPage());
+            .findAll(getAccessRequestGetRequest(), ENCRYPTION_KEY, getPage());
 
         assertThat(accessRequests.getContent()).hasSize(20);
     }
@@ -108,21 +111,20 @@ class AccessRequestRepositoryTest {
     @Test
     void shouldFindPageableResults() {
         final Page<AccessRequest> accessRequests = accessRequestFindRepository.findAll(
-            searchAccessRequest(),ENCRYPTION_KEY, of(1, 10)
+            getAccessRequestGetRequest(), ENCRYPTION_KEY, of(1, 10)
         );
 
         assertThat(accessRequests.getTotalElements()).isEqualTo(20);
         assertThat(accessRequests.getContent()).hasSize(10);
     }
 
-    private AccessRequest getAccessRequest(final String userId,final String caseRef,final Timestamp timeStamp) {
-        AccessRequest accessRequest =  new AccessRequest();
+    private AccessRequest getAccessRequest(final String userId, final String caseRef, final Timestamp timeStamp) {
+        AccessRequest accessRequest = new AccessRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId(userId);
         accessRequest.setCaseRef(caseRef);
         accessRequest.setReason("reason");
         accessRequest.setAction("APPROVED");
-        accessRequest.setRequestStart(timeStamp);
         accessRequest.setRequestEnd(timeStamp);
         accessRequest.setTimestamp(timeStamp);
         return accessRequest;
@@ -132,10 +134,10 @@ class AccessRequestRepositoryTest {
         return of(0, 100);
     }
 
-    private AccessRequest searchAccessRequest() {
-        AccessRequest accessRequest =  new AccessRequest();
-        accessRequest.setRequestStart(valueOf(now()));
-        accessRequest.setRequestEnd(valueOf(now().plusDays(20)));
+    private AccessRequestGetRequest getAccessRequestGetRequest() {
+        AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
+        accessRequest.setStartTimestamp(now().toString());
+        accessRequest.setEndTimestamp(now().plusDays(20).toString());
         return accessRequest;
     }
 
