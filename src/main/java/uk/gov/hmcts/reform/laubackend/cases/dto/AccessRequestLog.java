@@ -55,7 +55,7 @@ public class AccessRequestLog {
         accessRequest.setUserId(this.getUserId());
         accessRequest.setCaseRef(this.getCaseRef());
         accessRequest.setReason(this.getReason());
-        accessRequest.setAction(this.getAction().name());
+        accessRequest.setAction(this.getAction().getValue());
         accessRequest.setRequestEnd(timestampUtil.getUtcTimestampValue(this.getRequestEnd()));
         accessRequest.setTimestamp(timestampUtil.getUtcTimestampValue(this.getTimestamp()));
 
@@ -70,7 +70,7 @@ public class AccessRequestLog {
             .userId(accessRequest.getUserId())
             .caseRef(accessRequest.getCaseRef())
             .reason(accessRequest.getReason())
-            .action(AccessRequestAction.valueOf(accessRequest.getAction()))
+            .action(AccessRequestAction.getAccessRequestAction(accessRequest.getAction()))
             .requestEnd(timestampUtil.timestampConvertor(accessRequest.getRequestEnd()))
             .timestamp(timestampUtil.timestampConvertor(accessRequest.getTimestamp()));
 
