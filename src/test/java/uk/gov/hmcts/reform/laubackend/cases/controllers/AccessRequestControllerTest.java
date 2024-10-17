@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
@@ -40,6 +41,7 @@ class AccessRequestControllerTest {
     void shouldReturnResponseEntityForPostRequest() {
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
+            .action(AccessRequestAction.AUTO_APPROVED)
             .userId("1234-abcd")
             .build();
 
@@ -69,6 +71,7 @@ class AccessRequestControllerTest {
     void shouldReturnInternalServerErrorForBadPostRequest() {
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
+            .action(AccessRequestAction.AUTO_APPROVED)
             .userId("1234-abcd")
             .build();
 
@@ -128,5 +131,19 @@ class AccessRequestControllerTest {
 
         verify(accessRequestService, never()).getAccessRequestRecords(request);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+
+    @Test
+    void shouldReturnBadRequestForChallengedNonAutoApprovedRequest() {
+        AccessRequestPostRequest request = AccessRequestPostRequest.builder()
+            .accessLog(AccessRequestLog.builder()
+                           .requestType(AccessRequestType.CHALLENGED)
+                           .action(AccessRequestAction.CREATED).build())
+            .build();
+
+        ResponseEntity<AccessRequestPostResponse> response =
+            accessRequestController.saveAccessRequest(null, request);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }
