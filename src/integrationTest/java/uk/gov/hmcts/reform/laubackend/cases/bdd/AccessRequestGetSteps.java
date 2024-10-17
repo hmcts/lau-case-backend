@@ -58,7 +58,8 @@ public class AccessRequestGetSteps extends AbstractSteps {
         for (int i = 0; i < expectedRecords.size(); i++) {
             AccessRequestType expectedRequestType =
                 AccessRequestType.valueOf(expectedRecords.get(i).get("requestType"));
-            AccessRequestAction expectedAction = AccessRequestAction.valueOf(expectedRecords.get(i).get("action"));
+            AccessRequestAction expectedAction = AccessRequestAction
+                .getAccessRequestAction(expectedRecords.get(i).get("action"));
             assertThat(logs.get(i).getRequestType()).isEqualTo(expectedRequestType);
             assertThat(logs.get(i).getUserId()).isEqualTo(expectedRecords.get(i).get("userId"));
             assertThat(logs.get(i).getCaseRef()).isEqualTo(expectedRecords.get(i).get("caseRef"));

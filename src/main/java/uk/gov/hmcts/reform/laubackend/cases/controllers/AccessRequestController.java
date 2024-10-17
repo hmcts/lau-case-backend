@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
@@ -31,6 +30,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyAccessRequestGetTimestamp;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyChallengedAccessRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestAccessRequestParamsPresence;
 
 
@@ -53,17 +53,19 @@ public class AccessRequestController {
     @PostMapping("/audit/accessRequest")
     public ResponseEntity<AccessRequestPostResponse> saveAccessRequest(
         @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
-        @RequestHeader(value = CommonConstants.SERVICE_AUTHORISATION_HEADER, required = true)
-        final String serviceAuthorization,
+        @RequestHeader(value = SERVICE_AUTHORISATION_HEADER, required = true) final String serviceAuthorization,
         @Valid @RequestBody final AccessRequestPostRequest accessRequestPostRequest
     ) {
         try {
             AccessRequestLog accessRequestLog = accessRequestPostRequest.getAccessLog();
+
+            verifyChallengedAccessRequest(accessRequestLog);
+
             AccessRequestLog savedAccessRequestLog = accessRequestService.save(accessRequestLog);
             AccessRequestPostResponse postResponse = new AccessRequestPostResponse(savedAccessRequestLog);
             return new ResponseEntity<>(postResponse, CREATED);
-        } catch (DateTimeParseException dpe) {
-            log.error("Invalid request received - {}", dpe.getMessage());
+        } catch (final InvalidRequestException | DateTimeParseException exp) {
+            log.error("Invalid request received - {}", exp.getMessage());
             return new ResponseEntity<>(BAD_REQUEST);
         } catch (Exception e) {
             log.error("Error occurred while saving access request - {}", e.getMessage(), e);

@@ -50,7 +50,7 @@ class AccessRequestServiceTest {
     @Test
     void shouldSaveAccessRequestLog() {
 
-        AccessRequest accessRequest = getAccessRequest();
+        AccessRequest accessRequest = getAccessRequest(false);
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
         accessRequest.setCaseRef("case-ref");
@@ -115,7 +115,7 @@ class AccessRequestServiceTest {
         queryParams.setSize(10);
         queryParams.setPage(1);
 
-        AccessRequest accessRequest = getAccessRequest();
+        AccessRequest accessRequest = getAccessRequest(false);
         List<AccessRequest> accessRequestList = Collections.singletonList(accessRequest);
         Page<AccessRequest> accessRequestPage = new PageImpl<>(
             accessRequestList,
@@ -156,13 +156,44 @@ class AccessRequestServiceTest {
         assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
     }
 
-    private AccessRequest getAccessRequest() {
+    @Test
+    void shouldSaveAutoApprovedAccessRequestLog() {
+        AccessRequest accessRequest = getAccessRequest(true);
+
+        when(accessRequestRepository.save(any(AccessRequest.class))).thenReturn(accessRequest);
+
+        // given
+        AccessRequestLog accessRequestLog = AccessRequestLog.builder()
+            .requestType(AccessRequestType.CHALLENGED)
+            .userId("user-id")
+            .caseRef("case-ref")
+            .reason("reason")
+            .action(AccessRequestAction.AUTO_APPROVED)
+            .requestEnd("2021-08-01T23:59:59.999Z")
+            .timestamp("2021-08-01T00:00:00.000Z")
+            .build();
+
+        // when
+        AccessRequestLog savedAccessRequestLog = accessRequestService.save(accessRequestLog);
+
+        // then
+        assertThat(savedAccessRequestLog).isNotNull();
+        assertThat(savedAccessRequestLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
+        assertThat(savedAccessRequestLog.getUserId()).isEqualTo("user-id");
+        assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo("case-ref");
+        assertThat(savedAccessRequestLog.getReason()).isEqualTo("reason");
+        assertThat(savedAccessRequestLog.getAction()).isEqualTo(AccessRequestAction.AUTO_APPROVED);
+        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
+        assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
+    }
+
+    private AccessRequest getAccessRequest(final boolean isAutoApproved) {
         AccessRequest accessRequest = new AccessRequest();
         accessRequest.setRequestType("CHALLENGED");
         accessRequest.setUserId("user-id");
         accessRequest.setCaseRef("case-ref");
         accessRequest.setReason("reason");
-        accessRequest.setAction("APPROVED");
+        accessRequest.setAction(isAutoApproved ? "AUTO-APPROVED" : "APPROVED");
         accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
         return accessRequest;

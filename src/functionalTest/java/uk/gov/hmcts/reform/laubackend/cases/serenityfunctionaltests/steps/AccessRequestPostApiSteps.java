@@ -20,7 +20,7 @@ public class AccessRequestPostApiSteps extends BaseSteps {
         jsonAccessLog.put("userId", "user-" + uuid);
         jsonAccessLog.put("caseRef", caseRef);
         jsonAccessLog.put("reason", "functional test - shouldn't stay in DB");
-        jsonAccessLog.put("action", "APPROVED");
+        jsonAccessLog.put("action", "AUTO-APPROVED");
         jsonAccessLog.put("requestEndTimestamp", Instant.now().plus(1, ChronoUnit.DAYS).toString());
         jsonAccessLog.put("timestamp", Instant.now().toString());
         jsonRequestBody.put("accessLog", jsonAccessLog);

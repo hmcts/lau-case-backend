@@ -2,6 +2,9 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
+import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
@@ -12,6 +15,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -41,7 +45,7 @@ public final class InputParamsVerifier {
     }
 
     public static void verifyRequestActionParamsConditions(final ActionLog actionLog)
-            throws InvalidRequestException {
+        throws InvalidRequestException {
         verifyUserId(actionLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyAction(actionLog.getCaseAction(), CASE_ACTION_POST_EXCEPTION_MESSAGE);
         verifyCaseTypeId(actionLog.getCaseTypeId(), CASETYPEID_POST_EXCEPTION_MESSAGE);
@@ -50,7 +54,7 @@ public final class InputParamsVerifier {
     }
 
     public static void verifyRequestActionParamsConditions(final ActionInputParamsHolder inputParamsHolder)
-            throws InvalidRequestException {
+        throws InvalidRequestException {
         verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
         verifyCaseRef(inputParamsHolder.getCaseRef(), CASEREF_GET_EXCEPTION_MESSAGE);
         verifyCaseTypeId(inputParamsHolder.getCaseTypeId(), CASETYPEID_GET_EXCEPTION_MESSAGE);
@@ -61,7 +65,7 @@ public final class InputParamsVerifier {
     }
 
     public static void verifyRequestSearchParamsConditions(final SearchInputParamsHolder inputParamsHolder)
-            throws InvalidRequestException {
+        throws InvalidRequestException {
         verifyUserId(inputParamsHolder.getUserId(), USERID_GET_EXCEPTION_MESSAGE);
         verifyCaseRef(inputParamsHolder.getCaseRef(), CASEREF_GET_EXCEPTION_MESSAGE);
         verifyTimestamp(inputParamsHolder.getStartTime(), TIMESTAMP_GET_EXCEPTION_MESSAGE, TIMESTAMP_GET_REGEX);
@@ -69,7 +73,7 @@ public final class InputParamsVerifier {
     }
 
     public static void verifyRequestSearchParamsConditions(final SearchLog searchLog)
-            throws InvalidRequestException {
+        throws InvalidRequestException {
 
         verifyUserId(searchLog.getUserId(), USERID_POST_EXCEPTION_MESSAGE);
         verifyTimestamp(searchLog.getTimestamp(), TIMESTAMP_POST_EXCEPTION_MESSAGE, TIMESTAMP_POST_REGEX);
@@ -99,6 +103,18 @@ public final class InputParamsVerifier {
         } catch (DateTimeParseException dtpe) {
             log.error("Invalid request received - {}", dtpe.getMessage());
             throw new InvalidRequestException(TIMESTAMP_GET_EXCEPTION_MESSAGE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public static void verifyChallengedAccessRequest(final AccessRequestLog accessRequestLog)
+        throws InvalidRequestException {
+
+        if ((accessRequestLog.getRequestType() == AccessRequestType.CHALLENGED
+            && accessRequestLog.getAction() != AccessRequestAction.AUTO_APPROVED)
+            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
+            && accessRequestLog.getAction() == AccessRequestAction.AUTO_APPROVED)) {
+            throw new InvalidRequestException("CHALLENGED request type must have AUTO-APPROVED action", BAD_REQUEST);
+
         }
     }
 }

@@ -18,8 +18,10 @@ public final class InputParamsVerifierHelper {
     public static void verifyAction(final String action,
                                     final String caseActionPostExceptionMessage) throws InvalidRequestException {
         if (!isEmpty(action) && !isValidEnum(CaseAction.class, action)) {
-            throw new InvalidRequestException(appendExceptionParameter(caseActionPostExceptionMessage, action),
-                    BAD_REQUEST);
+            throw new InvalidRequestException(
+                appendExceptionParameter(caseActionPostExceptionMessage, action),
+                BAD_REQUEST
+            );
         }
     }
 
@@ -34,7 +36,7 @@ public final class InputParamsVerifierHelper {
     public static void verifyCaseRef(final String caseRef,
                                      final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseRef)
-                && !compile(CASE_REF_REGEX).matcher(caseRef).matches()) {
+            && !compile(CASE_REF_REGEX).matcher(caseRef).matches()) {
             throw new InvalidRequestException(appendExceptionParameter(exceptionMessage, caseRef), BAD_REQUEST);
         }
     }
@@ -57,8 +59,8 @@ public final class InputParamsVerifierHelper {
                                                 final String exceptionMessage) throws InvalidRequestException {
         if (!isEmpty(caseJurisdictionId) && caseJurisdictionId.length() > 70) {
             throw new InvalidRequestException(
-                    appendExceptionParameter(exceptionMessage, caseJurisdictionId),
-                    BAD_REQUEST
+                appendExceptionParameter(exceptionMessage, caseJurisdictionId),
+                BAD_REQUEST
             );
         }
     }
