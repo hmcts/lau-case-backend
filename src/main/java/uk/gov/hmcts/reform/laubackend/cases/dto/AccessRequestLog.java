@@ -35,7 +35,6 @@ public class AccessRequestLog {
     @Pattern(regexp = RegexConstants.CASE_REF_REGEX, message = "caseRef must be 16 digits")
     private String caseRef;
 
-    @NotBlank(message = "reason is required")
     private String reason;
 
     @NotNull(message = "action is required")

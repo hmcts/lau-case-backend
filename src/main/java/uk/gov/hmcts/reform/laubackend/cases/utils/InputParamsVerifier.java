@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
-import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
@@ -15,7 +13,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -35,6 +32,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelp
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyCaseJurisdictionId;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyCaseRef;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyCaseTypeId;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyChallengedRequestIsAutoApproved;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyReasonPopulated;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyTimestamp;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyUserId;
 
@@ -109,12 +108,9 @@ public final class InputParamsVerifier {
     public static void verifyChallengedAccessRequest(final AccessRequestLog accessRequestLog)
         throws InvalidRequestException {
 
-        if ((accessRequestLog.getRequestType() == AccessRequestType.CHALLENGED
-            && accessRequestLog.getAction() != AccessRequestAction.AUTO_APPROVED)
-            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
-            && accessRequestLog.getAction() == AccessRequestAction.AUTO_APPROVED)) {
-            throw new InvalidRequestException("CHALLENGED request type must have AUTO-APPROVED action", BAD_REQUEST);
-
-        }
+        verifyChallengedRequestIsAutoApproved(accessRequestLog);
+        verifyReasonPopulated(accessRequestLog);
     }
+
+
 }
