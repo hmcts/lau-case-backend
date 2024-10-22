@@ -30,15 +30,6 @@ class AccessRequestInputParamsVerifierTest {
 
 
     @Test
-    void verifyAccessRequestDoesNotThrowForValidChallengedRequest() {
-        AccessRequestLog accessRequestLog = new AccessRequestLog();
-        accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
-        accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
-
-        assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
-    }
-
-    @Test
     void verifyAccessRequestThrowsForInvalidChallengedRequest() {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
@@ -50,22 +41,33 @@ class AccessRequestInputParamsVerifierTest {
 
 
     @Test
-    void verifyAccessRequestDoesNotThrowForNonChallengedRequest() {
+    void verifyAccessRequestDoesNotThrowForNonSpecificRequestWithNoReason() {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
         accessRequestLog.setAction(AccessRequestAction.CREATED);
 
-        assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+        assertThrows(InvalidRequestException.class,() ->
+            InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
 
     @Test
-    void verifyAccessRequestThrowsForInvalidSpecificRequest() {
+    void verifyAccessRequestThrowsForInvalidChallengedRequestWithNoReason() {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
-        accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
+        accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
         accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
 
         assertThrows(InvalidRequestException.class, ()
             -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+    }
+
+    @Test
+    void verifyAccessRequestDoesNotThrowForSpecificReason() {
+        AccessRequestLog accessRequestLog = new AccessRequestLog();
+        accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
+        accessRequestLog.setAction(AccessRequestAction.CREATED);
+        accessRequestLog.setReason("Super important reason");
+
+        assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
 
 }

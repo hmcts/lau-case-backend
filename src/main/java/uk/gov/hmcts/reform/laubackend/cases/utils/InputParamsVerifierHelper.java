@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
+import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
+import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
 import static java.util.regex.Pattern.compile;
@@ -62,6 +65,26 @@ public final class InputParamsVerifierHelper {
                 appendExceptionParameter(exceptionMessage, caseJurisdictionId),
                 BAD_REQUEST
             );
+        }
+    }
+
+    public static void verifyChallengedRequestIsAutoApproved(AccessRequestLog accessRequestLog)
+        throws InvalidRequestException {
+        if ((accessRequestLog.getRequestType() == AccessRequestType.CHALLENGED
+            && accessRequestLog.getAction() != AccessRequestAction.AUTO_APPROVED)
+            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
+            && accessRequestLog.getAction() == AccessRequestAction.AUTO_APPROVED)) {
+            throw new InvalidRequestException("CHALLENGED request type must have AUTO-APPROVED action", BAD_REQUEST);
+        }
+    }
+
+    public static void verifyReasonPopulated(AccessRequestLog accessRequestLog) throws InvalidRequestException {
+        if ((accessRequestLog.getRequestType() == AccessRequestType.CHALLENGED && accessRequestLog.getReason() == null)
+            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
+            && accessRequestLog.getAction() == AccessRequestAction.CREATED
+            && accessRequestLog.getReason() == null)) {
+            throw new InvalidRequestException("CHALLENGED and SPECIFIC (CREATED) request type must have a reason",
+                                              BAD_REQUEST);
         }
     }
 }

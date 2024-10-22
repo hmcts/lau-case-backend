@@ -42,6 +42,7 @@ class AccessRequestControllerTest {
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
             .action(AccessRequestAction.AUTO_APPROVED)
+            .reason("super cool reason")
             .userId("1234-abcd")
             .build();
 
@@ -72,6 +73,7 @@ class AccessRequestControllerTest {
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
             .action(AccessRequestAction.AUTO_APPROVED)
+            .reason("some cool reason")
             .userId("1234-abcd")
             .build();
 
