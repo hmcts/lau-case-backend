@@ -46,7 +46,7 @@ class AccessRequestInputParamsVerifierTest {
         accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
         accessRequestLog.setAction(AccessRequestAction.CREATED);
 
-        assertThrows(InvalidRequestException.class,() ->
+        assertThrows(InvalidRequestException.class, () ->
             InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
 
@@ -69,5 +69,51 @@ class AccessRequestInputParamsVerifierTest {
 
         assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
+
+    @Test
+    void verifyAccessRequestThrowsForChallengedRequestWithoutEnd() {
+        AccessRequestLog accessRequestLog = new AccessRequestLog();
+        accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
+        accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
+        accessRequestLog.setReason("Some reason");
+
+        assertThrows(InvalidRequestException.class, ()
+            -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+    }
+
+    @Test
+    void verifyAccessRequestThrowForCSpecificRequestWithEnd() {
+        AccessRequestLog accessRequestLog = new AccessRequestLog();
+        accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
+        accessRequestLog.setAction(AccessRequestAction.CREATED);
+        accessRequestLog.setReason("Some reason");
+        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+
+        assertThrows(InvalidRequestException.class, () ->
+            InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+    }
+
+    @Test
+    void verifyAccessRequestDoesNotThrowForSpecificRequestWithEnd() {
+        AccessRequestLog accessRequestLog = new AccessRequestLog();
+        accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
+        accessRequestLog.setAction(AccessRequestAction.APPROVED);
+        accessRequestLog.setReason("Some reason");
+        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+
+        assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+    }
+
+    @Test
+    void verifyAccessRequestDoesNotThrowForChallengedRequestWithEnd() {
+        AccessRequestLog accessRequestLog = new AccessRequestLog();
+        accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
+        accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
+        accessRequestLog.setReason("Some reason");
+        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+
+        assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
+    }
+
 
 }

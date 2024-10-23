@@ -34,6 +34,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelp
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyCaseTypeId;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyChallengedRequestIsAutoApproved;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyReasonPopulated;
+import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyRequestEndPopulated;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyTimestamp;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyUserId;
 
@@ -110,6 +111,7 @@ public final class InputParamsVerifier {
 
         verifyChallengedRequestIsAutoApproved(accessRequestLog);
         verifyReasonPopulated(accessRequestLog);
+        verifyRequestEndPopulated(accessRequestLog);
     }
 
 
