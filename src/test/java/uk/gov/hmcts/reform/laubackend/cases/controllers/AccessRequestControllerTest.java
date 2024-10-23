@@ -43,6 +43,7 @@ class AccessRequestControllerTest {
             .requestType(AccessRequestType.CHALLENGED)
             .action(AccessRequestAction.AUTO_APPROVED)
             .reason("super cool reason")
+            .requestEnd("123")
             .userId("1234-abcd")
             .build();
 
@@ -75,6 +76,7 @@ class AccessRequestControllerTest {
             .action(AccessRequestAction.AUTO_APPROVED)
             .reason("some cool reason")
             .userId("1234-abcd")
+            .requestEnd("123")
             .build();
 
         when(accessRequestService.save(any())).thenThrow(new RuntimeException("Test exception"));

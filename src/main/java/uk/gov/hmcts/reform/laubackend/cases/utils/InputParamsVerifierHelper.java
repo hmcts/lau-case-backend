@@ -83,8 +83,28 @@ public final class InputParamsVerifierHelper {
             || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
             && accessRequestLog.getAction() == AccessRequestAction.CREATED
             && accessRequestLog.getReason() == null)) {
-            throw new InvalidRequestException("CHALLENGED and SPECIFIC (CREATED) request type must have a reason",
-                                              BAD_REQUEST);
+            throw new InvalidRequestException(
+                "CHALLENGED and SPECIFIC (CREATED) request type must have a reason",
+                BAD_REQUEST
+            );
         }
+    }
+
+    public static void verifyRequestEndPopulated(AccessRequestLog accessRequestLog) throws InvalidRequestException {
+        if (accessRequestLog.getRequestType() == AccessRequestType.CHALLENGED
+            && isEmpty(accessRequestLog.getRequestEnd())
+            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
+            && accessRequestLog.getAction() == AccessRequestAction.APPROVED
+            && isEmpty(accessRequestLog.getRequestEnd()))
+            || (accessRequestLog.getRequestType() == AccessRequestType.SPECIFIC
+            && (accessRequestLog.getAction() == AccessRequestAction.CREATED
+            || accessRequestLog.getAction() == AccessRequestAction.REJECTED)
+            && !isEmpty(accessRequestLog.getRequestEnd()))) {
+            throw new InvalidRequestException(
+                "CHALLENGED and SPECIFIC (APPROVED) request types must have requestEnd", BAD_REQUEST
+            );
+
+        }
+
     }
 }

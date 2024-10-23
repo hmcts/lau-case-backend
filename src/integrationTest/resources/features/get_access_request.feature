@@ -4,11 +4,11 @@ Feature: The application's GET accessRequest endpoint
     Given LAU backend application is healthy
     When I POST multiple Access Request records to "/audit/accessRequest" endpoint once using data:
       |requestType|userId|caseRef         |reason|action        |requestEndTimestamp     |timestamp               |
-      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED       |2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
-      |SPECIFIC   |123   |1234567890123456|nosy  |REJECTED      |2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
+      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED       |                        |2024-02-25T22:20:05.023Z|
+      |SPECIFIC   |123   |1234567890123456|nosy  |REJECTED      |                        |2024-02-25T22:20:05.023Z|
       |CHALLENGED |456   |1234567890123456|fun   |AUTO-APPROVED |2024-02-03T22:20:05.023Z|2024-03-20T22:20:05.023Z|
       |CHALLENGED |456   |6543210987654321|meh   |AUTO-APPROVED |2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
-      |SPECIFIC   |789   |6543210987654321|meh   |CREATED       |2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
+      |SPECIFIC   |789   |6543210987654321|meh   |CREATED       |                        |2024-05-10T22:20:05.023Z|
       |SPECIFIC   |789   |6543210987654321|      |APPROVED      |2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
       |CHALLENGED |789   |1122334455667788|nosy  |AUTO-APPROVED |2024-02-03T22:20:05.023Z|2024-06-05T22:20:05.023Z|
       |CHALLENGED |789   |1122334455667788|nosy  |AUTO-APPROVED |2024-02-03T22:20:05.023Z|2024-08-02T22:20:05.023Z|
@@ -23,8 +23,8 @@ Feature: The application's GET accessRequest endpoint
       |endTimestamp  |2024-03-02T22:01:00|
     Then the list of accessRequest records returned is (expected total 2):
       |requestType|userId|caseRef         |reason|action        |requestEndTimestamp     |timestamp               |
-      |SPECIFIC   |123   |1234567890123456|nosy  |REJECTED      |2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
-      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED       |2024-02-03T22:20:05.023Z|2024-02-25T22:20:05.023Z|
+      |SPECIFIC   |123   |1234567890123456|nosy  |REJECTED      |                        |2024-02-25T22:20:05.023Z|
+      |SPECIFIC   |123   |1234567890123456|nosy  |CREATED       |                        |2024-02-25T22:20:05.023Z|
 
 
   Scenario: The backend is able to process accessRequest GET requests by caseRef
@@ -35,7 +35,7 @@ Feature: The application's GET accessRequest endpoint
     Then the list of accessRequest records returned is (expected total 3):
       |requestType|userId|caseRef         |reason|action       |requestEndTimestamp     |timestamp               |
       |SPECIFIC   |789   |6543210987654321|      |APPROVED     |2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
-      |SPECIFIC   |789   |6543210987654321|meh   |CREATED      |2024-02-03T22:20:05.023Z|2024-05-10T22:20:05.023Z|
+      |SPECIFIC   |789   |6543210987654321|meh   |CREATED      |                        |2024-05-10T22:20:05.023Z|
       |CHALLENGED |456   |6543210987654321|meh   |AUTO-APPROVED|2024-02-03T22:20:05.023Z|2024-04-15T22:20:05.023Z|
 
   Scenario: The backend is able to process accessRequest GET requests by requestType
