@@ -247,7 +247,7 @@ dependencyManagement {
       entry 'netty-transport-native-epoll'
       entry 'netty-transport-native-unix-common'
     }
-    dependencySet(group: 'ch.qos.logback', version: '1.5.15') {
+    dependencySet(group: 'ch.qos.logback', version: '1.5.16') {
       entry 'logback-core'
       entry 'logback-classic'
     }
