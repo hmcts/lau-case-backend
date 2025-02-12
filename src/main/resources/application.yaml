@@ -61,6 +61,7 @@ spring:
             non_contextual_creation: true
     open-in-view: true
   flyway:
+    postgresql.transactional-lock: false
     enabled: ${LAU_FLYWAY_MIGRATE_DB:false}
     user: ${LAU_DB_ADMIN_USERNAME:lauadmin}
     password: ${LAU_DB_ADMIN_PASSWORD:}
