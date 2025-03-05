@@ -286,7 +286,7 @@ def versions = [
   serenity          : '4.2.16',
   sonarPitest       : '0.5',
   springCloud       : '4.2.0',
-  testcontainers    : '1.20.5',
+  testcontainers    : '1.20.6',
 ]
 
 configurations.all {
