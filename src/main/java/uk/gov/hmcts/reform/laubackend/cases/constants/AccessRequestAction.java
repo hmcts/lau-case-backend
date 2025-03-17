@@ -26,7 +26,7 @@ public enum AccessRequestAction {
 
     @JsonCreator
     public static AccessRequestAction getAccessRequestAction(String value) {
-        return stream(AccessRequestAction.values())
+        return stream(values())
             .filter(action -> action.getValue().equals(value))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("No AccessRequestAction constant with name: " + value));

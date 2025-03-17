@@ -22,6 +22,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.DatabaseCleaner.deleteRecord;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_DELETE_ENDPOINT;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 @RunWith(SerenityRunner.class)
 public class CaseActionApiTest {
 

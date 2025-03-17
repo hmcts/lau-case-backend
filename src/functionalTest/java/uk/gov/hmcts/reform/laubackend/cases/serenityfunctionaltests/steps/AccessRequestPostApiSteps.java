@@ -14,7 +14,7 @@ public class AccessRequestPostApiSteps extends BaseSteps {
         final JSONObject jsonRequestBody = new JSONObject();
         JSONObject jsonAccessLog = new JSONObject();
         String uuid = UUID.randomUUID().toString();
-        String caseRef = RandomStringUtils.random(16, false, true);
+        String caseRef = RandomStringUtils.secure().next(16, false, true);
 
         jsonAccessLog.put("requestType", "CHALLENGED");
         jsonAccessLog.put("userId", "user-" + uuid);

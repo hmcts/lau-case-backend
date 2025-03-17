@@ -16,7 +16,7 @@ public final class CaseRefsUtils {
 
     public static List<String> cleanUpCaseRefList(final List<String> caseRefs) {
 
-        caseRefs.removeIf(caseRef -> caseRef == null || caseRef.equals("") || caseRef.matches("^[a-zA-Z]*$"));
+        caseRefs.removeIf(caseRef -> caseRef == null || caseRef.isEmpty() || caseRef.matches("^[a-zA-Z]*$"));
         caseRefs.replaceAll(s -> s.replaceAll("\\D+", ""));
 
         return caseRefs;

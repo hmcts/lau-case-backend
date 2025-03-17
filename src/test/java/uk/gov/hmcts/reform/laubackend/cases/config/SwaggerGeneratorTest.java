@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * Each travis run on master should automatically save and upload (if updated) documentation.
  */
 
-@SuppressWarnings({"PMD.UnusedPrivateField"})
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnitTestShouldIncludeAssert", "PMD.LawOfDemeter"})
 @SpringBootTest
 @TestPropertySource(properties = {"idam.api.url = localhost:5000", "idam.s2s-auth.url = localhost:4502"})
 class SwaggerGeneratorTest {

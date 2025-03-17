@@ -20,7 +20,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.END_TIME
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME_PARAMETER;
 
-@SuppressWarnings({"PMD.JUnit4TestShouldUseBeforeAnnotation"})
+@SuppressWarnings({"PMD.JUnit4TestShouldUseBeforeAnnotation", "PMD.LawOfDemeter"})
 public class CaseSearchDeleteSteps extends AbstractSteps {
 
     private int httpStatusResponseCode;

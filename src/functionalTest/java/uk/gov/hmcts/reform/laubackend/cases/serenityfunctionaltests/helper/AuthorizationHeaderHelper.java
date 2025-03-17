@@ -24,6 +24,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SCOPE;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.TOKEN_URL;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class AuthorizationHeaderHelper {
 
     private static final Logger LOGGER =

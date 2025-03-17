@@ -13,6 +13,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.appendExceptionParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE_REF_REGEX;
 
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.GodClass", "PMD.CyclomaticComplexity"})
 public final class InputParamsVerifierHelper {
 
     private InputParamsVerifierHelper() {

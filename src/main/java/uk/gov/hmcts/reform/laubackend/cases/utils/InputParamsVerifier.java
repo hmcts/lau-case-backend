@@ -38,7 +38,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelp
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyTimestamp;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifierHelper.verifyUserId;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessiveImports", "PMD.PreserveStackTrace"})
 @Slf4j
 public final class InputParamsVerifier {
     private InputParamsVerifier() {

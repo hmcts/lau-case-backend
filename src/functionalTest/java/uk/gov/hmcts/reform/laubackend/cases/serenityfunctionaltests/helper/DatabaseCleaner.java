@@ -18,6 +18,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.config.EnvConfig.API_URL;
 
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidThrowingRawExceptionTypes"})
 public final class DatabaseCleaner {
 
     private DatabaseCleaner() {

@@ -11,7 +11,7 @@ public enum AppInsightsEvent {
     POST_ACTIVITY_REQUEST_EXCEPTION("Audit POST Case Activity Request Exception: "),
     POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION("Audit POST Case Activity Requst InvalidRequestException: ");
 
-    private String displayName;
+    private final String displayName;
 
     AppInsightsEvent(String displayName) {
         this.displayName = displayName;

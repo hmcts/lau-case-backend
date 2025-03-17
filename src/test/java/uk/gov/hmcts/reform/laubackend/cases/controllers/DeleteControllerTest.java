@@ -23,6 +23,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class DeleteControllerTest {
 
     private static final String CASEREF = "1234567890123456";

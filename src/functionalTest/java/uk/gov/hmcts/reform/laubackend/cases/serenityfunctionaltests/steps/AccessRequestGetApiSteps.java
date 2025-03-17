@@ -15,6 +15,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_ACCESS_REQUEST_ENDPOINT;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class AccessRequestGetApiSteps extends BaseSteps {
 
     private static final String CASE_REF = "caseRef";
@@ -80,7 +81,7 @@ public class AccessRequestGetApiSteps extends BaseSteps {
     }
 
     private String truncateMillisFromTimestamp(String timestamp) {
-        return timestamp.substring(0, timestamp.lastIndexOf(".")) + "Z";
+        return timestamp.substring(0, timestamp.lastIndexOf('.')) + "Z";
     }
 
 }

@@ -85,9 +85,9 @@ public class AccessRequestController {
     @GetMapping(path = "/audit/accessRequest")
     public ResponseEntity<AccessRequestGetResponse> getAccessRequest(
         @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
-        @RequestHeader(value = AUTHORISATION_HEADER) String authToken,
+        @RequestHeader(AUTHORISATION_HEADER) String authToken,
         @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
-        @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
+        @RequestHeader(SERVICE_AUTHORISATION_HEADER) String serviceAuthToken,
         @Valid @ParameterObject AccessRequestGetRequest requestQuery
     ) {
         try {

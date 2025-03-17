@@ -11,9 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AccessRequestInputParamsVerifierTest {
 
+    private static final String REQUEST_END = "2023-10-12T12:12:12.000";
+    private static final String REASON = "Some reason";
+
     @Test
     void verifyAccessRequestGetTimestampDoesNotThrowWithRightTimestamp() {
-        assertDoesNotThrow(() -> InputParamsVerifier.verifyAccessRequestGetTimestamp("2023-10-12T12:12:12.000"));
+        assertDoesNotThrow(() -> InputParamsVerifier.verifyAccessRequestGetTimestamp(REQUEST_END));
     }
 
     @Test
@@ -75,7 +78,7 @@ class AccessRequestInputParamsVerifierTest {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
         accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
-        accessRequestLog.setReason("Some reason");
+        accessRequestLog.setReason(REASON);
 
         assertThrows(InvalidRequestException.class, ()
             -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
@@ -86,8 +89,8 @@ class AccessRequestInputParamsVerifierTest {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
         accessRequestLog.setAction(AccessRequestAction.CREATED);
-        accessRequestLog.setReason("Some reason");
-        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+        accessRequestLog.setReason(REASON);
+        accessRequestLog.setRequestEnd(REQUEST_END);
 
         assertThrows(InvalidRequestException.class, () ->
             InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
@@ -98,8 +101,8 @@ class AccessRequestInputParamsVerifierTest {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.SPECIFIC);
         accessRequestLog.setAction(AccessRequestAction.APPROVED);
-        accessRequestLog.setReason("Some reason");
-        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+        accessRequestLog.setReason(REASON);
+        accessRequestLog.setRequestEnd(REQUEST_END);
 
         assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
@@ -109,8 +112,8 @@ class AccessRequestInputParamsVerifierTest {
         AccessRequestLog accessRequestLog = new AccessRequestLog();
         accessRequestLog.setRequestType(AccessRequestType.CHALLENGED);
         accessRequestLog.setAction(AccessRequestAction.AUTO_APPROVED);
-        accessRequestLog.setReason("Some reason");
-        accessRequestLog.setRequestEnd("2023-10-12T12:12:12.000");
+        accessRequestLog.setReason(REASON);
+        accessRequestLog.setRequestEnd(REQUEST_END);
 
         assertDoesNotThrow(() -> InputParamsVerifier.verifyChallengedAccessRequest(accessRequestLog));
     }
