@@ -37,6 +37,7 @@ public class CaseActionResponseVO {
         this.startRecordNumber = startRecordNumber;
     }
 
+    @SuppressWarnings("PMD.BooleanGetMethodName")
     public Boolean getMoreRecords() {
         return moreRecords;
     }

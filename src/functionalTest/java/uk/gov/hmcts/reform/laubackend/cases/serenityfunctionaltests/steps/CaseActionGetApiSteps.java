@@ -13,7 +13,6 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseAc
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
 
     @Step("When valid params are supplied for Get CaseAction API")
     public Map<String, String> givenValidParamsAreSuppliedForGetCaseAction() {
-        HashMap<String, String> queryParamMap = new HashMap<>();
+        Map<String, String> queryParamMap = new ConcurrentHashMap<>();
         queryParamMap.put("userId", "3748240");
         queryParamMap.put("caseAction", "VIEW");
         queryParamMap.put("caseRef", "1615817621013549");
@@ -54,6 +53,7 @@ public class CaseActionGetApiSteps extends BaseSteps {
         response.then().assertThat().body("startRecordNumber", Matchers.is(Matchers.greaterThanOrEqualTo(1)));
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Step("Then the GET CaseAction response params match the input")
     public String thenTheGetCaseActionResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
                                                                     CaseActionResponseVO caseActionResponseVO) {

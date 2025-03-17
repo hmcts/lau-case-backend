@@ -20,7 +20,12 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.g
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingUserId;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithValidOrInvalidCaseRefs;
 
-@SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.JUnit4TestShouldUseBeforeAnnotation","PMD.TooManyMethods"})
+@SuppressWarnings({
+    "PMD.UseConcurrentHashMap",
+    "PMD.JUnit4TestShouldUseBeforeAnnotation",
+    "PMD.TooManyMethods",
+    "PMD.LawOfDemeter"
+})
 public class CaseSearchPostSteps extends AbstractSteps {
 
     private final Gson jsonReader = new Gson();

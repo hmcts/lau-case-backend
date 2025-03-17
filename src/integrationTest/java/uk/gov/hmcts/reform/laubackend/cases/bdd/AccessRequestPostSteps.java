@@ -20,6 +20,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestHelper.ge
 import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestHelper.mapToAccessRequestPostRequestBody;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithInvalidParameter;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class AccessRequestPostSteps extends AbstractSteps {
 
     private int httpStatusResponseCode;

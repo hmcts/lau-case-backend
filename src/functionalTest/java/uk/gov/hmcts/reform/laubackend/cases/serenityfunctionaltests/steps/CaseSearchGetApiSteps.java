@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.Search
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,12 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_ENDPOINT;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidLiteralsInIfCondition"})
 public class CaseSearchGetApiSteps extends BaseSteps {
 
     @Step("When valid params are supplied for Get CaseSearch API")
     public Map<String, String> givenValidParamsAreSuppliedForGetCaseSearchApi() {
-        HashMap<String, String> queryParamMap = new HashMap<>();
+        Map<String, String> queryParamMap = new ConcurrentHashMap<>();
         queryParamMap.put("userId", "123455");
         queryParamMap.put("caseRef", "1589282126569940");
         queryParamMap.put("startTimestamp", "2021-10-18T13:41:05");

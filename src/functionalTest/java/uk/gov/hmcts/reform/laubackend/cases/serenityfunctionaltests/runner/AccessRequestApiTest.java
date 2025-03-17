@@ -19,6 +19,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helpe
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_ACCESS_REQUEST_DELETE_ENDPOINT;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_ACCESS_REQUEST_ENDPOINT;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 @RunWith(SerenityRunner.class)
 public class AccessRequestApiTest {
 

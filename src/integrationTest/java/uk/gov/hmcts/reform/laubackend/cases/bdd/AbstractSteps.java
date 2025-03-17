@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.google.gson.Gson;
 import lombok.Getter;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -15,10 +16,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTA
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
 
 @Getter
+@SuppressWarnings("PMD.LawOfDemeter")
 public class AbstractSteps {
 
     private static final String JSON_RESPONSE = "application/json;charset=UTF-8";
-    public final WiremokInstantiator wiremokInstantiator = INSTANCE;
     protected final RestHelper restHelper = new RestHelper();
     protected final Gson jsonReader = new Gson();
 
@@ -35,12 +36,13 @@ public class AbstractSteps {
     }
 
     public void setupAuthorisationStubWithRole(String role) {
-        wiremokInstantiator.getWireMockServer().stubFor(get(urlPathMatching("/details"))
+        WireMockServer server = INSTANCE.getWireMockServer();
+        server.stubFor(get(urlPathMatching("/details"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody("lau_frontend")));
-        wiremokInstantiator.getWireMockServer().stubFor(get(urlPathMatching("/o/userinfo"))
+        server.stubFor(get(urlPathMatching("/o/userinfo"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)

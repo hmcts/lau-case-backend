@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -18,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.AccessRequestHelper.mapToAccessRequestPostRequestBody;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class AccessRequestGetSteps extends AbstractSteps {
 
     private static boolean posted;
-    private final Gson jsonReader = new Gson();
     private String responseBody;
 
     @When("I POST multiple Access Request records to {string} endpoint once using data:")
@@ -38,7 +37,7 @@ public class AccessRequestGetSteps extends AbstractSteps {
     }
 
     @When("I GET {string} using params:")
-    public void getAccessRequestUsingParams(String path, Map<String, String> queryParams) {
+    public void callGetAccessRequestUsingParams(String path, Map<String, String> queryParams) {
         String endpoint = baseUrl() + path;
         final Response response = restHelper.getResponse(endpoint, queryParams);
         responseBody = response.getBody().asString();

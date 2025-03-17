@@ -25,7 +25,7 @@ public class IdamServiceClient {
         this.s2sUrl = s2sUrl;
     }
 
-    @SuppressWarnings("PMD.UseConcurrentHashMap")
+    @SuppressWarnings({"PMD.UseConcurrentHashMap", "PMD.LawOfDemeter"})
     public String s2sSignIn() {
 
         log.info("s2sUrl lease url: {}", s2sUrl + "/lease");

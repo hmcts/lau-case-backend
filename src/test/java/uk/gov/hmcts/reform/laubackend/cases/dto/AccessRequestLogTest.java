@@ -17,6 +17,7 @@ import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("PMD.LawOfDemeter")
 class AccessRequestLogTest {
 
     private Validator validator;

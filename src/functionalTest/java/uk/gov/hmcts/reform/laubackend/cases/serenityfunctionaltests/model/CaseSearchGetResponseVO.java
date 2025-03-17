@@ -48,6 +48,7 @@ public class CaseSearchGetResponseVO {
         this.startRecordNumber = startRecordNumber;
     }
 
+    @SuppressWarnings("PMD.BooleanGetMethodName")
     @JsonProperty("moreRecords")
     public Boolean getMoreRecords() {
         return moreRecords;

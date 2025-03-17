@@ -143,6 +143,7 @@ checkstyle {
 }
 
 pmd {
+  toolVersion = "7.11.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -268,7 +269,7 @@ repositories {
   mavenLocal()
   mavenCentral()
   maven {
-    url 'https://jitpack.io'
+    url = 'https://jitpack.io'
   }
 }
 
@@ -400,7 +401,6 @@ dependencies {
   testAnnotationProcessor group: 'org.projectlombok', name: 'lombok'
 
   testImplementation group: 'jakarta.el', name: 'jakarta.el-api', version: '6.0.1'
-  testImplementation group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.70.0'
 }
 
 flyway {

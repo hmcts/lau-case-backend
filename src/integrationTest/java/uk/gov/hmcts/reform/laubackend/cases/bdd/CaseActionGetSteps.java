@@ -23,7 +23,11 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.END_TIME
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TIME_PARAMETER;
 
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.JUnit4TestShouldUseBeforeAnnotation","PMD.UseObjectForClearerAPI"})
+@SuppressWarnings({
+    "PMD.TooManyMethods",
+    "PMD.JUnit4TestShouldUseBeforeAnnotation",
+    "PMD.UseObjectForClearerAPI",
+    "PMD.LawOfDemeter"})
 public class CaseActionGetSteps extends AbstractSteps {
 
     private String caseActionPostResponseBody;

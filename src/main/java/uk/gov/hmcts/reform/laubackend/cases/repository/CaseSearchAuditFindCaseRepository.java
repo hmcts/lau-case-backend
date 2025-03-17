@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "PMD.LawOfDemeter"})
 @Repository
 public class CaseSearchAuditFindCaseRepository {
     private static final String SELECT_CRITERIA = "SELECT csa.id, csa.user_id, csa.log_timestamp, csa.case_refs";

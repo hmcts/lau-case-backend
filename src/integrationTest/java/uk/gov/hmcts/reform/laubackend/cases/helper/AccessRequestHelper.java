@@ -9,7 +9,7 @@ import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestPostRequest;
 
 import java.util.Map;
 
-public class AccessRequestHelper {
+public final class AccessRequestHelper {
 
     private AccessRequestHelper() {
     }
@@ -28,6 +28,7 @@ public class AccessRequestHelper {
         return new AccessRequestPostRequest(accessRequestLog);
     }
 
+    @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
     public static String mapToAccessRequestPostRequestBody(Map<String, String> dataMap) {
         JSONObject jsonRequestBody = new JSONObject();
         JSONObject jsonAccessLog = new JSONObject();

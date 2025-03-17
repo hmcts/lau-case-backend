@@ -35,6 +35,12 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AccessRequestServiceTest {
 
+    private static final String USER_ID = "user-id";
+    private static final String CASE_REF = "case-ref";
+    private static final String REASON = "reason";
+    private static final String REQUEST_END = "2021-08-01T23:59:59.999Z";
+    private static final String TIMESTAMP = "2021-08-01T00:00:00.000Z";
+
     @Mock
     private AccessRequestRepository accessRequestRepository;
 
@@ -52,9 +58,9 @@ class AccessRequestServiceTest {
 
         AccessRequest accessRequest = getAccessRequest(false);
         accessRequest.setRequestType("CHALLENGED");
-        accessRequest.setUserId("user-id");
-        accessRequest.setCaseRef("case-ref");
-        accessRequest.setReason("reason");
+        accessRequest.setUserId(USER_ID);
+        accessRequest.setCaseRef(CASE_REF);
+        accessRequest.setReason(REASON);
         accessRequest.setAction("APPROVED");
         accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
@@ -64,12 +70,12 @@ class AccessRequestServiceTest {
         // given
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
-            .userId("user-id")
-            .caseRef("case-ref")
-            .reason("reason")
+            .userId(USER_ID)
+            .caseRef(CASE_REF)
+            .reason(REASON)
             .action(AccessRequestAction.APPROVED)
-            .requestEnd("2021-08-01T23:59:59.999Z")
-            .timestamp("2021-08-01T00:00:00.000Z")
+            .requestEnd(REQUEST_END)
+            .timestamp(TIMESTAMP)
             .build();
 
         // when
@@ -78,12 +84,12 @@ class AccessRequestServiceTest {
         // then
         assertThat(savedAccessRequestLog).isNotNull();
         assertThat(savedAccessRequestLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
-        assertThat(savedAccessRequestLog.getUserId()).isEqualTo("user-id");
-        assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo("case-ref");
-        assertThat(savedAccessRequestLog.getReason()).isEqualTo("reason");
+        assertThat(savedAccessRequestLog.getUserId()).isEqualTo(USER_ID);
+        assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo(CASE_REF);
+        assertThat(savedAccessRequestLog.getReason()).isEqualTo(REASON);
         assertThat(savedAccessRequestLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
-        assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo(REQUEST_END);
+        assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo(TIMESTAMP);
     }
 
     @Test
@@ -91,11 +97,11 @@ class AccessRequestServiceTest {
         // given
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
-            .userId("user-id")
-            .caseRef("case-ref")
-            .reason("reason")
+            .userId(USER_ID)
+            .caseRef(CASE_REF)
+            .reason(REASON)
             .action(AccessRequestAction.APPROVED)
-            .requestEnd("2021-08-01T23:59:59.999Z")
+            .requestEnd(REQUEST_END)
             .timestamp("2021-08-01") // missing time part in timestamp
             .build();
 
@@ -148,12 +154,12 @@ class AccessRequestServiceTest {
 
         AccessRequestLog accessLog = response.getAccessLog().getFirst();
         assertThat(accessLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
-        assertThat(accessLog.getUserId()).isEqualTo("user-id");
-        assertThat(accessLog.getCaseRef()).isEqualTo("case-ref");
-        assertThat(accessLog.getReason()).isEqualTo("reason");
+        assertThat(accessLog.getUserId()).isEqualTo(USER_ID);
+        assertThat(accessLog.getCaseRef()).isEqualTo(CASE_REF);
+        assertThat(accessLog.getReason()).isEqualTo(REASON);
         assertThat(accessLog.getAction()).isEqualTo(AccessRequestAction.APPROVED);
-        assertThat(accessLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
-        assertThat(accessLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(accessLog.getRequestEnd()).isEqualTo(REQUEST_END);
+        assertThat(accessLog.getTimestamp()).isEqualTo(TIMESTAMP);
     }
 
     @Test
@@ -165,12 +171,12 @@ class AccessRequestServiceTest {
         // given
         AccessRequestLog accessRequestLog = AccessRequestLog.builder()
             .requestType(AccessRequestType.CHALLENGED)
-            .userId("user-id")
-            .caseRef("case-ref")
-            .reason("reason")
+            .userId(USER_ID)
+            .caseRef(CASE_REF)
+            .reason(REASON)
             .action(AccessRequestAction.AUTO_APPROVED)
-            .requestEnd("2021-08-01T23:59:59.999Z")
-            .timestamp("2021-08-01T00:00:00.000Z")
+            .requestEnd(REQUEST_END)
+            .timestamp(TIMESTAMP)
             .build();
 
         // when
@@ -179,20 +185,20 @@ class AccessRequestServiceTest {
         // then
         assertThat(savedAccessRequestLog).isNotNull();
         assertThat(savedAccessRequestLog.getRequestType()).isEqualTo(AccessRequestType.CHALLENGED);
-        assertThat(savedAccessRequestLog.getUserId()).isEqualTo("user-id");
-        assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo("case-ref");
-        assertThat(savedAccessRequestLog.getReason()).isEqualTo("reason");
+        assertThat(savedAccessRequestLog.getUserId()).isEqualTo(USER_ID);
+        assertThat(savedAccessRequestLog.getCaseRef()).isEqualTo(CASE_REF);
+        assertThat(savedAccessRequestLog.getReason()).isEqualTo(REASON);
         assertThat(savedAccessRequestLog.getAction()).isEqualTo(AccessRequestAction.AUTO_APPROVED);
-        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo("2021-08-01T23:59:59.999Z");
-        assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo("2021-08-01T00:00:00.000Z");
+        assertThat(savedAccessRequestLog.getRequestEnd()).isEqualTo(REQUEST_END);
+        assertThat(savedAccessRequestLog.getTimestamp()).isEqualTo(TIMESTAMP);
     }
 
     private AccessRequest getAccessRequest(final boolean isAutoApproved) {
         AccessRequest accessRequest = new AccessRequest();
         accessRequest.setRequestType("CHALLENGED");
-        accessRequest.setUserId("user-id");
-        accessRequest.setCaseRef("case-ref");
-        accessRequest.setReason("reason");
+        accessRequest.setUserId(USER_ID);
+        accessRequest.setCaseRef(CASE_REF);
+        accessRequest.setReason(REASON);
         accessRequest.setAction(isAutoApproved ? "AUTO-APPROVED" : "APPROVED");
         accessRequest.setRequestEnd(Timestamp.valueOf("2021-08-01 23:59:59.999"));
         accessRequest.setTimestamp(Timestamp.valueOf("2021-08-01 00:00:00.000"));
@@ -202,8 +208,8 @@ class AccessRequestServiceTest {
     private AccessRequestGetRequest getAccessRequestGetRequest() {
         AccessRequestGetRequest accessRequest = new AccessRequestGetRequest();
         accessRequest.setRequestType(AccessRequestType.CHALLENGED);
-        accessRequest.setUserId("user-id");
-        accessRequest.setCaseRef("case-ref");
+        accessRequest.setUserId(USER_ID);
+        accessRequest.setCaseRef(CASE_REF);
         accessRequest.setStartTimestamp("2021-08-01 23:59:59.999");
         accessRequest.setEndTimestamp("2021-08-01 00:00:00.000");
         return accessRequest;

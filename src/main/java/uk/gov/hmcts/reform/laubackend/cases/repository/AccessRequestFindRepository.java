@@ -19,7 +19,7 @@ import java.util.List;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "PMD.LawOfDemeter"})
 @Repository
 public class AccessRequestFindRepository {
 
