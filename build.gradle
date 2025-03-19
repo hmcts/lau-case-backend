@@ -347,13 +347,16 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   testImplementation group: 'org.testcontainers', name: 'postgresql', version: versions.testcontainers
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+  }
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
   testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
   testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
   testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '2.1.0'
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner'
 
