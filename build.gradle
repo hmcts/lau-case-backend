@@ -1,6 +1,6 @@
 buildscript {
   dependencies {
-    classpath "org.flywaydb:flyway-database-postgresql:11.5.0"
+    classpath "org.flywaydb:flyway-database-postgresql:11.6.0"
   }
 }
 
@@ -276,7 +276,7 @@ repositories {
 
 def versions = [
   commonsIo         : '2.18.0',
-  flywaydb          : '11.5.0',
+  flywaydb          : '11.6.0',
   cucumber          : '7.21.1',
   gradlePitest      : '1.15.0',
   junit             : '5.9.3',
