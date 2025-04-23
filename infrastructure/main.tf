@@ -63,10 +63,6 @@ module "lau-case-db-flexible" {
   ]
 
   admin_user_object_id = var.jenkins_AAD_objectId
-
-  action_group_name           = join("-", [var.db_monitor_action_group_name, local.db_server_name, var.env])
-  email_address_key           = var.db_alert_email_address_key
-  email_address_key_vault_id  = data.azurerm_key_vault.key_vault.id
 }
 
 ////////////////////////////////
