@@ -36,11 +36,11 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                              final Object handler) throws IOException {
 
         try {
-            serviceAuthorizationAuthenticator.authorizeServiceToken(request);
+            serviceAuthorizationAuthenticator.authorizeServiceToken(request); // s2s token
 
             if (request.getMethod().equalsIgnoreCase(GET.name())
                 || request.getMethod().equalsIgnoreCase(DELETE.name())) {
-                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request);
+                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request); //idam token
 
                 if (isServiceLogsUserGettingNonDeletedCases(request, roles)) {
                     throw new InvalidAuthorizationException(

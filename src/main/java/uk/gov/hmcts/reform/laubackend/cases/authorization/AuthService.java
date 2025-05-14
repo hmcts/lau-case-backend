@@ -1,6 +1,9 @@
 package uk.gov.hmcts.reform.laubackend.cases.authorization;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
@@ -8,31 +11,60 @@ import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class AuthService {
 
-    private final AuthTokenValidator authTokenValidator;
-    private final IdamClient idamClient;
+private final AsyncAuthService asyncAuthService;
 
 
-    @Autowired
-    public AuthService(final AuthTokenValidator authTokenValidator,
-                       final IdamClient idamClient) {
-        this.authTokenValidator = authTokenValidator;
-        this.idamClient = idamClient;
-    }
 
     public String authenticateService(final String authHeader) {
-        if (authHeader != null) {
-            return authTokenValidator.getServiceName(authHeader);
+        try {
+            return asyncAuthService.getServiceName(authHeader).get();
+        } catch (final Exception e) {
+            throw new InvalidAuthorizationException("Authorization failed: " + e.getMessage());
+
         }
-        throw new InvalidServiceAuthorizationException("Missing ServiceAuthorization header");
     }
 
     public UserInfo authorize(final String authHeader) {
-        if (authHeader != null) {
-            return idamClient.getUserInfo(authHeader);
+        try {
+            return asyncAuthService.getUserInfo(authHeader).get();
+        } catch (final Exception e) {
+            throw new InvalidAuthorizationException("Authorization failed: " + e.getMessage());
         }
-        throw new InvalidAuthorizationException("Missing Authorization header");
+
     }
+
+//
+//    @Async("taskExecutor")
+//    public CompletableFuture<UserInfo> getUserInfo(String authHeader) {
+//        String threadName = Thread.currentThread().getName();
+//        log.info("********* getUserInfo executing in thread ****************: {}", threadName);
+//
+//        if (authHeader != null) {
+//            return CompletableFuture.completedFuture(asyncAuthService.getUserInfo(authHeader));
+//        }
+//        return CompletableFuture.failedFuture(
+//            new InvalidServiceAuthorizationException("Missing Authorization header"));
+//    }
+//
+//
+//    @Async("taskExecutor")
+//    public CompletableFuture<String> getServiceName(String authHeader) {
+//        String threadName = Thread.currentThread().getName();
+//        log.info("***************** getServiceName executing in thread *****************: {}", threadName);
+//        if (authHeader != null) {
+//            return CompletableFuture.completedFuture(
+//                authTokenValidator.getServiceName(authHeader)
+//            );
+//        }
+//        return CompletableFuture.failedFuture(
+//            new InvalidServiceAuthorizationException("Missing Authorization header"));
+//    }
 }
+

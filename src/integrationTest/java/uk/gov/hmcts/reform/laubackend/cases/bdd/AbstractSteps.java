@@ -45,7 +45,7 @@ public class AbstractSteps {
         server.stubFor(get(urlPathMatching("/o/userinfo"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
-                        .withStatus(200)
+                        .withStatus(403)
                         .withBody(getUserInfoAsJson(role))));
     }
 

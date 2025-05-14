@@ -49,8 +49,8 @@ public class RestHelper {
                 .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
                 .header(AUTHORISATION_HEADER, "Bearer " + AUTH_TOKEN)
                 .when()
-                .get()
-                .andReturn();
+                .get();
+//                .andReturn();
     }
 
 
