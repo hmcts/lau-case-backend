@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
+import java.util.concurrent.CompletableFuture;
+
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -22,19 +24,25 @@ class ServiceAuthorizationAuthenticatorTest {
     private AuthService authService;
 
     @Mock
+    private AsyncAuthService asyncAuthService;
+
+    @Mock
     private AuthorisedServices authorisedServices;
 
     @InjectMocks
     private ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
 
+    public static final String HEADER = "Super cool header";
+
+
+
     @Test
     void shouldThrowExceptionForInvalidServiceName() {
-        final String header = "Super cool header";
         final String serviceName = "super_cool_service";
 
         final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(header);
-        when(authService.authenticateService(header)).thenReturn(serviceName);
+        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
+        when(authService.authenticateService(HEADER)).thenReturn(serviceName);
 
         when(authorisedServices.hasService(serviceName)).thenReturn(false);
 
@@ -48,12 +56,11 @@ class ServiceAuthorizationAuthenticatorTest {
 
     @Test
     void shouldNotThrowExceptionForValidServiceName() {
-        final String header = "Super cool header";
         final String serviceName = "super_cool_service";
 
         final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(header);
-        when(authService.authenticateService(header)).thenReturn(serviceName);
+        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
+        when(authService.authenticateService(HEADER)).thenReturn(serviceName);
 
         when(authorisedServices.hasService(serviceName)).thenReturn(true);
 
@@ -61,4 +68,44 @@ class ServiceAuthorizationAuthenticatorTest {
 
         assertDoesNotThrow(() -> serviceAuthorizationAuthenticator.authorizeServiceToken(httpServletRequest));
     }
+
+    @Test
+    void shouldNotThrowExceptionForValidServiceNameOnPostAsync() {
+        final String serviceName = "super_cool_service";
+
+        HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
+        when(httpServletRequest.getMethod()).thenReturn("POST");
+
+        // Mock asyncAuthService to return a completed future with the service name
+        CompletableFuture<String> future = CompletableFuture.completedFuture(serviceName);
+        when(asyncAuthService.authenticateService(HEADER)).thenReturn(future);
+
+        when(authorisedServices.hasService(serviceName)).thenReturn(true);
+
+        // Should not throw any exception
+        assertDoesNotThrow(() -> serviceAuthorizationAuthenticator.authorizeServiceToken(httpServletRequest));
+    }
+
+    @Test
+    void shouldThrowExceptionAndSimulateRetryOnPostAsync403() {
+        final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
+        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
+        when(httpServletRequest.getMethod()).thenReturn("POST");
+
+        // Simulate asyncAuthService throwing 403 (wrapped in InvalidServiceAuthorizationException)
+        CompletableFuture<String> failedFuture = CompletableFuture.failedFuture(
+            new InvalidServiceAuthorizationException("Forbidden")
+        );
+        when(asyncAuthService.authenticateService(HEADER)).thenReturn(failedFuture);
+
+        Throwable thrown = catchThrowable(() ->
+                    serviceAuthorizationAuthenticator.authorizeServiceToken(httpServletRequest)
+        );
+
+        assertThat(thrown)
+            .isInstanceOf(InvalidServiceAuthorizationException.class)
+            .hasMessage("Forbidden");
+    }
+
 }
