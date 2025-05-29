@@ -9,8 +9,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 
 @CucumberContextConfiguration
-//@ContextConfiguration(classes = {AsyncConfiguration.class})
-//@Import(AsyncConfiguration.class)
 @SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @Slf4j
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
