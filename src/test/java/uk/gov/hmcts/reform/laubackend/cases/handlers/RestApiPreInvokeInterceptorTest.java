@@ -54,9 +54,8 @@ class RestApiPreInvokeInterceptorTest {
         final HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         final Object object = mock(Object.class);
 
-        doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
-
         when(httpServletRequest.getMethod()).thenReturn(POST.name());
+        doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
                 .preHandle(httpServletRequest, httpServletResponse, object);
