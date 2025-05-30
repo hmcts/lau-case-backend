@@ -88,7 +88,7 @@ class ServiceAuthorizationAuthenticatorTest {
     }
 
     @Test
-    void shouldThrowExceptionAndSimulateRetryOnPostAsync403() {
+    void shouldThrowExceptionOnPostAsync403() {
         final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
         when(httpServletRequest.getMethod()).thenReturn("POST");
