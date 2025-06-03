@@ -255,7 +255,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
         }
     }
 
-    @Then("caseSearch response body is returned for all ten requests with some failures")
+    @Then("caseSearch response body is returned for passed requests with some failures")
     public void caseSearchResponseBodyIsReturnedForAllTenRequestsWithFailures() {
         for (int i = 0; i < 10; i++) {
             if (ScenarioContext.get("error" + i) != null) {

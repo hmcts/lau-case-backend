@@ -43,4 +43,4 @@ Feature: The application's POST caseSearch endpoint
   Scenario: The backend is able to process 10 different caseSearch POST requests with some failures
     Given LAU backend application is healthy
     When I request 10 requests to POST "/audit/caseSearch" endpoint with s2s with simulate failures
-    Then  caseSearch response body is returned for all ten requests with some failures
+    Then  caseSearch response body is returned for passed requests with some failures
