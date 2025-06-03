@@ -3,21 +3,19 @@ package uk.gov.hmcts.reform.laubackend.cases.authorization;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD.PreserveStackTrace","PMD.DoNotUseThreads","PMD.UseTryWithResources",
-    "PMD.ExceptionAsFlowControl"})
+@SuppressWarnings({"PMD.PreserveStackTrace", "PMD.ExceptionAsFlowControl"})
 public class ServiceAuthorizationAuthenticator {
 
     private final AuthService authService;
@@ -39,8 +37,8 @@ public class ServiceAuthorizationAuthenticator {
         }
     }
 
+    @Async("TaskExecutor")
     private void handlePostRequest(String serviceAuthHeader) {
-        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
         try {
             CompletableFuture<Void> future = asyncAuthService.authenticateService(serviceAuthHeader)
                 .thenAcceptAsync(serviceName -> {
@@ -49,7 +47,7 @@ public class ServiceAuthorizationAuthenticator {
                         throw new InvalidServiceAuthorizationException(
                             "Unable to authenticate service name asynchronously.");
                     }
-                }, executor)
+                })
                 .handle((result, ex) -> {
                     if (ex != null) {
                         log.error("Error during service authentication: {}", ex.getMessage(), ex);
@@ -61,8 +59,6 @@ public class ServiceAuthorizationAuthenticator {
             future.join();  // Wait for the asynchronous operation to complete.
         } catch (CompletionException ex) {
             handleCompletionException(ex);
-        } finally {
-            executor.close(); // Ensure the executor is closed to release resources
         }
     }
 

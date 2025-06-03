@@ -39,3 +39,8 @@ Feature: The application's POST caseSearch endpoint
     Given LAU backend application is healthy
     When I request 10 request to POST "/audit/caseSearch" endpoint with s2s in asynchronous mode
     Then  caseSearch response body is returned for all ten requests
+
+  Scenario: The backend is able to process 10 different caseSearch POST requests with some failures
+    Given LAU backend application is healthy
+    When I request 10 requests to POST "/audit/caseSearch" endpoint with s2s with simulate failures
+    Then  caseSearch response body is returned for all ten requests with some failures

@@ -32,6 +32,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.g
     "PMD.LawOfDemeter",
     "PMD.DoNotUseThreads",
     "PMD.SignatureDeclareThrowsException",
+    "PMD.AvoidThrowingRawExceptionTypes"
 })
 public class CaseSearchPostSteps extends AbstractSteps {
 
@@ -41,6 +42,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
     private int httpStatusResponseCode;
 
     private static final String THREAD_NAME = "threadName";
+    private static final String RESPONSE = "response";
 
     @Before
     public void setUp() {
@@ -202,7 +204,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
         for (int i = 0; i < numRequests; i++) {
             Response response = futures.get(i).get();
-            ScenarioContext.set("response" + i, response);
+            ScenarioContext.set(RESPONSE + i, response);
             String threadName = ScenarioContext.get(THREAD_NAME + i);
             assertThat(threadName).isNotEqualTo("main");
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
@@ -212,8 +214,59 @@ public class CaseSearchPostSteps extends AbstractSteps {
     @Then("caseSearch response body is returned for all ten requests")
     public void caseSearchResponseBodyIsReturnedForAllTenRequests() {
         for (int i = 0; i < 10; i++) {
-            Response response = ScenarioContext.get("response" + i);
+            Response response = ScenarioContext.get(RESPONSE + i);
             assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+        }
+    }
+
+    @When("I request 10 requests to POST {string} endpoint with s2s with simulate failures")
+    public void requestMultiplePostCaseSearchEndpointWithFailures(final String path) throws Exception {
+        List<CompletableFuture<Response>> futures = new ArrayList<>();
+        int numRequests = 10;
+
+        for (int i = 0; i < numRequests; i++) {
+            final int idx = i;
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                String threadName = Thread.currentThread().getName();
+                ScenarioContext.set(THREAD_NAME + idx, threadName);
+
+                if (idx == 3  || idx == 6 || idx == 9) { // Fail every third request
+                    throw new RuntimeException("Simulated failure" + idx);
+                }
+
+                return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
+            }).exceptionally(ex -> {
+                ScenarioContext.set("error" + idx, ex.getMessage());
+                return null; // Return null for failed requests
+            }));
+        }
+
+        // Wait for all futures to complete
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        for (int i = 0; i < 10; i++) {
+            CompletableFuture<Response> future = futures.get(i);
+            if (!future.isCompletedExceptionally()) {
+                Response response = future.get();
+                String threadName = ScenarioContext.get(THREAD_NAME + i);
+                assertThat(threadName).isNotEqualTo("main");
+                ScenarioContext.set(RESPONSE + i, response);
+            }
+        }
+    }
+
+    @Then("caseSearch response body is returned for all ten requests with some failures")
+    public void caseSearchResponseBodyIsReturnedForAllTenRequestsWithFailures() {
+        for (int i = 0; i < 10; i++) {
+            if (ScenarioContext.get("error" + i) != null) {
+                String errorMessage = ScenarioContext.get("error" + i);
+                assertThat(errorMessage).contains("Simulated failure");
+            } else {
+                Response response = ScenarioContext.get(RESPONSE + i);
+                if (response != null) {
+                    assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+                }
+            }
         }
     }
 }
