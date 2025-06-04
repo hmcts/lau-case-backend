@@ -1,6 +1,6 @@
 buildscript {
   dependencies {
-    classpath "org.flywaydb:flyway-database-postgresql:11.9.0"
+    classpath "org.flywaydb:flyway-database-postgresql:11.8.2"
   }
 }
 
@@ -276,7 +276,7 @@ repositories {
 
 def versions = [
   commonsIo         : '2.19.0',
-  flywaydb          : '11.9.0',
+  flywaydb          : '11.8.2',
   cucumber          : '7.23.0',
   gradlePitest      : '1.15.0',
   junit             : '5.9.3',
@@ -336,7 +336,7 @@ dependencies {
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.3'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.3'
   implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.9.10'
-  implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.0.Final'
+  implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.2.Final'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 

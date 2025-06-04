@@ -3,19 +3,18 @@ package uk.gov.hmcts.reform.laubackend.cases.authorization;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD.PreserveStackTrace", "PMD.ExceptionAsFlowControl"})
+@SuppressWarnings({"PMD.PreserveStackTrace", "PMD.ExceptionAsFlowControl",
+    "PMD.DoNotUseThreads"})
 public class ServiceAuthorizationAuthenticator {
 
     private final AuthService authService;
@@ -37,7 +36,7 @@ public class ServiceAuthorizationAuthenticator {
         }
     }
 
-    @Async("TaskExecutor")
+    /*@Async("TaskExecutor")
     private void handlePostRequest(String serviceAuthHeader) {
         try {
             CompletableFuture<Void> future = asyncAuthService.authenticateService(serviceAuthHeader)
@@ -60,6 +59,27 @@ public class ServiceAuthorizationAuthenticator {
         } catch (CompletionException ex) {
             handleCompletionException(ex);
         }
+    }*/
+
+    private void handlePostRequest(String serviceAuthHeader) {
+        try {
+            String serviceName = asyncAuthService.authenticateService(serviceAuthHeader).get();
+
+            if (!authorisedServices.hasService(serviceName)) {
+                log.error("Service name '{}' is not authorized.", serviceName);
+                throw new InvalidServiceAuthorizationException("Unauthorized service");
+            }
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new InvalidServiceAuthorizationException("Thread interrupted" + e.getMessage());
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause(); // Extract the original cause
+            if (cause instanceof InvalidServiceAuthorizationException) {
+                throw (InvalidServiceAuthorizationException) cause; // Rethrow if it's the expected exception
+            }
+            throw new InvalidServiceAuthorizationException("Service authentication failed: " + cause.getMessage());
+        }
     }
 
     private void handleOtherRequest(String serviceAuthHeader) {
@@ -73,12 +93,12 @@ public class ServiceAuthorizationAuthenticator {
         }
     }
 
-    private void handleCompletionException(CompletionException ex) {
+    /*private void handleCompletionException(CompletionException ex) {
         if (ex.getCause() instanceof InvalidServiceAuthorizationException) {
             log.error("Invalid service authorization: {}", ex.getCause().getMessage(), ex);
             throw (InvalidServiceAuthorizationException) ex.getCause();
         }
         log.error("Unexpected error: {}", ex.getMessage(), ex);
         throw new InvalidServiceAuthorizationException(ex.getMessage());
-    }
+    }*/
 }
