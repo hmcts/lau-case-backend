@@ -41,8 +41,9 @@ public class ServiceAuthorizationAuthenticator {
             String serviceName = asyncAuthService.authenticateService(serviceAuthHeader).get();
 
             if (!authorisedServices.hasService(serviceName)) {
-                log.error("Service name '{}' is not authorized.", serviceName);
-                throw new InvalidServiceAuthorizationException("Unauthorized service");
+                log.info("Service {} has NOT been authorised!", serviceName);
+                throw new InvalidServiceAuthorizationException(
+                    "Unable to authenticate service name in Post request.");
             }
 
         } catch (InterruptedException e) {
@@ -61,9 +62,10 @@ public class ServiceAuthorizationAuthenticator {
         try {
             final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
             if (!authorisedServices.hasService(serviceName)) {
+                log.info("Service {} has NOT been authorised!", serviceName);
                 throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
             }
-        } catch (Exception exception) {
+        } catch (final Exception exception) {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
         }
     }

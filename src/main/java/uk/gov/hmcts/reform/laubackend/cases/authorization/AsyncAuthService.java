@@ -23,6 +23,6 @@ public class AsyncAuthService {
         if (authHeader != null) {
             return CompletableFuture.completedFuture(authTokenValidator.getServiceName(authHeader));
         }
-        throw new InvalidServiceAuthorizationException("Missing ServiceAuthorization header");
+        throw new InvalidServiceAuthorizationException("Missing ServiceAuthorization header in AsyncAuthService");
     }
 }
