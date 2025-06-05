@@ -36,31 +36,6 @@ public class ServiceAuthorizationAuthenticator {
         }
     }
 
-    /*@Async("TaskExecutor")
-    private void handlePostRequest(String serviceAuthHeader) {
-        try {
-            CompletableFuture<Void> future = asyncAuthService.authenticateService(serviceAuthHeader)
-                .thenAcceptAsync(serviceName -> {
-                    if (!authorisedServices.hasService(serviceName)) {
-                        log.error("Service name '{}' is not authorized.", serviceName);
-                        throw new InvalidServiceAuthorizationException(
-                            "Unable to authenticate service name asynchronously.");
-                    }
-                })
-                .handle((result, ex) -> {
-                    if (ex != null) {
-                        log.error("Error during service authentication: {}", ex.getMessage(), ex);
-                        throw new CompletionException(ex.getCause());
-                    }
-                    return result;
-                });
-
-            future.join();  // Wait for the asynchronous operation to complete.
-        } catch (CompletionException ex) {
-            handleCompletionException(ex);
-        }
-    }*/
-
     private void handlePostRequest(String serviceAuthHeader) {
         try {
             String serviceName = asyncAuthService.authenticateService(serviceAuthHeader).get();
@@ -92,13 +67,4 @@ public class ServiceAuthorizationAuthenticator {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
         }
     }
-
-    /*private void handleCompletionException(CompletionException ex) {
-        if (ex.getCause() instanceof InvalidServiceAuthorizationException) {
-            log.error("Invalid service authorization: {}", ex.getCause().getMessage(), ex);
-            throw (InvalidServiceAuthorizationException) ex.getCause();
-        }
-        log.error("Unexpected error: {}", ex.getMessage(), ex);
-        throw new InvalidServiceAuthorizationException(ex.getMessage());
-    }*/
 }
