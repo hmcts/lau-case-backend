@@ -261,7 +261,7 @@ dependencyManagement {
     }
   }
   imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2024.0.1'
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.0.0'
   }
 }
 
@@ -279,8 +279,8 @@ def versions = [
   flywaydb          : '11.9.0',
   cucumber          : '7.23.0',
   gradlePitest      : '1.15.0',
-  junit             : '5.9.3',
-  junitPlatform     : '1.9.3',
+  junit             : '5.12.2',
+  junitPlatform     : '1.12.2',
   log4j             : '2.24.3',
   lombok            : '1.18.38',
   restAssured       : '5.5.5',
