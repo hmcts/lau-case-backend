@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
-import java.util.concurrent.ExecutionException;
-
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static org.springdoc.core.utils.Constants.POST_METHOD;
 
@@ -38,34 +36,28 @@ public class ServiceAuthorizationAuthenticator {
     private void handlePostRequest(String serviceAuthHeader) {
         try {
             String serviceName = asyncAuthService.authenticateService(serviceAuthHeader).get();
-
-            if (!authorisedServices.hasService(serviceName)) {
-                log.info("Service {} has NOT been authorised!", serviceName);
-                throw new InvalidServiceAuthorizationException(
-                    "Unable to authenticate service name in Post request.");
-            }
-
+            validateServiceName(serviceName);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new InvalidServiceAuthorizationException("Thread interrupted" + e.getMessage());
-        } catch (ExecutionException e) {
-            Throwable cause = e.getCause(); // Extract the original cause
-            if (cause instanceof InvalidServiceAuthorizationException) {
-                throw (InvalidServiceAuthorizationException) cause; // Rethrow if it's the expected exception
-            }
-            throw new InvalidServiceAuthorizationException("Service authentication failed: " + cause.getMessage());
+        } catch (Exception e) {
+            throw new InvalidServiceAuthorizationException("Service authentication failed: " + e.getMessage());
         }
     }
 
     private void handleOtherRequest(String serviceAuthHeader) {
         try {
             final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
-            if (!authorisedServices.hasService(serviceName)) {
-                log.info("Service {} has NOT been authorised!", serviceName);
-                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
-            }
+            validateServiceName(serviceName);
         } catch (final Exception exception) {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
+        }
+    }
+
+    private void validateServiceName(String serviceName) {
+        if (!authorisedServices.hasService(serviceName)) {
+            log.info("Service {} has NOT been authorised!", serviceName);
+            throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
         }
     }
 }

@@ -105,7 +105,8 @@ class ServiceAuthorizationAuthenticatorTest {
 
         assertThat(thrown)
             .isInstanceOf(InvalidServiceAuthorizationException.class)
-            .hasMessage("Forbidden");
+            .hasMessage("Service authentication failed: uk.gov.hmcts.reform.laubackend.cases.exceptions."
+                            + "InvalidServiceAuthorizationException: Forbidden");
     }
 
 }
