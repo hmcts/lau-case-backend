@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizati
 import java.util.concurrent.ExecutionException;
 
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
+import static org.springdoc.core.utils.Constants.POST_METHOD;
 
 @Slf4j
 @Service
@@ -22,8 +23,6 @@ public class ServiceAuthorizationAuthenticator {
     private final AuthorisedServices authorisedServices;
 
     private final AsyncAuthService asyncAuthService;
-
-    public static final String POST_METHOD = "POST";
 
     public void authorizeServiceToken(HttpServletRequest httpServletRequest) {
         String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
