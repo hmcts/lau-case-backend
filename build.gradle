@@ -1,6 +1,6 @@
 buildscript {
   dependencies {
-    classpath "org.flywaydb:flyway-database-postgresql:11.9.0"
+    classpath "org.flywaydb:flyway-database-postgresql:11.9.1"
   }
 }
 
@@ -13,7 +13,7 @@ plugins {
   id 'com.github.ben-manes.versions' version '0.52.0'
   id 'com.gorylenko.gradle-git-properties' version '2.5.0'
   id 'io.spring.dependency-management' version '1.1.7'
-  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.30'
+  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.33'
   id 'org.flywaydb.flyway' version '11.1.1'
   id 'org.owasp.dependencycheck' version '12.1.1'
   id 'org.sonarqube' version '6.2.0.5505'
@@ -236,7 +236,7 @@ dependencyManagement {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
-    dependencySet(group: 'io.netty', version: '4.2.1.Final') {
+    dependencySet(group: 'io.netty', version: '4.2.2.Final') {
       entry 'netty-buffer'
       entry 'netty-codec'
       entry 'netty-codec-dns'
@@ -276,7 +276,7 @@ repositories {
 
 def versions = [
   commonsIo         : '2.19.0',
-  flywaydb          : '11.9.0',
+  flywaydb          : '11.9.1',
   cucumber          : '7.23.0',
   gradlePitest      : '1.15.0',
   junit             : '5.12.2',
@@ -335,7 +335,7 @@ dependencies {
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.3'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.3'
-  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.9.10'
+  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.9.11'
   implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.0.Final'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
