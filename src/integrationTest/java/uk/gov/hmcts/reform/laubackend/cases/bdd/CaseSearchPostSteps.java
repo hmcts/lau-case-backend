@@ -12,14 +12,9 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -48,6 +43,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
     private static final String THREAD_NAME = "threadName";
     private static final String RESPONSE = "response";
+    private static final int FAILURE_ID = 3;
 
     @Before
     public void setUp() {
@@ -226,7 +222,6 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
     @When("I request 10 requests to POST {string} endpoint with s2s with simulate failures")
     public void requestMultiplePostCaseSearchEndpointWithFailures(final String path) throws Exception {
-        RestHelper mockRestHelper = setupMockRestHelperWithFailures();
 
         List<CompletableFuture<Response>> futures = new ArrayList<>();
         final int numRequests = 10;
@@ -236,7 +231,12 @@ public class CaseSearchPostSteps extends AbstractSteps {
             futures.add(CompletableFuture.supplyAsync(() -> {
                 String threadName = Thread.currentThread().getName();
                 ScenarioContext.set(THREAD_NAME + idx, threadName);
-                return mockRestHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
+                if (idx == FAILURE_ID) {
+                    return restHelper.postObjectWithoutHeader(
+                        getCaseSearchPostRequestWithMissingUserId(), baseUrl() + path);
+                } else {
+                    return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
+                }
             }).exceptionally(ex -> {
                 ScenarioContext.set("error" + idx, ex.getMessage());
                 return null; // Return null for failed requests
@@ -256,30 +256,14 @@ public class CaseSearchPostSteps extends AbstractSteps {
         }
     }
 
-    private RestHelper setupMockRestHelperWithFailures() {
-        RestHelper mockRestHelper = mock(RestHelper.class);
-        Map<String, String> failureConditions = Map.of(
-            "3", "Simulated failure3",
-            "6", "Simulated failure6",
-            "9", "Simulated failure9"
-        );
-
-        failureConditions.forEach((id, message) ->
-               when(mockRestHelper.postObject(any(), contains(id))).thenThrow(new RuntimeException(message))
-        );
-
-        return mockRestHelper;
-    }
-
     @Then("caseSearch response body is returned for passed requests with some failures")
     public void caseSearchResponseBodyIsReturnedForAllTenRequestsWithFailures() {
         for (int i = 0; i < 10; i++) {
-            if (ScenarioContext.get("error" + i) != null) {
-                String errorMessage = ScenarioContext.get("error" + i);
-                assertThat(errorMessage).contains("Simulated failure");
-            } else {
-                Response response = ScenarioContext.get(RESPONSE + i);
-                if (response != null) {
+            Response response = ScenarioContext.get(RESPONSE + i);
+            if (response != null) {
+                if (i == FAILURE_ID) {
+                    assertThat(response.getStatusCode()).isEqualTo(FORBIDDEN.value());
+                } else {
                     assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
                 }
             }
