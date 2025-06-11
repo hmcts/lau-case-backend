@@ -167,25 +167,6 @@ public class CaseSearchPostSteps extends AbstractSteps {
     }
 
 
-    @When("I request POST {string} endpoint with s2s in asynchronous mode")
-    public void requestPostCaseSearchEndpointWithS2S(final String path) throws Exception {
-        CompletableFuture<Response> future = CompletableFuture.supplyAsync(() -> {
-            String threadName = Thread.currentThread().getName();
-            ScenarioContext.set(THREAD_NAME, threadName);
-
-            return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
-        });
-
-        Response response = future.get(); // Wait for the async call to complete
-
-        // Assert
-        String threadName = ScenarioContext.get(THREAD_NAME);
-        assertThat(threadName).isNotEqualTo("main"); // Verify it's not the main thread
-        assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
-
-        caseSearchPostResponseBody = response.getBody().asString();
-    }
-
     @When("I request 10 request to POST {string} endpoint with s2s in asynchronous mode")
     public void requestMultiplePostCaseSearchEndpointWithS2S(final String path) throws Exception {
         List<CompletableFuture<Response>> futures = new ArrayList<>();
