@@ -15,7 +15,7 @@ import static feign.form.ContentProcessor.CONTENT_TYPE_HEADER;
 import static java.util.List.of;
 import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTANCE;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
-import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.GOOD_S2S_TOKEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.GOOD_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.BAD_S2S_TOKEN;
 
 @Getter
@@ -41,7 +41,7 @@ public class AbstractSteps {
     public void setupAuthorisationStubWithRole(String role) {
         WireMockServer server = INSTANCE.getWireMockServer();
         server.stubFor(get(urlPathMatching("/details"))
-                           .withHeader("Authorization", containing(GOOD_S2S_TOKEN))
+                           .withHeader("Authorization", containing(GOOD_TOKEN))
                            .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)

@@ -4,7 +4,7 @@ public final class RestConstants {
     public static final String SERVICE_AUTHORISATION_HEADER = "ServiceAuthorization";
     public static final String AUTHORISATION_HEADER = "Authorization";
 
-    public static final String GOOD_S2S_TOKEN = "good_token";
+    public static final String GOOD_TOKEN = "good_token";
     public static final String BAD_S2S_TOKEN = "bad_token";
 
 
