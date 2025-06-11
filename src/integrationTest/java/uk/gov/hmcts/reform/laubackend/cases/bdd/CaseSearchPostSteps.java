@@ -213,7 +213,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
                 String threadName = Thread.currentThread().getName();
                 ScenarioContext.set(THREAD_NAME + idx, threadName);
                 if (idx == FAILURE_ID) {
-                    return restHelper.postObjectWithoutHeader(
+                    return restHelper.postObjectWithBadServiceHeader(
                         getCaseSearchPostRequestWithMissingUserId(), baseUrl() + path);
                 } else {
                     return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);

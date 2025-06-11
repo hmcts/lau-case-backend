@@ -4,20 +4,27 @@ import feign.FeignException;
 import feign.Response;
 import feign.RetryableException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import uk.gov.hmcts.reform.laubackend.cases.authorization.HttpPostRecordHolder;
 
 @Configuration
 @Slf4j
 public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
+
+    @Autowired
+    private HttpPostRecordHolder httpPostRecordHolder;
 
     @Override
     public Exception decode(String methodKey, Response response) {
         int status = response.status();
         FeignException exception = FeignException.errorStatus(methodKey, response);
         log.info("Feign response status: {}, message - {}", status, exception.getMessage());
-        // Make sure we retry for s2s validation only
-        if (response.status() >= 400 && "GET".equalsIgnoreCase(response.request().httpMethod().name())
-            && response.request().url().endsWith("/details")) {
+        // Make sure we retry for POST s2s validation only
+        if (response.status() >= 400
+            && "GET".equalsIgnoreCase(response.request().httpMethod().name())
+            && response.request().url().endsWith("/details")
+            && httpPostRecordHolder.isPost()) {
             return new RetryableException(
                 status,
                 exception.getMessage(),
