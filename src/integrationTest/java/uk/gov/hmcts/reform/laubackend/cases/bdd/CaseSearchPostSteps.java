@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
 import com.google.gson.Gson;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -8,6 +9,10 @@ import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.cases.helper.RestHelper;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -24,7 +29,10 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.g
     "PMD.UseConcurrentHashMap",
     "PMD.JUnit4TestShouldUseBeforeAnnotation",
     "PMD.TooManyMethods",
-    "PMD.LawOfDemeter"
+    "PMD.LawOfDemeter",
+    "PMD.DoNotUseThreads",
+    "PMD.SignatureDeclareThrowsException",
+    "PMD.AvoidThrowingRawExceptionTypes"
 })
 public class CaseSearchPostSteps extends AbstractSteps {
 
@@ -33,9 +41,19 @@ public class CaseSearchPostSteps extends AbstractSteps {
     private String caseSearchPostResponseBody;
     private int httpStatusResponseCode;
 
+    private static final String THREAD_NAME = "threadName";
+    private static final String RESPONSE = "response";
+    private static final int FAILURE_ID = 3;
+
     @Before
     public void setUp() {
         setupAuthorisationStub();
+    }
+
+
+    @After
+    public void clearScenarioContext() {
+        ScenarioContext.clear();
     }
 
     @When("I request POST {string} endpoint using s2s")
@@ -145,6 +163,91 @@ public class CaseSearchPostSteps extends AbstractSteps {
                     .isEqualTo(caseSearchPostResponse.getSearchLog().getCaseRefs().get(2));
             assertThat(caseSearchPostRequest.getSearchLog().getCaseRefs().get(3))
                     .isEqualTo(caseSearchPostResponse.getSearchLog().getCaseRefs().get(3));
+        }
+    }
+
+
+    @When("I request 10 request to POST {string} endpoint with s2s in asynchronous mode")
+    public void requestMultiplePostCaseSearchEndpointWithS2S(final String path) throws Exception {
+        List<CompletableFuture<Response>> futures = new ArrayList<>();
+        int numRequests = 10;
+
+        for (int i = 0; i < numRequests; i++) {
+            final int idx = i;
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                String threadName = Thread.currentThread().getName();
+                ScenarioContext.set(THREAD_NAME + idx, threadName);
+                return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
+            }));
+        }
+
+        // Wait for all futures to complete
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        for (int i = 0; i < numRequests; i++) {
+            Response response = futures.get(i).get();
+            ScenarioContext.set(RESPONSE + i, response);
+            String threadName = ScenarioContext.get(THREAD_NAME + i);
+            assertThat(threadName).isNotEqualTo("main");
+            assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+        }
+    }
+
+    @Then("caseSearch response body is returned for all ten requests")
+    public void caseSearchResponseBodyIsReturnedForAllTenRequests() {
+        for (int i = 0; i < 10; i++) {
+            Response response = ScenarioContext.get(RESPONSE + i);
+            assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+        }
+    }
+
+    @When("I request 10 requests to POST {string} endpoint with s2s with simulate failures")
+    public void requestMultiplePostCaseSearchEndpointWithFailures(final String path) throws Exception {
+
+        List<CompletableFuture<Response>> futures = new ArrayList<>();
+        final int numRequests = 10;
+
+        for (int i = 0; i < numRequests; i++) {
+            final int idx = i;
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                String threadName = Thread.currentThread().getName();
+                ScenarioContext.set(THREAD_NAME + idx, threadName);
+                if (idx == FAILURE_ID) {
+                    return restHelper.postObjectWithBadServiceHeader(
+                        getCaseSearchPostRequestWithMissingUserId(), baseUrl() + path);
+                } else {
+                    return restHelper.postObject(getCaseSearchPostRequest(), baseUrl() + path);
+                }
+            }).exceptionally(ex -> {
+                ScenarioContext.set("error" + idx, ex.getMessage());
+                return null; // Return null for failed requests
+            }));
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        for (int i = 0; i < numRequests; i++) {
+            CompletableFuture<Response> future = futures.get(i);
+            if (!future.isCompletedExceptionally()) {
+                Response response = future.get();
+                String threadName = ScenarioContext.get(THREAD_NAME + i);
+                assertThat(threadName).isNotEqualTo("main");
+                ScenarioContext.set(RESPONSE + i, response);
+            }
+        }
+    }
+
+    @Then("caseSearch response body is returned for passed requests with some failures")
+    public void caseSearchResponseBodyIsReturnedForAllTenRequestsWithFailures() {
+        for (int i = 0; i < 10; i++) {
+            Response response = ScenarioContext.get(RESPONSE + i);
+            if (response != null) {
+                if (i == FAILURE_ID) {
+                    assertThat(response.getStatusCode()).isEqualTo(FORBIDDEN.value());
+                } else {
+                    assertThat(response.getStatusCode()).isEqualTo(CREATED.value());
+                }
+            }
         }
     }
 }
