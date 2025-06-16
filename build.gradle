@@ -336,7 +336,7 @@ dependencies {
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.3'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.3'
   implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.9.11'
-  implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.0.Final'
+  implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.1.Final'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
