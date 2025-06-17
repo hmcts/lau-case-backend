@@ -284,7 +284,7 @@ def versions = [
   log4j             : '2.24.3',
   lombok            : '1.18.38',
   restAssured       : '5.5.5',
-  serenity          : '4.2.30',
+  serenity          : '4.2.34',
   sonarPitest       : '0.5',
   springCloud       : '4.3.0',
   testcontainers    : '1.21.1',
