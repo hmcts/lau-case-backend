@@ -76,3 +76,9 @@ variable "db_alert_email_address_key" {
   type        = string
   default     = ""
 }
+
+variable "delegated_subnet_id" {
+  description = "The subnet to delegate to the PostgreSQL server"
+  type        = string
+}
+
