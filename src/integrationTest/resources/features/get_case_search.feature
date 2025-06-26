@@ -28,11 +28,13 @@ Feature: The application's GET caseSearch endpoint
     Given LAU backend application is healthy
     When And I GET "/audit/caseSearch" without authorization header
     Then HTTP "401" Unauthorized response is returned
+    And authorization End Point is called only once
 
   Scenario: The backend is unable to process caseSearch GET requests due to missing search params
     Given LAU backend application is healthy
     When I request GET "/audit/caseSearch" endpoint without mandatory params
     Then HTTP "400" Bad Request response is returned
+    And authorization End Point is called only once
 
 
 

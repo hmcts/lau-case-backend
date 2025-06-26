@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.google.gson.Gson;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.CollectionUtils.isEmpty;
+import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTANCE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithInvalidUserId;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithMissingCaseRefs;
@@ -249,5 +251,30 @@ public class CaseSearchPostSteps extends AbstractSteps {
                 }
             }
         }
+    }
+
+    @When("I POST a request to {string} endpoint with s2s with simulate failure")
+    public void requestPostCaseSearchEndpointWithFailure(final String path) throws Exception {
+        INSTANCE.getWireMockServer().resetRequests();
+        CompletableFuture<Response> future = CompletableFuture.supplyAsync(() -> {
+            String threadName = Thread.currentThread().getName();
+            ScenarioContext.set(THREAD_NAME, threadName);
+            return restHelper.postObjectWithBadServiceHeader(
+                getCaseSearchPostRequestWithMissingUserId(), baseUrl() + path);
+        }).exceptionally(ex -> {
+            ScenarioContext.set("error", ex.getMessage());
+            return null; // Return null for failed requests
+        });
+
+        Response response = future.get();
+        ScenarioContext.set(RESPONSE, response);
+    }
+
+    @Then("it should try making retry call for authorisation details")
+    public void tryToRetryDetailsCall() {
+        Response response = ScenarioContext.get(RESPONSE);
+        assertThat(response.getStatusCode()).isEqualTo(FORBIDDEN.value());
+        INSTANCE.getWireMockServer().verify(3, WireMock.getRequestedFor(
+            WireMock.urlPathEqualTo("/details")));
     }
 }
