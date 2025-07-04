@@ -14,6 +14,7 @@ import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTANCE;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public class CommonSteps {
@@ -51,12 +52,14 @@ public class CommonSteps {
 
     @When("And I GET {string} without authorization header")
     public void searchWithoutAuthorizationHeader(final String path) {
+        INSTANCE.getWireMockServer().resetRequests();
         final Response response = restHelper.getResponseWithoutAuthorizationHeader(getUrl(path));
         httpStatusResponseCode = response.getStatusCode();
     }
 
     @When("I request GET {string} endpoint without mandatory params")
     public void requestWithoutMandatoryParams(final String path) {
+        INSTANCE.getWireMockServer().resetRequests();
         final Response response = restHelper.getResponse(getUrl(path), Map.of("nonExistingParam", "nonExistingValue"));
         httpStatusResponseCode = response.getStatusCode();
     }

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.google.gson.Gson;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -15,6 +16,7 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
+import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTANCE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchGetHelper.getCaseRefs;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchGetHelper.getCaseSearchPostRequest;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.END_TIME;
@@ -127,6 +129,12 @@ public class CaseSearchGetSteps extends AbstractSteps {
         final CaseSearchPostRequest caseSearchPostRequest = getCaseSearchPostRequest(null, getCaseRefs(caseRef), null);
 
         assertResponse(caseActionGetResponse, caseSearchPostRequest);
+    }
+
+    @And("authorization End Point is called only once")
+    public void assertErrorResponse() {
+        INSTANCE.getWireMockServer().verify(1, WireMock.getRequestedFor(
+            WireMock.urlPathEqualTo("/details")));
     }
 
     private void assertResponse(final CaseSearchGetResponse caseSearchGetResponse,
