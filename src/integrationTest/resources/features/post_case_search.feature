@@ -29,3 +29,8 @@ Feature: The application's POST caseSearch endpoint
     Given LAU backend application is healthy
     When I request POST "/audit/caseSearch" endpoint with missing s2s header
     Then http forbidden response is returned for POST caseSearch
+
+  Scenario: The backend is able to process caseSearch POST requests with failure
+    Given LAU backend application is healthy
+    When I POST a request to "/audit/caseSearch" endpoint with s2s with simulate failure
+    Then   it should try making retry call for authorisation details
