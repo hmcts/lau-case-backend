@@ -30,7 +30,19 @@ public class ServiceAuthorizationAuthenticator {
         } else {
             httpPostRecordHolder.setPost(false);
         }
-        final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
+        handleRequest(serviceAuthHeader);
+    }
+
+    private void handleRequest(String serviceAuthHeader) {
+        try {
+            final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
+            validateServiceName(serviceName);
+        } catch (final Exception exception) {
+            throw new InvalidServiceAuthorizationException(exception.getMessage());
+        }
+    }
+
+    private void validateServiceName(String serviceName) {
         if (!authorisedServices.hasService(serviceName)) {
             log.info("Service {} has NOT been authorised!", serviceName);
             throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
