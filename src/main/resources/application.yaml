@@ -86,7 +86,7 @@ idam:
 authorised.services: ${LAU_AUTHORISED_SERVICES:lau_frontend,ccd_data,ccd_case_disposer}
 authorised.roles: cft-audit-investigator,cft-service-logs
 db.allow.delete.record: ${DB_ALLOW_DELETE_RECORD:true}
-delayOnError: 30
+delayOnError: 10
 
 azure:
   application-insights:

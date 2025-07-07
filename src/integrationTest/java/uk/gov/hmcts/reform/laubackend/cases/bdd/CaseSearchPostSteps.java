@@ -158,8 +158,8 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
     @When("I POST a request to {string} endpoint with s2s with simulate failure")
     public void requestPostCaseSearchEndpointWithFailure(final String path) throws Exception {
-        Response response = restHelper.postObjectWithBadServiceHeader(
-            getCaseSearchPostRequestWithMissingUserId(), baseUrl() + path);
+        Response response = restHelper.postObjectWithUnavailableServiceHeader(
+            getCaseSearchPostRequest(), baseUrl() + path);
         httpStatusResponseCode = response.getStatusCode();
     }
 
