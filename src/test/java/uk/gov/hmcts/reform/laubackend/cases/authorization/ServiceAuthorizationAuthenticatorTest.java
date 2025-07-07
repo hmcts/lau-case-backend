@@ -8,8 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
-import java.util.concurrent.CompletableFuture;
-
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -22,9 +20,6 @@ class ServiceAuthorizationAuthenticatorTest {
 
     @Mock
     private AuthService authService;
-
-    @Mock
-    private AsyncAuthService asyncAuthService;
 
     @Mock
     private AuthorisedServices authorisedServices;
@@ -73,43 +68,17 @@ class ServiceAuthorizationAuthenticatorTest {
     }
 
     @Test
-    void shouldNotThrowExceptionForValidServiceNameOnPostAsync() {
+    void shouldNotThrowExceptionForValidServiceNameOnPost() {
         final String serviceName = "super_cool_service";
 
         HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
         when(httpServletRequest.getMethod()).thenReturn("POST");
 
-        // Mock asyncAuthService to return a completed future with the service name
-        CompletableFuture<String> future = CompletableFuture.completedFuture(serviceName);
-        when(asyncAuthService.authenticateService(HEADER)).thenReturn(future);
-
+        when(authService.authenticateService(HEADER)).thenReturn(serviceName);
         when(authorisedServices.hasService(serviceName)).thenReturn(true);
 
         // Should not throw any exception
         assertDoesNotThrow(() -> serviceAuthorizationAuthenticator.authorizeServiceToken(httpServletRequest));
     }
-
-    @Test
-    void shouldThrowExceptionOnPostAsync403() {
-        final HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
-        when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
-        when(httpServletRequest.getMethod()).thenReturn("POST");
-
-        // Simulate asyncAuthService throwing 403 (wrapped in InvalidServiceAuthorizationException)
-        CompletableFuture<String> failedFuture = CompletableFuture.failedFuture(
-            new InvalidServiceAuthorizationException("Forbidden")
-        );
-        when(asyncAuthService.authenticateService(HEADER)).thenReturn(failedFuture);
-
-        Throwable thrown = catchThrowable(() ->
-                    serviceAuthorizationAuthenticator.authorizeServiceToken(httpServletRequest)
-        );
-
-        assertThat(thrown)
-            .isInstanceOf(InvalidServiceAuthorizationException.class)
-            .hasMessage("Service authentication failed: uk.gov.hmcts.reform.laubackend.cases.exceptions."
-                            + "InvalidServiceAuthorizationException: Forbidden");
-    }
-
 }

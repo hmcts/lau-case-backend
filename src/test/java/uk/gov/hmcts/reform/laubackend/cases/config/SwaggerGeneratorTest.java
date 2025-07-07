@@ -10,7 +10,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
-import uk.gov.hmcts.reform.laubackend.cases.authorization.AsyncAuthService;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthService;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorisedServices;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeDeleteInterceptor;
@@ -38,9 +37,6 @@ class SwaggerGeneratorTest {
 
     @Autowired
     private WebApplicationContext webAppContext;
-
-    @MockitoBean
-    private AsyncAuthService asyncAuthService;
 
     @MockitoBean
     private AuthService authService;
