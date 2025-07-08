@@ -277,7 +277,7 @@ repositories {
 def versions = [
   commonsIo         : '2.19.0',
   flywaydb          : '11.10.1',
-  cucumber          : '7.23.0',
+  cucumber          : '7.24.0',
   gradlePitest      : '1.15.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
@@ -335,7 +335,7 @@ dependencies {
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.3'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.3'
-  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.10.1'
+  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.10.2'
   implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.1.Final'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
