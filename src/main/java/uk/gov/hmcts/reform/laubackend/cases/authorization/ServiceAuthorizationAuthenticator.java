@@ -12,7 +12,7 @@ import static org.springdoc.core.utils.Constants.POST_METHOD;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD.PreserveStackTrace"})
+@SuppressWarnings({"PMD.PreserveStackTrace","PMD.ExceptionAsFlowControl"})
 public class ServiceAuthorizationAuthenticator {
 
     private final AuthService authService;

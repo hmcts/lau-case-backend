@@ -37,5 +37,5 @@ Feature: The application's POST caseSearch endpoint
 
   Scenario: The backend is able to process caseSearch POST requests with failure but without retry
     Given LAU backend application is healthy
-    When I POST a request to "/audit/caseSearch" endpoint with s2s 401 failure
+    When I POST a request to "/audit/caseSearch" endpoint with s2s 500 failure
     Then   it should not try making retry call for authorisation details

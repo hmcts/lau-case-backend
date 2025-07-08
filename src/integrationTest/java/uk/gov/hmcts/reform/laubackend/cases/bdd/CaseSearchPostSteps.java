@@ -171,10 +171,10 @@ public class CaseSearchPostSteps extends AbstractSteps {
             WireMock.urlPathEqualTo("/details")));
     }
 
-    @When("I POST a request to {string} endpoint with s2s 401 failure")
-    public void requestPostCaseSearchEndpointWith401Failure(final String path) throws Exception {
+    @When("I POST a request to {string} endpoint with s2s 500 failure")
+    public void requestPostCaseSearchEndpointWith500Failure(final String path) throws Exception {
         INSTANCE.getWireMockServer().resetRequests();
-        Response response = restHelper.postObjectWithBadServiceHeader(
+        Response response = restHelper.postObjectWith500BadServiceHeader(
             getCaseSearchPostRequest(), baseUrl() + path);
         httpStatusResponseCode = response.getStatusCode();
     }

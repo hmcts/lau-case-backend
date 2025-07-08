@@ -12,6 +12,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.GOOD_TOK
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.BAD_S2S_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_UNAVAILABLE_S2S_TOKEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.INTERNAL_SERVER_S2S_TOKEN;
 
 @SuppressWarnings({"unchecked", "PMD.AvoidDuplicateLiterals"})
 public class RestHelper {
@@ -157,6 +158,19 @@ public class RestHelper {
             .body(object)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + SERVICE_UNAVAILABLE_S2S_TOKEN)
+            .when()
+            .post()
+            .andReturn();
+    }
+
+    public Response postObjectWith500BadServiceHeader(final Object object, final String path) {
+        return RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(path)
+            .body(object)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + INTERNAL_SERVER_S2S_TOKEN)
             .when()
             .post()
             .andReturn();
