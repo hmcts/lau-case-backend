@@ -22,30 +22,23 @@ public class ServiceAuthorizationAuthenticator {
     private final HttpPostRecordHolder httpPostRecordHolder;
 
     public void authorizeServiceToken(HttpServletRequest httpServletRequest) {
-        String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
-        String method = httpServletRequest.getMethod();
-
-        if (POST_METHOD.equalsIgnoreCase(method)) {
-            httpPostRecordHolder.setPost(true);
-        } else {
-            httpPostRecordHolder.setPost(false);
-        }
-        handleRequest(serviceAuthHeader);
-    }
-
-    private void handleRequest(String serviceAuthHeader) {
         try {
+            String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
+            String method = httpServletRequest.getMethod();
+
+            if (POST_METHOD.equalsIgnoreCase(method)) {
+                httpPostRecordHolder.setPost(true);
+            } else {
+                httpPostRecordHolder.setPost(false);
+            }
+
             final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
-            validateServiceName(serviceName);
+            if (!authorisedServices.hasService(serviceName)) {
+                log.info("Service {} has NOT been authorised!", serviceName);
+                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
+            }
         } catch (final Exception exception) {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
-        }
-    }
-
-    private void validateServiceName(String serviceName) {
-        if (!authorisedServices.hasService(serviceName)) {
-            log.info("Service {} has NOT been authorised!", serviceName);
-            throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
         }
     }
 }
