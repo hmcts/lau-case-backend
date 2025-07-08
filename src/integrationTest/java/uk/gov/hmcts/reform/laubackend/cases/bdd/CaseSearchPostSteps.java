@@ -156,7 +156,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
         }
     }
 
-    @When("I POST a request to {string} endpoint with s2s with simulate failure")
+    @When("I POST a request to {string} endpoint with s2s 503 failure")
     public void requestPostCaseSearchEndpointWithFailure(final String path) throws Exception {
         INSTANCE.getWireMockServer().resetRequests();
         Response response = restHelper.postObjectWithUnavailableServiceHeader(
@@ -168,6 +168,21 @@ public class CaseSearchPostSteps extends AbstractSteps {
     public void tryToRetryDetailsCall() {
         assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
         INSTANCE.getWireMockServer().verify(3, WireMock.getRequestedFor(
+            WireMock.urlPathEqualTo("/details")));
+    }
+
+    @When("I POST a request to {string} endpoint with s2s 401 failure")
+    public void requestPostCaseSearchEndpointWith401Failure(final String path) throws Exception {
+        INSTANCE.getWireMockServer().resetRequests();
+        Response response = restHelper.postObjectWithBadServiceHeader(
+            getCaseSearchPostRequest(), baseUrl() + path);
+        httpStatusResponseCode = response.getStatusCode();
+    }
+
+    @Then("it should not try making retry call for authorisation details")
+    public void notRetryDetailsCall() {
+        assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
+        INSTANCE.getWireMockServer().verify(1, WireMock.getRequestedFor(
             WireMock.urlPathEqualTo("/details")));
     }
 }
