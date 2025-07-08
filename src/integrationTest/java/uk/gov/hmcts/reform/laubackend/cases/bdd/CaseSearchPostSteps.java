@@ -158,6 +158,7 @@ public class CaseSearchPostSteps extends AbstractSteps {
 
     @When("I POST a request to {string} endpoint with s2s with simulate failure")
     public void requestPostCaseSearchEndpointWithFailure(final String path) throws Exception {
+        INSTANCE.getWireMockServer().resetRequests();
         Response response = restHelper.postObjectWithUnavailableServiceHeader(
             getCaseSearchPostRequest(), baseUrl() + path);
         httpStatusResponseCode = response.getStatusCode();
