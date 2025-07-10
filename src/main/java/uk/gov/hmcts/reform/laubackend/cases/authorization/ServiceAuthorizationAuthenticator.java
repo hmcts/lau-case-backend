@@ -12,56 +12,33 @@ import static org.springdoc.core.utils.Constants.POST_METHOD;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({"PMD.PreserveStackTrace", "PMD.ExceptionAsFlowControl",
-    "PMD.DoNotUseThreads"})
+@SuppressWarnings({"PMD.PreserveStackTrace","PMD.ExceptionAsFlowControl"})
 public class ServiceAuthorizationAuthenticator {
 
     private final AuthService authService;
 
     private final AuthorisedServices authorisedServices;
 
-    private final AsyncAuthService asyncAuthService;
-
     private final HttpPostRecordHolder httpPostRecordHolder;
 
     public void authorizeServiceToken(HttpServletRequest httpServletRequest) {
-        String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
-        String method = httpServletRequest.getMethod();
-
-        if (POST_METHOD.equalsIgnoreCase(method)) {
-            httpPostRecordHolder.setPost(true);
-            handlePostRequest(serviceAuthHeader);
-        } else {
-            httpPostRecordHolder.setPost(false);
-            handleOtherRequest(serviceAuthHeader);
-        }
-    }
-
-    private void handlePostRequest(String serviceAuthHeader) {
         try {
-            String serviceName = asyncAuthService.authenticateService(serviceAuthHeader).get();
-            validateServiceName(serviceName);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new InvalidServiceAuthorizationException("Thread interrupted" + e.getMessage());
-        } catch (Exception e) {
-            throw new InvalidServiceAuthorizationException("Service authentication failed: " + e.getMessage());
-        }
-    }
+            String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
+            String method = httpServletRequest.getMethod();
 
-    private void handleOtherRequest(String serviceAuthHeader) {
-        try {
+            if (POST_METHOD.equalsIgnoreCase(method)) {
+                httpPostRecordHolder.setPost(true);
+            } else {
+                httpPostRecordHolder.setPost(false);
+            }
+
             final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
-            validateServiceName(serviceName);
+            if (!authorisedServices.hasService(serviceName)) {
+                log.info("Service {} has NOT been authorised!", serviceName);
+                throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
+            }
         } catch (final Exception exception) {
             throw new InvalidServiceAuthorizationException(exception.getMessage());
-        }
-    }
-
-    private void validateServiceName(String serviceName) {
-        if (!authorisedServices.hasService(serviceName)) {
-            log.info("Service {} has NOT been authorised!", serviceName);
-            throw new InvalidServiceAuthorizationException("Unable to authenticate service name.");
         }
     }
 }
