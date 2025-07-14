@@ -52,7 +52,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVeri
 @Tag(name = "Case search database operations.", description = "This is the Log and Audit "
         + "Back-End API that will audit case searches. "
         + "The API will be invoked by both the CCD (POST) and the LAU front-end service (GET).")
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.UnnecessaryAnnotationValueElement", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.UnnecessaryAnnotationValueElement"})
 public class CaseSearchController {
 
     private static final String EXCEPTION_TRACKING_NAME = "exception";

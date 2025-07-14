@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_ACTION_ENDPOINT;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 
-@SuppressWarnings("PMD.TooManyMethods")
 public class CaseActionGetApiSteps extends BaseSteps {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CaseActionGetApiSteps.class);

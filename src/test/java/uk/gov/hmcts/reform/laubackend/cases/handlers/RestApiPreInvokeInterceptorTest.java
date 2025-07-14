@@ -36,7 +36,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings({"PMD.LawOfDemeter"})
 class RestApiPreInvokeInterceptorTest {
 
     @Mock

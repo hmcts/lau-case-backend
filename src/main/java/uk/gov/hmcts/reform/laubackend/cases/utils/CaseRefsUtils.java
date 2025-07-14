@@ -7,7 +7,6 @@ import java.util.List;
 import static java.util.regex.Pattern.compile;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE_REF_REGEX;
 
-@SuppressWarnings({"PMD.ConfusingTernary"})
 @Slf4j
 public final class CaseRefsUtils {
 

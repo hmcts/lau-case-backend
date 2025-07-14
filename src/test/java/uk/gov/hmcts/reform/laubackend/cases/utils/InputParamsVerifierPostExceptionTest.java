@@ -19,7 +19,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageCon
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestActionParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class InputParamsVerifierPostExceptionTest {
 

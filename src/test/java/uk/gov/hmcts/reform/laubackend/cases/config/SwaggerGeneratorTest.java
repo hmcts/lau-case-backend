@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * Each travis run on master should automatically save and upload (if updated) documentation.
  */
 
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.UnitTestShouldIncludeAssert", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.UnitTestShouldIncludeAssert", "PMD.LawOfDemeter"})
 @SpringBootTest
 @TestPropertySource(properties = {"idam.api.url = localhost:5000", "idam.s2s-auth.url = localhost:4502"})
 class SwaggerGeneratorTest {
@@ -60,7 +60,6 @@ class SwaggerGeneratorTest {
 
     @DisplayName("Generate swagger documentation")
     @Test
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void generateDocs() throws Exception {
         byte[] specs = mvc.perform(get("/v2/api-docs"))
             .andExpect(status().isOk())

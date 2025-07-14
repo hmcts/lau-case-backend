@@ -21,7 +21,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_SERVICE_LOGS_ROLE;
 
 @Slf4j
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.ExceptionAsFlowControl"})
+@SuppressWarnings({"PMD.ExceptionAsFlowControl"})
 public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
 
     @Autowired

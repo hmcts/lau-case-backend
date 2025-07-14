@@ -29,7 +29,7 @@ import static org.springframework.data.domain.PageRequest.of;
     "spring.liquibase.enabled=false",
     "spring.flyway.enabled=true"
 })
-@SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals"})
 class CaseSearchAuditRepositoryTest {
 
     @Autowired
@@ -95,7 +95,6 @@ class CaseSearchAuditRepositoryTest {
     }
 
     @Test
-    @SuppressWarnings("PMD.JUnitAssertionsShouldIncludeMessage")
     void shouldGetAllRecordsDescOrder() {
         final Page<CaseSearchAudit> caseSearchAuditList = caseSearchAuditFindCaseRepository.findCaseSearch(
                 null,
@@ -158,7 +157,6 @@ class CaseSearchAuditRepositoryTest {
         assertThat(caseSearch1.getContent()).isEmpty();
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private CaseSearchAudit getCaseSearchAuditEntity(final List<Long> caseRefs,
                                                      final String userId,
                                                      final Timestamp timestamp) {

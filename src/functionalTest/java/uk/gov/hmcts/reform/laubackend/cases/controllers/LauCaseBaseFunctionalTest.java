@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.laubackend.cases.client.LauCaseBackEndServiceClient;
 @ComponentScan("uk.gov.hmcts.reform.laubackend.cases")
 @TestPropertySource("classpath:application-functional.yaml")
 @Slf4j
-@SuppressWarnings({"PMD.AbstractClassWithoutAnyMethod", "PMD.AbstractClassWithoutAbstractMethod"})
+@SuppressWarnings({"PMD.AbstractClassWithoutAbstractMethod"})
 public abstract class LauCaseBaseFunctionalTest {
 
     @Value("${targetInstance}")

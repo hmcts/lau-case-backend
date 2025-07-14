@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_ENDPOINT;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidLiteralsInIfCondition"})
+@SuppressWarnings({"PMD.AvoidLiteralsInIfCondition"})
 public class CaseSearchGetApiSteps extends BaseSteps {
 
     @Step("When valid params are supplied for Get CaseSearch API")
@@ -140,5 +140,3 @@ public class CaseSearchGetApiSteps extends BaseSteps {
         return authToken + "abc";
     }
 }
-
-

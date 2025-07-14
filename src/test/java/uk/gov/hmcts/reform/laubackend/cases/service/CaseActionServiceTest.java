@@ -34,7 +34,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction.CREATE;
 
 
 @ExtendWith(MockitoExtension.class)
-@SuppressWarnings({"PMD.UnusedPrivateField", "unchecked", "PMD.LawOfDemeter"})
+@SuppressWarnings({"unchecked", "PMD.LawOfDemeter"})
 class CaseActionServiceTest {
 
     @Mock
