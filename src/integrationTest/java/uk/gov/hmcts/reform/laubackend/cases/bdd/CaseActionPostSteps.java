@@ -19,11 +19,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.g
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithMissingMandatoryParameter;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseActionPostHelper.getCaseActionPostRequestWithValidOrInvalidCaseRefParameter;
 
-@SuppressWarnings({
-    "PMD.UseConcurrentHashMap",
-    "PMD.JUnit4TestShouldUseBeforeAnnotation",
-    "PMD.TooManyMethods",
-    "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 public class CaseActionPostSteps extends AbstractSteps {
 
     private final Gson jsonReader = new Gson();

@@ -23,12 +23,9 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.g
 import static uk.gov.hmcts.reform.laubackend.cases.helper.CaseSearchPostHelper.getCaseSearchPostRequestWithValidOrInvalidCaseRefs;
 
 @SuppressWarnings({
-    "PMD.UseConcurrentHashMap",
-    "PMD.JUnit4TestShouldUseBeforeAnnotation",
     "PMD.TooManyMethods",
     "PMD.LawOfDemeter",
-    "PMD.SignatureDeclareThrowsException",
-    "PMD.AvoidThrowingRawExceptionTypes"
+    "PMD.SignatureDeclareThrowsException"
 })
 public class CaseSearchPostSteps extends AbstractSteps {
 
@@ -36,10 +33,6 @@ public class CaseSearchPostSteps extends AbstractSteps {
     private final RestHelper restHelper = new RestHelper();
     private String caseSearchPostResponseBody;
     private int httpStatusResponseCode;
-
-    private static final String THREAD_NAME = "threadName";
-    private static final String RESPONSE = "response";
-    private static final int FAILURE_ID = 3;
 
     @Before
     public void setUp() {

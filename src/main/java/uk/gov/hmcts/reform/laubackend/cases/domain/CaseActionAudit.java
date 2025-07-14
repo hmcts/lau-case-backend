@@ -18,7 +18,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Getter
 @Setter
-@SuppressWarnings({"PMD.TooManyFields"})
 public class CaseActionAudit implements Serializable {
 
     public static final long serialVersionUID = 5428747L;

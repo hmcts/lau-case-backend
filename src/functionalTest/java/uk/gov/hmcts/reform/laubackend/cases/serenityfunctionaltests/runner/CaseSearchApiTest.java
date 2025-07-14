@@ -26,7 +26,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helpe
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_DELETE_ENDPOINT;
 
 @RunWith(SerenityRunner.class)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class CaseSearchApiTest {
     @Steps
     CaseSearchPostApiSteps caseSearchPostApiSteps;

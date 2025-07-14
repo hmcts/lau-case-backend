@@ -21,7 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @NoArgsConstructor
-@SuppressWarnings({"PMD.TooManyFields","PMD.UnnecessaryAnnotationValueElement","PMD.UnusedAssignment"})
+@SuppressWarnings({"PMD.UnusedAssignment"})
 public class CaseSearchAudit implements Serializable {
 
     public static final long serialVersionUID = 5428747L;

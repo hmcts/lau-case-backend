@@ -30,7 +30,6 @@ import static org.springframework.util.CollectionUtils.isEmpty;
     "spring.liquibase.enabled=false",
     "spring.flyway.enabled=true"
 })
-@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 class CaseSearchAuditRepositoryCaseRefTest {
 
     private CaseSearchAuditFindCaseRepository caseSearchAuditFindCaseRepository;

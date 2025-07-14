@@ -25,7 +25,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TI
 
 @SuppressWarnings({
     "PMD.TooManyMethods",
-    "PMD.JUnit4TestShouldUseBeforeAnnotation",
     "PMD.UseObjectForClearerAPI",
     "PMD.LawOfDemeter"})
 public class CaseActionGetSteps extends AbstractSteps {
