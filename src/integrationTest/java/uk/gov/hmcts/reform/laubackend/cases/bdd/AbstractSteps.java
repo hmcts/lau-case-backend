@@ -17,6 +17,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.bdd.WiremokInstantiator.INSTA
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_AUDIT_INVESTIGATOR_ROLE;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.GOOD_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.BAD_S2S_TOKEN;
+import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.INTERNAL_SERVER_S2S_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_UNAVAILABLE_S2S_TOKEN;
 
 @Getter
@@ -57,6 +58,11 @@ public class AbstractSteps {
                            .willReturn(aResponse()
                                            .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                                            .withStatus(503)));
+        server.stubFor(get(urlPathMatching("/details"))
+                           .withHeader("Authorization", containing(INTERNAL_SERVER_S2S_TOKEN))
+                           .willReturn(aResponse()
+                                           .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
+                                           .withStatus(500)));
         server.stubFor(get(urlPathMatching("/o/userinfo"))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)

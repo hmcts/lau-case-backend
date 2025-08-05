@@ -26,6 +26,7 @@ public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
             && Request.HttpMethod.GET.equals(response.request().httpMethod())
             && response.request().url().endsWith("/details")
             && httpPostRecordHolder.isPost()) {
+            log.info("Going to throw RetryableException: {}", response.status());
             return new RetryableException(
                 response.status(),
                 exception.getMessage(),
