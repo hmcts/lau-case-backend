@@ -25,6 +25,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.SERVICE_
 public class AbstractSteps {
 
     private static final String JSON_RESPONSE = "application/json;charset=UTF-8";
+    private static final String AUTHORISATION_HEADER = "Authorization";
+    private static final String DETAILS_URL = "/details";
     protected final RestHelper restHelper = new RestHelper();
     protected final Gson jsonReader = new Gson();
 
@@ -42,24 +44,24 @@ public class AbstractSteps {
 
     public void setupAuthorisationStubWithRole(String role) {
         WireMockServer server = INSTANCE.getWireMockServer();
-        server.stubFor(get(urlPathMatching("/details"))
-                           .withHeader("Authorization", containing(GOOD_TOKEN))
+        server.stubFor(get(urlPathMatching(DETAILS_URL))
+                           .withHeader(AUTHORISATION_HEADER, containing(GOOD_TOKEN))
                            .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody("lau_frontend")));
-        server.stubFor(get(urlPathMatching("/details"))
-                           .withHeader("Authorization", containing(BAD_S2S_TOKEN))
+        server.stubFor(get(urlPathMatching(DETAILS_URL))
+                           .withHeader(AUTHORISATION_HEADER, containing(BAD_S2S_TOKEN))
                            .willReturn(aResponse()
                                            .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                                            .withStatus(401)));
-        server.stubFor(get(urlPathMatching("/details"))
-                           .withHeader("Authorization", containing(SERVICE_UNAVAILABLE_S2S_TOKEN))
+        server.stubFor(get(urlPathMatching(DETAILS_URL))
+                           .withHeader(AUTHORISATION_HEADER, containing(SERVICE_UNAVAILABLE_S2S_TOKEN))
                            .willReturn(aResponse()
                                            .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                                            .withStatus(503)));
-        server.stubFor(get(urlPathMatching("/details"))
-                           .withHeader("Authorization", containing(INTERNAL_SERVER_S2S_TOKEN))
+        server.stubFor(get(urlPathMatching(DETAILS_URL))
+                           .withHeader(AUTHORISATION_HEADER, containing(INTERNAL_SERVER_S2S_TOKEN))
                            .willReturn(aResponse()
                                            .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                                            .withStatus(500)));
