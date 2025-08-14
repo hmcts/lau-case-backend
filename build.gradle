@@ -236,7 +236,7 @@ dependencyManagement {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
-    dependencySet(group: 'io.netty', version: '4.2.3.Final') {
+    dependencySet(group: 'io.netty', version: '4.2.4.Final') {
       entry 'netty-buffer'
       entry 'netty-codec'
       entry 'netty-codec-dns'
