@@ -296,6 +296,9 @@ configurations.all {
       if (details.requested.group in ['org.apache.logging.log4j']) {
         details.useVersion versions.log4j
       }
+      if (details.requested.name == 'commons-lang3') {
+        details.useVersion '3.18.0'
+      }
     }
   }
 }
@@ -307,6 +310,7 @@ dependencies {
     }
   }
 
+  implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.6.0'
   implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
