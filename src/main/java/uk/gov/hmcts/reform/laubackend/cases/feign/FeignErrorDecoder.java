@@ -21,7 +21,7 @@ public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
         HttpStatus respStatus = HttpStatus.valueOf(response.status());
         FeignException exception = FeignException.errorStatus(methodKey, response);
-        log.info("Feign response status: {}, message - {}", response.status(), exception.getMessage());
+        log.info("Case Backend : Feign response status: {}, message - {}", response.status(), exception.getMessage());
         if (respStatus.is5xxServerError()
             && Request.HttpMethod.GET.equals(response.request().httpMethod())
             && response.request().url().endsWith("/details")
