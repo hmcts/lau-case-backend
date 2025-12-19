@@ -5,8 +5,10 @@ import feign.Request;
 import feign.Request.HttpMethod;
 import feign.Response;
 import feign.RetryableException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,8 +19,6 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-
-@SuppressWarnings({"PMD.CloseResource","PMD.TooManyMethods"})
 
 @ExtendWith(MockitoExtension.class)
 class FeignErrorDecoderTest {
@@ -32,7 +32,6 @@ class FeignErrorDecoderTest {
 
     @InjectMocks
     private FeignErrorDecoder feignErrorDecoder;
-
 
     private Response buildResponse(int status, String method, String url) {
         Request request = Request.create(
@@ -49,99 +48,40 @@ class FeignErrorDecoderTest {
             .build();
     }
 
-    @Test
-    void shouldReturnFeignExceptionForGetRequestWithDetailsUrlAndStatus401() {
-        Response response = buildResponse(401, GET_METHOD, DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
+    @ParameterizedTest
+    @CsvSource({
+        "200,GET,http://localhost/service/details",
+        "308,GET,http://localhost/service/details",
+        "401,GET,http://localhost/service/details",
+        "401,GET,http://localhost/api?endpoint=details&user=123",
+        "401,POST,http://localhost/service/details",
+        "403,GET,http://localhost/service/validate",
+        "403,GET,http://localhost/api/v1/details/user",
+        "403,PUT,http://localhost/service/details",
+        "500,GET,http://localhost/service/details",
+        "500,GET,http://localhost/service/validate",
+        "500,GET,http://localhost/api?endpoint=details&user=123",
+        "502,PUT,http://localhost/api?endpoint=details&user=123",
+        "502,PUT,http://localhost/service/details",
+        "504,POST,http://localhost/service/details"
+    })
+    void shouldReturnNotRetryableException(int httpStatus, String httpMethod, String url) {
+        try (Response response = buildResponse(httpStatus, httpMethod, url)) {
+            Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
+            assertThat(ex)
+                .isInstanceOf(FeignException.class)
+                .isNotInstanceOf(RetryableException.class);
+        }
     }
 
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsUrlAndStatus500() {
-        Response response = buildResponse(500, GET_METHOD, DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
+    @ParameterizedTest
+    @ValueSource(ints = {500, 502, 503, 504})
+    void shouldReturnRetryableException(int httpStatus) {
+        try (Response response = buildResponse(httpStatus, GET_METHOD, DETAILS_URL)) {
+            when(httpPostRecordHolder.isPost()).thenReturn(true);
+            Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
+            assertThat(ex).isInstanceOf(RetryableException.class);
+        }
     }
 
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsUrlAndStatus502() {
-        Response response = buildResponse(502, GET_METHOD, DETAILS_URL);
-        when(httpPostRecordHolder.isPost()).thenReturn(true);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsUrlAndStatus503() {
-        Response response = buildResponse(503, GET_METHOD, DETAILS_URL);
-        when(httpPostRecordHolder.isPost()).thenReturn(true);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsUrlAndStatus504() {
-        Response response = buildResponse(504, GET_METHOD, DETAILS_URL);
-        when(httpPostRecordHolder.isPost()).thenReturn(true);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnFeignExceptionForGetRequestWithoutDetailsUrl() {
-        Response response = buildResponse(403, GET_METHOD, "http://localhost/service/validate");
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnFeignExceptionForPostRequestEvenWithDetailsUrl() {
-        Response response = buildResponse(401, "POST", DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnFeignExceptionForPutRequestWithDetailsUrl() {
-        Response response = buildResponse(403, "PUT", DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnFeignExceptionForGetRequestWithDetailsUrlAndStatus200() {
-        Response response = buildResponse(200, GET_METHOD, DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnFeignExceptionForGetRequestWithDetailsUrlAndStatus308() {
-        Response response = buildResponse(308, GET_METHOD, DETAILS_URL);
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsInPath() {
-        Response response = buildResponse(403, GET_METHOD, "http://localhost/api/v1/details/user");
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
-
-    @Test
-    void shouldReturnRetryableExceptionForGetRequestWithDetailsAsQueryParam() {
-        Response response = buildResponse(401, GET_METHOD, "http://localhost/api?endpoint=details&user=123");
-        Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
-        assertThat(ex).isInstanceOf(FeignException.class)
-            .isNotInstanceOf(RetryableException.class);
-    }
 }
