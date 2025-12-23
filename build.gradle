@@ -232,7 +232,7 @@ dependencyCheck {
 dependencyManagement {
   dependencies {
     dependency group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.83'
-    dependencySet(group: 'org.springframework.cloud', version: '4.3.0') {
+    dependencySet(group: 'org.springframework.cloud', version: '5.0.0') {
       entry 'spring-cloud-starter-openfeign'
       entry 'spring-cloud-openfeign-core'
     }
@@ -267,7 +267,7 @@ def versions = [
   restAssured       : '5.5.6',
   serenity          : '4.3.4',
   sonarPitest       : '0.5',
-  springCloud       : '4.3.0',
+  springCloud       : '5.0.0',
   testcontainers    : '2.0.3',
 ]
 
