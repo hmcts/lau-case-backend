@@ -330,6 +330,7 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   testImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
+  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
   }
