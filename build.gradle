@@ -120,6 +120,7 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
     mustRunAfter test
 }
 check.dependsOn integration
@@ -229,8 +230,26 @@ dependencyCheck {
   }
 }
 
+def versions = [
+  commonsIo         : '2.21.0',
+  flywaydb          : '11.20.2',
+  cucumber          : '7.33.0',
+  gradlePitest      : '1.15.0',
+  junit             : '5.14.1',
+  junitPlatform     : '1.14.1',
+  log4j             : '2.25.3',
+  lombok            : '1.18.42',
+  restAssured       : '5.5.6',
+  serenity          : '4.3.4',
+  sonarPitest       : '0.5',
+  springCloud       : '4.3.1',
+  testcontainers    : '2.0.3',
+]
+
 dependencyManagement {
   dependencies {
+    dependency group: 'org.junit', name: 'junit-bom', version: versions.junit
+    dependency group: 'org.junit.platform', name: 'junit-platform-bom', version: versions.junitPlatform
     dependency group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.83'
     dependencySet(group: 'org.springframework.cloud', version: '4.3.1') {
       entry 'spring-cloud-starter-openfeign'
@@ -254,23 +273,6 @@ repositories {
   }
 }
 
-
-def versions = [
-  commonsIo         : '2.21.0',
-  flywaydb          : '11.20.2',
-  cucumber          : '7.33.0',
-  gradlePitest      : '1.15.0',
-  junit             : '5.12.2',
-  junitPlatform     : '1.12.2',
-  log4j             : '2.25.3',
-  lombok            : '1.18.42',
-  restAssured       : '5.5.6',
-  serenity          : '4.3.4',
-  sonarPitest       : '0.5',
-  springCloud       : '4.3.1',
-  testcontainers    : '2.0.3',
-]
-
 configurations.all {
   resolutionStrategy {
     eachDependency { DependencyResolveDetails details ->
@@ -279,6 +281,12 @@ configurations.all {
       }
       if (details.requested.name == 'commons-lang3') {
         details.useVersion '3.18.0'
+      }
+      if (details.requested.group == 'org.junit.platform') {
+        details.useVersion versions.junitPlatform
+      }
+      if (details.requested.group == 'org.junit.jupiter') {
+        details.useVersion versions.junit
       }
     }
   }
@@ -330,19 +338,20 @@ dependencies {
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   testImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
-  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
   testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
   }
   testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
   testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
   testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '2.3.0'
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner'
+
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-junit-platform-engine', version: versions.cucumber
+  integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: versions.junitPlatform
 
   integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
   integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
