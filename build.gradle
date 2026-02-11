@@ -319,7 +319,7 @@ dependencies {
   implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.7'
   implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.7'
-  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.15.1'
+  implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.15.2'
   implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.0.Final'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
