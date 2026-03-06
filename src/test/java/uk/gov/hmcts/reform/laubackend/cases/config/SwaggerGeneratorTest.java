@@ -12,7 +12,6 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.idam.client.IdamApi;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthService;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorisedServices;
-import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeDeleteInterceptor;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeInterceptor;
 
 import java.io.OutputStream;
@@ -46,9 +45,6 @@ class SwaggerGeneratorTest {
 
     @MockitoBean
     private RestApiPreInvokeInterceptor restApiPreInvokeInterceptor;
-
-    @MockitoBean
-    private RestApiPreInvokeDeleteInterceptor restApiPreInvokeDeleteInterceptor;
 
     @MockitoBean
     private IdamApi idamApi;
