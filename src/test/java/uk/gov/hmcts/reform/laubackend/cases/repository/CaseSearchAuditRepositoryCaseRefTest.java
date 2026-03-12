@@ -41,7 +41,7 @@ class CaseSearchAuditRepositoryCaseRefTest {
     private EntityManager entityManager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         caseSearchAuditFindCaseRepository = new CaseSearchAuditFindCaseRepository(entityManager);
     }
 

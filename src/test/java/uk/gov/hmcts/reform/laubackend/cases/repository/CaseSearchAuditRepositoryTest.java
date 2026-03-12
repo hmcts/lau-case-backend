@@ -41,7 +41,7 @@ class CaseSearchAuditRepositoryTest {
     private EntityManager entityManager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         caseSearchAuditFindCaseRepository = new CaseSearchAuditFindCaseRepository(entityManager);
 
         //Insert 20 records

@@ -35,6 +35,7 @@ public class CaseSearchAuditFindCaseRepository {
         this.entityManager = entityManager;
     }
 
+    @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
     @Transactional(readOnly = true)
     public Page<CaseSearchAudit> findCaseSearch(final String userId,
                                                 final String caseRef,

@@ -40,7 +40,7 @@ class AccessRequestRepositoryTest {
     private EntityManager entityManager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         final AccessRequestInsertRepository accessRequestInsertRepository =
             new AccessRequestInsertRepository(entityManager);
         // Insert 20 records
