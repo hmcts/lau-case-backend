@@ -30,9 +30,7 @@ class ServiceAuthorizationAuthenticatorTest {
     @InjectMocks
     private ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
 
-    public static final String HEADER = "Super cool header";
-
-
+    private static final String HEADER = "Super cool header";
 
     @Test
     void shouldThrowExceptionForInvalidServiceName() {

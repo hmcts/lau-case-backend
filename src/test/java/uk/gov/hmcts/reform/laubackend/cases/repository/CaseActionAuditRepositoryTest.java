@@ -43,7 +43,7 @@ class CaseActionAuditRepositoryTest {
     private QueryBuilder queryBuilder;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         //Insert 20 records
         for (int i = 1; i < 21; i++) {
             caseActionAuditRepository
