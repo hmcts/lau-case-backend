@@ -3,7 +3,7 @@ version: '3'
 
 services:
   sidam-api:
-    image: "hmctspublic.azurecr.io/idam/api:stable"
+    image: "hmctsprod.azurecr.io/idam/api:stable"
     environment:
       JAVA_OPTS: -Xms128m -Xmx512m -Dlogging.level.uk.gov.hmcts=INFO
       TESTING_SUPPORT_ENABLED: "true"
@@ -40,7 +40,7 @@ services:
       - shared-db
 
   service-auth-provider-api:
-    image: "hmctspublic.azurecr.io/rpe/service-auth-provider:latest"
+    image: "hmctsprod.azurecr.io/rpe/service-auth-provider:latest"
     healthcheck:
       interval: 10s
       timeout: 10s
@@ -68,7 +68,7 @@ services:
       - 4502:8080
 
   fr-am:
-    image: "hmctsprivate.azurecr.io/idam/idam-fr-am:latest"
+    image: "hmctsprod.azurecr.io/idam/idam-fr-am:latest"
     environment:
       JAVA_OPTS: -Xms128m -Xmx512m
     ports:
@@ -78,7 +78,7 @@ services:
       - shared-db
 
   fr-idm:
-    image: "hmctsprivate.azurecr.io/idam/idam-fr-idm:latest"
+    image: "hmctsprod.azurecr.io/idam/idam-fr-idm:latest"
     environment:
       JAVA_TOOL_OPTIONS: -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=vm-ubuntu16 -Dcom.sun.management.jmxremote.rmi.port=9010
       JAVA_OPTS: -Xms128m -Xmx512m
@@ -90,7 +90,6 @@ services:
       - shared-db
 
   shared-db:
-    image: "hmctsprivate.azurecr.io/idam/shared-db:latest"
+    image: "hmctsprod.azurecr.io/idam/shared-db:latest"
     ports:
       - 5051:5432
-
