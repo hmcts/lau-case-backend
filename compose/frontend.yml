@@ -3,7 +3,7 @@ version: '3'
 
 services:
   idam-web-admin:
-    image: "hmctspublic.azurecr.io/idam/web-admin:stable"
+    image: "hmctsprod.azurecr.io/idam/web-admin:stable"
     environment:
       JAVA_OPTS: -Xms128m -Xmx512m
       STRATEGIC_SERVICE_URL: http://sidam-api:5000
@@ -15,7 +15,7 @@ services:
       - sidam-api
 
   idam-web-public:
-    image: "hmctspublic.azurecr.io/idam/web-public:stable"
+    image: "hmctsprod.azurecr.io/idam/web-public:stable"
     environment:
      STRATEGIC_SERVICE_URL: http://sidam-api:5000
      IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS: "false"
@@ -29,4 +29,3 @@ services:
       - sidam-api
     depends_on:
       - sidam-api
-
