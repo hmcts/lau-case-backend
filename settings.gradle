@@ -1,8 +1,10 @@
+def azureRepoUrl = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+
 dependencyResolutionManagement {
   repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
   repositories {
     maven {
-      url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+      url = azureRepoUrl
     }
 
     mavenCentral()
@@ -10,13 +12,12 @@ dependencyResolutionManagement {
     exclusiveContent {
       forRepository {
         maven {
-          url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+          url = azureRepoUrl
         }
       }
 
       filter {
-        includeGroupByRegex "uk\\.gov\\.hmcts(\\..*)?"
-        includeGroup "com.github.hmcts"
+        includeGroupByRegex("com\\.github\\.hmcts(\\..*)?")
       }
     }
   }
