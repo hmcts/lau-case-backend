@@ -1,0 +1,23 @@
+dependencyResolutionManagement {
+  repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+  repositories {
+    maven {
+      url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+    }
+
+    mavenCentral()
+
+    exclusiveContent {
+      forRepository {
+        maven {
+          url = uri("https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1")
+        }
+      }
+
+      filter {
+        includeGroupByRegex "uk\\.gov\\.hmcts(\\..*)?"
+        includeGroup "com.github.hmcts"
+      }
+    }
+  }
+}

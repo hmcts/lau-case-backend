@@ -246,14 +246,6 @@ dependencyManagement {
   }
 }
 
-repositories {
-  mavenLocal()
-  mavenCentral()
-  maven {
-    url = 'https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1'
-  }
-}
-
 
 def versions = [
   commonsIo         : '2.21.0',
