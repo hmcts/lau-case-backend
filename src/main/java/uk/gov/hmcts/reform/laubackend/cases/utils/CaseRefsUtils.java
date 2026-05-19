@@ -2,7 +2,10 @@ package uk.gov.hmcts.reform.laubackend.cases.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static java.util.regex.Pattern.compile;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.RegexConstants.CASE_REF_REGEX;
@@ -15,10 +18,12 @@ public final class CaseRefsUtils {
 
     public static List<String> cleanUpCaseRefList(final List<String> caseRefs) {
 
-        caseRefs.removeIf(caseRef -> caseRef == null || caseRef.isEmpty() || caseRef.matches("^[a-zA-Z]*$"));
-        caseRefs.replaceAll(s -> s.replaceAll("\\D+", ""));
-
-        return caseRefs;
+        return caseRefs.stream()
+            .filter(Objects::nonNull)
+            .filter(caseRef -> !caseRef.isEmpty())
+            .filter(caseRef -> !caseRef.matches("^[a-zA-Z]*$"))
+            .map(caseRef -> caseRef.replaceAll("\\D+", ""))
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static String cleanUpCaseRef(final String caseRef) {
