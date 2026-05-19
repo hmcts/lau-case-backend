@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import uk.gov.hmcts.reform.laubackend.cases.domain.CaseSearchAudit;
@@ -15,7 +14,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseSearchHelper.conver
 
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
 @Schema(description = "Data model for the case search log")
 public class SearchLog implements Serializable {
 
@@ -29,6 +27,12 @@ public class SearchLog implements Serializable {
 
     @Schema(description = "When the operation took place with microseconds in iso-8601-date-and-time-format")
     private String timestamp;
+
+    public SearchLog(final String userId, final List<String> caseRefs, final String timestamp) {
+        this.userId = userId;
+        this.caseRefs = isEmpty(caseRefs) ? caseRefs : cleanUpCaseRefList(caseRefs);
+        this.timestamp = timestamp;
+    }
 
     public SearchLog toDto(final CaseSearchAudit caseSearchAuditResponse, final String timestamp) {
         this.userId = caseSearchAuditResponse.getUserId();
