@@ -107,7 +107,7 @@ public final class CaseActionController {
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
                 EXCEPTION, invalidRequestException.getMessage()));
-            return new ResponseEntity<>(null, BAD_REQUEST);
+            return ResponseEntity.status(BAD_REQUEST).build();
         } catch (final Exception exception) {
             log.error("saveCaseAction API call failed due to error - {}",
                     exception.getMessage(),
@@ -115,7 +115,7 @@ public final class CaseActionController {
             );
             appInsights.trackEvent(POST_ACTIVITY_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
                 EXCEPTION, exception.getMessage()));
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -200,7 +200,7 @@ public final class CaseActionController {
             );
             appInsights.trackEvent(GET_ACTIVITY_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
                 EXCEPTION, invalidRequestException.getMessage()));
-            return new ResponseEntity<>(null, BAD_REQUEST);
+            return ResponseEntity.status(BAD_REQUEST).build();
         }
     }
 

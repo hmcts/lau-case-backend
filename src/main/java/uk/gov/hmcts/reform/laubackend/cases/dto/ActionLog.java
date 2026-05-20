@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.CaseRefsUtils.cleanUpCaseRef;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Schema(description = "Data model for the case action log")
@@ -38,6 +36,20 @@ public class ActionLog implements Serializable {
 
     @Schema(description = "When the operation took place with microseconds in iso-8601-date-and-time-format")
     private String timestamp;
+
+    public ActionLog(final String userId,
+                     final String caseAction,
+                     final String caseRef,
+                     final String caseJurisdictionId,
+                     final String caseTypeId,
+                     final String timestamp) {
+        this.userId = userId;
+        this.caseAction = caseAction;
+        this.caseRef = isEmpty(caseRef) ? caseRef : cleanUpCaseRef(caseRef);
+        this.caseJurisdictionId = caseJurisdictionId;
+        this.caseTypeId = caseTypeId;
+        this.timestamp = timestamp;
+    }
 
     public ActionLog toDto(final CaseActionAudit caseActionAudit, final String timestamp) {
         this.userId = caseActionAudit.getUserId();
