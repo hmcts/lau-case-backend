@@ -264,7 +264,7 @@ def versions = [
   junitPlatform     : '1.12.2',
   log4j             : '2.26.0',
   lombok            : '1.18.46',
-  restAssured       : '5.5.7',
+  restAssured       : '6.0.0',
   serenity          : '4.3.4',
   sonarPitest       : '0.5',
   springCloud       : '4.3.2',
