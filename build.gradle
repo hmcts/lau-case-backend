@@ -261,7 +261,7 @@ def versions = [
   log4j             : '2.26.0',
   lombok            : '1.18.46',
   restAssured       : '6.0.0',
-  serenity          : '4.3.4',
+  serenity          : '5.3.10',
   sonarPitest       : '0.5',
   testcontainers    : '2.0.5',
 ]
