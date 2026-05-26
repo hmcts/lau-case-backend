@@ -2,13 +2,13 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.runner;
 
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Steps;
-import net.serenitybdd.annotations.Title;
-import net.serenitybdd.junit.runners.SerenityRunner;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.AccessRequestGetApiSteps;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.AccessRequestPostApiSteps;
 
@@ -20,8 +20,8 @@ import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_ACCESS_REQUEST_ENDPOINT;
 
 @SuppressWarnings("PMD.LawOfDemeter")
-@RunWith(SerenityRunner.class)
-public class AccessRequestApiTest {
+@ExtendWith(SerenityJUnit5Extension.class)
+class AccessRequestApiTest {
 
     @Steps
     AccessRequestGetApiSteps getSteps;
@@ -30,8 +30,8 @@ public class AccessRequestApiTest {
     AccessRequestPostApiSteps postSteps;
 
     @Test
-    @Title("Assert response code of 200 for GET /audit/accessRequest with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForGetAccessRequestApi() throws JSONException {
+    @DisplayName("Assert response code of 200 for GET /audit/accessRequest with valid headers and valid request params")
+    void assertHttpSuccessResponseCodeForGetAccessRequestApi() throws JSONException {
         String serviceToken = getSteps.givenAValidServiceTokenIsGenerated();
         String authorizationToken = getSteps.validAuthorizationTokenIsGenerated();
         JSONObject postRequestBody = postSteps.generateAccessRequestPostRequestBodyJson();
@@ -48,8 +48,8 @@ public class AccessRequestApiTest {
     }
 
     @Test
-    @Title("Assert that response code of 201 is returned for POST /audit/accessRequest")
-    public void assertHttpSuccessResponseCodeForPostAccessRequestApi() throws JSONException {
+    @DisplayName("Assert that response code of 201 is returned for POST /audit/accessRequest")
+    void assertHttpSuccessResponseCodeForPostAccessRequestApi() throws JSONException {
         String serviceToken = postSteps.givenAValidServiceTokenIsGenerated();
         String requestBody = postSteps.generateAccessRequestPostRequestBodyJson().toString();
         Response response = postSteps.performPostOperation(AUDIT_ACCESS_REQUEST_ENDPOINT, requestBody, serviceToken);
@@ -59,8 +59,8 @@ public class AccessRequestApiTest {
     }
 
     @Test
-    @Title("Assert response code 400 for GET /audit/accessRequest with empty query params")
-    public void assertBadRequestResponseCodeForGetAccessRequestApi() throws JSONException {
+    @DisplayName("Assert response code 400 for GET /audit/accessRequest with empty query params")
+    void assertBadRequestResponseCodeForGetAccessRequestApi() throws JSONException {
         String serviceToken = getSteps.givenAValidServiceTokenIsGenerated();
         String authorizationToken = getSteps.validAuthorizationTokenIsGenerated();
         Response response = getSteps.whenTheGetAccessRequestServiceIsInvokedWithTheGivenParams(
@@ -69,8 +69,8 @@ public class AccessRequestApiTest {
     }
 
     @Test
-    @Title("Assert response code 401 for GET /audit/accessRequest with invalid auth token")
-    public void assertUnauthorizedResponseCodeForGetAccessRequestApi() {
+    @DisplayName("Assert response code 401 for GET /audit/accessRequest with invalid auth token")
+    void assertUnauthorizedResponseCodeForGetAccessRequestApi() {
         String serviceToken = getSteps.givenAValidServiceTokenIsGenerated();
 
         Response response = getSteps.whenTheGetAccessRequestServiceIsInvokedWithTheGivenParams(
@@ -79,8 +79,8 @@ public class AccessRequestApiTest {
     }
 
     @Test
-    @Title("Assert response code 403 for GET /audit/accessRequest with invalid service token")
-    public void assertForbiddenResponseCodeForGetAccessRequestApi() throws JSONException {
+    @DisplayName("Assert response code 403 for GET /audit/accessRequest with invalid service token")
+    void assertForbiddenResponseCodeForGetAccessRequestApi() throws JSONException {
         String authorizationToken = getSteps.validAuthorizationTokenIsGenerated();
         Response response = getSteps.whenTheGetAccessRequestServiceIsInvokedWithTheGivenParams(
             "invalid-token", authorizationToken, null);

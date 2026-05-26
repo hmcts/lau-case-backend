@@ -2,12 +2,12 @@ package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.runner;
 
 
 import io.restassured.response.Response;
-import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.annotations.Steps;
-import net.serenitybdd.annotations.Title;
 import org.json.JSONException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchGetResponseVO;
@@ -25,9 +25,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.helper.DatabaseCleaner.deleteRecord;
 import static uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.utils.TestConstants.AUDIT_CASE_SEARCH_DELETE_ENDPOINT;
 
-@RunWith(SerenityRunner.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 @SuppressWarnings({"PMD.LawOfDemeter"})
-public class CaseSearchApiTest {
+class CaseSearchApiTest {
     @Steps
     CaseSearchPostApiSteps caseSearchPostApiSteps;
     @Steps
@@ -35,8 +35,8 @@ public class CaseSearchApiTest {
 
 
     @Test
-    @Title("Assert response code of 201 for POST Request CaseSearchApi")
-    public void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
+    @DisplayName("Assert response code of 201 for POST Request CaseSearchApi")
+    void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
             throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
@@ -54,8 +54,8 @@ public class CaseSearchApiTest {
     }
 
     @Test
-    @Title("Assert response code of 400 for Invalid POST request body for CaseSearchApi")
-    public void assertHttpBadResponseCodeForInvalidPostRequestBodyCaseSearchApi()
+    @DisplayName("Assert response code of 400 for Invalid POST request body for CaseSearchApi")
+    void assertHttpBadResponseCodeForInvalidPostRequestBodyCaseSearchApi()
             throws com.fasterxml.jackson.core.JsonProcessingException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
@@ -70,8 +70,8 @@ public class CaseSearchApiTest {
     }
 
     @Test
-    @Title("Assert response code of 200 for GET CaseSearchApi with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForCaseViewApi()
+    @DisplayName("Assert response code of 200 for GET CaseSearchApi with valid headers and valid request params")
+    void assertHttpSuccessResponseCodeForCaseViewApi()
         throws IOException, ParseException, JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
@@ -106,8 +106,8 @@ public class CaseSearchApiTest {
     }
 
     @Test
-    @Title("Assert response code of 403 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() throws JSONException {
+    @DisplayName("Assert response code of 403 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
+    void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetCaseViewApi() throws JSONException {
 
         String invalidServiceToken = caseSearchGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
@@ -124,8 +124,8 @@ public class CaseSearchApiTest {
     }
 
     @Test
-    @Title("Assert response code of 401 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf401WithInvalidServiceAuthorizationTokenForGetCaseSearchApi() throws JSONException {
+    @DisplayName("Assert response code of 401 for GET CaseSearchApi service with Invalid ServiceAuthorization Token")
+    void assertResponseCodeOf401WithInvalidServiceAuthorizationTokenForGetCaseSearchApi() throws JSONException {
 
         String validServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         String ivalidAuthorizationToken = caseSearchGetApiSteps.givenTheInvalidAuthorizationTokenIsGenerated();
@@ -142,8 +142,8 @@ public class CaseSearchApiTest {
     }
 
     @Test
-    @Title("Assert response code of 400 for GET CaseSearchApi with Empty Params")
-    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
+    @DisplayName("Assert response code of 400 for GET CaseSearchApi with Empty Params")
+    void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         String authorizationToken = caseSearchGetApiSteps.validAuthorizationTokenIsGenerated();
         Map<String, String> queryParamMap = caseSearchGetApiSteps.givenEmptyParamsAreSuppliedForGetCaseSearchApi();

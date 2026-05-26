@@ -1,22 +1,19 @@
 package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import net.serenitybdd.annotations.WithTag;
-import net.serenitybdd.annotations.WithTags;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringIntegrationSerenityRunner.class)
-@WithTags({@WithTag("testType:Functional")})
-@ActiveProfiles("functional")
-public class EndpointSecurityTest extends LauCaseBaseFunctionalTest {
+@ExtendWith(SerenityJUnit5Extension.class)
+@Tag("testType:Functional")
+class EndpointSecurityTest extends LauCaseBaseFunctionalTest {
 
 
     @Test
-    public void shouldAllowUnauthenticatedRequestsToHealthCheck() {
+    void shouldAllowUnauthenticatedRequestsToHealthCheck() {
 
         String response = lauCaseBackEndServiceClient.getHealthPage();
 
