@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository.helpers;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,6 @@ import uk.gov.hmcts.reform.laubackend.cases.domain.CaseActionAudit;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.utils.TimestampUtil;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,7 +33,7 @@ class QueryBuilderTest {
             "345",
             "CAVEAT",
             "VIEW",
-            random(71, "123456"),
+            RandomStringUtils.insecure().next(71, "123456"),
             "2000-08-23T22:20:05.200",
             "2001-08-23T22:20:05.200",
             "1",

@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEACTION_GET_EXCEPTION_MESSAGE;
@@ -23,7 +22,7 @@ class ActionInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyUserId() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     null,
@@ -44,7 +43,7 @@ class ActionInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyCaseRef() {
-        final String caseRef = random(17, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(17, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     caseRef,
@@ -87,7 +86,7 @@ class ActionInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyCaseTypeId() {
-        final String caseTypeId = random(71, "123456");
+        final String caseTypeId = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     null,
@@ -129,7 +128,7 @@ class ActionInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyCaseJurisdictionId() {
-        final String caseJurisdictionId = random(71, "123456");
+        final String caseJurisdictionId = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     null,

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,7 +18,6 @@ import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseActionPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseActionService;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -52,7 +52,7 @@ class CaseActionControllerTest {
     @Test
     void shouldReturnResponseEntityForGetRequest() {
         final String userId = "1";
-        final String caseRef = random(16, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(16, "123456");
         final String caseTypeId = "3";
         final String caseAction = "VIEW";
         final CaseActionGetResponse caseActionGetResponse = mock(CaseActionGetResponse.class);

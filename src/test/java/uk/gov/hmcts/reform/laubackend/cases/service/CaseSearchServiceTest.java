@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.service;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +24,6 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -82,7 +82,7 @@ class CaseSearchServiceTest {
     @Test
     void shouldPostCaseView() {
 
-        final String caseRef = random(16, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(16, "123456");
 
         final CaseSearchAudit caseSearchAudit = new CaseSearchAudit();
         caseSearchAudit.setId(Long.valueOf(3));

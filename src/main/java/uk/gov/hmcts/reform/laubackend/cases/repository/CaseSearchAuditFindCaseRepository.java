@@ -54,7 +54,7 @@ public class CaseSearchAuditFindCaseRepository {
         query.setFirstResult((int) pageable.getOffset());
         query.setMaxResults(pageable.getPageSize());
 
-        final List<CaseSearchAudit> results = (List<CaseSearchAudit>) query.getResultList();
+        final List<CaseSearchAudit> results = query.getResultList();
         long totalCount = countResults(userId, caseRef, startTime, endTime);
 
         return new PageImpl<>(results, pageable, totalCount);

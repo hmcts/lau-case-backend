@@ -10,15 +10,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.laubackend.cases.authorization.HttpPostRecordHolder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FeignErrorDecoderTest {
@@ -26,9 +23,6 @@ class FeignErrorDecoderTest {
     private static final String GET_METHOD = "GET";
     private static final String DETAILS_URL = "http://localhost/service/details";
     private static final String METHOD_KEY = "methodKey";
-
-    @Mock
-    private HttpPostRecordHolder httpPostRecordHolder;
 
     @InjectMocks
     private FeignErrorDecoder feignErrorDecoder;
@@ -58,7 +52,6 @@ class FeignErrorDecoderTest {
         "403,GET,http://localhost/service/validate",
         "403,GET,http://localhost/api/v1/details/user",
         "403,PUT,http://localhost/service/details",
-        "500,GET,http://localhost/service/details",
         "500,GET,http://localhost/service/validate",
         "500,GET,http://localhost/api?endpoint=details&user=123",
         "502,PUT,http://localhost/api?endpoint=details&user=123",
@@ -78,7 +71,6 @@ class FeignErrorDecoderTest {
     @ValueSource(ints = {500, 502, 503, 504})
     void shouldReturnRetryableException(int httpStatus) {
         try (Response response = buildResponse(httpStatus, GET_METHOD, DETAILS_URL)) {
-            when(httpPostRecordHolder.isPost()).thenReturn(true);
             Exception ex = feignErrorDecoder.decode(METHOD_KEY, response);
             assertThat(ex).isInstanceOf(RetryableException.class);
         }

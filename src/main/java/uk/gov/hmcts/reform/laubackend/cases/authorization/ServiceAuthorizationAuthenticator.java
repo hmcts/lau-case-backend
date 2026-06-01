@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidServiceAuthorizationException;
 
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
-import static org.springdoc.core.utils.Constants.POST_METHOD;
 
 @Slf4j
 @Service
@@ -19,18 +18,9 @@ public class ServiceAuthorizationAuthenticator {
 
     private final AuthorisedServices authorisedServices;
 
-    private final HttpPostRecordHolder httpPostRecordHolder;
-
     public void authorizeServiceToken(HttpServletRequest httpServletRequest) {
         try {
             String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
-            String method = httpServletRequest.getMethod();
-
-            if (POST_METHOD.equalsIgnoreCase(method)) {
-                httpPostRecordHolder.setPost(true);
-            } else {
-                httpPostRecordHolder.setPost(false);
-            }
 
             final String serviceName = String.valueOf(authService.authenticateService(serviceAuthHeader));
             if (!authorisedServices.hasService(serviceName)) {

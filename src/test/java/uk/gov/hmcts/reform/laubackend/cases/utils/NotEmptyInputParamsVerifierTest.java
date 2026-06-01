@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +15,6 @@ import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestGetRequest;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,15 +30,16 @@ class NotEmptyInputParamsVerifierTest {
 
     @Test
     void shouldVerifyRequestParamsAreNotEmptyForJurisdictionCaseAction() {
-        assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(null,
-                null,
-                null,
-                null,
-                random(71, "123456"),
-                "123",
-                "456",
-                null,
-                null)));
+        assertDoesNotThrow(() -> verifyRequestActionParamsAreNotEmpty(new ActionInputParamsHolder(
+            null,
+            null,
+            null,
+            null,
+            RandomStringUtils.insecure().next(71, "123456"),
+            "123",
+            "456",
+            null,
+            null)));
     }
 
     @Test
@@ -205,8 +206,9 @@ class NotEmptyInputParamsVerifierTest {
 
     @Test
     void shouldVerifyRequestParamsAreNotEmptyForCaseSearch() {
-        assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder(null,
-                random(71, "123456"),
+        assertDoesNotThrow(() -> verifyRequestSearchParamsAreNotEmpty(new SearchInputParamsHolder(
+            null,
+            RandomStringUtils.insecure().next(71, "123456"),
                 "123",
                 "345",
                 null,
@@ -298,7 +300,10 @@ class NotEmptyInputParamsVerifierTest {
     @Test
     void shouldThrowExceptionWhenRequestParamsAreEmptyForCaseSearch() {
         try {
-            final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), null);
+            final SearchLog searchLog = new SearchLog(
+                "1",
+                asList(RandomStringUtils.insecure().next(16, "123456")),
+                null);
 
             final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
             caseSearchPostRequest.setSearchLog(searchLog);

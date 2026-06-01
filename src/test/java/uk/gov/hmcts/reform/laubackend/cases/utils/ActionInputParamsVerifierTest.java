@@ -1,13 +1,12 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -39,7 +38,7 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyUserId() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(userId,
                     null,
@@ -60,8 +59,9 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldVerifyCaseRef() {
-        assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
-                random(16, "123456"),
+        assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(
+            null,
+            RandomStringUtils.insecure().next(16, "123456"),
                 null,
                 null,
                 null,
@@ -73,7 +73,7 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyCaseRef() {
-        final String caseRef = random(17, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(17, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     caseRef,
@@ -128,9 +128,10 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldVerifyCaseTypeId() {
-        assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(null,
-                null,
-                random(69, "123456"),
+        assertDoesNotThrow(() -> verifyRequestActionParamsConditions(new ActionInputParamsHolder(
+            null,
+                                null,
+                RandomStringUtils.insecure().next(69, "123456"),
                 null,
                 null,
                 null,
@@ -141,7 +142,7 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyCaseTypeId() {
-        final String caseTypeId = random(71, "123456");
+        final String caseTypeId = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     null,
@@ -200,7 +201,7 @@ class ActionInputParamsVerifierTest {
                 null,
                 null,
                 null,
-                random(69, "123456"),
+                 RandomStringUtils.insecure().next(69, "123456"),
                 null,
                 null,
                 null,
@@ -209,7 +210,7 @@ class ActionInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyCaseJurisdictionId() {
-        final String caseJurisdiction = random(71, "123456");
+        final String caseJurisdiction = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionInputParamsHolder inputParamsHolder = new ActionInputParamsHolder(null,
                     null,

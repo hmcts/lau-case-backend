@@ -2,8 +2,9 @@ package uk.gov.hmcts.reform.laubackend.cases.authorization;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidAuthorizationException;
@@ -22,13 +23,13 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 
 @Slf4j
 @SuppressWarnings({"PMD.ExceptionAsFlowControl"})
+@RequiredArgsConstructor
+@Component
 public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
+    private final ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
 
-    @Autowired
-    private AuthorizationAuthenticator authorizationAuthenticator;
+    private final AuthorizationAuthenticator authorizationAuthenticator;
 
     @Override
     public boolean preHandle(final HttpServletRequest request,

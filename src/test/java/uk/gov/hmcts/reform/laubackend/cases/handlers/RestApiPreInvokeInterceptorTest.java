@@ -35,7 +35,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_SERVICE_LOGS_ROLE;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RestApiPreInvokeInterceptorTest {
 
     @Mock

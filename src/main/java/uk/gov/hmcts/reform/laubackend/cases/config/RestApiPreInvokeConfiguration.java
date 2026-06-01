@@ -1,21 +1,19 @@
 package uk.gov.hmcts.reform.laubackend.cases.config;
 
-import org.springframework.context.annotation.Bean;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeInterceptor;
 
 @Configuration
+@RequiredArgsConstructor
 public class RestApiPreInvokeConfiguration implements WebMvcConfigurer {
+
+    private final RestApiPreInvokeInterceptor restApiPreInvokeInterceptor;
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(restApiPreInvokeInterceptor()).addPathPatterns("/audit/**");
-    }
-
-    @Bean
-    public RestApiPreInvokeInterceptor restApiPreInvokeInterceptor() {
-        return new RestApiPreInvokeInterceptor();
+        registry.addInterceptor(restApiPreInvokeInterceptor).addPathPatterns("/audit/**");
     }
 }

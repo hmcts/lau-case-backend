@@ -1,13 +1,12 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchLog;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASETYPEID_POST_EXCEPTION_MESSAGE;
@@ -24,7 +23,7 @@ class InputParamsVerifierPostExceptionTest {
 
     @Test
     void shouldNotVerifyUserIdForCaseAction() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final ActionLog actionLog = new ActionLog(userId,
                     null,
@@ -65,7 +64,7 @@ class InputParamsVerifierPostExceptionTest {
 
     @Test
     void shouldNotVerifyCaseTypeIdForCaseAction() {
-        final String caseTypeId = random(71, "123456");
+        final String caseTypeId = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionLog actionLog = new ActionLog(null,
                     null,
@@ -85,7 +84,7 @@ class InputParamsVerifierPostExceptionTest {
 
     @Test
     void shouldNotVerifyCaseJurisdictionIdForCaseAction() {
-        final String caseJurisdictionId = random(71, "123456");
+        final String caseJurisdictionId = RandomStringUtils.insecure().next(71, "123456");
         try {
             final ActionLog actionLog = new ActionLog(null,
                     null,
@@ -105,7 +104,7 @@ class InputParamsVerifierPostExceptionTest {
 
     @Test
     void shouldNotVerifyUserIdForCaseSearch() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final SearchLog searchLog = new SearchLog(userId, null, null);
 

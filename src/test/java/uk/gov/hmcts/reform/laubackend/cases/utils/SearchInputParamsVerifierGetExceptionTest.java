@@ -1,12 +1,11 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
 
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.ExceptionMessageConstants.CASEREF_GET_EXCEPTION_MESSAGE;
@@ -20,7 +19,7 @@ class SearchInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyUserId() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
                     null,
@@ -38,7 +37,7 @@ class SearchInputParamsVerifierGetExceptionTest {
 
     @Test
     void shouldNotVerifyCaseRef() {
-        final String caseRef = random(17, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(17, "123456");
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
                     caseRef,
