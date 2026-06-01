@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import uk.gov.hmcts.reform.laubackend.cases.constants.CaseAction;
@@ -27,9 +28,9 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 @Component
 public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
 
-    private final ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
+    private final ObjectProvider<ServiceAuthorizationAuthenticator> serviceAuthorizationAuthenticator;
 
-    private final AuthorizationAuthenticator authorizationAuthenticator;
+    private final ObjectProvider<AuthorizationAuthenticator> authorizationAuthenticator;
 
     @Override
     public boolean preHandle(final HttpServletRequest request,
@@ -37,11 +38,11 @@ public class RestApiPreInvokeInterceptor implements HandlerInterceptor {
                              final Object handler) throws IOException {
 
         try {
-            serviceAuthorizationAuthenticator.authorizeServiceToken(request);
+            serviceAuthorizationAuthenticator.getObject().authorizeServiceToken(request);
 
             if (request.getMethod().equalsIgnoreCase(GET.name())
                 || request.getMethod().equalsIgnoreCase(DELETE.name())) {
-                List<String> roles = authorizationAuthenticator.authorizeAuthorizationToken(request);
+                List<String> roles = authorizationAuthenticator.getObject().authorizeAuthorizationToken(request);
 
                 if (isServiceLogsUserGettingNonDeletedCases(request, roles)) {
                     throw new InvalidAuthorizationException(
