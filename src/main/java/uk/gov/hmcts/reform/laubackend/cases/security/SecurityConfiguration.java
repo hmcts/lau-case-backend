@@ -18,8 +18,7 @@ import java.security.Security;
 public class SecurityConfiguration {
 
     @Bean
-    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
             .csrf(AbstractHttpConfigurer::disable) //NOSONAR not used in secure contexts
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

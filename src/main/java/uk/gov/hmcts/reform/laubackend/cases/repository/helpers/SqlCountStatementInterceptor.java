@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.cases.repository.helpers;
 
+import org.apache.commons.lang3.Strings;
 import org.hibernate.resource.jdbc.spi.StatementInspector;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class SqlCountStatementInterceptor implements StatementInspector {
@@ -11,7 +11,7 @@ public class SqlCountStatementInterceptor implements StatementInspector {
     private static final String COUNT_STATEMENT = "SELECT COUNT(*) AS col_0_0_ FROM (";
     private static final String COUNT_SEARCH_STRING = "SELECT COUNT(";
     private static final String LIMIT_CRITERIA = " LIMIT 10000) ca";
-    private static final String COUNT_REGEX = "count\\(.*?\\)";
+    private static final String COUNT_REGEX = "count\\([^)]*+\\)";
 
     @Override
     public String inspect(final String sql) {
@@ -23,6 +23,6 @@ public class SqlCountStatementInterceptor implements StatementInspector {
     }
 
     private static boolean isCountCaseAction(final String sql) {
-        return containsIgnoreCase(sql, COUNT_SEARCH_STRING) && containsIgnoreCase(sql, "case_action_audit");
+        return Strings.CI.contains(sql, COUNT_SEARCH_STRING) && Strings.CI.contains(sql, "case_action_audit");
     }
 }

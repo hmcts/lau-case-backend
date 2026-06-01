@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
@@ -10,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -36,7 +35,7 @@ class SearchInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyUserId() {
-        final String userId = randomAlphanumeric(65);
+        final String userId = RandomStringUtils.insecure().next(65);
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(userId,
                     null,
@@ -54,8 +53,9 @@ class SearchInputParamsVerifierTest {
 
     @Test
     void shouldVerifyCaseRef() {
-        assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder(null,
-                random(16, "123456"),
+        assertDoesNotThrow(() -> verifyRequestSearchParamsConditions(new SearchInputParamsHolder(
+            null,
+            RandomStringUtils.insecure().next(16, "123456"),
                 null,
                 null,
                 null,
@@ -64,7 +64,7 @@ class SearchInputParamsVerifierTest {
 
     @Test
     void shouldNotVerifyCaseRef() {
-        final String caseRef = random(17, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(17, "123456");
         try {
             final SearchInputParamsHolder inputParamsHolder = new SearchInputParamsHolder(null,
                     caseRef,
@@ -110,7 +110,7 @@ class SearchInputParamsVerifierTest {
 
     @Test
     void shouldRemoveInvalidCaseRefsForCaseSearchPost() throws InvalidRequestException {
-        final String caseRef = random(16, "123458");
+        final String caseRef = RandomStringUtils.insecure().next(16, "123458");
         final List<String> caseRefList = new ArrayList<>(asList(caseRef, "", "null"));
         final SearchLog searchLog = new SearchLog();
         searchLog.setCaseRefs(caseRefList);
@@ -123,7 +123,7 @@ class SearchInputParamsVerifierTest {
 
     @Test
     void shouldRemoveInvalidCaseRefsForCaseSearchPost1() throws InvalidRequestException {
-        final String caseRef = random(16, "123459");
+        final String caseRef = RandomStringUtils.insecure().next(16, "123459");
         final List<String> caseRefList = new ArrayList<>(asList(caseRef, "123", "567", "null"));
         final SearchLog searchLog = new SearchLog();
         searchLog.setCaseRefs(caseRefList);

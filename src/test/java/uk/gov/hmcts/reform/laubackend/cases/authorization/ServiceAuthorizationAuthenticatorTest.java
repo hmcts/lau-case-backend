@@ -24,9 +24,6 @@ class ServiceAuthorizationAuthenticatorTest {
     @Mock
     private AuthorisedServices authorisedServices;
 
-    @Mock
-    private HttpPostRecordHolder httpPostRecordHolder;
-
     @InjectMocks
     private ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
 
@@ -71,7 +68,6 @@ class ServiceAuthorizationAuthenticatorTest {
 
         HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         when(httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER)).thenReturn(HEADER);
-        when(httpServletRequest.getMethod()).thenReturn("POST");
 
         when(authService.authenticateService(HEADER)).thenReturn(serviceName);
         when(authorisedServices.hasService(serviceName)).thenReturn(true);

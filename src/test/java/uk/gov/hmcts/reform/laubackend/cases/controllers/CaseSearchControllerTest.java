@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.cases.controllers;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +17,6 @@ import uk.gov.hmcts.reform.laubackend.cases.response.SearchLogPostResponse;
 import uk.gov.hmcts.reform.laubackend.cases.service.CaseSearchService;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -48,7 +48,7 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForGetRequest() {
         final String userId = "1";
-        final String caseRef = random(16, "123456");
+        final String caseRef = RandomStringUtils.insecure().next(16, "123456");
         final CaseSearchGetResponse caseSearchGetResponse = mock(CaseSearchGetResponse.class);
 
         when(caseSearchService.getCaseSearch(any())).thenReturn(
@@ -93,10 +93,13 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnResponseEntityForPostRequest() {
 
-        final SearchLog searchLog = new SearchLog("1", asList(random(16, "123456")), "2021-08-23T22:20:05.023Z");
+        final SearchLog searchLog = new SearchLog(
+            "1",
+            asList(RandomStringUtils.insecure().next(16, "123456")),
+            "2021-08-23T22:20:05.023Z");
         final SearchLogPostResponse searchLogPostResponse = new SearchLogPostResponse("1",
                 "1",
-                asList(random(16, "123456")),
+                asList(RandomStringUtils.insecure().next(16, "123456")),
                 "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest(searchLog);
@@ -118,7 +121,10 @@ class CaseSearchControllerTest {
 
     @Test
     void shouldReturnBadRequestResponseEntityForPostRequest() {
-        final SearchLog searchLog = new SearchLog("1", asList(random(18, "123456")), null);
+        final SearchLog searchLog = new SearchLog(
+            "1",
+            asList(RandomStringUtils.insecure().next(18, "123456")),
+            null);
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
         caseSearchPostRequest.setSearchLog(searchLog);
@@ -136,7 +142,7 @@ class CaseSearchControllerTest {
     @Test
     void shouldReturnInternalServerErrorForPostRequest() {
         final SearchLog searchLog = new SearchLog("1",
-                asList(random(16, "123456")),
+                asList(RandomStringUtils.insecure().next(16, "123456")),
                 "2021-08-23T22:20:05.023Z");
 
         final CaseSearchPostRequest caseSearchPostRequest = new CaseSearchPostRequest();
