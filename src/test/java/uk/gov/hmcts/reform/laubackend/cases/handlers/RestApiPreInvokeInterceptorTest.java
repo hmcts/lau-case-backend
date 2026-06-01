@@ -2,12 +2,12 @@ package uk.gov.hmcts.reform.laubackend.cases.handlers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.AuthorizationAuthenticator;
 import uk.gov.hmcts.reform.laubackend.cases.authorization.RestApiPreInvokeInterceptor;
@@ -38,13 +38,26 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUT
 class RestApiPreInvokeInterceptorTest {
 
     @Mock
+    private ObjectProvider<ServiceAuthorizationAuthenticator> serviceAuthorizationAuthenticatorProvider;
+
+    @Mock
     private ServiceAuthorizationAuthenticator serviceAuthorizationAuthenticator;
+
+    @Mock
+    private ObjectProvider<AuthorizationAuthenticator> authorizationAuthenticatorProvider;
 
     @Mock
     private AuthorizationAuthenticator authorizationAuthenticator;
 
-    @InjectMocks
     private RestApiPreInvokeInterceptor restApiPreInvokeInterceptor;
+
+    @BeforeEach
+    void setUp() {
+        restApiPreInvokeInterceptor = new RestApiPreInvokeInterceptor(
+            serviceAuthorizationAuthenticatorProvider,
+            authorizationAuthenticatorProvider
+        );
+    }
 
     @Test
     void shouldReturnTrueWhenServiceAndAuthTokenIsValidForPostRequest() throws IOException {
@@ -53,6 +66,7 @@ class RestApiPreInvokeInterceptorTest {
         final Object object = mock(Object.class);
 
         when(httpServletRequest.getMethod()).thenReturn(POST.name());
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
         doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
@@ -69,6 +83,8 @@ class RestApiPreInvokeInterceptorTest {
         final List<String> roles = Collections.singletonList(AUTHORISATION_AUDIT_INVESTIGATOR_ROLE);
 
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
+        when(authorizationAuthenticatorProvider.getObject()).thenReturn(authorizationAuthenticator);
         when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
@@ -86,6 +102,8 @@ class RestApiPreInvokeInterceptorTest {
 
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
         when(httpServletRequest.getParameter(CASE_ACTION)).thenReturn(CaseAction.DELETE.name());
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
+        when(authorizationAuthenticatorProvider.getObject()).thenReturn(authorizationAuthenticator);
         when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
@@ -102,6 +120,8 @@ class RestApiPreInvokeInterceptorTest {
         List<String> roles = Arrays.asList(AUTHORISATION_SERVICE_LOGS_ROLE, AUTHORISATION_AUDIT_INVESTIGATOR_ROLE);
 
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
+        when(authorizationAuthenticatorProvider.getObject()).thenReturn(authorizationAuthenticator);
         when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
 
         final boolean isValidRequest = restApiPreInvokeInterceptor
@@ -116,6 +136,7 @@ class RestApiPreInvokeInterceptorTest {
         final HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         final Object object = mock(Object.class);
 
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
         doThrow(new InvalidServiceAuthorizationException("Yabba Dabba Doo"))
                 .when(serviceAuthorizationAuthenticator)
                 .authorizeServiceToken(httpServletRequest);
@@ -136,8 +157,10 @@ class RestApiPreInvokeInterceptorTest {
         final HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         final Object object = mock(Object.class);
 
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
         doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(authorizationAuthenticatorProvider.getObject()).thenReturn(authorizationAuthenticator);
         doThrow(new InvalidAuthorizationException("Scooby Doo"))
                 .when(authorizationAuthenticator)
                 .authorizeAuthorizationToken(httpServletRequest);
@@ -160,8 +183,10 @@ class RestApiPreInvokeInterceptorTest {
         final Object object = mock(Object.class);
         List<String> roles = Arrays.asList(AUTHORISATION_SERVICE_LOGS_ROLE);
 
+        when(serviceAuthorizationAuthenticatorProvider.getObject()).thenReturn(serviceAuthorizationAuthenticator);
         doNothing().when(serviceAuthorizationAuthenticator).authorizeServiceToken(httpServletRequest);
         when(httpServletRequest.getMethod()).thenReturn(GET.name());
+        when(authorizationAuthenticatorProvider.getObject()).thenReturn(authorizationAuthenticator);
         when(authorizationAuthenticator.authorizeAuthorizationToken(httpServletRequest)).thenReturn(roles);
         when(httpServletRequest.getParameter(CASE_ACTION)).thenReturn(CaseAction.VIEW.name());
 
