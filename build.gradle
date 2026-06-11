@@ -145,7 +145,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "7.24.0"
+  toolVersion = "7.25.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -290,101 +290,101 @@ dependencies {
     }
   }
 
-  implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.6.0'
-  implementation group: 'commons-io', name: 'commons-io', version: versions.commonsIo
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-flyway'
-  implementation group: 'org.springframework.boot', name: 'spring-boot-devtools'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
-  implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
-  implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.0.3'
-  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '6.0.0'
-  implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '4.0.0'
-  implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '8.0.0'
-  implementation group: 'org.flywaydb', name: 'flyway-core', version: versions.flywaydb
-  implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
-  implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.11'
-  implementation group: 'org.yaml', name: 'snakeyaml', version: '2.6'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
-  implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-  implementation group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.1.0'
-  implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.8'
-  implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.7.8'
-  implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.0.Final'
+  implementation "commons-fileupload:commons-fileupload:1.6.0"
+  implementation "commons-io:commons-io:${versions.commonsIo}"
+  implementation "org.springframework.boot:spring-boot-starter-webmvc"
+  implementation "org.springframework.boot:spring-boot-starter-actuator"
+  implementation "org.springframework.boot:spring-boot-starter-json"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+  implementation "org.springframework.boot:spring-boot-starter-jdbc"
+  implementation "org.springframework.boot:spring-boot-starter-security"
+  implementation "org.springframework.boot:spring-boot-starter-webflux"
+  implementation "org.springframework.boot:spring-boot-flyway"
+  implementation "org.springframework.boot:spring-boot-devtools"
+  implementation "org.springframework.cloud:spring-cloud-starter"
+  implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+  implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
+  implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3"
+  implementation "com.github.hmcts:service-auth-provider-java-client:6.0.0"
+  implementation "com.github.hmcts:idam-java-client:4.0.0"
+  implementation "com.github.hmcts.java-logging:logging:8.0.0"
+  implementation "org.flywaydb:flyway-core:${versions.flywaydb}"
+  implementation "org.flywaydb:flyway-database-postgresql:${versions.flywaydb}"
+  implementation "org.postgresql:postgresql:42.7.11"
+  implementation "org.yaml:snakeyaml:2.6"
+  implementation "org.apache.logging.log4j:log4j-api:${versions.log4j}"
+  implementation "org.apache.logging.log4j:log4j-to-slf4j:${versions.log4j}"
+  implementation "org.projectlombok:lombok:${versions.lombok}"
+  implementation "jakarta.servlet:jakarta.servlet-api:6.1.0"
+  implementation "com.microsoft.azure:applicationinsights-core:3.7.8"
+  implementation "com.microsoft.azure:applicationinsights-web:3.7.8"
+  implementation "org.hibernate.validator:hibernate-validator:9.1.0.Final"
 
-  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
 
-  testImplementation group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: versions.gradlePitest
-  testImplementation group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', version: '0.5'
-  testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
-  testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  testImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
-  testImplementation group: 'org.wiremock', name: 'wiremock-standalone', version: '3.13.2'
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, {
+  testImplementation "info.solidsoft.gradle.pitest:gradle-pitest-plugin:${versions.gradlePitest}"
+  testImplementation "org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5"
+  testImplementation "com.github.hmcts:fortify-client:1.4.10:all"
+  testImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
+  testImplementation "org.testcontainers:testcontainers-postgresql:${versions.testcontainers}"
+  testImplementation "org.wiremock:wiremock-standalone:3.13.2"
+  testImplementation "net.serenity-bdd:serenity-core:${versions.serenity}", {
     exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
   }
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: versions.serenity
-  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
-  testImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '2.3.21'
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-  testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa-test'
-  testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner'
+  testImplementation "net.serenity-bdd:serenity-junit5:${versions.serenity}"
+  testImplementation "net.serenity-bdd:serenity-rest-assured:${versions.serenity}"
+  testImplementation "io.cucumber:cucumber-spring:${versions.cucumber}"
+  testImplementation "io.cucumber:cucumber-junit:${versions.cucumber}"
+  testImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
+  testImplementation "org.jetbrains.kotlin:kotlin-stdlib:2.3.21"
+  testImplementation "org.springframework.boot:spring-boot-starter-test"
+  testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
+  testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
 
-  integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
-  integrationTestImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
+  integrationTestImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
+  integrationTestImplementation "org.testcontainers:testcontainers-postgresql:${versions.testcontainers}"
 
-  integrationTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-  integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  integrationTestCompileOnly "org.projectlombok:lombok:${versions.lombok}"
+  integrationTestAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
 
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
   functionalTestImplementation sourceSets.main.runtimeClasspath
   functionalTestImplementation sourceSets.test.runtimeClasspath
-  functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-  functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  functionalTestCompileOnly "org.projectlombok:lombok:${versions.lombok}"
+  functionalTestAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
 
-  smokeTestImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-  smokeTestImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.restAssured
-  smokeTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-  smokeTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
+  smokeTestImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
+  smokeTestImplementation "io.rest-assured:rest-assured-common:${versions.restAssured}"
+  smokeTestImplementation "io.rest-assured:json-path:${versions.restAssured}"
+  smokeTestImplementation "io.rest-assured:xml-path:${versions.restAssured}"
 
   smokeTestImplementation sourceSets.main.runtimeClasspath
   smokeTestImplementation sourceSets.test.runtimeClasspath
 
 //Added for FN tests
-  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-  testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-  testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
-  testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.14.0'
-  testImplementation group: 'com.googlecode.junit-toolbox', name: 'junit-toolbox', version: '2.4'
-  testImplementation group: 'org.testng', name: 'testng', version: '7.12.0'
+  testImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
+  testImplementation "io.rest-assured:json-path:${versions.restAssured}"
+  testImplementation "io.rest-assured:xml-path:${versions.restAssured}"
+  testImplementation "com.google.code.gson:gson:2.14.0"
+  testImplementation "com.googlecode.junit-toolbox:junit-toolbox:2.4"
+  testImplementation "org.testng:testng:7.12.0"
 
-  cucumberRuntime group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
-  cucumberRuntime group: 'org.springframework', name: 'spring-web'
-  cucumberRuntime group: 'io.rest-assured', name: 'rest-assured', version: versions.restAssured
-  cucumberRuntime group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
-  cucumberRuntime group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
-  cucumberRuntime group: 'net.serenity-bdd', name: 'serenity-rest-assured'
-  cucumberRuntime group: 'com.google.code.gson', name: 'gson', version: '2.14.0'
-  cucumberRuntime group: 'com.googlecode.junit-toolbox', name: 'junit-toolbox', version: '2.4'
-  cucumberRuntime group: 'org.testng', name: 'testng', version: '7.12.0'
+  cucumberRuntime "io.cucumber:cucumber-java:${versions.cucumber}"
+  cucumberRuntime "org.springframework:spring-web"
+  cucumberRuntime "io.rest-assured:rest-assured:${versions.restAssured}"
+  cucumberRuntime "io.rest-assured:json-path:${versions.restAssured}"
+  cucumberRuntime "io.rest-assured:xml-path:${versions.restAssured}"
+  cucumberRuntime "net.serenity-bdd:serenity-rest-assured"
+  cucumberRuntime "com.google.code.gson:gson:2.14.0"
+  cucumberRuntime "com.googlecode.junit-toolbox:junit-toolbox:2.4"
+  cucumberRuntime "org.testng:testng:7.12.0"
 
-  testCompileOnly group: 'org.projectlombok', name: 'lombok'
-  testAnnotationProcessor group: 'org.projectlombok', name: 'lombok'
+  testCompileOnly "org.projectlombok:lombok:${versions.lombok}"
+  testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
 
-  testImplementation group: 'jakarta.el', name: 'jakarta.el-api', version: '6.0.1'
+  testImplementation "jakarta.el:jakarta.el-api:6.0.1"
 }
 
 flyway {
