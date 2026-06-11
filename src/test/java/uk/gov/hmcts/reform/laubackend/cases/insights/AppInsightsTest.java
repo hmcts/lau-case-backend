@@ -30,7 +30,6 @@ class AppInsightsTest {
         classUnderTest = new AppInsights(telemetryClient);
     }
 
-    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @AfterEach
     void close() throws Exception {
         autoCloseable.close();
