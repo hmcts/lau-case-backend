@@ -67,6 +67,7 @@ spring:
   jackson:
     mapper:
       accept-case-insensitive-enums: true
+      accept-case-insensitive-properties: false
   jpa:
     properties:
       hibernate:
