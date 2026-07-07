@@ -310,7 +310,7 @@ dependencies {
   implementation "com.github.hmcts.java-logging:logging:8.0.0"
   implementation "org.flywaydb:flyway-core:${versions.flywaydb}"
   implementation "org.flywaydb:flyway-database-postgresql:${versions.flywaydb}"
-  implementation "org.postgresql:postgresql:42.7.11"
+  implementation "org.postgresql:postgresql:42.7.13"
   implementation "org.yaml:snakeyaml:2.6"
   implementation "org.apache.logging.log4j:log4j-api:${versions.log4j}"
   implementation "org.apache.logging.log4j:log4j-to-slf4j:${versions.log4j}"
