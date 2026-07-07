@@ -259,7 +259,7 @@ def versions = [
   gradlePitest      : '1.15.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
-  log4j             : '2.26.0',
+  log4j             : '2.26.1',
   lombok            : '1.18.46',
   restAssured       : '6.0.0',
   serenity          : '5.3.10',
