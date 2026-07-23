@@ -268,7 +268,6 @@ def versions = [
 ]
 
 ext['tomcat.version'] = '11.0.24'
-ext['netty.version'] = '4.2.15.Final'
 
 configurations.all {
   resolutionStrategy {
@@ -298,7 +297,6 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-data-jpa"
   implementation "org.springframework.boot:spring-boot-starter-jdbc"
   implementation "org.springframework.boot:spring-boot-starter-security"
-  implementation "org.springframework.boot:spring-boot-starter-webflux"
   implementation "org.springframework.boot:spring-boot-flyway"
   implementation "org.springframework.boot:spring-boot-devtools"
   implementation "org.springframework.cloud:spring-cloud-starter"
