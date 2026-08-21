@@ -7,8 +7,8 @@ import org.json.JSONException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseActionGetApiSteps;
@@ -121,8 +121,7 @@ class CaseActionApiTest {
 
     @Test
     @DisplayName("Assert response code of 201 for POST Request CaseActionApi")
-    void assertHttpSuccessResponseCodeForPostRequestCaseViewApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
+    void assertHttpSuccessResponseCodeForPostRequestCaseViewApi() throws JSONException {
 
         String authServiceToken = caseActionGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseActionRequestVO caseActionRequestVO = caseActionPostApiSteps.generateCaseActionPostRequestBody();

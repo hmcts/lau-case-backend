@@ -143,7 +143,6 @@ public class CaseSearchController {
             produces = APPLICATION_JSON_VALUE,
             consumes = APPLICATION_JSON_VALUE
     )
-    @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     public ResponseEntity<CaseSearchGetResponse> getCaseSearch(
             @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = AUTHORISATION_HEADER) String authToken,

@@ -1,9 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseActionRequestVO;
 
@@ -25,7 +24,7 @@ public class CaseActionPostApiSteps extends BaseSteps {
     }
 
     @Step("When the POST service is invoked")
-    public Response whenThePostServiceIsInvoked(String serviceToken, Object actionLog) throws JsonProcessingException {
+    public Response whenThePostServiceIsInvoked(String serviceToken, Object actionLog) {
         String bodyJsonStr = null == actionLog ? "" : new ObjectMapper().writeValueAsString(actionLog);
         return performPostOperation(AUDIT_CASE_ACTION_ENDPOINT, null, null, bodyJsonStr, serviceToken);
     }

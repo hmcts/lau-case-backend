@@ -147,7 +147,6 @@ public final class CaseActionController {
         path = "/audit/caseAction",
         produces = APPLICATION_JSON_VALUE
     )
-    @SuppressWarnings({"PMD.UseObjectForClearerAPI"})
     public ResponseEntity<CaseActionGetResponse> getCaseAction(
             @Parameter(name = "Authorization", example = "Bearer eyJ0eXAiOiJK.........")
             @RequestHeader(value = AUTHORISATION_HEADER) String authToken,

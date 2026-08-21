@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestAction;
 import uk.gov.hmcts.reform.laubackend.cases.constants.AccessRequestType;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
@@ -44,8 +43,7 @@ public class AccessRequestGetSteps extends AbstractSteps {
     }
 
     @Then("the list of accessRequest records returned is \\(expected total {int}):")
-    public void listOfAccessRequestRecordsReturned(int expectedNumber, List<Map<String, String>> expectedRecords)
-        throws JsonProcessingException {
+    public void listOfAccessRequestRecordsReturned(int expectedNumber, List<Map<String, String>> expectedRecords) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         final AccessRequestGetResponse response = objectMapper.readValue(

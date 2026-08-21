@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.laubackend.cases.helper;
 import uk.gov.hmcts.reform.laubackend.cases.dto.ActionLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseActionPostRequest;
 
-@SuppressWarnings({"PMD.UseObjectForClearerAPI"})
 public final class CaseActionGetHelper {
 
     private CaseActionGetHelper() {
