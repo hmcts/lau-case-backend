@@ -1,11 +1,10 @@
 package uk.gov.hmcts.reform.laubackend.cases.bdd;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.cases.dto.AccessRequestLog;
 import uk.gov.hmcts.reform.laubackend.cases.request.AccessRequestPostRequest;
 
@@ -40,7 +39,7 @@ public class AccessRequestPostSteps extends AbstractSteps {
     }
 
     @Then("accessRequest response body is returned")
-    public void accessRequestResponseBodyIsReturned() throws JsonProcessingException {
+    public void accessRequestResponseBodyIsReturned() {
         final AccessRequestPostRequest request = getAccessRequestPostRequest();
 
         assertResponse(request);
@@ -69,7 +68,7 @@ public class AccessRequestPostSteps extends AbstractSteps {
         assertThat(httpStatusResponseCode).isEqualTo(FORBIDDEN.value());
     }
 
-    private void assertResponse(final AccessRequestPostRequest request) throws JsonProcessingException {
+    private void assertResponse(final AccessRequestPostRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
         final AccessRequestPostRequest response = objectMapper.readValue(
             accessRequestPostResponseBody, AccessRequestPostRequest.class);

@@ -8,8 +8,8 @@ import org.json.JSONException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchGetResponseVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.model.CaseSearchRequestVO;
 import uk.gov.hmcts.reform.laubackend.cases.serenityfunctionaltests.steps.CaseSearchGetApiSteps;
@@ -36,8 +36,7 @@ class CaseSearchApiTest {
 
     @Test
     @DisplayName("Assert response code of 201 for POST Request CaseSearchApi")
-    void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException, JSONException {
+    void assertHttpSuccessResponseCodeForPostRequestCaseSearchApi() throws JSONException {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
 
@@ -55,8 +54,7 @@ class CaseSearchApiTest {
 
     @Test
     @DisplayName("Assert response code of 400 for Invalid POST request body for CaseSearchApi")
-    void assertHttpBadResponseCodeForInvalidPostRequestBodyCaseSearchApi()
-            throws com.fasterxml.jackson.core.JsonProcessingException {
+    void assertHttpBadResponseCodeForInvalidPostRequestBodyCaseSearchApi() {
 
         String authServiceToken = caseSearchGetApiSteps.givenAValidServiceTokenIsGenerated();
         CaseSearchRequestVO caseSearchRequestVO = caseSearchPostApiSteps.generateInvalidCaseSearchPostRequestBody();

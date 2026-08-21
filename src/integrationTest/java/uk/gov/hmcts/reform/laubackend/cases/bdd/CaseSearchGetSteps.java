@@ -26,7 +26,6 @@ import static uk.gov.hmcts.reform.laubackend.cases.helper.RestConstants.START_TI
 
 @SuppressWarnings({
     "PMD.TooManyMethods",
-    "PMD.UseObjectForClearerAPI",
     "PMD.LawOfDemeter"})
 public class CaseSearchGetSteps extends AbstractSteps {
 
