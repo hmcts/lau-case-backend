@@ -27,7 +27,7 @@ version = '0.0.1'
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+    languageVersion = JavaLanguageVersion.of(25)
   }
 }
 
@@ -302,7 +302,7 @@ dependencies {
   implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
   implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
   implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0"
-  implementation "com.github.hmcts:service-auth-provider-java-client:6.0.0"
+  implementation "com.github.hmcts:service-auth-provider-java-client:6.1.0"
   implementation "com.github.hmcts:idam-java-client:4.0.0"
   implementation "com.github.hmcts.java-logging:logging:8.0.0"
   implementation "org.flywaydb:flyway-core:${versions.flywaydb}"
@@ -347,6 +347,7 @@ dependencies {
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
+  functionalTestImplementation "com.warrenstrange:googleauth:1.5.0"
   functionalTestImplementation sourceSets.main.runtimeClasspath
   functionalTestImplementation sourceSets.test.runtimeClasspath
   functionalTestCompileOnly "org.projectlombok:lombok:${versions.lombok}"
