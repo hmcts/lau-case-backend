@@ -347,6 +347,7 @@ dependencies {
   integrationTestImplementation sourceSets.main.runtimeClasspath
   integrationTestImplementation sourceSets.test.runtimeClasspath
 
+  functionalTestImplementation "com.warrenstrange:googleauth:1.5.0"
   functionalTestImplementation sourceSets.main.runtimeClasspath
   functionalTestImplementation sourceSets.test.runtimeClasspath
   functionalTestCompileOnly "org.projectlombok:lombok:${versions.lombok}"
