@@ -237,6 +237,7 @@ dependencyManagement {
       entry 'logback-core'
       entry 'logback-classic'
     }
+    dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
   }
   imports {
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.1.3'
