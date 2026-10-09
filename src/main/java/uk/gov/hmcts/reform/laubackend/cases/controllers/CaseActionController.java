@@ -173,7 +173,7 @@ public final class CaseActionController {
             return new ResponseEntity<>(caseView, OK);
         } catch (final InvalidRequestException invalidRequestException) {
             log.error(
-                    "getCaseView API call failed due to error - {}",
+                    "getCaseAction API call failed due to error - {}",
                     invalidRequestException.getMessage(),
                     invalidRequestException
             );
