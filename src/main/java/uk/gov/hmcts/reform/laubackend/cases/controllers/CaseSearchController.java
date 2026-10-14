@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.laubackend.cases.dto.SearchInputParamsHolder;
 import uk.gov.hmcts.reform.laubackend.cases.exceptions.InvalidRequestException;
-import uk.gov.hmcts.reform.laubackend.cases.insights.AppInsights;
 import uk.gov.hmcts.reform.laubackend.cases.request.CaseSearchPostRequest;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchGetResponse;
 import uk.gov.hmcts.reform.laubackend.cases.response.CaseSearchPostResponse;
@@ -35,14 +34,7 @@ import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.START_TIME;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CaseActionConstants.USER_ID;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.AUTHORISATION_HEADER;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_ABOVE;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_THRESHOLD_MESSAGE_BELOW;
-import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.PERF_TOLERANCE_THRESHOLD_MS;
 import static uk.gov.hmcts.reform.laubackend.cases.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_SEARCH_REQUEST_INFO;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.GET_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_SEARCH_REQUEST_EXCEPTION;
-import static uk.gov.hmcts.reform.laubackend.cases.insights.AppInsightsEvent.POST_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.InputParamsVerifier.verifyRequestSearchParamsConditions;
 import static uk.gov.hmcts.reform.laubackend.cases.utils.NotEmptyInputParamsVerifier.verifyRequestSearchParamsAreNotEmpty;
 
@@ -58,8 +50,6 @@ public class CaseSearchController {
     private static final String EXCEPTION_TRACKING_NAME = "exception";
 
     private final CaseSearchService caseSearchService;
-
-    private final AppInsights appInsights;
 
     @Operation(tags = "POST end-points", summary = "Save case search audits", description = "This operation will "
             + "persist CCD case search entries which are posted in the request. Single CaseSearch per request will "
@@ -102,16 +92,12 @@ public class CaseSearchController {
                     invalidRequestException.getMessage(),
                     invalidRequestException
             );
-            appInsights.trackEvent(POST_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                EXCEPTION_TRACKING_NAME, invalidRequestException.getMessage()));
             return ResponseEntity.status(BAD_REQUEST).build();
         } catch (final Exception exception) {
             log.error("saveCaseSearch API call failed due to error - {}",
                     exception.getMessage(),
                     exception
             );
-            appInsights.trackEvent(POST_SEARCH_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                EXCEPTION_TRACKING_NAME, exception.getMessage()));
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -167,25 +153,17 @@ public class CaseSearchController {
                     endTime,
                     size,
                     page);
-            final long timeStart = System.currentTimeMillis();
             verifyRequestSearchParamsAreNotEmpty(inputParamsHolder);
             verifyRequestSearchParamsConditions(inputParamsHolder);
 
             final CaseSearchGetResponse caseSearch = caseSearchService.getCaseSearch(inputParamsHolder);
-            final long timeEnd = System.currentTimeMillis();
-            final String report = (timeEnd - timeStart) > PERF_TOLERANCE_THRESHOLD_MS
-                ? PERF_THRESHOLD_MESSAGE_ABOVE : PERF_THRESHOLD_MESSAGE_BELOW;
-            appInsights.trackEvent(GET_SEARCH_REQUEST_INFO.toString(), appInsights.trackingMap(
-                "GET /audit/caseSearch", report));
             return new ResponseEntity<>(caseSearch, OK);
         } catch (final InvalidRequestException invalidRequestException) {
             log.error(
-                    "getCaseView API call failed due to error - {}",
+                    "getCaseSearch API call failed due to error - {}",
                     invalidRequestException.getMessage(),
                     invalidRequestException
             );
-            appInsights.trackEvent(GET_SEARCH_REQUEST_INVALID_REQUEST_EXCEPTION.toString(), appInsights.trackingMap(
-                EXCEPTION_TRACKING_NAME, invalidRequestException.getMessage()));
             return ResponseEntity.status(BAD_REQUEST).build();
         }
     }

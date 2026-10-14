@@ -6,12 +6,6 @@ public final class CommonConstants {
     public static final String AUTHORISATION_AUDIT_INVESTIGATOR_ROLE = "cft-audit-investigator";
     public static final String AUTHORISATION_SERVICE_LOGS_ROLE = "cft-service-logs";
 
-    public static final long PERF_TOLERANCE_THRESHOLD_MS = 1500;
-    public static final String PERF_THRESHOLD_MESSAGE_BELOW =
-        "Good: below threshold (" + PERF_TOLERANCE_THRESHOLD_MS + "ms)";
-    public static final String PERF_THRESHOLD_MESSAGE_ABOVE =
-        "Bad: above threshold (" + PERF_TOLERANCE_THRESHOLD_MS + "ms)";
-
     private CommonConstants() {
     }
 }
