@@ -362,7 +362,7 @@ dependencies {
   testImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
   testImplementation "io.rest-assured:json-path:${versions.restAssured}"
   testImplementation "io.rest-assured:xml-path:${versions.restAssured}"
-  testImplementation "com.google.code.gson:gson:2.14.0"
+  testImplementation "com.google.code.gson:gson:2.15.0"
   testImplementation "com.googlecode.junit-toolbox:junit-toolbox:2.4"
   testImplementation "org.testng:testng:7.12.0"
 
@@ -372,7 +372,7 @@ dependencies {
   cucumberRuntime "io.rest-assured:json-path:${versions.restAssured}"
   cucumberRuntime "io.rest-assured:xml-path:${versions.restAssured}"
   cucumberRuntime "net.serenity-bdd:serenity-rest-assured"
-  cucumberRuntime "com.google.code.gson:gson:2.14.0"
+  cucumberRuntime "com.google.code.gson:gson:2.15.0"
   cucumberRuntime "com.googlecode.junit-toolbox:junit-toolbox:2.4"
   cucumberRuntime "org.testng:testng:7.12.0"
 
