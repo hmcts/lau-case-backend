@@ -19,6 +19,7 @@
     <exclude name="TooManyStaticImports"/>
     <exclude name="CommentDefaultAccessModifier"/>
     <exclude name="UseUnderscoresInNumericLiterals"/>
+    <exclude name="LocalVariableDeclarationShouldBeAtStartOfBlock"/>
   </rule>
   <rule ref="category/java/codestyle.xml/ClassNamingConventions">
     <properties>
@@ -37,7 +38,7 @@
     </properties>
   </rule>
   <rule ref="category/java/design.xml">
-    <exclude name="UseUtilityClass"/>
+    <exclude name="InstantiableUtilityClass"/>
     <exclude name="LoosePackageCoupling"/>
     <exclude name="DataClass"/>
   </rule>
