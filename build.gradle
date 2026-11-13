@@ -256,7 +256,7 @@ repositories {
 def versions = [
   commonsIo         : '2.22.0',
   flywaydb          : '13.12.2',
-  cucumber          : '7.34.9',
+  cucumber          : '8.0.4',
   gradlePitest      : '1.15.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
