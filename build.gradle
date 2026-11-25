@@ -121,6 +121,7 @@ task integration(type: Test) {
     group = "Verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
     mustRunAfter test
 }
 check.dependsOn integration
@@ -263,7 +264,7 @@ def versions = [
   log4j             : '2.26.1',
   lombok            : '1.18.48',
   restAssured       : '6.0.1',
-  serenity          : '5.3.11',
+  serenity          : '5.4.2',
   sonarPitest       : '0.5',
   testcontainers    : '2.0.5',
 ]
@@ -324,18 +325,16 @@ dependencies {
   testImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
   testImplementation "org.testcontainers:testcontainers-postgresql:${versions.testcontainers}"
   testImplementation "org.wiremock:wiremock-standalone:3.13.2"
-  testImplementation "net.serenity-bdd:serenity-core:${versions.serenity}", {
-    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
-  }
+  testImplementation "net.serenity-bdd:serenity-core:${versions.serenity}"
   testImplementation "net.serenity-bdd:serenity-junit5:${versions.serenity}"
   testImplementation "net.serenity-bdd:serenity-rest-assured:${versions.serenity}"
-  testImplementation "io.cucumber:cucumber-spring:${versions.cucumber}"
-  testImplementation "io.cucumber:cucumber-junit:${versions.cucumber}"
-  testImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
-  testImplementation "org.jetbrains.kotlin:kotlin-stdlib:2.4.21"
   testImplementation "org.springframework.boot:spring-boot-starter-test"
   testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
 
+  integrationTestImplementation "io.cucumber:cucumber-java:${versions.cucumber}"
+  integrationTestImplementation "io.cucumber:cucumber-spring:${versions.cucumber}"
+  integrationTestImplementation "io.cucumber:cucumber-junit-platform-engine:${versions.cucumber}"
+  integrationTestImplementation "org.junit.platform:junit-platform-suite"
   integrationTestImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
   integrationTestImplementation "org.testcontainers:testcontainers-postgresql:${versions.testcontainers}"
 
@@ -366,16 +365,6 @@ dependencies {
   testImplementation "com.google.code.gson:gson:2.15.0"
   testImplementation "com.googlecode.junit-toolbox:junit-toolbox:2.4"
   testImplementation "org.testng:testng:7.12.0"
-
-  cucumberRuntime "io.cucumber:cucumber-java:${versions.cucumber}"
-  cucumberRuntime "org.springframework:spring-web"
-  cucumberRuntime "io.rest-assured:rest-assured:${versions.restAssured}"
-  cucumberRuntime "io.rest-assured:json-path:${versions.restAssured}"
-  cucumberRuntime "io.rest-assured:xml-path:${versions.restAssured}"
-  cucumberRuntime "net.serenity-bdd:serenity-rest-assured"
-  cucumberRuntime "com.google.code.gson:gson:2.15.0"
-  cucumberRuntime "com.googlecode.junit-toolbox:junit-toolbox:2.4"
-  cucumberRuntime "org.testng:testng:7.12.0"
 
   testCompileOnly "org.projectlombok:lombok:${versions.lombok}"
   testAnnotationProcessor "org.projectlombok:lombok:${versions.lombok}"
